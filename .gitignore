@@ -1,0 +1,6 @@
+
+# Python byte-code
+*.py[co]
+
+# Anything under the virutalenv directory
+/soco/
