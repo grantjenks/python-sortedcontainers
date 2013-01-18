@@ -11,12 +11,13 @@ Missing:
 import bisect
 from functools import total_ordering
 from itertools import chain, izip
+import collections
 
 @total_ordering
-class SortedList:
-    def __init__(self, iterable=None, load=1000):
+class SortedList(collections.MutableSequence):
+    def __init__(self, iterable=None, load=100):
         self.clear()
-        self.load, self.twice, self.half = load, load * 2, load / 2
+        self._load, self._twice, self._half = load, load * 2, load / 2
 
         if iterable is not None:
             self.update(iterable)
@@ -39,14 +40,14 @@ class SortedList:
             else:
                 bisect.insort(self._lists[pos], val)
 
-            self._grow(pos)
+            self._expand(pos)
 
         self._len += 1
 
     def _expand(self, pos):
-        if len(self._lists[pos]) > self.twice:
-            half = self._lists[pos][self.load:]
-            self._lists[pos] = self._lists[pos][:self.load]
+        if len(self._lists[pos]) > self._twice:
+            half = self._lists[pos][self._load:]
+            self._lists[pos] = self._lists[pos][:self._load]
             self._maxes[pos] = self._lists[pos][-1]
             self._maxes.insert(pos + 1, half[-1])
             self._lists.insert(pos + 1, half)
@@ -56,8 +57,8 @@ class SortedList:
         values = sorted(iterable)
 
         if self._maxes is None:
-            self._lists = [values[pos:(pos + self.load)]
-                          for pos in xrange(0, len(values), self.load)]
+            self._lists = [values[pos:(pos + self._load)]
+                          for pos in xrange(0, len(values), self._load)]
             self._maxes = [sublist[-1] for sublist in self._lists]
             self._len = len(values)
         else:
@@ -76,8 +77,8 @@ class SortedList:
 
         index = bisect.bisect_left(self._lists[pos], val)
 
-        if index == len(self._lists[pos]):
-            return False
+        # if index == len(self._lists[pos]):
+        #     return False
 
         return self._lists[pos][index] == val
 
@@ -94,8 +95,8 @@ class SortedList:
 
         index = bisect.bisect_left(self._lists[pos], val)
 
-        if index == len(self._lists[pos]):
-            return
+        # if index == len(self._lists[pos]):
+        #     return
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -113,8 +114,8 @@ class SortedList:
 
         index = bisect.bisect_left(self._lists[pos], val)
 
-        if index == len(self._lists[pos]):
-            raise ValueError
+        # if index == len(self._lists[pos]):
+        #     raise ValueError
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -137,9 +138,10 @@ class SortedList:
         else:
             self._maxes[pos] = self._lists[pos][-1]
 
-            if len(self._lists) > 1 and len(self._lists[pos]) < self.half:
+            if len(self._lists) > 1 and len(self._lists[pos]) < self._half:
                 if pos == 0: pos += 1
                 self._lists[pos - 1].extend(self._lists[pos])
+                self._maxes[pos - 1] = self._lists[pos - 1][-1]
                 del self._maxes[pos]
                 del self._lists[pos]
 
@@ -148,6 +150,13 @@ class SortedList:
 
     def _pos(self, index):
         if self._maxes is None:
+            raise IndexError
+
+        if index < 0:
+            index += len(self)
+        if index < 0:
+            raise IndexError
+        if index >= self._len:
             raise IndexError
 
         for pos in xrange(len(self._maxes)):
@@ -162,22 +171,57 @@ class SortedList:
         return pos, index
 
     def __delitem__(self, index):
-        pos, index = self._pos(index)
-        self._delete(pos, index)
+        if isinstance(index, slice):
+            raise NotImplementedError
+        else:
+            pos, index = self._pos(index)
+            self._delete(pos, index)
 
     def __getitem__(self, index):
-        pos, index = self._pos(index)
-        return self._lists[pos][index]
+        if isinstance(index, slice):
+            raise NotImplementedError
+        else:
+            pos, index = self._pos(index)
+            return self._lists[pos][index]
 
     def __setitem__(self, idx, val):
-        pos, index = self._pos(idx)
-        self._lists[pos][index] = val
+        if isinstance(idx, slice):
+            raise NotImplementedError
+        else:
+            pos, index = self._pos(idx)
+
+            if idx > 0:
+                index_prev = index - 1
+                pos_prev = pos
+
+                if index_prev < 0:
+                    pos_prev -= 1
+                    index_prev = len(self._lists[pos_prev]) - 1
+
+                if self._lists[pos_prev][index_prev] > val:
+                    raise ValueError
+
+            if idx < (self._len - 1):
+                index_next = index + 1
+                pos_next = pos
+
+                if index_next == len(self._lists[pos_next]):
+                    pos_next += 1
+                    index_next = 0
+
+                if self._lists[pos_next][index_next] < val:
+                    raise ValueError
+
+            self._lists[pos][index] = val
 
     def __iter__(self):
         return chain.from_iterable(self._lists)
 
     def reversed(self):
-        return chain.from_iterable(reversed(map(reversed, self._lists)))
+        start = len(self._lists) - 1
+        iterable = (reversed(self._lists[pos])
+                    for pos in xrange(start, -1, -1))
+        return chain.from_iterable(iterable)
 
     def __len__(self):
         return self._len
@@ -217,13 +261,11 @@ class SortedList:
         start = bisect.bisect_left(self._maxes, val)
         right = bisect.bisect_right(self._maxes, val)
 
-        if start == right:
-            return self._lists[start].count(val)
-        else:
-            return sum(self._lists[pos].count(val)
-                       for val in xrange(start, right))
+        if right < len(self._lists):
+            right += 1
 
-        return total
+        return sum(self._lists[pos].count(val)
+                   for pos in xrange(start, right))
 
     def append(self, val):
         """Append the given val to the end of the sorted list.
@@ -232,6 +274,7 @@ class SortedList:
         if self._maxes is None:
             self._maxes = [val]
             self._lists = [[val]]
+            self._len = 1
             return
 
         pos = len(self._lists) - 1
@@ -241,6 +284,7 @@ class SortedList:
 
         self._maxes[pos] = val
         self._lists[pos].append(val)
+        self._len += 1
 
         self._expand(pos)
 
@@ -248,22 +292,32 @@ class SortedList:
         """Extend this list with the given values.
         Raises ValueError if the values would make the list unsorted.
         """
-        values = list(values)
+        if not isinstance(values, list):
+            values = list(values)
 
-        if any(values[pos - 1] > values[pos] for pos in xrange(1, len(values))):
+        if any(values[pos - 1] > values[pos]
+               for pos in xrange(1, len(values))):
             raise ValueError
+
+        offset = 0
 
         if self._maxes is None:
-            self.update(values)
-            return
+            self._lists = []
+            self._maxes = []
+        else:
+            if values[0] < self._lists[-1][-1]:
+                raise ValueError
 
-        if values[0] < self._lists[-1][-1]:
-            raise ValueError
+            if len(self._lists[-1]) < self._half:
+                self._lists[-1].extend(values[:self._load])
+                self._maxes[-1] = self._lists[-1][-1]
+                offset = self._load
 
-        for value in values:
-            self._maxes[-1] = value
-            self._lists[-1].append(value)
-            self._expand(len(self._lists) - 1)
+        for idx in xrange(offset, len(values), self._load):
+            self._lists.append(values[idx:(idx + self._load)])
+            self._maxes.append(self._lists[-1][-1])
+
+        self._len += len(values)
 
     def insert(self, index, val):
         """Insert the given val at index.
@@ -277,12 +331,11 @@ class SortedList:
             index = self._len
 
         if self._maxes is None:
-            if index == 0:
-                self._maxes = [val]
-                self._lists = [[val]]
-                return
-            else:
-                raise ValueError
+            # The index must be zero by the inequalities above.
+            self._maxes = [val]
+            self._lists = [[val]]
+            self._len = 1
+            return
 
         if index == 0:
             if val > self._lists[0][0]:
@@ -290,6 +343,18 @@ class SortedList:
             else:
                 self._lists[0].insert(0, val)
                 self._expand(0)
+                self._len += 1
+                return
+
+        if index == self._len:
+            pos = len(self._lists) - 1
+            if self._lists[pos][-1] > val:
+                raise ValueError
+            else:
+                self._lists[pos].append(val)
+                self._maxes[pos] = self._lists[pos][-1]
+                self._expand(pos)
+                self._len += 1
                 return
 
         pos, index = self._pos(index)
@@ -300,10 +365,11 @@ class SortedList:
         else:
             pos_before = pos
 
-        before = self.lists[pos_before][index_before]
-        if before <= val <= self.lists[pos][index]:
-            self.lists[pos].insert(index, val)
+        before = self._lists[pos_before][index_before]
+        if before <= val <= self._lists[pos][index]:
+            self._lists[pos].insert(index, val)
             self._expand(pos)
+            self._len += 1
         else:
             raise ValueError
 
@@ -313,10 +379,11 @@ class SortedList:
         if index < 0 or index >= self._len:
             raise IndexError
 
-        pos, index = self._index(index)
+        pos, index = self._pos(index)
         val = self._lists[pos][index]
 
         self._delete(pos, index)
+        self._len -= 1
 
         return val
 
@@ -353,7 +420,7 @@ class SortedList:
 
         while self._lists[pos][index] == val:
             if start <= (pos, index) < stop:
-                return self._index(pos, index)
+                return self._pos(pos, index)
             else:
                 index += 1
                 if index == len(self._lists[pos]):
@@ -402,18 +469,61 @@ class SortedList:
 
         return True
 
-    def check(self):
-        if self._maxes is None:
-            assert self._lists is None
-            return
+    def _check(self):
+        try:
+            # Check load parameters.
 
-        assert all(sublist[pos - 1] <= sublist[pos]
-                   for sublist in self._lists
-                   for pos in xrange(1, len(sublist)))
+            assert self._load >= 4
+            assert self._half == (self._load / 2)
+            assert self._twice == (self._load * 2)
 
-        for pos in xrange(1, len(self._lists)):
-            assert self._lists[pos - 1][-1] <= self._lists[pos][0]
+            # Check empty sorted list case.
 
-        assert len(self._maxes) == len(self._lists)
-        assert all(self._maxes[pos] == self._lists[pos][-1]
-                   for pos in xrange(len(self._maxes)))
+            if self._maxes is None:
+                assert self._lists is None
+                return
+
+            # Check all sublists are sorted.
+
+            assert all(sublist[pos - 1] <= sublist[pos]
+                       for sublist in self._lists
+                       for pos in xrange(1, len(sublist)))
+
+            # Check beginning/end of sublists are sorted.
+
+            for pos in xrange(1, len(self._lists)):
+                assert self._lists[pos - 1][-1] <= self._lists[pos][0]
+
+            # Check length of _maxes and _lists match.
+
+            assert len(self._maxes) == len(self._lists)
+
+            # Check _maxes is a map of _lists.
+
+            assert all(self._maxes[pos] == self._lists[pos][-1]
+                       for pos in xrange(len(self._maxes)))
+
+            # Check load level is less than _twice.
+
+            assert all(len(sublist) <= self._twice for sublist in self._lists)
+
+            # Check load level is greater than _half for all
+            # but the last sublist.
+
+            assert all(len(self._lists[pos]) >= self._half
+                       for pos in xrange(0, len(self._lists) - 1))
+
+            # Check length.
+
+            assert self._len == sum(len(sublist) for sublist in self._lists)
+
+        except AssertionError:
+            import sys, traceback
+
+            traceback.print_exc(file=sys.stdout)
+
+            print self._len, self._load, self._half, self._twice
+            print self._maxes
+            print self._lists
+
+            raise AssertionError

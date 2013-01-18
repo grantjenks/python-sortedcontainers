@@ -3,4 +3,4 @@
 *.py[co]
 
 # Anything under the virutalenv directory
-/soco/
+/soco27/

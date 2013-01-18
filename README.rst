@@ -1,8 +1,56 @@
 # Sorted Containers
 
-Module for sorted container data types.
+Pure-Python module for sorted container data types.
 
-Currently only contains an implementation of sorted list.
+Currently, only contains an implementation of sorted list.
+
+# TODO
+
+* Make sortedlist inherit from collections.MutableSequence
+* Slice support for delitem, getitem, setitem
+* Fix setitem to raise ValueError
+
+# Testing
+
+Currently tested with CPython version 2.7.
+
+# Performance
+
+Planned: benchmark against the popular blist module.
+
+# Goals
+
+## More Containers
+
+* sortedset
+* sorteddict
+
+## Better Testing
+
+* CPython versions 2.5.4, 2.6.6, 3.1.4, 3.2.3 and 3.3.0
+* http://www.python.org/download/releases/2.5.4/
+* http://www.python.org/download/releases/2.6.6/
+* http://www.python.org/download/releases/3.1.4/
+* http://www.python.org/download/releases/3.2.3/
+* http://www.python.org/download/releases/3.3.0/
+
+## Better Performance
+
+* Cython
+
+# Alternatives
+
+* http://pypi.python.org/pypi/treap/0.995
+  - slow, c-impl
+* http://pypi.python.org/pypi/blist/
+  - slow, c-impl
+* http://pypi.python.org/pypi/rbtree/
+  - fast, c-impl
+* https://github.com/pgrafov/python-avl-tree
+* http://sourceforge.net/projects/pyavl/
+  - easy_install failed on Windows, c-impl
+* http://newcenturycomputers.net/projects/rbtree.html
+  - slow, pure-python
 
 # License
 
