@@ -3,6 +3,7 @@
 import random
 from sortedlist import SortedList
 from nose.tools import raises
+from itertools import izip
 
 def test_init():
     slt = SortedList()
@@ -15,12 +16,12 @@ def test_init():
     slt._check()
 
     slt = SortedList(xrange(10000))
-    assert all(tup[0] == tup[1] for tup in zip(slt, list(xrange(10000))))
+    assert all(tup[0] == tup[1] for tup in izip(slt, list(xrange(10000))))
 
     slt.clear()
     assert slt._len == 0
     assert slt._maxes == None
-    assert slt._lists == None
+    assert slt._lists == []
     slt._check()
 
 def test_add():
@@ -44,7 +45,7 @@ def test_update():
     slt = SortedList()
 
     slt.update(xrange(1000))
-    assert all(tup[0] == tup[1] for tup in zip(slt, list(xrange(1000))))
+    assert all(tup[0] == tup[1] for tup in izip(slt, list(xrange(1000))))
     assert len(slt) == 1000
     slt._check()
 
@@ -81,7 +82,7 @@ def test_discard():
     slt.discard(2)
     slt._check()
 
-    assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
+    assert all(tup[0] == tup[1] for tup in izip(slt, [1, 2, 2, 3, 3, 5]))
 
 def test_remove():
     slt = SortedList()
@@ -98,7 +99,7 @@ def test_remove():
     slt._check()
     slt.discard(2)
 
-    assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
+    assert all(tup[0] == tup[1] for tup in izip(slt, [1, 2, 2, 3, 3, 5]))
 
 @raises(ValueError)
 def test_remove_valueerror1():
@@ -123,7 +124,7 @@ def test_delete():
         slt._check()
     assert len(slt) == 0
     assert slt._maxes == None
-    assert slt._lists == None
+    assert slt._lists == []
 
 def test_getitem():
     random.seed(0)
@@ -139,6 +140,7 @@ def test_getitem():
     lst.sort()
 
     assert all(slt[idx] == lst[idx] for idx in xrange(100))
+    assert all(slt[idx - 99] == lst[idx - 99] for idx in xrange(100))
 
 @raises(IndexError)
 def test_getitem_indexerror1():
@@ -150,12 +152,27 @@ def test_getitem_indexerror2():
     slt = SortedList(xrange(100))
     print slt[200]
 
+@raises(IndexError)
+def test_getitem_indexerror3():
+    slt = SortedList(xrange(100))
+    print slt[-101]
+
+@raises(NotImplementedError)
+def test_getitem_notimplementederror():
+    slt = SortedList(xrange(100), load=17)
+    print slt[5:10]
+
 def test_delitem():
     random.seed(0)
     slt = SortedList(xrange(100), load=17)
     while len(slt) > 0:
         del slt[random.randrange(len(slt))]
         slt._check()
+
+@raises(NotImplementedError)
+def test_delitem_notimplementederror():
+    slt = SortedList(xrange(100), load=17)
+    del slt[5:10]
 
 def test_setitem():
     random.seed(0)
@@ -176,15 +193,20 @@ def test_setitem_valueerror2():
     slt = SortedList(xrange(10))
     slt[0] = 10
 
+@raises(NotImplementedError)
+def test_setitem_notimplementederror():
+    slt = SortedList(xrange(100), load=17)
+    slt[5:10] = [5, 6, 7, 8, 9]
+
 def test_iter():
     slt = SortedList(xrange(10000))
     itr = iter(slt)
-    assert all(tup[0] == tup[1] for tup in zip(xrange(10000), itr))
+    assert all(tup[0] == tup[1] for tup in izip(xrange(10000), itr))
 
 def test_reversed():
     slt = SortedList(xrange(10000))
     rev = slt.reversed()
-    assert all(tup[0] == tup[1] for tup in zip(xrange(9999, -1, -1), rev))
+    assert all(tup[0] == tup[1] for tup in izip(xrange(9999, -1, -1), rev))
 
 def test_len():
     slt = SortedList()
@@ -194,19 +216,29 @@ def test_len():
         assert len(slt) == (val + 1)
 
 def test_bisect_left():
-    slt = SortedList(xrange(10000))
-    slt.update(xrange(10000))
+    slt = SortedList()
+    assert slt.bisect_left(0) == 0
+    slt = SortedList(xrange(100), load=17)
+    slt.update(xrange(100))
     slt._check()
-    assert slt.bisect_left(1000) == 2000
+    assert slt.bisect_left(50) == 100
+    assert slt.bisect_left(200) == 200
 
 def test_bisect():
-    test_bisect_left()
+    slt = SortedList()
+    assert slt.bisect(0) == 0
+    slt = SortedList(xrange(100), load=17)
+    slt.update(xrange(100))
+    slt._check()
+    assert slt.bisect(50) == 100
+    assert slt.bisect(200) == 200
 
 def test_bisect_right():
-    slt = SortedList(xrange(10000))
-    slt.update(xrange(10000))
+    slt = SortedList(xrange(100), load=17)
+    slt.update(xrange(100))
     slt._check()
-    assert slt.bisect_right(1000) == 2002
+    assert slt.bisect_right(10) == 22
+    assert slt.bisect_right(200) == 200
 
 def test_count():
     slt = SortedList(load=7)
@@ -282,6 +314,11 @@ def test_insert():
     slt._check()
 
 @raises(ValueError)
+def test_insert_valueerror1():
+    slt = SortedList(xrange(10), load=4)
+    slt.insert(10, 5)
+
+@raises(ValueError)
 def test_insert_valueerror2():
     slt = SortedList(xrange(10), load=4)
     slt.insert(0, 10)
@@ -292,12 +329,13 @@ def test_insert_valueerror3():
     slt.insert(5, 3)
 
 @raises(ValueError)
-def test_insert_valueerror3():
+def test_insert_valueerror4():
     slt = SortedList(xrange(10), load=4)
     slt.insert(5, 7)
 
 def test_pop():
     slt = SortedList(xrange(10), load=4)
+    slt._check()
     assert slt.pop() == 9
     slt._check()
     assert slt.pop(0) == 0
@@ -317,3 +355,131 @@ def test_pop_indexerror2():
     slt = SortedList(xrange(10), load=4)
     slt.pop(10)
 
+def test_index():
+    slt = SortedList(xrange(100), load=17)
+
+    for val in xrange(100):
+        assert val == slt.index(val)
+
+    assert slt.index(99, 0, 1000) == 99
+
+    slt = SortedList((0 for rpt in xrange(100)), load=17)
+
+    for start in xrange(100):
+        for stop in xrange(start, 100):
+            assert slt.index(0, start, stop + 1) == start
+
+    for start in xrange(100):
+        assert slt.index(0, -(100 - start)) == start
+
+    assert slt.index(0, -1000) == 0
+
+@raises(ValueError)
+def test_index_valueerror1():
+    slt = SortedList([0] * 10, load=4)
+    slt.index(0, 10)
+
+@raises(ValueError)
+def test_index_valueerror2():
+    slt = SortedList([0] * 10, load=4)
+    slt.index(0, 0, -10)
+
+@raises(ValueError)
+def test_index_valueerror3():
+    slt = SortedList([0] * 10, load=4)
+    slt.index(0, 7, 3)
+
+@raises(ValueError)
+def test_index_valueerror4():
+    slt = SortedList([0] * 10, load=4)
+    slt.index(1)
+
+@raises(ValueError)
+def test_index_valueerror5():
+    slt = SortedList()
+    slt.index(1)
+
+@raises(ValueError)
+def test_index_valueerror6():
+    slt = SortedList(xrange(10), load=4)
+    slt.index(3, 5)
+
+def test_mul():
+    this = SortedList(xrange(10), load=4)
+    that = this * 5
+    this._check()
+    that._check()
+    assert this == list(xrange(10))
+    assert that == sorted(list(xrange(10)) * 5)
+    assert this != that
+
+def test_imul():
+    this = SortedList(xrange(10), load=4)
+    this *= 5
+    this._check()
+    assert this == sorted(list(xrange(10)) * 5)
+
+def test_op_add():
+    this = SortedList(xrange(10), load=4)
+    assert (this + this + this) == (this * 3)
+
+    that = SortedList(xrange(10), load=4)
+    that += that
+    that += that
+    assert that == (this * 4)
+
+def test_eq():
+    this = SortedList(xrange(10), load=4)
+    that = SortedList(xrange(20), load=4)
+    assert not (this == that)
+    that.clear()
+    that.update(xrange(10))
+    assert this == that
+
+def test_lt():
+    this = SortedList(xrange(10), load=4)
+    that = SortedList(xrange(10, 20), load=5)
+    assert this < that
+    assert not (that < this)
+    that = SortedList(xrange(1, 20), load=6)
+    assert this < that
+    that = SortedList(xrange(1, 10), load=4)
+    assert not (this < that)
+
+def test_lte():
+    this = SortedList(xrange(10), load=4)
+    that = SortedList(xrange(10), load=5)
+    assert this <= that
+    assert that <= this
+    del this[-1]
+    assert this <= that
+    assert not (that <= this)
+
+def test_gt():
+    this = SortedList(xrange(10), load=4)
+    that = SortedList(xrange(10, 20), load=5)
+    assert that > this
+    assert not (this > that)
+    that = SortedList(xrange(1, 20), load=6)
+    assert that > this
+    that = SortedList(xrange(1, 10), load=4)
+    assert not (that > this)
+
+def test_gte():
+    this = SortedList(xrange(10), load=4)
+    that = SortedList(xrange(10), load=5)
+    assert this >= that
+    assert that >= this
+    del this[-1]
+    assert that >= this
+    assert not (this >= that)
+
+def test_repr():
+    this = SortedList(xrange(10), load=4)
+    assert repr(this) == 'SortedList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])'
+
+@raises(AssertionError)
+def test_check():
+    slt = SortedList(xrange(10), load=4)
+    slt._len = 5
+    slt._check()

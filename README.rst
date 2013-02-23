@@ -6,9 +6,8 @@ Currently, only contains an implementation of sorted list.
 
 # TODO
 
-* Make sortedlist inherit from collections.MutableSequence
 * Slice support for delitem, getitem, setitem
-* Fix setitem to raise ValueError
+* Audit places where iteration happens manually
 
 # Testing
 

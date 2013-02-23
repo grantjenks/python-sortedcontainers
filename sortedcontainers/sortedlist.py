@@ -1,20 +1,13 @@
 """
 Sorted list implementation.
-
-Missing:
-* del L[i:j]
-* L[i:j]
-* L[i:j] = iterable
-* testing
 """
 
 import bisect
-from functools import total_ordering
-from itertools import chain, izip
-import collections
+from itertools import chain, izip, imap
+from collections import MutableSequence
+from operator import iadd
 
-@total_ordering
-class SortedList(collections.MutableSequence):
+class SortedList(MutableSequence):
     def __init__(self, iterable=None, load=100):
         self.clear()
         self._load, self._twice, self._half = load, load * 2, load / 2
@@ -23,7 +16,7 @@ class SortedList(collections.MutableSequence):
             self.update(iterable)
 
     def clear(self):
-        self._len, self._maxes, self._lists = 0, None, None
+        self._len, self._maxes, self._lists = 0, None, []
 
     def add(self, val):
         """Add a val to the sorted list."""
@@ -56,7 +49,8 @@ class SortedList(collections.MutableSequence):
         """Update this sorted list with values from iterable."""
         values = sorted(iterable)
 
-        if self._maxes is None:
+        if self._maxes is None and len(values) > 0:
+            values.sort()
             self._lists = [values[pos:(pos + self._load)]
                           for pos in xrange(0, len(values), self._load)]
             self._maxes = [sublist[-1] for sublist in self._lists]
@@ -77,9 +71,6 @@ class SortedList(collections.MutableSequence):
 
         index = bisect.bisect_left(self._lists[pos], val)
 
-        # if index == len(self._lists[pos]):
-        #     return False
-
         return self._lists[pos][index] == val
 
     def discard(self, val):
@@ -94,9 +85,6 @@ class SortedList(collections.MutableSequence):
             return
 
         index = bisect.bisect_left(self._lists[pos], val)
-
-        # if index == len(self._lists[pos]):
-        #     return
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -113,9 +101,6 @@ class SortedList(collections.MutableSequence):
             raise ValueError
 
         index = bisect.bisect_left(self._lists[pos], val)
-
-        # if index == len(self._lists[pos]):
-        #     raise ValueError
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -134,7 +119,7 @@ class SortedList(collections.MutableSequence):
 
             if len(self._maxes) == 0:
                 self._maxes = None
-                self._lists = None
+                self._lists = []
         else:
             self._maxes[pos] = self._lists[pos][-1]
 
@@ -144,6 +129,7 @@ class SortedList(collections.MutableSequence):
                 self._maxes[pos - 1] = self._lists[pos - 1][-1]
                 del self._maxes[pos]
                 del self._lists[pos]
+                self._expand(pos - 1)
 
     def _index(self, pos, index):
         return index + sum(len(self._lists[idx]) for idx in xrange(pos))
@@ -153,22 +139,17 @@ class SortedList(collections.MutableSequence):
             raise IndexError
 
         if index < 0:
-            index += len(self)
+            index += self._len
         if index < 0:
             raise IndexError
         if index >= self._len:
             raise IndexError
 
-        for pos in xrange(len(self._maxes)):
-            index -= len(self._lists[pos])
-            if index < 0:
-                break
-        else:
-            raise IndexError
-
-        index += len(self._lists[pos])
-
-        return pos, index
+        for pos, sub_len in enumerate(imap(len, self._lists)):
+            if index < sub_len:
+                return pos, index
+            else:
+                index -= sub_len
 
     def __delitem__(self, index):
         if isinstance(index, slice):
@@ -189,6 +170,8 @@ class SortedList(collections.MutableSequence):
             raise NotImplementedError
         else:
             pos, index = self._pos(idx)
+
+            if idx < 0: idx += self._len
 
             if idx > 0:
                 index_prev = index - 1
@@ -302,8 +285,8 @@ class SortedList(collections.MutableSequence):
         offset = 0
 
         if self._maxes is None:
-            self._lists = []
             self._maxes = []
+            self._lists = []
         else:
             if values[0] < self._lists[-1][-1]:
                 raise ValueError
@@ -324,7 +307,7 @@ class SortedList(collections.MutableSequence):
         Raise ValueError if the val at index would make the list unsorted.
         """
         if index < 0:
-            index += len(self)
+            index += self._len
         if index < 0:
             index = 0
         if index > self._len:
@@ -375,99 +358,102 @@ class SortedList(collections.MutableSequence):
 
     def pop(self, index=-1):
         if index < 0:
-            index += len(self)
+            index += self._len
         if index < 0 or index >= self._len:
             raise IndexError
 
         pos, index = self._pos(index)
         val = self._lists[pos][index]
-
         self._delete(pos, index)
-        self._len -= 1
 
         return val
 
-    def index(self, val, start=0, stop=-1):
+    def index(self, val, start=None, stop=None):
         if self._maxes is None:
             raise ValueError
 
+        if start == None:
+            start = 0
         if start < 0:
-            start += len(self)
+            start += self._len
         if start < 0:
             start = 0
-        if start > self._len:
-            start = self._len
 
+        if stop == None:
+            stop = self._len
         if stop < 0:
-            stop += len(self)
-        if stop < 0:
-            stop = 0
+            stop += self._len
         if stop > self._len:
             stop = self._len
 
-        pos = bisect.bisect_left(self._maxes, val)
-
-        if pos == len(self._maxes):
+        if stop <= start:
             raise ValueError
 
-        index = bisect.bisect_left(self._lists[pos], val)
+        stop -= 1
 
-        if index == len(self._lists[pos]):
+        left = self.bisect_left(val)
+
+        if (left == self._len) or (self[left] != val):
             raise ValueError
 
-        start = self._pos(start)
-        stop = self._pos(stop)
+        right = self.bisect_right(val) - 1
 
-        while self._lists[pos][index] == val:
-            if start <= (pos, index) < stop:
-                return self._pos(pos, index)
-            else:
-                index += 1
-                if index == len(self._lists[pos]):
-                    index = 0
-                    pos += 1
+        pos = max(start, left)
+
+        if pos <= right and pos <= stop:
+            return pos
 
         raise ValueError
 
+    def as_list(self):
+        return reduce(iadd, self._lists, [])
+
+    def __add__(self, that):
+        values = self.as_list()
+        values.extend(that)
+        return SortedList(values)
+
+    def __iadd__(self, that):
+        self.update(that)
+        return self
+
     def __mul__(self, that):
-        values = list(self)
-        values *= that
+        values = self.as_list() * that
         return SortedList(values)
 
     def __imul__(self, that):
-        values = list(self)
+        values = self.as_list() * that
         self.clear()
-        values *= that
         self.update(values)
+        return self
 
     def __eq__(self, that):
-        if len(self) != len(that):
-            return False
-        return all(lhs == rhs for lhs, rhs in izip(self, that))
+        return ((self._len == len(that))
+                and all(lhs == rhs for lhs, rhs in izip(self, that)))
+
+    def __ne__(self, that):
+        return ((self._len != len(that))
+                or any(lhs != rhs for lhs, rhs in izip(self, that)))
 
     def __lt__(self, that):
-        it_self, it_that = iter(self), iter(that)
-        lhs_stop, rhs_stop = False, False
+        return ((self._len <= len(that))
+                and all(lhs < rhs for lhs, rhs in izip(self, that)))
 
-        while True:
-            try:
-                lhs = it_self.next()
-            except StopIteration:
-                lhs_stop = True
+    def __le__(self, that):
+        return ((self._len <= len(that))
+                and all(lhs <= rhs for lhs, rhs in izip(self, that)))
 
-            try:
-                rhs = it_that.next()
-            except StopIteration:
-                rhs_stop = True
+    def __gt__(self, that):
+        return ((self._len >= len(that))
+                and all(lhs > rhs for lhs, rhs in izip(self, that)))
 
-            if lhs_stop:
-                return True
-            if rhs_stop:
-                return False
-            if lhs >= rhs:
-                return False
+    def __ge__(self, that):
+        return ((self._len >= len(that))
+                and all(lhs >= rhs for lhs, rhs in izip(self, that)))
 
-        return True
+    def __repr__(self):
+        reprs = (repr(value) for value in self)
+        return 'SortedList([{}])'.format(', '.join(reprs))
 
     def _check(self):
         try:
@@ -480,8 +466,10 @@ class SortedList(collections.MutableSequence):
             # Check empty sorted list case.
 
             if self._maxes is None:
-                assert self._lists is None
+                assert self._lists == []
                 return
+
+            assert len(self._maxes) > 0 and len(self._lists) > 0
 
             # Check all sublists are sorted.
 
@@ -526,4 +514,4 @@ class SortedList(collections.MutableSequence):
             print self._maxes
             print self._lists
 
-            raise AssertionError
+            raise
