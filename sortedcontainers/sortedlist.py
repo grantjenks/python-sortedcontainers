@@ -268,6 +268,14 @@ class SortedList(MutableSequence):
         return self._index(pos, index)
 
     def count(self, val):
+        """
+        TODO:
+        left = self.bisect_left(val)
+        right = self.bisect_right(val)
+
+        return right - left
+        """
+
         if self._maxes is None:
             return 0
 
