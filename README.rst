@@ -23,6 +23,7 @@ Planned: benchmark against the popular blist module.
 
 * sortedset
 * sorteddict
+* priority queue
 
 ## Better Testing
 
