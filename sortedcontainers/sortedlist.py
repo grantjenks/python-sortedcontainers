@@ -16,7 +16,7 @@ class SortedList(MutableSequence):
             self.update(iterable)
 
     def clear(self):
-        self._len, self._maxes, self._lists = 0, None, []
+        self._len, self._maxes, self._lists, self._cumsum = 0, None, [], []
 
     def add(self, val):
         """Add a val to the sorted list."""
@@ -164,6 +164,36 @@ class SortedList(MutableSequence):
         else:
             pos, index = self._pos(index)
             return self._lists[pos][index]
+
+    def fast_getitem(self, index):
+        # TODO: Change def _pos and def _index
+        if self._maxes is None:
+            raise IndexError
+
+        if index < 0:
+            index += self._len
+        if index < 0:
+            raise IndexError
+        if index >= self._len:
+            raise IndexError
+
+        pos = bisect_right(self._cumsum, index)
+
+        if pos == len(self._cumsum):
+            if pos == 0:
+                self._cumsum.append(len(self._lists[0]))
+                pos += 1
+
+            while self._cumsum[-1] < index:
+                self._cumsum.append(self._cumsum[-1] + len(self._lists[pos]))
+                pos += 1
+
+            pos -= 1
+
+        if pos == 0:
+            return self._lists[pos][index]
+        else:
+            return self._lists[pos][index - self._cumsum[pos - 1]]
 
     def __setitem__(self, idx, val):
         if isinstance(idx, slice):
