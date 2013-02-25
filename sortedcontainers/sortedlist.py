@@ -2,7 +2,7 @@
 Sorted list implementation.
 """
 
-import bisect
+from bisect import bisect_left, bisect_right, insort
 from itertools import chain, izip, imap
 from collections import MutableSequence
 from operator import iadd
@@ -24,14 +24,14 @@ class SortedList(MutableSequence):
             self._maxes = [val]
             self._lists = [[val]]
         else:
-            pos = bisect.bisect_right(self._maxes, val)
+            pos = bisect_right(self._maxes, val)
 
             if pos == len(self._maxes):
                 pos -= 1
                 self._maxes[pos] = val
                 self._lists[pos].append(val)
             else:
-                bisect.insort(self._lists[pos], val)
+                insort(self._lists[pos], val)
 
             self._expand(pos)
 
@@ -64,12 +64,12 @@ class SortedList(MutableSequence):
         if self._maxes is None:
             return False
 
-        pos = bisect.bisect_left(self._maxes, val)
+        pos = bisect_left(self._maxes, val)
 
         if pos == len(self._maxes):
             return False
 
-        index = bisect.bisect_left(self._lists[pos], val)
+        index = bisect_left(self._lists[pos], val)
 
         return self._lists[pos][index] == val
 
@@ -79,12 +79,12 @@ class SortedList(MutableSequence):
         if self._maxes is None:
             return
 
-        pos = bisect.bisect_left(self._maxes, val)
+        pos = bisect_left(self._maxes, val)
 
         if pos == len(self._maxes):
             return
 
-        index = bisect.bisect_left(self._lists[pos], val)
+        index = bisect_left(self._lists[pos], val)
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -95,12 +95,12 @@ class SortedList(MutableSequence):
         if self._maxes is None:
             raise ValueError
 
-        pos = bisect.bisect_left(self._maxes, val)
+        pos = bisect_left(self._maxes, val)
 
         if pos == len(self._maxes):
             raise ValueError
 
-        index = bisect.bisect_left(self._lists[pos], val)
+        index = bisect_left(self._lists[pos], val)
 
         if self._lists[pos][index] == val:
             self._delete(pos, index)
@@ -213,12 +213,12 @@ class SortedList(MutableSequence):
         if self._maxes is None:
             return 0
 
-        pos = bisect.bisect_left(self._maxes, val)
+        pos = bisect_left(self._maxes, val)
 
         if pos == len(self._maxes):
             return self._index(pos, 0)
 
-        index = bisect.bisect_left(self._lists[pos], val)
+        index = bisect_left(self._lists[pos], val)
 
         return self._index(pos, index)
 
@@ -228,12 +228,12 @@ class SortedList(MutableSequence):
     def bisect_right(self, val):
         if self._maxes is None: return 0
 
-        pos = bisect.bisect_right(self._maxes, val)
+        pos = bisect_right(self._maxes, val)
 
         if pos == len(self._maxes):
             return self._index(pos, 0)
 
-        index = bisect.bisect_right(self._lists[pos], val)
+        index = bisect_right(self._lists[pos], val)
 
         return self._index(pos, index)
 
@@ -241,8 +241,8 @@ class SortedList(MutableSequence):
         if self._maxes is None:
             return 0
 
-        start = bisect.bisect_left(self._maxes, val)
-        right = bisect.bisect_right(self._maxes, val)
+        start = bisect_left(self._maxes, val)
+        right = bisect_right(self._maxes, val)
 
         if right < len(self._lists):
             right += 1
