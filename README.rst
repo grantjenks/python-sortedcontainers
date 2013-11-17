@@ -1,13 +1,22 @@
 # Sorted Containers
 
-Pure-Python module for sorted container data types.
+Sorted container data types: sorted list, sorted set, and sorted dict.
 
-Currently, only contains an implementation of sorted list.
+# Features
+
+* Pure-Python
+* Performance matters
 
 # TODO
 
 * Slice support for delitem, getitem, setitem
-* Audit places where iteration happens manually
+* Stress testing for sortedset
+* Implementation of sorteddict
+* Coverage testing for sordeddict
+* Stress testing for sorteddict
+* Benchmark sortedlist
+* Benchmark sortedset
+* Benchmark sorteddict
 
 # Testing
 
@@ -21,8 +30,6 @@ Planned: benchmark against the popular blist module.
 
 ## More Containers
 
-* sortedset
-* sorteddict
 * priority queue
 
 ## Better Testing
@@ -51,6 +58,8 @@ Planned: benchmark against the popular blist module.
   - easy_install failed on Windows, c-impl
 * http://newcenturycomputers.net/projects/rbtree.html
   - slow, pure-python
+* http://pythonsweetness.tumblr.com/post/45227295342/fast-pypy-compatible-ordered-map-in-89-lines-of-python
+  - fast, pure-python
 
 # License
 

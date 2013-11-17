@@ -3,11 +3,13 @@
 import copy
 import bisect
 import random
-from sortedlist import SortedList
+from context import sortedcontainers
+from sortedcontainers import SortedList
 from nose.tools import raises
 from functools import wraps
 from itertools import izip
 
+random.seed(0)
 actions = []
 
 def frange(start, stop, step):
@@ -317,6 +319,7 @@ def test_stress(repeat=1000):
             del slt._maxes[pos]
             del slt._lists[pos]
             slt._len = sum(len(sublist) for sublist in slt._lists)
+            slt._index = []
             slt._check()
 
     slt._check()

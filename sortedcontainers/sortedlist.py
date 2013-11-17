@@ -16,7 +16,7 @@ class SortedList(MutableSequence):
             self.update(iterable)
 
     def clear(self):
-        self._len, self._maxes, self._lists, self._cumsum = 0, None, [], []
+        self._len, self._maxes, self._lists, self._index = 0, None, [], []
 
     def add(self, val):
         """Add a val to the sorted list."""
@@ -33,6 +33,7 @@ class SortedList(MutableSequence):
             else:
                 insort(self._lists[pos], val)
 
+            del self._index[pos:]
             self._expand(pos)
 
         self._len += 1
@@ -44,17 +45,18 @@ class SortedList(MutableSequence):
             self._maxes[pos] = self._lists[pos][-1]
             self._maxes.insert(pos + 1, half[-1])
             self._lists.insert(pos + 1, half)
+            del self._index[pos:]
 
     def update(self, iterable):
         """Update this sorted list with values from iterable."""
         values = sorted(iterable)
 
         if self._maxes is None and len(values) > 0:
-            values.sort()
             self._lists = [values[pos:(pos + self._load)]
                           for pos in xrange(0, len(values), self._load)]
             self._maxes = [sublist[-1] for sublist in self._lists]
             self._len = len(values)
+            del self._index[:]
         else:
             for val in values:
                 self.add(val)
@@ -69,9 +71,9 @@ class SortedList(MutableSequence):
         if pos == len(self._maxes):
             return False
 
-        index = bisect_left(self._lists[pos], val)
+        idx = bisect_left(self._lists[pos], val)
 
-        return self._lists[pos][index] == val
+        return self._lists[pos][idx] == val
 
     def discard(self, val):
         """Remove the first occurrence of val.
@@ -84,10 +86,10 @@ class SortedList(MutableSequence):
         if pos == len(self._maxes):
             return
 
-        index = bisect_left(self._lists[pos], val)
+        idx = bisect_left(self._lists[pos], val)
 
-        if self._lists[pos][index] == val:
-            self._delete(pos, index)
+        if self._lists[pos][idx] == val:
+            self._delete(pos, idx)
 
     def remove(self, val):
         """Remove the first occurrence of val.
@@ -100,18 +102,19 @@ class SortedList(MutableSequence):
         if pos == len(self._maxes):
             raise ValueError
 
-        index = bisect_left(self._lists[pos], val)
+        idx = bisect_left(self._lists[pos], val)
 
-        if self._lists[pos][index] == val:
-            self._delete(pos, index)
+        if self._lists[pos][idx] == val:
+            self._delete(pos, idx)
         else:
             raise ValueError
 
-    def _delete(self, pos, index):
-        """Delete the item at the given (pos, index).
+    def _delete(self, pos, idx):
+        """Delete the item at the given (pos, idx).
         Combines lists that are less than half the load level."""
-        del self._lists[pos][index]
+        del self._lists[pos][idx]
         self._len -= 1
+        del self._index[pos:]
 
         if len(self._lists[pos]) == 0:
             del self._maxes[pos]
@@ -125,107 +128,112 @@ class SortedList(MutableSequence):
 
             if len(self._lists) > 1 and len(self._lists[pos]) < self._half:
                 if pos == 0: pos += 1
-                self._lists[pos - 1].extend(self._lists[pos])
-                self._maxes[pos - 1] = self._lists[pos - 1][-1]
+                prev = pos - 1
+                self._lists[prev].extend(self._lists[pos])
+                self._maxes[prev] = self._lists[prev][-1]
                 del self._maxes[pos]
                 del self._lists[pos]
-                self._expand(pos - 1)
+                del self._index[prev:]
+                self._expand(prev)
 
-    def _index(self, pos, index):
-        return index + sum(len(self._lists[idx]) for idx in xrange(pos))
+    def _loc(self, pos, idx):
+        if pos == 0:
+            return idx
 
-    def _pos(self, index):
+        end = len(self._index)
+
+        if pos >= end:
+
+            repeat = pos - end + 1
+            prev = self._index[-1] if end > 0 else 0
+
+            for rpt in xrange(repeat):
+                next = prev + len(self._lists[end + rpt])
+                self._index.append(next)
+                prev = next
+
+        return self._index[pos - 1] + idx
+
+    def _pos(self, idx):
         if self._maxes is None:
             raise IndexError
 
-        if index < 0:
-            index += self._len
-        if index < 0:
+        if idx < 0:
+            idx += self._len
+        if idx < 0:
             raise IndexError
-        if index >= self._len:
-            raise IndexError
-
-        for pos, sub_len in enumerate(imap(len, self._lists)):
-            if index < sub_len:
-                return pos, index
-            else:
-                index -= sub_len
-
-    def __delitem__(self, index):
-        if isinstance(index, slice):
-            raise NotImplementedError
-        else:
-            pos, index = self._pos(index)
-            self._delete(pos, index)
-
-    def __getitem__(self, index):
-        if isinstance(index, slice):
-            raise NotImplementedError
-        else:
-            pos, index = self._pos(index)
-            return self._lists[pos][index]
-
-    def fast_getitem(self, index):
-        # TODO: Change def _pos and def _index
-        if self._maxes is None:
+        if idx >= self._len:
             raise IndexError
 
-        if index < 0:
-            index += self._len
-        if index < 0:
-            raise IndexError
-        if index >= self._len:
-            raise IndexError
+        pos = bisect_right(self._index, idx)
 
-        pos = bisect_right(self._cumsum, index)
+        if pos == len(self._index):
+            prev = self._index[-1] if pos > 0 else 0
 
-        if pos == len(self._cumsum):
-            if pos == 0:
-                self._cumsum.append(len(self._lists[0]))
-                pos += 1
-
-            while self._cumsum[-1] < index:
-                self._cumsum.append(self._cumsum[-1] + len(self._lists[pos]))
+            while prev <= idx:
+                next = prev + len(self._lists[pos])
+                self._index.append(next)
+                prev = next
                 pos += 1
 
             pos -= 1
 
         if pos == 0:
-            return self._lists[pos][index]
+            return (pos, idx)
         else:
-            return self._lists[pos][index - self._cumsum[pos - 1]]
+            return (pos, (idx - self._index[pos - 1]))
+
+    def __delitem__(self, idx):
+        if isinstance(idx, slice):
+            raise NotImplementedError
+        else:
+            pos, idx = self._pos(idx)
+            self._delete(pos, idx)
+
+    def __getitem__(self, idx):
+        if isinstance(idx, slice):
+            raise NotImplementedError
+        else:
+            pos, idx = self._pos(idx)
+            return self._lists[pos][idx]
 
     def __setitem__(self, idx, val):
         if isinstance(idx, slice):
             raise NotImplementedError
         else:
-            pos, index = self._pos(idx)
+            pos, loc = self._pos(idx)
 
             if idx < 0: idx += self._len
 
+            # Check that the inserted value is not less than the
+            # previous value.
+
             if idx > 0:
-                index_prev = index - 1
+                idx_prev = loc - 1
                 pos_prev = pos
 
-                if index_prev < 0:
+                if idx_prev < 0:
                     pos_prev -= 1
-                    index_prev = len(self._lists[pos_prev]) - 1
+                    idx_prev = len(self._lists[pos_prev]) - 1
 
-                if self._lists[pos_prev][index_prev] > val:
+                if self._lists[pos_prev][idx_prev] > val:
                     raise ValueError
+
+            # Check that the inserted value is not greater than
+            # the previous value.
 
             if idx < (self._len - 1):
-                index_next = index + 1
+                idx_next = loc + 1
                 pos_next = pos
 
-                if index_next == len(self._lists[pos_next]):
+                if idx_next == len(self._lists[pos_next]):
                     pos_next += 1
-                    index_next = 0
+                    idx_next = 0
 
-                if self._lists[pos_next][index_next] < val:
+                if self._lists[pos_next][idx_next] < val:
                     raise ValueError
 
-            self._lists[pos][index] = val
+            self._lists[pos][loc] = val
 
     def __iter__(self):
         return chain.from_iterable(self._lists)
@@ -246,47 +254,36 @@ class SortedList(MutableSequence):
         pos = bisect_left(self._maxes, val)
 
         if pos == len(self._maxes):
-            return self._index(pos, 0)
+            return self._len
 
-        index = bisect_left(self._lists[pos], val)
+        idx = bisect_left(self._lists[pos], val)
 
-        return self._index(pos, index)
+        return self._loc(pos, idx)
 
     def bisect(self, val):
         return self.bisect_left(val)
 
     def bisect_right(self, val):
-        if self._maxes is None: return 0
+        if self._maxes is None:
+            return 0
 
         pos = bisect_right(self._maxes, val)
 
         if pos == len(self._maxes):
-            return self._index(pos, 0)
+            return self._len
 
-        index = bisect_right(self._lists[pos], val)
+        idx = bisect_right(self._lists[pos], val)
 
-        return self._index(pos, index)
+        return self._loc(pos, idx)
 
     def count(self, val):
-        """
-        TODO:
+        if self._maxes is None:
+            return 0
+
         left = self.bisect_left(val)
         right = self.bisect_right(val)
 
         return right - left
-        """
-
-        if self._maxes is None:
-            return 0
-
-        start = bisect_left(self._maxes, val)
-        right = bisect_right(self._maxes, val)
-
-        if right < len(self._lists):
-            right += 1
-
-        return sum(self._lists[pos].count(val)
-                   for pos in xrange(start, right))
 
     def append(self, val):
         """Append the given val to the end of the sorted list.
@@ -306,6 +303,7 @@ class SortedList(MutableSequence):
         self._maxes[pos] = val
         self._lists[pos].append(val)
         self._len += 1
+        del self._index[pos:]
 
         self._expand(pos)
 
@@ -321,6 +319,7 @@ class SortedList(MutableSequence):
             raise ValueError
 
         offset = 0
+        count = len(self._lists) - 1
 
         if self._maxes is None:
             self._maxes = []
@@ -339,35 +338,37 @@ class SortedList(MutableSequence):
             self._maxes.append(self._lists[-1][-1])
 
         self._len += len(values)
+        del self._index[count:]
 
-    def insert(self, index, val):
-        """Insert the given val at index.
-        Raise ValueError if the val at index would make the list unsorted.
+    def insert(self, idx, val):
+        """Insert the given val at idx.
+        Raise ValueError if the val at idx would make the list unsorted.
         """
-        if index < 0:
-            index += self._len
-        if index < 0:
-            index = 0
-        if index > self._len:
-            index = self._len
+        if idx < 0:
+            idx += self._len
+        if idx < 0:
+            idx = 0
+        if idx > self._len:
+            idx = self._len
 
         if self._maxes is None:
-            # The index must be zero by the inequalities above.
+            # The idx must be zero by the inequalities above.
             self._maxes = [val]
             self._lists = [[val]]
             self._len = 1
             return
 
-        if index == 0:
+        if idx == 0:
             if val > self._lists[0][0]:
                 raise ValueError
             else:
                 self._lists[0].insert(0, val)
                 self._expand(0)
                 self._len += 1
+                del self._index[:]
                 return
 
-        if index == self._len:
+        if idx == self._len:
             pos = len(self._lists) - 1
             if self._lists[pos][-1] > val:
                 raise ValueError
@@ -376,33 +377,35 @@ class SortedList(MutableSequence):
                 self._maxes[pos] = self._lists[pos][-1]
                 self._expand(pos)
                 self._len += 1
+                del self._index[pos:]
                 return
 
-        pos, index = self._pos(index)
-        index_before = index - 1
-        if index_before < 0:
+        pos, idx = self._pos(idx)
+        idx_before = idx - 1
+        if idx_before < 0:
             pos_before = pos - 1
-            index_before = len(self._lists[pos_before]) - 1
+            idx_before = len(self._lists[pos_before]) - 1
         else:
             pos_before = pos
 
-        before = self._lists[pos_before][index_before]
-        if before <= val <= self._lists[pos][index]:
-            self._lists[pos].insert(index, val)
+        before = self._lists[pos_before][idx_before]
+        if before <= val <= self._lists[pos][idx]:
+            self._lists[pos].insert(idx, val)
             self._expand(pos)
             self._len += 1
+            del self._index[pos:]
         else:
             raise ValueError
 
-    def pop(self, index=-1):
-        if index < 0:
-            index += self._len
-        if index < 0 or index >= self._len:
+    def pop(self, idx=-1):
+        if idx < 0:
+            idx += self._len
+        if idx < 0 or idx >= self._len:
             raise IndexError
 
-        pos, index = self._pos(index)
-        val = self._lists[pos][index]
-        self._delete(pos, index)
+        pos, idx = self._pos(idx)
+        val = self._lists[pos][idx]
+        self._delete(pos, idx)
 
         return val
 
@@ -543,12 +546,21 @@ class SortedList(MutableSequence):
 
             assert self._len == sum(len(sublist) for sublist in self._lists)
 
+            # Check cumulative sum cache.
+
+            cumulative_sum_len = [len(self._lists[0])]
+            for pos in xrange(1, len(self._index)):
+                cumulative_sum_len.append(cumulative_sum_len[-1] + len(self._lists[pos]))
+            assert all((self._index[pos] == cumulative_sum_len[pos])
+                       for pos in xrange(len(self._index)))
+
         except AssertionError:
             import sys, traceback
 
             traceback.print_exc(file=sys.stdout)
 
             print self._len, self._load, self._half, self._twice
+            print self._index
             print self._maxes
             print self._lists
 

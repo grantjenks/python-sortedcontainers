@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import random
-from sortedlist import SortedList
+from context import sortedcontainers
+from sortedcontainers import SortedList
 from nose.tools import raises
 from itertools import izip
 
@@ -16,7 +17,7 @@ def test_init():
     slt._check()
 
     slt = SortedList(xrange(10000))
-    assert all(tup[0] == tup[1] for tup in izip(slt, list(xrange(10000))))
+    assert all(tup[0] == tup[1] for tup in izip(slt, xrange(10000)))
 
     slt.clear()
     assert slt._len == 0
@@ -483,3 +484,7 @@ def test_check():
     slt = SortedList(xrange(10), load=4)
     slt._len = 5
     slt._check()
+
+if __name__ == '__main__':
+    import nose
+    nose.main()
