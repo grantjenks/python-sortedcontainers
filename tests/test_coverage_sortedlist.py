@@ -235,6 +235,8 @@ def test_bisect():
     assert slt.bisect(200) == 200
 
 def test_bisect_right():
+    slt = SortedList()
+    assert slt.bisect_right(10) == 0
     slt = SortedList(xrange(100), load=17)
     slt.update(xrange(100))
     slt._check()
