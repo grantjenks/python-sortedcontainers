@@ -20,7 +20,7 @@ class SortedDict(MutableMapping):
     def clear(self):
         self._dict.clear()
         self._list.clear()
-        
+
     def __contains__(self, key):
         return key in self._dict
 
