@@ -9,8 +9,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-* Slice support for delitem, getitem, setitem
-* Stress testing for sortedset
+* Slice support for SortedList delitem, getitem, setitem
 * Implementation of sorteddict
 * Coverage testing for sordeddict
 * Stress testing for sorteddict
@@ -34,16 +33,12 @@ Planned: benchmark against the popular blist module.
 
 ## Better Testing
 
-* CPython versions 2.5.4, 2.6.6, 3.1.4, 3.2.3 and 3.3.0
-* http://www.python.org/download/releases/2.5.4/
-* http://www.python.org/download/releases/2.6.6/
-* http://www.python.org/download/releases/3.1.4/
-* http://www.python.org/download/releases/3.2.3/
-* http://www.python.org/download/releases/3.3.0/
+* CPython versions 2.6, 3.2 and 3.3
 
 ## Better Performance
 
 * Cython
+* PyPI
 
 # Alternatives
 
