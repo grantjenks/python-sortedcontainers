@@ -1,6 +1,12 @@
-
 # Python byte-code
 *.py[co]
 
 # Anything under the virutalenv directory
-/soco27/
+/env*/
+
+# Ignore coverage file
+.coverage
+
+# Ignore Python setup sdist and upload directories.
+/dist/
+/runstats.egg-info/
