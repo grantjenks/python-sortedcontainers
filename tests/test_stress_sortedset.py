@@ -134,6 +134,22 @@ def stress_update(sst):
                iter_randomly(1000, 1500, 100),
                iter_randomly(1500, 2000, 100))
 
+@actor
+def stress_isdisjoint(sst):
+    values = [-1, -2, -3]
+    assert sst.isdisjoint(values)
+
+@actor
+def stress_issubset(sst):
+    that = SortedSet(sst)
+    that.update(xrange(1000))
+    assert sst.issubset(that)
+
+@actor
+def stress_issuperset(sst):
+    that = SortedSet(sst)
+    assert sst.issuperset(that)
+
 def test_stress(repeat=1000):
     sst = SortedSet(xrange(1000))
 
