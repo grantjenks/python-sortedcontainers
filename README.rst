@@ -10,7 +10,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 * Slice support for SortedList delitem, getitem, setitem
-* Implementation of sorteddict
+* Slice support for SortedSet getitem
 * Coverage testing for sordeddict
 * Stress testing for sorteddict
 * Benchmark sortedlist
