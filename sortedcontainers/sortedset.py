@@ -4,6 +4,7 @@ Sorted set implementation.
 
 from sortedlist import SortedList
 from collections import MutableSet, Sequence
+from itertools import izip
 
 class SortedSet(MutableSet, Sequence):
     def __init__(self, iterable=None, load=100):
@@ -25,12 +26,28 @@ class SortedSet(MutableSet, Sequence):
             del self._slist[index]
     def __setitem__(self, index, value):
         raise NotImplementedError
+    def __eq__(self, that):
+        if len(self) != len(that): return False
+        if isinstance(that, SortedSet):
+            return all(lhs == rhs for lhs, rhs in izip(self, that))
+        else:
+            return self.issubset(that) and self.issuperset(that)
+    def __ne__(self, that):
+        if len(self) != len(that): return True
+        if isinstance(that, SortedSet):
+            return any(lhs != rhs for lhs, rhs in izip(self, that))
+        else:
+            return (not self.issubset(that)) or (not self.issuperset(that))
     def __lt__(self, that):
         return ((len(self._slist) < len(that))
                 and all((value in that) for value in self._slist))
     def __gt__(self, that):
         return ((len(self._slist) > len(that))
                 and all((value in self._slist) for value in that))
+    def __lte__(self, that):
+        return all((value in that) for value in self._slist)
+    def __gte__(self, that):
+        return all((value in self._slist) for value in that)
     def __iter__(self):
         return iter(self._slist)
     def __len__(self):
