@@ -2,6 +2,7 @@
 Sorted dict implementation.
 """
 
+from sortedset import SortedSet
 from sortedlist import SortedList
 from collections import MutableMapping
 
@@ -124,50 +125,100 @@ class SortedDict(MutableMapping):
         return ItemsView(self)
 
 class KeysView:
-    def __init__(self, sdict):
-        self._sdict = sdict
+    def __init__(self, sorted_dict):
+        self._list = sorted_dict._list
+        self._view = sorted_dict.viewkeys()
     def __len__(self):
-        return len(self._sdict)
+        return len(self._view)
     def __contains__(self, key):
-        return key in self._sdict
+        return key in self._view
+    def __iter__(self):
+        return self._list.iter()
+    def __eq__(self, that):
+        return self._view == that
+    def __ne__(self, that):
+        return self._view != that
+    def __lt__(self, that):
+        return self._view < that
+    def __gt__(self, that):
+        return self._view > that
+    def __lte__(self, that):
+        return self._view <= that
+    def __gte__(self, that):
+        return self._view >= that
+    def isdisjoint(self, that):
+        return self._view.isdisjoint(that)
     def __and__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view & that)
     def __or__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view | that)
     def __sub__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view - that)
     def __xor__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view ^ that)
 
 class ValuesView:
-    def __init__(self, sdict):
-        self._sdict = sdict
+    def __init__(self, sorted_dict):
+        self._dict = sorted_dict
+        self._list = sorted_dict._list
+        self._view = sorted_dict.viewvalues()
     def __len__(self):
-        return len(self._sdict)
-    def __contains__(self, value):
-        return any(value == other for other in self._sdict.itervalues())
+        return len(self._dict)
+    def __contains__(self, key):
+        return key in self._dict
+    def __iter__(self):
+        return iter(self._dict[key] for key in self._list)
+    def __eq__(self, that):
+        return self._view == that
+    def __ne__(self, that):
+        return self._view == that
+    def __lt__(self, that):
+        raise TypeError
+    def __gt__(self, that):
+        raise TypeError
+    def __lte__(self, that):
+        raise TypeError
+    def __gte__(self, that):
+        raise TypeError
     def __and__(self, that):
-        raise NotImplementedError
+        raise TypeError
     def __or__(self, that):
-        raise NotImplementedError
+        raise TypeError
     def __sub__(self, that):
-        raise NotImplementedError
+        raise TypeError
     def __xor__(self, that):
-        raise NotImplementedError
+        raise TypeError
 
 class ItemsView:
-    def __init__(self, sdict):
-        self._sdict = sdict
+    def __init__(self, sorted_dict):
+        self._dict = sorted_dict
+        self._list = sorted_dict._list
+        self._view = sorted_dict.viewitems()
     def __len__(self):
-        return len(self._sdict)
-    def __contains__(self, item):
-        key, value = item
-        return key in self._sdict and self._sdict[key] == value
+        return len(self._view)
+    def __contains__(self, key):
+        return key in self._view
+    def __iter__(self):
+        return iter((key, self._dict[key]) for key in self._list)
+    def __eq__(self, that):
+        return self._view == that
+    def __ne__(self, that):
+        return self._view != that
+    def __lt__(self, that):
+        return self._view < that
+    def __gt__(self, that):
+        return self._view > that
+    def __lte__(self, that):
+        return self._view <= that
+    def __gte__(self, that):
+        return self._view >= that
+    def isdisjoint(self, that):
+        return self._view.isdisjoint(that)
     def __and__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view & that)
     def __or__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view | that)
     def __sub__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view - that)
     def __xor__(self, that):
-        raise NotImplementedError
+        return SortedSet(self._view ^ that)
