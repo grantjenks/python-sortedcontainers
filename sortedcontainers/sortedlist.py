@@ -183,57 +183,133 @@ class SortedList(MutableSequence):
         else:
             return (pos, (idx - self._index[pos - 1]))
 
+    def _slice_indices(self, slc):
+        start, stop, step = slc.indices(len(self))
+
+        if step == 0:
+            raise ValueError('slice step cannot be zero')
+
+        # Set defaults for missing values.
+
+        if start is None:
+            start = 0
+        if stop is None:
+            stop = len(self)
+        if step is None:
+            step = 1
+
+        # Fix negative indices.
+
+        if start < 0:
+            start += len(self)
+        if stop < 0:
+            stop += len(self)
+
+        # Build iterator for indices.
+
+        if step < 0:
+            indices = xrange(stop - 1, start, step)
+        else:
+            indices = xrange(start, stop, step)
+
+        return start, stop, step, indices
+
     def __delitem__(self, idx):
         if isinstance(idx, slice):
-            raise NotImplementedError
+            start, stop, step, indices = self._slice_indices(idx)
+
+            # Delete items from greatest index to least so
+            # that the indices remain valid throughout iteration.
+
+            if step > 0:
+                indices = reversed(indices)
+
+            for index in indices:
+                pos, idx = self._pos(index)
+                self._delete(pos, idx)
         else:
             pos, idx = self._pos(idx)
             self._delete(pos, idx)
 
     def __getitem__(self, idx):
         if isinstance(idx, slice):
-            raise NotImplementedError
+            start, stop, step, indices = self._slice_indices(idx)
+
+            # Return a list because a negative step could
+            # reverse the order of the items and this could
+            # be the desired behavior.
+
+            return list(self[index] for index in indices)
         else:
             pos, idx = self._pos(idx)
             return self._lists[pos][idx]
 
-    def __setitem__(self, idx, val):
-        if isinstance(idx, slice):
-            raise NotImplementedError
+    def _check_order(self, idx, val):
+        pos, loc = self._pos(idx)
+
+        if idx < 0: idx += self._len
+
+        # Check that the inserted value is not less than the
+        # previous value.
+
+        if idx > 0:
+            idx_prev = loc - 1
+            pos_prev = pos
+
+            if idx_prev < 0:
+                pos_prev -= 1
+                idx_prev = len(self._lists[pos_prev]) - 1
+
+            if self._lists[pos_prev][idx_prev] > val:
+                raise ValueError
+
+        # Check that the inserted value is not greater than
+        # the previous value.
+
+        if idx < (self._len - 1):
+            idx_next = loc + 1
+            pos_next = pos
+
+            if idx_next == len(self._lists[pos_next]):
+                pos_next += 1
+                idx_next = 0
+
+            if self._lists[pos_next][idx_next] < val:
+                raise ValueError
+
+    def __setitem__(self, index, value):
+        if isinstance(index, slice):
+            start, stop, step, indices = self._slice_indices(index)
+
+            # Keep a log of values that are set so that we can
+            # roll back changes if ordering is violated.
+
+            log = []
+
+            for idx, val in izip(indices, value):
+                pos, loc = self._pos(idx)
+                log.append((idx, self._lists[pos][loc], val))
+                self._lists[pos][loc] = val
+
+            try:
+                # Validate ordering of new values.
+
+                for idx, oldval, newval in log:
+                    self._check_order(idx, newval)
+
+            except ValueError:
+
+                # Roll back changes from log.
+
+                for idx, oldval, newval in log:
+                    pos, loc = self._pos(idx)
+                    self._lists[pos][loc] = oldval
+
+                raise
         else:
-            pos, loc = self._pos(idx)
-
-            if idx < 0: idx += self._len
-
-            # Check that the inserted value is not less than the
-            # previous value.
-
-            if idx > 0:
-                idx_prev = loc - 1
-                pos_prev = pos
-
-                if idx_prev < 0:
-                    pos_prev -= 1
-                    idx_prev = len(self._lists[pos_prev]) - 1
-
-                if self._lists[pos_prev][idx_prev] > val:
-                    raise ValueError
-
-            # Check that the inserted value is not greater than
-            # the previous value.
-
-            if idx < (self._len - 1):
-                idx_next = loc + 1
-                pos_next = pos
-
-                if idx_next == len(self._lists[pos_next]):
-                    pos_next += 1
-                    idx_next = 0
-
-                if self._lists[pos_next][idx_next] < val:
-                    raise ValueError
-
-            self._lists[pos][loc] = val
+            pos, loc = self._pos(index)
+            self._check_order(index, value)
+            self._lists[pos][loc] = value
 
     def __iter__(self):
         return chain.from_iterable(self._lists)
