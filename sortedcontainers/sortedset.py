@@ -15,17 +15,14 @@ class SortedSet(MutableSet, Sequence):
         return (value in self._slist)
     def __getitem__(self, index):
         if isinstance(index, slice):
-            # TODO: Returns a SortedSet
-            raise NotImplementedError
+            start, stop, step, indices = self._slist._slice_indices(index)
+            return SortedSet(self._slist[index] for index in indices)
         else:
             return self._slist[index]
     def __delitem__(self, index):
-        if isinstance(index, slice):
-            raise NotImplementedError
-        else:
-            del self._slist[index]
+        del self._slist[index]
     def __setitem__(self, index, value):
-        raise NotImplementedError
+        self._slist[index] = value
     def __eq__(self, that):
         if len(self) != len(that): return False
         if isinstance(that, SortedSet):
