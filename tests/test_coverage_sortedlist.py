@@ -143,25 +143,77 @@ def test_getitem():
     assert all(slt[idx] == lst[idx] for idx in xrange(100))
     assert all(slt[idx - 99] == lst[idx - 99] for idx in xrange(100))
 
+def test_getitem_slice():
+    random.seed(0)
+    slt = SortedList(load=17)
+
+    lst = list()
+
+    for rpt in xrange(100):
+        val = random.random()
+        slt.add(val)
+        lst.append(val)
+
+    lst.sort()
+
+    assert all(slt[start:] == lst[start:]
+               for start in [-75, -25, 0, 25, 75])
+
+    assert all(slt[:stop] == lst[:stop]
+               for stop in [-75, -25, 0, 25, 75])
+
+    assert all(slt[::step] == lst[::step]
+               for step in [-5, -1, 1, 5])
+
+    assert all(slt[start:stop] == lst[start:stop]
+               for start in [-75, -25, 0, 25, 75]
+               for stop in [-75, -25, 0, 25, 75])
+
+    assert all(slt[:stop:step] == lst[:stop:step]
+               for stop in [-75, -25, 0, 25, 75]
+               for step in [-5, -1, 1, 5])
+
+    assert all(slt[start::step] == lst[start::step]
+               for start in [-75, -25, 0, 25, 75]
+               for step in [-5, -1, 1, 5])
+
+    assert all(slt[start:stop:step] == lst[start:stop:step]
+               for start in [-75, -25, 0, 25, 75]
+               for stop in [-75, -25, 0, 25, 75]
+               for step in [-5, -1, 1, 5])
+
+def test_getitem_slice_big():
+    slt = SortedList(xrange(4))
+    lst = list(xrange(4))
+
+    itr = ((start, stop, step)
+           for start in [-6, -4, -2, 0, 2, 4, 6]
+           for stop in [-6, -4, -2, 0, 2, 4, 6]
+           for step in [-3, -2, -1, 1, 2, 3])
+
+    for start, stop, step in itr:
+        print start, stop, step
+        assert slt[start:stop:step] == lst[start:stop:step]
+
+@raises(ValueError)
+def test_getitem_slicezero():
+    slt = SortedList(xrange(100), load=17)
+    slt[::0]
+
 @raises(IndexError)
 def test_getitem_indexerror1():
     slt = SortedList()
-    print slt[5]
+    slt[5]
 
 @raises(IndexError)
 def test_getitem_indexerror2():
     slt = SortedList(xrange(100))
-    print slt[200]
+    slt[200]
 
 @raises(IndexError)
 def test_getitem_indexerror3():
     slt = SortedList(xrange(100))
-    print slt[-101]
-
-@raises(NotImplementedError)
-def test_getitem_notimplementederror():
-    slt = SortedList(xrange(100), load=17)
-    print slt[5:10]
+    slt[-101]
 
 def test_delitem():
     random.seed(0)
@@ -254,7 +306,6 @@ def test_count():
         slt._check()
 
     for iii in xrange(100):
-        print slt.count(iii), iii
         assert slt.count(iii) == iii
 
 def test_append():

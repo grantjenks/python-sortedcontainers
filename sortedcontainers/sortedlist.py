@@ -184,31 +184,65 @@ class SortedList(MutableSequence):
             return (pos, (idx - self._index[pos - 1]))
 
     def _slice_indices(self, slc):
-        start, stop, step = slc.indices(len(self))
+        start, stop, step = slc.start, slc.stop, slc.step
 
         if step == 0:
             raise ValueError('slice step cannot be zero')
 
         # Set defaults for missing values.
 
-        if start is None:
-            start = 0
-        if stop is None:
-            stop = len(self)
         if step is None:
             step = 1
 
-        # Fix negative indices.
+        if step > 0:
+            if start is None:
+                start = 0
+
+            if stop is None:
+                stop = len(self)
+            elif stop < 0:
+                stop += len(self)
+        else:
+            if start is None:
+                start = len(self) - 1
+
+            if stop is None:
+                stop = -1
+            elif stop < 0:
+                stop += len(self)
 
         if start < 0:
             start += len(self)
-        if stop < 0:
-            stop += len(self)
+
+        # Fix indices that are too big or too small.
+        # Slice notation is surprisingly permissive
+        # where normal indexing would raise IndexError.
+
+        if step > 0:
+            if start < 0:
+                start = 0
+            elif start > len(self):
+                start = len(self)
+
+            if stop < 0:
+                stop = 0
+            elif stop > len(self):
+                stop = len(self)
+        else:
+            if start < 0:
+                start = -1
+            elif start >= len(self):
+                start = len(self) - 1
+
+            if stop < 0:
+                stop = -1
+            elif stop > len(self):
+                stop = len(self)
 
         # Build iterator for indices.
 
         if step < 0:
-            indices = xrange(stop - 1, start, step)
+            indices = xrange(start, stop, step)
         else:
             indices = xrange(start, stop, step)
 

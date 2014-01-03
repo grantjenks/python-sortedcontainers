@@ -10,6 +10,8 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 * Coverage and stress testing for sortedlist.py
+  - setitem slice support
+  - delitem slice support
 * Coverage and stress testing for sortedset.py
 * Coverage testing for sordeddict
 * Stress testing for sorteddict

@@ -35,10 +35,9 @@ def test_delitem_slice():
     temp = SortedSet(xrange(100), load=7)
     del temp[:10]
 
-@raises(NotImplementedError)
 def test_setitem():
-    temp = SortedSet(xrange(100), load=7)
-    temp[10] = 20
+    temp = SortedSet(xrange(0, 1000, 10), load=7)
+    temp[10] = 105
 
 def test_lt_gt():
     temp = SortedSet(xrange(100), load=7)
