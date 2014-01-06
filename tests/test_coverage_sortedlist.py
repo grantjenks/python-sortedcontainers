@@ -236,6 +236,37 @@ def test_setitem():
     for pos, val in values:
         slt[pos] = val
 
+def test_setitem_slice():
+    slt = SortedList(xrange(100), load=17)
+    slt[:10] = xrange(10)
+    assert slt == list(xrange(100))
+    slt[:50] = xrange(-50, 50)
+    assert slt == list(xrange(-50, 100))
+    slt[:100] = xrange(10)
+    assert slt == list(xrange(100))
+
+@raises(ValueError)
+def test_setitem_slice_bad():
+    slt = SortedList(xrange(100), load=17)
+    slt[:10] = list(reversed(xrange(10)))
+
+def test_setitem_extended_slice():
+    slt = SortedList(xrange(0, 1000, 10), load=17)
+    lst = list(xrange(0, 1000, 10))
+    lst[10:90:10] = xrange(150, 950, 100)
+    slt[10:90:10] = xrange(150, 950, 100)
+    assert slt == lst
+
+@raises(ValueError)
+def test_setitem_extended_slice_bad1():
+    slt = SortedList(xrange(100), load=17)
+    slt[20:80:3] = list(xrange(10))
+
+@raises(ValueError)
+def test_setitem_extended_slice_bad2():
+    slt = SortedList(xrange(100), load=17)
+    slt[40:90:5] = list(xrange(10))
+
 @raises(ValueError)
 def test_setitem_valueerror1():
     slt = SortedList(xrange(10))
@@ -245,11 +276,6 @@ def test_setitem_valueerror1():
 def test_setitem_valueerror2():
     slt = SortedList(xrange(10))
     slt[0] = 10
-
-@raises(NotImplementedError)
-def test_setitem_notimplementederror():
-    slt = SortedList(xrange(100), load=17)
-    slt[5:10] = [5, 6, 7, 8, 9]
 
 def test_iter():
     slt = SortedList(xrange(10000))
@@ -539,5 +565,6 @@ def test_check():
     slt._check()
 
 if __name__ == '__main__':
+    # test_setitem_slice()
     import nose
     nose.main()

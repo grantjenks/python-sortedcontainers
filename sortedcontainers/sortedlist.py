@@ -312,34 +312,81 @@ class SortedList(MutableSequence):
                 raise ValueError
 
     def __setitem__(self, index, value):
+        """
+        Set item should insert new items if len(value) is greater than len(index)
+        If step != 1 then len(index) must be equal to len(value)
+        """
+
         if isinstance(index, slice):
             start, stop, step, indices = self._slice_indices(index)
 
-            # Keep a log of values that are set so that we can
-            # roll back changes if ordering is violated.
+            if step != 1:
+                if not hasattr(value, '__len__'):
+                    value = list(value)
 
-            log = []
+                indices = list(indices)
 
-            for idx, val in izip(indices, value):
-                pos, loc = self._pos(idx)
-                log.append((idx, self._lists[pos][loc], val))
-                self._lists[pos][loc] = val
+                if len(value) != len(indices):
+                    raise ValueError(
+                        'attempt to assign sequence of size {0}'
+                        ' to extended slice of size {1}'
+                        .format(len(value), len(indices)))
 
-            try:
-                # Validate ordering of new values.
+                # Keep a log of values that are set so that we can
+                # roll back changes if ordering is violated.
 
-                for idx, oldval, newval in log:
-                    self._check_order(idx, newval)
+                log = []
 
-            except ValueError:
-
-                # Roll back changes from log.
-
-                for idx, oldval, newval in log:
+                for idx, val in izip(indices, value):
                     pos, loc = self._pos(idx)
-                    self._lists[pos][loc] = oldval
+                    log.append((idx, self._lists[pos][loc], val))
+                    self._lists[pos][loc] = val
 
-                raise
+                try:
+                    # Validate ordering of new values.
+
+                    for idx, oldval, newval in log:
+                        self._check_order(idx, newval)
+
+                except ValueError:
+
+                    # Roll back changes from log.
+
+                    for idx, oldval, newval in log:
+                        pos, loc = self._pos(idx)
+                        self._lists[pos][loc] = oldval
+
+                    raise
+            else:
+                # Test ordering using indexing. If the value given
+                # doesn't support getitem, convert it to a list.
+
+                if not hasattr(value, '__getitem__'):
+                    value = list(value)
+
+                # Check that the given values are ordered properly.
+
+                ordered = all(value[pos - 1] <= value[pos]
+                              for pos in xrange(1, len(value)))
+
+                if not ordered:
+                    raise ValueError
+
+                indices = list(indices)
+
+                # Check ordering of values in the sorted list context.
+
+                self._check_order(indices[0], value[0])
+                self._check_order(indices[-1], value[-1])
+
+                # Delete the existing values.
+
+                del self[index]
+
+                # Insert the new values.
+
+                for idx, val in enumerate(value):
+                    self.insert(indices[0] + idx, val)
         else:
             pos, loc = self._pos(index)
             self._check_order(index, value)
