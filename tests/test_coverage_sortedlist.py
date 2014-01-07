@@ -222,10 +222,12 @@ def test_delitem():
         del slt[random.randrange(len(slt))]
         slt._check()
 
-@raises(NotImplementedError)
-def test_delitem_notimplementederror():
+def test_delitem_slice():
     slt = SortedList(xrange(100), load=17)
-    del slt[5:10]
+    del slt[10:40:1]
+    del slt[10:40:-1]
+    del slt[10:40:2]
+    del slt[10:40:-2]
 
 def test_setitem():
     random.seed(0)
@@ -238,11 +240,11 @@ def test_setitem():
 
 def test_setitem_slice():
     slt = SortedList(xrange(100), load=17)
-    slt[:10] = xrange(10)
+    slt[:10] = iter(xrange(10))
     assert slt == list(xrange(100))
     slt[:50] = xrange(-50, 50)
     assert slt == list(xrange(-50, 100))
-    slt[:100] = xrange(10)
+    slt[:100] = xrange(50)
     assert slt == list(xrange(100))
 
 @raises(ValueError)
@@ -250,11 +252,21 @@ def test_setitem_slice_bad():
     slt = SortedList(xrange(100), load=17)
     slt[:10] = list(reversed(xrange(10)))
 
+@raises(ValueError)
+def test_setitem_slice_bad1():
+    slt = SortedList(xrange(100), load=17)
+    slt[10:20] = xrange(20, 30)
+
+@raises(ValueError)
+def test_setitem_slice_bad2():
+    slt = SortedList(xrange(100), load=17)
+    slt[20:30] = xrange(10, 20)
+
 def test_setitem_extended_slice():
     slt = SortedList(xrange(0, 1000, 10), load=17)
     lst = list(xrange(0, 1000, 10))
-    lst[10:90:10] = xrange(150, 950, 100)
-    slt[10:90:10] = xrange(150, 950, 100)
+    lst[10:90:10] = xrange(105, 905, 100)
+    slt[10:90:10] = xrange(105, 905, 100)
     assert slt == lst
 
 @raises(ValueError)
@@ -565,6 +577,5 @@ def test_check():
     slt._check()
 
 if __name__ == '__main__':
-    # test_setitem_slice()
     import nose
     nose.main()

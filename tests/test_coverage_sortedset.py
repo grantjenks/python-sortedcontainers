@@ -19,10 +19,10 @@ def test_getitem():
     temp = SortedSet(xrange(100), load=7)
     assert all(val == temp[val] for val in temp)
 
-@raises(NotImplementedError)
 def test_getitem_slice():
-    temp = SortedSet(xrange(100), load=7)
-    temp[:10]
+    vals = list(xrange(100))
+    temp = SortedSet(vals, load=7)
+    assert temp[20:30] == vals[20:30]
 
 def test_delitem():
     temp = SortedSet(xrange(100), load=7)
@@ -30,14 +30,22 @@ def test_delitem():
         del temp[val]
     assert all(temp[pos] == (pos + 50) for pos in xrange(50))
 
-@raises(NotImplementedError)
 def test_delitem_slice():
-    temp = SortedSet(xrange(100), load=7)
-    del temp[:10]
+    vals = list(xrange(100))
+    temp = SortedSet(vals, load=7)
+    del vals[20:40:2]
+    del temp[20:40:2]
+    assert temp == vals
 
 def test_setitem():
     temp = SortedSet(xrange(0, 1000, 10), load=7)
     temp[10] = 105
+
+def test_setitem_slice():
+    vals = list(xrange(100))
+    temp = SortedSet(vals, load=7)
+    temp[:25] = xrange(25)
+    assert temp == vals
 
 def test_lt_gt():
     temp = SortedSet(xrange(100), load=7)

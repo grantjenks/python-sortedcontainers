@@ -134,24 +134,20 @@ def stress_setitem2(slt):
     slt[pos] = slt[pos]
 
 @actor(1)
-def stress_notimplementederror(slt):
-    try:
-        slt[5:10]
-        assert False
-    except NotImplementedError:
-        pass
+@not_empty
+def stress_getset_slice(slt):
+    start, stop = sorted(random.randrange(len(slt)) for rpt in xrange(2))
+    step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
+    lst = slt[start:stop:step]
+    assert all(lst[pos - 1] <= lst[pos] for pos in xrange(1, len(lst)))
+    slt[start:stop:step] = lst
 
-    try:
-        del slt[5:10]
-        assert False
-    except NotImplementedError:
-        pass
-
-    try:
-        slt[5:10] = [1, 2, 3, 4, 5]
-        assert False
-    except NotImplementedError:
-        pass
+@actor(1)
+@not_empty
+def stress_delitem_slice(slt):
+    start, stop = sorted(random.randrange(len(slt)) for rpt in xrange(2))
+    step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
+    del slt[start:stop:step]
 
 @actor(1)
 def stress_iter(slt):
