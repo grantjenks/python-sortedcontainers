@@ -4,15 +4,14 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # Features
 
-* Pure-Python
+* Feature-rich
 * Performance matters
+* Pure-Python
 
 # TODO
 
-* Coverage and stress testing for sortedlist.py
-  - setitem slice support
-  - delitem slice support
-* Coverage and stress testing for sortedset.py
+* Stress testing for sortedlist.py
+* Stress testing for sortedset.py
 * Coverage testing for sordeddict
 * Stress testing for sorteddict
 * Benchmark sortedlist
@@ -60,7 +59,7 @@ Planned: benchmark against the popular blist module.
 
 # License
 
-Copyright 2012 Grant Jenks
+Copyright 2014 Grant Jenks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
