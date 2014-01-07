@@ -372,12 +372,23 @@ class SortedList(MutableSequence):
                 if not ordered:
                     raise ValueError
 
-                indices = list(indices)
+                # Check ordering in context of sorted list.
 
-                # Check ordering of values in the sorted list context.
+                if start == 0:
+                    # Nothing to check on the lhs.
+                    pass
+                else:
+                    if self[start - 1] > value[0]:
+                        raise ValueError
 
-                self._check_order(indices[0], value[0])
-                self._check_order(indices[-1], value[-1])
+                if stop == len(self):
+                    # Nothing to check on the rhs.
+                    pass
+                else:
+                    # "stop" is exclusive so we don't need
+                    # to add one for the index.
+                    if self[stop] < value[-1]:
+                        raise ValueError
 
                 # Delete the existing values.
 
@@ -386,7 +397,7 @@ class SortedList(MutableSequence):
                 # Insert the new values.
 
                 for idx, val in enumerate(value):
-                    self.insert(indices[0] + idx, val)
+                    self.insert(start + idx, val)
         else:
             pos, loc = self._pos(index)
             self._check_order(index, value)
