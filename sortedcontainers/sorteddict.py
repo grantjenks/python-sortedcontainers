@@ -33,7 +33,7 @@ class SortedDict(MutableMapping):
         return self._dict[key]
 
     def __eq__(self, that):
-        raise NotImplementedError
+        return all(self[key] == that[key] for key in that)
 
     def __iter__(self):
         return iter(self._list)
@@ -43,7 +43,7 @@ class SortedDict(MutableMapping):
 
     def __setitem__(self, key, value):
         if key not in self._dict:
-            self._list.insert(key)
+            self._list.add(key)
         self._dict[key] = value
 
     def copy(self):
@@ -106,11 +106,11 @@ class SortedDict(MutableMapping):
             return self._dict[key]
         else:
             self._dict[key] = default
-            self._list.insert(key)
+            self._list.add(key)
             return default
 
     def update(self, other=None, **kwargs):
-        itr = iter(kwargs) if other is None else iter(other)
+        itr = kwargs.iteritems() if other is None else iter(other)
 
         for key, value in itr:
             self[key] = value
@@ -123,6 +123,11 @@ class SortedDict(MutableMapping):
 
     def viewitems(self):
         return ItemsView(self)
+
+    def _check(self):
+        self._list._check()
+        assert len(self._dict) == len(self._list)
+        assert all(val in self._dict for val in self._list)
 
 class KeysView:
     def __init__(self, sorted_dict):
