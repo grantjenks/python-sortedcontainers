@@ -10,8 +10,6 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-* Stress testing for sortedlist.py
-* Stress testing for sortedset.py
 * Coverage testing for sordeddict
 * Stress testing for sorteddict
 * Benchmark sortedlist
@@ -30,7 +28,7 @@ Planned: benchmark against the popular blist module.
 
 ## More Containers
 
-* priority queue
+* priority queue - maybe better term as a "PriorityDict": a map-like object for which iteration depends on the ordering of the values
 
 ## Better Testing
 
