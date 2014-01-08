@@ -28,13 +28,13 @@ class SortedSet(MutableSet, Sequence):
         if isinstance(that, SortedSet):
             return all(lhs == rhs for lhs, rhs in izip(self, that))
         else:
-            return self.issubset(that) and self.issuperset(that)
+            return all((val in self) for val in that)
     def __ne__(self, that):
         if len(self) != len(that): return True
         if isinstance(that, SortedSet):
             return any(lhs != rhs for lhs, rhs in izip(self, that))
         else:
-            return (not self.issubset(that)) or (not self.issuperset(that))
+            return any((val not in self) for val in that)
     def __lt__(self, that):
         return ((len(self._slist) < len(that))
                 and all((value in that) for value in self._slist))
