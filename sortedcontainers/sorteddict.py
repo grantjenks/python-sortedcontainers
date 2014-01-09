@@ -101,7 +101,7 @@ class SortedDict(MutableMapping):
         del self._dict[key]
         return (key, value)
 
-    def setdefault(self, default=None):
+    def setdefault(self, key, default=None):
         if key in self._dict:
             return self._dict[key]
         else:
@@ -132,13 +132,13 @@ class SortedDict(MutableMapping):
 class KeysView:
     def __init__(self, sorted_dict):
         self._list = sorted_dict._list
-        self._view = sorted_dict.viewkeys()
+        self._view = sorted_dict._dict.viewkeys()
     def __len__(self):
         return len(self._view)
     def __contains__(self, key):
         return key in self._view
     def __iter__(self):
-        return self._list.iter()
+        return iter(self._list)
     def __eq__(self, that):
         return self._view == that
     def __ne__(self, that):
@@ -147,12 +147,10 @@ class KeysView:
         return self._view < that
     def __gt__(self, that):
         return self._view > that
-    def __lte__(self, that):
+    def __le__(self, that):
         return self._view <= that
-    def __gte__(self, that):
+    def __ge__(self, that):
         return self._view >= that
-    def isdisjoint(self, that):
-        return self._view.isdisjoint(that)
     def __and__(self, that):
         return SortedSet(self._view & that)
     def __or__(self, that):
@@ -161,16 +159,18 @@ class KeysView:
         return SortedSet(self._view - that)
     def __xor__(self, that):
         return SortedSet(self._view ^ that)
+    def __repr__(self):
+        return 'SortedDict_keys({0})'.format(repr(list(self)))
 
 class ValuesView:
     def __init__(self, sorted_dict):
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        self._view = sorted_dict.viewvalues()
+        self._view = sorted_dict._dict.viewvalues()
     def __len__(self):
         return len(self._dict)
     def __contains__(self, key):
-        return key in self._dict
+        return key in self._view
     def __iter__(self):
         return iter(self._dict[key] for key in self._list)
     def __eq__(self, that):
@@ -181,9 +181,9 @@ class ValuesView:
         raise TypeError
     def __gt__(self, that):
         raise TypeError
-    def __lte__(self, that):
+    def __le__(self, that):
         raise TypeError
-    def __gte__(self, that):
+    def __ge__(self, that):
         raise TypeError
     def __and__(self, that):
         raise TypeError
@@ -193,12 +193,14 @@ class ValuesView:
         raise TypeError
     def __xor__(self, that):
         raise TypeError
+    def __repr__(self):
+        return 'SortedDict_values({0})'.format(repr(list(self)))
 
 class ItemsView:
     def __init__(self, sorted_dict):
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        self._view = sorted_dict.viewitems()
+        self._view = sorted_dict._dict.viewitems()
     def __len__(self):
         return len(self._view)
     def __contains__(self, key):
@@ -213,9 +215,9 @@ class ItemsView:
         return self._view < that
     def __gt__(self, that):
         return self._view > that
-    def __lte__(self, that):
+    def __le__(self, that):
         return self._view <= that
-    def __gte__(self, that):
+    def __ge__(self, that):
         return self._view >= that
     def isdisjoint(self, that):
         return self._view.isdisjoint(that)
@@ -227,3 +229,5 @@ class ItemsView:
         return SortedSet(self._view - that)
     def __xor__(self, that):
         return SortedSet(self._view ^ that)
+    def __repr__(self):
+        return 'SortedDict_items({0})'.format(repr(list(self)))
