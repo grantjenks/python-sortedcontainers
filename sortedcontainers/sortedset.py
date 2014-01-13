@@ -24,13 +24,15 @@ class SortedSet(MutableSet, Sequence):
     def __setitem__(self, index, value):
         self._slist[index] = value
     def __eq__(self, that):
-        if len(self) != len(that): return False
+        if len(self) != len(that):
+            return False
         if isinstance(that, SortedSet):
             return all(lhs == rhs for lhs, rhs in izip(self, that))
         else:
             return all((val in self) for val in that)
     def __ne__(self, that):
-        if len(self) != len(that): return True
+        if len(self) != len(that):
+            return True
         if isinstance(that, SortedSet):
             return any(lhs != rhs for lhs, rhs in izip(self, that))
         else:
@@ -41,9 +43,9 @@ class SortedSet(MutableSet, Sequence):
     def __gt__(self, that):
         return ((len(self._slist) > len(that))
                 and all((value in self._slist) for value in that))
-    def __lte__(self, that):
+    def __le__(self, that):
         return all((value in that) for value in self._slist)
-    def __gte__(self, that):
+    def __ge__(self, that):
         return all((value in self._slist) for value in that)
     def __iter__(self):
         return iter(self._slist)
