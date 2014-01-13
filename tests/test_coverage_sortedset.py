@@ -47,11 +47,29 @@ def test_setitem_slice():
     temp[:25] = xrange(25)
     assert temp == vals
 
+def test_eq():
+    alpha = SortedSet(xrange(100), load=7)
+    beta = SortedSet(xrange(100), load=17)
+    assert alpha == beta
+
+def test_ne():
+    alpha = SortedSet(xrange(100), load=7)
+    beta = SortedSet(xrange(99), load=17)
+    assert alpha != beta
+    beta[100:] = [101]
+    assert alpha != beta
+
 def test_lt_gt():
     temp = SortedSet(xrange(100), load=7)
     that = SortedSet(xrange(25, 75), load=9)
     assert that < temp
     assert temp > that
+
+def test_le_ge():
+    alpha = SortedSet(xrange(100), load=7)
+    beta = SortedSet(xrange(101), load=17)
+    assert alpha <= beta
+    assert beta >= alpha
 
 def test_iter():
     temp = SortedSet(xrange(100), load=7)

@@ -242,9 +242,13 @@ def test_setitem_slice():
     slt = SortedList(xrange(100), load=17)
     slt[:10] = iter(xrange(10))
     assert slt == list(xrange(100))
+    slt[:10:2] = iter(val * 2 for val in xrange(5))
+    assert slt == list(xrange(100))
     slt[:50] = xrange(-50, 50)
     assert slt == list(xrange(-50, 100))
     slt[:100] = xrange(50)
+    assert slt == list(xrange(100))
+    slt[:] = xrange(100)
     assert slt == list(xrange(100))
 
 @raises(ValueError)

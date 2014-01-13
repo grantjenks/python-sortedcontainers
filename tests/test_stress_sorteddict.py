@@ -21,13 +21,13 @@ def test_init():
     sdict = SortedDict(load=17)
     sdict._check()
 
-    sdict = SortedDict(xrange(10000))
+    sdict = SortedDict((val, -val) for val in xrange(10000))
     sdict._check()
-    assert all(tup[0] == tup[1] for tup in izip(sdict, xrange(10000)))
+    assert all(key == -val for key, val in sdict.iteritems())
 
     sdict.clear()
     sdict._check()
-    assert len(sst) == 0
+    assert len(sdict) == 0
 
     sdict = SortedDict.fromkeys(xrange(1000), None)
     assert all(sdict[key] == None for key in xrange(1000))

@@ -292,6 +292,40 @@ def test_values_view_xor():
     that_values = that.viewvalues()
     values ^ that_values
 
+def test_itemsview():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping[:13])
+    items = temp.viewitems()
+
+    assert len(items) == 13
+    assert ('a', 0) in items
+    assert list(items) == mapping[:13]
+
+    temp.update(mapping[13:])
+
+    assert len(items) == 26
+    assert ('z', 25) in items
+    assert list(items) == mapping
+
+    that = dict(mapping)
+
+    that_items = that.viewitems()
+
+    assert items == that_items
+    assert not (items != that_items)
+    assert not (items < that_items)
+    assert not (items > that_items)
+    assert items <= that_items
+    assert items >= that_items
+
+    assert list(items & that_items) == mapping
+    assert list(items | that_items) == mapping
+    assert list(items - that_items) == []
+    assert list(items ^ that_items) == []
+
+    items = SortedDict(mapping[:2]).viewitems()
+    assert repr(items) == "SortedDict_items([('a', 0), ('b', 1)])"
+
 if __name__ == '__main__':
     import nose
     nose.main()
