@@ -10,10 +10,13 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-* Stress testing for sorteddict
+* Stress testing
 * Benchmark sortedlist
 * Benchmark sortedset
 * Benchmark sorteddict
+* Test Python 2.6
+* Test Python 3.2
+* Test Python 3.3
 
 # Testing
 
