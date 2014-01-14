@@ -173,10 +173,6 @@ class ValuesView:
         return key in self._view
     def __iter__(self):
         return iter(self._dict[key] for key in self._list)
-    def __eq__(self, that):
-        return self._view == that
-    def __ne__(self, that):
-        return self._view == that
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
