@@ -217,6 +217,9 @@ def test_valuesview():
     assert 25 in values
     assert list(values) == [pos for val, pos in mapping]
 
+    that = dict(mapping)
+    that_values = that.viewvalues()
+
     values = SortedDict(mapping[:2]).viewvalues()
     assert repr(values) == "SortedDict_values([0, 1])"
 
@@ -239,7 +242,7 @@ def test_values_view_gt():
     values > that_values
 
 @raises(TypeError)
-def test_values_view_lte():
+def test_values_view_le():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -248,7 +251,7 @@ def test_values_view_lte():
     values <= that_values
 
 @raises(TypeError)
-def test_values_view_gte():
+def test_values_view_ge():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()

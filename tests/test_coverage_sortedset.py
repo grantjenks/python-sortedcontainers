@@ -51,12 +51,16 @@ def test_eq():
     alpha = SortedSet(xrange(100), load=7)
     beta = SortedSet(xrange(100), load=17)
     assert alpha == beta
+    beta.add(101)
+    assert not (alpha == beta)
 
 def test_ne():
     alpha = SortedSet(xrange(100), load=7)
     beta = SortedSet(xrange(99), load=17)
     assert alpha != beta
     beta[100:] = [101]
+    assert alpha != beta
+    beta = set(beta)
     assert alpha != beta
 
 def test_lt_gt():
