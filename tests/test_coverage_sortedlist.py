@@ -250,6 +250,10 @@ def test_setitem_slice():
     assert slt == list(xrange(100))
     slt[:] = xrange(100)
     assert slt == list(xrange(100))
+    slt[90:] = []
+    assert slt == list(xrange(90))
+    slt[:10] = []
+    assert slt == list(xrange(10, 90))
 
 @raises(ValueError)
 def test_setitem_slice_bad():
