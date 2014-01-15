@@ -374,14 +374,14 @@ class SortedList(MutableSequence):
 
                 # Check ordering in context of sorted list.
 
-                if start == 0:
+                if start == 0 or len(value) == 0:
                     # Nothing to check on the lhs.
                     pass
                 else:
                     if self[start - 1] > value[0]:
                         raise ValueError
 
-                if stop == len(self):
+                if stop == len(self) or len(value) == 0:
                     # Nothing to check on the rhs.
                     pass
                 else:
