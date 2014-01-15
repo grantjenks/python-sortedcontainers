@@ -215,8 +215,6 @@ class ItemsView:
         return self._view <= that
     def __ge__(self, that):
         return self._view >= that
-    def isdisjoint(self, that):
-        return self._view.isdisjoint(that)
     def __and__(self, that):
         return SortedSet(self._view & that)
     def __or__(self, that):
