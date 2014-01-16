@@ -1,3 +1,15 @@
+"""
+def test(num):
+    from sortedcontainers import SortedList
+    import random
+    random.seed(0)
+    sl = SortedList()
+    for rpt in xrange(num):
+        sl.add(random.random())
+for val in xrange(100000, 1000000, 10000):
+    print val, timeit.timeit('test({})'.format(val), setup='from __main__ import test', number=5)
+"""
+
 def add_inc(count, load):
     from sortedlist import SortedList
     slst = SortedList(load=load)
