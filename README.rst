@@ -41,21 +41,77 @@ Planned: benchmark against the popular blist module.
 * Cython
 * PyPI
 
-# Alternatives
+# Benchmark
 
-* http://pypi.python.org/pypi/treap/0.995
-  - slow, c-impl
-* http://pypi.python.org/pypi/blist/
-  - slow, c-impl
-* http://pypi.python.org/pypi/rbtree/
-  - fast, c-impl
-* https://github.com/pgrafov/python-avl-tree
-* http://sourceforge.net/projects/pyavl/
-  - easy_install failed on Windows, c-impl
+## Routines
+
+### SortedList
+
+* add
+* update (add from iterable)
+* contains
+* remove
+* delitem
+* getitem
+* pop
+* index
+* iter
+* count
+
+### SortedDict
+
+* setitem, getitem, delitem
+* keys, values, items
+* pop
+* update
+* setdefault
+* iter
+
+### SortedSet
+
+* and
+* eq
+* or
+* sub
+* xor
+* add
+* difference
+* intersection
+* pop
+* remove
+* union
+* update
+* iter
+
+## Competitors
+
+* https://pypi.python.org/pypi/rbtree
+  - c-module
+  - rbtree.rbtree is SortedDict
+  - rbtree.rbset is SortedSet
+* https://pypi.python.org/pypi/blist
+  - c and python implementations
+  - blist.sortedlist is SortedList
+  - blist.sorteddict is SortedDict
+  - blist.sortedset is SortedSet
+* https://pypi.python.org/pypi/treap
+  - depends on cython
+  - treap.treap is SortedDict
+* https://pypi.python.org/pypi/bintrees
+  - had to install from exe on Windows
+  - bintrees.FastAVLTree is SortedDict & SortedSet
+  - bintrees.FastRBTree is SortedDict & SortedSet
+* https://pypi.python.org/pypi/skiplistcollections
+  - pure python
+  - skiplistcollections.SkipListDict
+  - skiplistcollections.SkipListSet
+
+## Not Easily Installable
+
 * http://newcenturycomputers.net/projects/rbtree.html
-  - slow, pure-python
-* http://pythonsweetness.tumblr.com/post/45227295342/fast-pypy-compatible-ordered-map-in-89-lines-of-python
-  - fast, pure-python
+* https://github.com/pgrafov/python-avl-tree
+* https://pypi.python.org/pypi/pyavl
+  - Fails to install on Windows
 
 # License
 
