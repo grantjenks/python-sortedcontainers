@@ -61,10 +61,7 @@ Planned: benchmark against the popular blist module.
 ### SortedDict
 
 * setitem, getitem, delitem
-* keys, values, items
 * pop
-* update
-* setdefault
 * iter
 
 ### SortedSet

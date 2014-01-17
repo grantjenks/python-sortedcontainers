@@ -69,8 +69,13 @@ from context import sortedcontainers
 from sortedcontainers import SortedDict
 
 from rbtree import rbtree
-
 from blist import sorteddict
+
+# todo
+
+from treap import treap
+from bintrees import FastAVLTree, FastRBTree
+from skiplistcollections import SkipListDict
 
 impls[getitem]['sortedcontainers.SortedDict'] = {
     'setup': fill_values,
@@ -109,6 +114,10 @@ impls[setitem]['blist.sorteddict'] = {
 }
 
 if __name__ == '__main__':
+    # Add switches
+    # -testname
+    # -datatypename
+
     for test in impls:
         for name in impls[test]:
             details = impls[test][name]
