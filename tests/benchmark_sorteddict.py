@@ -2,14 +2,8 @@
 Benchmark Sorted Dictionary Datatypes
 """
 
-import time, random
-from collections import defaultdict
-
-random.seed(0)
-sizes = [10, 100, 1000, 10000, 100000] # 1000000
-lists = {key: list(xrange(key)) for key in sizes}
-for key in sizes:
-    random.shuffle(lists[key])
+import time, random, argparse
+from collections import defaultdict, OrderedDict
 
 # Benchmarking.
 
@@ -39,18 +33,40 @@ def benchmark(test, name, ctor, setup, func_name):
 
         print test.func_name, name, size, min(times), max(times), times[2], sum(times) / len(times)
 
+tests = OrderedDict()
+
+def register_test(func):
+    tests[func.func_name] = func
+    return func
+
 # Tests
 
+@register_test
 def getitem(func, size):
     for val in lists[size]:
         assert func(val) == -val
 
+@register_test
 def setitem(func, size):
     for val in lists[size]:
         func(val, -val)
 
-def delitem():
-    pass
+@register_test
+def setitem_existing(func, size):
+    for val in lists[size]:
+        func(val, -val)
+
+@register_test
+def delitem(func, size):
+    for val in lists[size]:
+        func(val)
+
+@register_test
+def iter(func, size):
+    count = 0
+    for val in func():
+        assert val == count
+        count += 1
 
 # Setups
 
@@ -61,64 +77,105 @@ def fill_values(obj, size):
     for val in lists[size]:
         obj[val] = -val
 
-# Implementations
-
-impls = defaultdict(dict)
+# Implementation imports.
 
 from context import sortedcontainers
 from sortedcontainers import SortedDict
-
 from rbtree import rbtree
 from blist import sorteddict
-
-# todo
-
 from treap import treap
 from bintrees import FastAVLTree, FastRBTree
 from skiplistcollections import SkipListDict
 
-impls[getitem]['sortedcontainers.SortedDict'] = {
-    'setup': fill_values,
-    'ctor': SortedDict,
-    'func': '__getitem__'
-}
+kinds = OrderedDict()
 
-impls[getitem]['rbtree.rbtree'] = {
-    'setup': fill_values,
-    'ctor': rbtree,
-    'func': '__getitem__'
-}
+kinds['SortedDict'] = SortedDict
+kinds['rbtree'] = rbtree
+kinds['sorteddict'] = sorteddict
+kinds['treap'] = treap
+kinds['FastAVLTree'] = FastAVLTree
+kinds['FastRBTree'] = FastRBTree
+kinds['SkipListDict'] = SkipListDict
 
-impls[getitem]['blist.sorteddict'] = {
-    'setup': fill_values,
-    'ctor': sorteddict,
-    'func': '__getitem__'
-}
+# Implementations
 
-impls[setitem]['sortedcontainers.SortedDict'] = {
-    'setup': do_nothing,
-    'ctor': SortedDict,
-    'func': '__setitem__'
-}
+impls = OrderedDict()
 
-impls[setitem]['rbtree.rbtree'] = {
-    'setup': do_nothing,
-    'ctor': rbtree,
-    'func': '__setitem__'
-}
+for name in tests:
+    impls[name] = OrderedDict()
 
-impls[setitem]['blist.sorteddict'] = {
-    'setup': do_nothing,
-    'ctor': sorteddict,
-    'func': '__setitem__'
-}
+for name, kind in kinds.items():
+    impls['getitem'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__getitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['setitem'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': '__setitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['setitem_existing'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__setitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['delitem'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__delitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['iter'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__iter__'
+    }
+
+# Setup
+
+parser = argparse.ArgumentParser(description='Benchmark Sorted Dict Implementations')
+parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--test', action='append')
+parser.add_argument('--kind', action='append')
+parser.add_argument('--size', type=int, action='append')
+
+args = parser.parse_args()
+
+print 'Seed:', args.seed
+random.seed(args.seed)
+
+sizes = args.size or [10, 100, 1000, 10000, 100000]
+
+print 'Sizes:', sizes
+
+lists = {key: list(xrange(key)) for key in sizes}
+for key in sizes:
+    random.shuffle(lists[key])
+
+# Script
 
 if __name__ == '__main__':
-    # Add switches
-    # -testname
-    # -datatypename
+    test_names = args.test or tests.keys()
+    kind_names = args.kind or kinds.keys()
+
+    print 'Tests:', test_names
+    print 'Kinds:', kind_names
+
+    print 'test_name', 'data_type', 'size', 'min', 'max', 'median', 'mean'
 
     for test in impls:
+        if test not in test_names:
+            continue
         for name in impls[test]:
+            if name not in kind_names:
+                continue
             details = impls[test][name]
-            benchmark(test, name, details['ctor'], details['setup'], details['func'])
+            benchmark(tests[test], name, details['ctor'], details['setup'], details['func'])
