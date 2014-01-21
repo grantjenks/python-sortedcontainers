@@ -7,12 +7,16 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Feature-rich
 * Performance matters
 * Pure-Python
+* 100% test coverage
+* Stress testing
 
 # TODO
 
 * Benchmark sortedlist
 * Benchmark sortedset
-* Benchmark sorteddict
+* SortedDict.pop 'key' could be _NotGiven -> remove_max (popitem)
+  - Also provide remove_min, find_min, find_max
+* SortedDict.iloc -> index location (self._list.__getitem__)
 * Stress testing
 * Test Python 2.6
 * Test Python 3.2
@@ -57,12 +61,6 @@ Planned: benchmark against the popular blist module.
 * index
 * iter
 * count
-
-### SortedDict
-
-* setitem, getitem, delitem
-* pop
-* iter
 
 ### SortedSet
 
