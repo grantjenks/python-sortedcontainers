@@ -53,7 +53,7 @@ class SortedDict(MutableMapping):
         return that
 
     @classmethod
-    def fromkeys(self, seq, value=None):
+    def fromkeys(cls, seq, value=None):
         that = SortedDict()
         for key in seq:
             that[key] = value
