@@ -21,6 +21,8 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Test Python 2.6
 * Test Python 3.2
 * Test Python 3.3
+* Documentation
+* Parse benchmark results and publish
 
 # Testing
 
@@ -48,19 +50,6 @@ Planned: benchmark against the popular blist module.
 # Benchmark
 
 ## Routines
-
-### SortedList
-
-* add
-* update (add from iterable)
-* contains
-* remove
-* delitem
-* getitem
-* pop
-* index
-* iter
-* count
 
 ### SortedSet
 
