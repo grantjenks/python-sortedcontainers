@@ -1,66 +1,161 @@
 """
-def test(num):
-    from sortedcontainers import SortedList
-    import random
-    random.seed(0)
-    sl = SortedList()
-    for rpt in xrange(num):
-        sl.add(random.random())
-for val in xrange(100000, 1000000, 10000):
-    print val, timeit.timeit('test({})'.format(val), setup='from __main__ import test', number=5)
+Benchmark Sorted List Datatypes
 """
 
-def add_inc(count, load):
-    from sortedlist import SortedList
-    slst = SortedList(load=load)
-    for val in xrange(count):
-        slst.add(val)
+from benchmark import *
 
-def add_dec(count, load):
-    from sortedlist import SortedList
-    slst = SortedList(load=load)
-    for val in xrange(count, 0, -1):
-        slst.add(val)
+# Tests.
 
-def add_rnd(count, load):
-    from sortedlist import SortedList
-    import random
-    random.seed(0)
-    slst = SortedList(load=load)
-    for val in xrange(count):
-        slst.add(random.random())
+@register_test
+def add(func, size):
+    for val in lists[size]:
+        func(val)
 
-def fun_rnd(count):
-    import random
-    random.seed(0)
-    for val in xrange(count):
-        random.random()
+@register_test
+def update(func, size):
+    pos = 0
+    chunk = size / 10
+    while pos < size:
+        func(lists[size][pos:(pos + chunk)])
+        pos += chunk
 
-def calibrate(command, setup):
-    import timeit
-    number = 1
-    while True:
-        dur = timeit.timeit(command, setup=setup, number=number)
-        if dur > 1: break
-        number *= 2
-    return number
+@register_test
+def contains(func, size):
+    for val in lists[size]:
+        assert func(val)
 
-def stddev(values):
-    mean = sum(values) / len(values)
-    diff = [(value - mean) ** 2 for value in values]
-    return (sum(diff) / len(values)) ** 0.5
+@register_test
+def remove(func, size):
+    for val in lists[size]:
+        func(val)
 
-def better_timeit(command, setup, repeat=5):
-    import timeit
-    number = calibrate(command, setup)
-    print 'Testing "', command, '" at', number, 'iterations.'
-    runs = []
-    for rpt in xrange(repeat):
-        runs.append(timeit.timeit(command, setup=setup, number=number) / number)
-    print 'Min:', min(runs), 'Max:', max(runs), 'Mean:', sum(runs) / repeat,
-    print 'Median:', sorted(runs)[repeat / 2], 'Stddev:', stddev(runs)
+@register_test
+def delitem(func, size):
+    while size > 0:
+        pos = random.randrange(size)
+        func(pos)
+        size -= 1
+
+@register_test
+def getitem(func, size):
+    for val in lists[size]:
+        assert func(val) == val
+
+@register_test
+def pop(func, size):
+    size -= 1
+    while size >= 0:
+        assert func() == size
+        size -= 1
+
+@register_test
+def index(func, size):
+    for val in lists[size]:
+        assert func(val) == val
+
+@register_test
+def iter(func, size):
+    count = 0
+    for val in func():
+        assert val == count
+        count += 1
+
+@register_test
+def count(func, size):
+    for val in lists[size]:
+        assert func(val) == 1
+
+# Setups.
+
+def do_nothing(obj, size):
+    pass
+
+def fill_values(obj, size):
+    obj.update(lists[size])
+
+# Implementation imports.
+
+from context import sortedcontainers
+from sortedcontainers import SortedList
+from blist import sortedlist
+
+kinds['SortedList'] = SortedList
+kinds['sortedlist'] = sortedlist
+
+# Implementation configuration.
+
+for name in tests:
+    impls[name] = OrderedDict()
+
+for name, kind in kinds.items():
+    impls['add'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'add'
+    }
+
+for name, kind in kinds.items():
+    impls['update'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': 'update'
+    }
+
+for name, kind in kinds.items():
+    impls['contains'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__contains__'
+    }
+
+for name, kind in kinds.items():
+    impls['remove'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'remove'
+    }
+
+for name, kind in kinds.items():
+    impls['delitem'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__delitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['getitem'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__getitem__'
+    }
+
+for name, kind in kinds.items():
+    impls['pop'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'pop'
+    }
+
+for name, kind in kinds.items():
+    impls['index'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'index'
+    }
+
+for name, kind in kinds.items():
+    impls['iter'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__iter__'
+    }
+
+for name, kind in kinds.items():
+    impls['count'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'count'
+    }
 
 if __name__ == '__main__':
-    # At 1,000,000 - load=100
-    for val in xrange(50, 151, 50):
-        better_timeit('add_rnd(10000000, {})'.format(val), 'from __main__ import add_rnd')
+    main()
