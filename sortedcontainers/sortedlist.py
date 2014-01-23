@@ -159,6 +159,9 @@ class SortedList(MutableSequence):
             raise IndexError
 
         if idx < 0:
+            last_len = len(self._lists[-1])
+            if -idx <= last_len:
+                return (len(self._lists) - 1, last_len + idx)
             idx += self._len
         if idx < 0:
             raise IndexError
@@ -566,9 +569,7 @@ class SortedList(MutableSequence):
             raise ValueError
 
     def pop(self, idx=-1):
-        if idx < 0:
-            idx += self._len
-        if idx < 0 or idx >= self._len:
+        if (idx < 0 and -idx > self._len) or (idx >= self._len):
             raise IndexError
 
         pos, idx = self._pos(idx)
