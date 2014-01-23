@@ -12,10 +12,9 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-* Benchmark sortedlist
 * Benchmark sortedset
+  - Implementation should use Python built-in set
 * SortedDict.pop 'key' could be _NotGiven -> remove_max (popitem)
-  - Also provide remove_min, find_min, find_max
 * SortedDict.iloc -> index location (self._list.__getitem__)
 * Stress testing
 * Test Python 2.6
@@ -23,6 +22,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Test Python 3.3
 * Documentation
 * Parse benchmark results and publish
+* Measure memory usage
 
 # Testing
 
@@ -37,6 +37,10 @@ Planned: benchmark against the popular blist module.
 ## More Containers
 
 * priority queue - maybe better term as a "PriorityDict": a map-like object for which iteration depends on the ordering of the values
+  - dict for mapping
+  - sortedlist of (value, key) tuples for ordering
+  - require keys and values to be orderable
+  - require values to be hashable
 
 ## Better Testing
 
@@ -66,6 +70,7 @@ Planned: benchmark against the popular blist module.
 * union
 * update
 * iter
+* contains
 
 ## Competitors
 
