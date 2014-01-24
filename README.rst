@@ -9,12 +9,11 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Pure-Python
 * 100% test coverage
 * Stress testing
+* Pragmatic design (e.g. use set for sortedset)
 
 # TODO
 
 * Benchmark sortedset
-  - Implementation should use Python built-in set
-* SortedDict.pop 'key' could be _NotGiven -> remove_max (popitem)
 * SortedDict.iloc -> index location (self._list.__getitem__)
 * Stress testing
 * Test Python 2.6
@@ -57,20 +56,14 @@ Planned: benchmark against the popular blist module.
 
 ### SortedSet
 
-* and
-* eq
-* or
-* sub
-* xor
-* add
-* difference
-* intersection
+* __and__ (intersection)
+* __eq__
+* __or__ (union)
+* __sub__ (difference)
+* __xor__ (symmetric_difference)
 * pop
 * remove
-* union
 * update
-* iter
-* contains
 
 ## Competitors
 
