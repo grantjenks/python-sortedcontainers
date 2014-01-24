@@ -20,9 +20,9 @@ def test_init():
     sst._check()
 
     sst = SortedSet(load=10000)
-    assert sst._slist._load == 10000
-    assert sst._slist._twice == 20000
-    assert sst._slist._half == 5000
+    assert sst._list._load == 10000
+    assert sst._list._twice == 20000
+    assert sst._list._half == 5000
     sst._check()
 
     sst = SortedSet(xrange(10000))
