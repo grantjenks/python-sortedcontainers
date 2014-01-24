@@ -11,6 +11,18 @@ def contains(func, size):
     for val in lists[size]:
         assert func(val)
 
+@register_test
+def iter(func, size):
+    count = 0
+    for val in func():
+        assert val == count
+        count += 1
+
+@register_test
+def add(func, size):
+    for val in lists[size]:
+        func(val)
+
 # Setups.
 
 def do_nothing(obj, size):
@@ -43,6 +55,20 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__contains__'
+    }
+
+for name, kind in kinds.items():
+    impls['iter'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__iter__'
+    }
+
+for name, kind in kinds.items():
+    impls['add'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': 'add'
     }
 
 if __name__ == '__main__':
