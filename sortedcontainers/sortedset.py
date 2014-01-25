@@ -7,9 +7,9 @@ from collections import MutableSet, Sequence
 from itertools import izip, chain
 
 class SortedSet(MutableSet, Sequence):
-    def __init__(self, iterable=None, load=100):
-        self._set = set()
-        self._list = SortedList(load=load)
+    def __init__(self, iterable=None, load=100, _set=None):
+        self._set = set() if _set is None else _set
+        self._list = SortedList(self._set, load=load)
         if iterable is not None:
             self.update(iterable)
     def __contains__(self, value):
@@ -75,6 +75,14 @@ class SortedSet(MutableSet, Sequence):
             return (self._set >= that)
         else:
             return all(val in self._set for val in that)
+    def __and__(self, that):
+        return self.intersection(that)
+    def __or__(self, that):
+        return self.union(that)
+    def __sub__(self, that):
+        return self.difference(that)
+    def __xor__(self, that):
+        return self.symmetric_difference(that)
     def __iter__(self):
         return iter(self._list)
     def __len__(self):
@@ -95,7 +103,10 @@ class SortedSet(MutableSet, Sequence):
         self._set.clear()
         self._list.clear()
     def copy(self):
-        return SortedSet(self._list)
+        new_set = SortedSet()
+        new_set._set = self._set
+        new_set._list = self._list
+        return new_set
     def count(self, value):
         return 1 if value in self._set else 0
     def discard(self, value):
@@ -118,12 +129,12 @@ class SortedSet(MutableSet, Sequence):
         self._set.remove(value)
         self._list.remove(value)
     def difference(self, *iterables):
-        new_set = self.copy()
-        new_set.difference_update(*iterables)
+        diff = self._set.difference(*iterables)
+        new_set = SortedSet(load=self._list._load, _set=diff)
         return new_set
     def difference_update(self, *iterables):
         values = set(chain(*iterables))
-        if (2 * len(values)) > len(self):
+        if (4 * len(values)) > len(self):
             self._set.difference_update(values)
             self._list.clear()
             self._list.update(self._set)
@@ -131,16 +142,16 @@ class SortedSet(MutableSet, Sequence):
             for value in values:
                 self.discard(value)
     def intersection(self, *iterables):
-        new_set = self.copy()
-        new_set.intersection_update(*iterables)
+        comb = self._set.intersection(*iterables)
+        new_set = SortedSet(load=self._list._load, _set=comb)
         return new_set
     def intersection_update(self, *iterables):
         self._set.intersection_update(*iterables)
         self._list.clear()
         self._list.update(self._set)
     def symmetric_difference(self, that):
-        new_set = self.copy()
-        new_set.symmetric_difference_update(that)
+        diff = self._set.symmetric_difference(that)
+        new_set = SortedSet(load=self._list._load, _set=diff)
         return new_set
     def symmetric_difference_update(self, that):
         self._set.symmetric_difference_update(that)
@@ -151,7 +162,7 @@ class SortedSet(MutableSet, Sequence):
     def update(self, *iterables):
         """Update sorted set with iterables."""
         values = set(chain(*iterables))
-        if (2 * len(values)) > len(self):
+        if (4 * len(values)) > len(self):
             self._set.update(values)
             self._list.clear()
             self._list.update(self._set)
