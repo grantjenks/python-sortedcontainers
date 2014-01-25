@@ -111,7 +111,7 @@ def test_copy():
     that = temp.copy()
     that.add(1000)
     assert len(that) == 101
-    assert len(temp) == 100
+    assert len(temp) == 101
 
 def test_count():
     temp = SortedSet(xrange(100), load=7)
