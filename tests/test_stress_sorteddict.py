@@ -52,7 +52,7 @@ def stress_getitem(sdict):
     
 @actor
 def stress_eq(sdict):
-    that = {key: value for key, value in sdict.iteritems()}
+    that = dict((key, value) for key, value in sdict.iteritems())
     assert sdict == that
 
 @actor
@@ -128,7 +128,7 @@ def stress_setdefault(sdict):
 def stress_update(sdict):
     sdict.update((val, -val) for val in xrange(100))
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    sdict.update(**{val: val for val in letters})
+    sdict.update(**dict((val, val) for val in letters))
     for letter in letters:
         del sdict[letter]
 

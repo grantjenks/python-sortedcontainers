@@ -4,6 +4,7 @@ import random, string
 from context import sortedcontainers
 from sortedcontainers import SortedDict
 from nose.tools import raises
+from sys import hexversion
 
 def test_init():
     temp = SortedDict()
@@ -168,7 +169,15 @@ def test_update2():
     temp.update(**dict(mapping))
     assert temp.items() == mapping
 
+def test_iloc():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert temp.iloc(0) == 'a'
+    assert temp.iloc(-1) == 'z'
+
 def test_keysview():
+    if hexversion < 0x02070000: return
+
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
     keys = temp.viewkeys()
@@ -203,6 +212,8 @@ def test_keysview():
     assert repr(keys) == "SortedDict_keys(['a', 'b'])"
 
 def test_valuesview():
+    if hexversion < 0x02070000: return
+
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
     values = temp.viewvalues()
@@ -225,6 +236,7 @@ def test_valuesview():
 
 @raises(TypeError)
 def test_values_view_lt():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -234,6 +246,7 @@ def test_values_view_lt():
 
 @raises(TypeError)
 def test_values_view_gt():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -243,6 +256,7 @@ def test_values_view_gt():
 
 @raises(TypeError)
 def test_values_view_le():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -252,6 +266,7 @@ def test_values_view_le():
 
 @raises(TypeError)
 def test_values_view_ge():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -261,6 +276,7 @@ def test_values_view_ge():
 
 @raises(TypeError)
 def test_values_view_and():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -270,6 +286,7 @@ def test_values_view_and():
 
 @raises(TypeError)
 def test_values_view_or():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -279,6 +296,7 @@ def test_values_view_or():
 
 @raises(TypeError)
 def test_values_view_sub():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -288,6 +306,7 @@ def test_values_view_sub():
 
 @raises(TypeError)
 def test_values_view_xor():
+    if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     values = temp.viewvalues()
@@ -296,6 +315,7 @@ def test_values_view_xor():
     values ^ that_values
 
 def test_itemsview():
+    if hexversion < 0x02070000: return
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
     items = temp.viewitems()
