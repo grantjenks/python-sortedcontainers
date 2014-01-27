@@ -663,7 +663,7 @@ class SortedList(MutableSequence):
 
     def __repr__(self):
         reprs = (repr(value) for value in self)
-        return 'SortedList([{}])'.format(', '.join(reprs))
+        return 'SortedList([{0}])'.format(', '.join(reprs))
 
     def _check(self):
         try:
