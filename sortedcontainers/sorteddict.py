@@ -115,6 +115,21 @@ class SortedDict(MutableMapping):
         for key, value in itr:
             self[key] = value
 
+    def iloc(self, index):
+        """
+        Return key(s) corresponding to index location.
+        Accepts slices.
+        Use to easily implement find_min or pop_max. For example:
+
+            def find_min(sdict):
+                return sdict.iloc(0)
+
+            def pop_max(sdict):
+                val = sdict.iloc(-1)
+                del sdict[val]
+                return val
+        """
+        return self._list[index]
     def viewkeys(self):
         return KeysView(self)
 
