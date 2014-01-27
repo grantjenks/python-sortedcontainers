@@ -8,6 +8,19 @@ from collections import MutableMapping
 
 _NotGiven = object()
 
+def not26(func):
+    from functools import wraps
+    from sys import hexversion
+
+    @wraps(func)
+    def errfunc(*args, **kwargs):
+        raise NotImplementedError
+
+    if hexversion < 0x02070000:
+        return errfunc
+    else:
+        return func
+
 class SortedDict(MutableMapping):
     def __init__(self, *args, **kwargs):
         self._dict = dict()
@@ -130,12 +143,16 @@ class SortedDict(MutableMapping):
                 return val
         """
         return self._list[index]
+
+    @not26
     def viewkeys(self):
         return KeysView(self)
 
+    @not26
     def viewvalues(self):
         return ValuesView(self)
 
+    @not26
     def viewitems(self):
         return ItemsView(self)
 
