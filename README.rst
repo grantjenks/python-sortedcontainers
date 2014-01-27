@@ -10,62 +10,29 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * 100% test coverage
 * Stress testing
 * Pragmatic design (e.g. use set for sortedset)
+* Tested on Python 2.6, 2.7, 3.2, and 3.3
+* Fully documented
+* Benchmark comparison
 
 # TODO
 
-* Benchmark sortedset
-* SortedDict.iloc -> index location (self._list.__getitem__)
-* Stress testing
-* Test Python 2.6
 * Test Python 3.2
 * Test Python 3.3
+* Stress testing
 * Documentation
-* Parse benchmark results and publish
-* Measure memory usage
+* Parse benchmark results, plot, and integrate in docs
 
-# Testing
-
-Currently tested with CPython version 2.7.
-
-# Performance
-
-Planned: benchmark against the popular blist module.
-
-# Goals
-
-## More Containers
+# Future
 
 * priority queue - maybe better term as a "PriorityDict": a map-like object for which iteration depends on the ordering of the values
   - dict for mapping
   - sortedlist of (value, key) tuples for ordering
   - require keys and values to be orderable
   - require values to be hashable
+* Test/benchmark with Cython
+* Test/benchmark with PyPI
 
-## Better Testing
-
-* CPython versions 2.6, 3.2 and 3.3
-
-## Better Performance
-
-* Cython
-* PyPI
-
-# Benchmark
-
-## Routines
-
-### SortedSet
-
-* __and__ (intersection)
-* __eq__
-* __or__ (union)
-* __sub__ (difference)
-* __xor__ (symmetric_difference)
-* pop
-* remove
-* update
-
-## Competitors
+# Competitors
 
 * https://pypi.python.org/pypi/rbtree
   - c-module
