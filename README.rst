@@ -17,8 +17,12 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 * Test Python 3.2
+  - Work through nosetests
+  - Look for division
 * Test Python 3.3
+* Test Python 2.6, 2.7 again
 * Stress testing
+  - Py 2.6, 2.7, 3.2, 3.3
 * Documentation
 * Parse benchmark results, plot, and integrate in docs
 
