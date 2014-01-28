@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function as print
+from sys import version_info
+
 import copy
 import bisect
 import random
-from context import sortedcontainers
+from .context import sortedcontainers
 from sortedcontainers import SortedList
 from nose.tools import raises
 from functools import wraps
 from itertools import izip
+
+if version_info[0] == 2:
+    range = xrange
 
 random.seed(0)
 actions = []
@@ -49,7 +55,7 @@ def stress_add(slt):
 
 @actor(1)
 def stress_update(slt):
-    slt.update((random.random() for rpt in xrange(350)))
+    slt.update((random.random() for rpt in range(350)))
 
 @actor(1)
 @not_empty
@@ -136,23 +142,23 @@ def stress_setitem2(slt):
 @actor(1)
 @not_empty
 def stress_getset_slice(slt):
-    start, stop = sorted(random.randrange(len(slt)) for rpt in xrange(2))
+    start, stop = sorted(random.randrange(len(slt)) for rpt in range(2))
     step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
     lst = slt[start:stop:step]
-    assert all(lst[pos - 1] <= lst[pos] for pos in xrange(1, len(lst)))
+    assert all(lst[pos - 1] <= lst[pos] for pos in range(1, len(lst)))
     slt[start:stop:step] = lst
 
 @actor(1)
 @not_empty
 def stress_delitem_slice(slt):
-    start, stop = sorted(random.randrange(len(slt)) for rpt in xrange(2))
+    start, stop = sorted(random.randrange(len(slt)) for rpt in range(2))
     step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
     del slt[start:stop:step]
 
 @actor(1)
 def stress_iter(slt):
     itr1 = iter(slt)
-    itr2 = (slt[pos] for pos in xrange(len(slt)))
+    itr2 = (slt[pos] for pos in range(len(slt)))
     assert all(tup[0] == tup[1] for tup in izip(itr1, itr2))
 
 @actor(1)
@@ -186,7 +192,7 @@ def stress_bisect_right(slt):
 def stress_dups(slt):
     pos = min(random.randrange(len(slt)), 300)
     val = slt[pos]
-    for rpt in xrange(pos):
+    for rpt in range(pos):
         slt.add(val)
 
 @actor(1)
@@ -210,7 +216,7 @@ def stress_extend(slt):
     if random.randrange(100) < 10:
         slt.clear()
     if len(slt) == 0:
-        slt.extend(float(val) / 1000 for val in xrange(1000))
+        slt.extend(float(val) / 1000 for val in range(1000))
     else:
         slt.extend(frange(slt[-1], 1, 0.001))
 
@@ -278,7 +284,7 @@ def stress_imul(slt):
 def stress_reversed(slt):
     itr = slt.reversed()
     pos = random.randrange(1, len(slt))
-    for rpt in xrange(pos):
+    for rpt in range(pos):
         val = itr.next()
     assert val == slt[-pos]
 
@@ -300,9 +306,9 @@ def stress_lt(slt):
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedList((random.random() for rpt in xrange(1000)))
+    slt = SortedList((random.random() for rpt in range(1000)))
 
-    for rpt in xrange(repeat):
+    for rpt in range(repeat):
         action = random.choice(actions)
         action(slt)
 
@@ -336,17 +342,17 @@ if __name__ == '__main__':
 
     try:
         num = int(sys.argv[1])
-        print 'Setting iterations to', num
+        print('Setting iterations to', num)
     except:
-        print 'Setting iterations to 1000 (default)'
+        print('Setting iterations to 1000 (default)')
         num = 1000
 
     try:
         pea = int(sys.argv[2])
         random.seed(pea)
-        print 'Setting seed to', pea
+        print('Setting seed to', pea)
     except:
-        print 'Setting seed to 0 (default)'
+        print('Setting seed to 0 (default)')
         random.seed(0)
 
     try:
@@ -354,4 +360,4 @@ if __name__ == '__main__':
     except:
         raise
     finally:
-        print 'Exiting after', (datetime.now() - start)
+        print('Exiting after', (datetime.now() - start))

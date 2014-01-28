@@ -2,8 +2,8 @@
 Sorted dict implementation.
 """
 
-from sortedset import SortedSet
-from sortedlist import SortedList
+from .sortedset import SortedSet
+from .sortedlist import SortedList
 from collections import MutableMapping
 
 _NotGiven = object()

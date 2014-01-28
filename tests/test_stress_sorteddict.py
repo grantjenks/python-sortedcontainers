@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function as print
+from sys import version_info
+
 import random
-from context import sortedcontainers
+from .context import sortedcontainers
 from sortedcontainers import SortedDict
 from nose.tools import raises
 from functools import wraps
 from itertools import izip
+
+if version_info[0] == 2:
+    range = xrange
 
 random.seed(0)
 actions = []
@@ -21,7 +27,7 @@ def test_init():
     sdict = SortedDict(load=17)
     sdict._check()
 
-    sdict = SortedDict((val, -val) for val in xrange(10000))
+    sdict = SortedDict((val, -val) for val in range(10000))
     sdict._check()
     assert all(key == -val for key, val in sdict.iteritems())
 
@@ -29,8 +35,8 @@ def test_init():
     sdict._check()
     assert len(sdict) == 0
 
-    sdict = SortedDict.fromkeys(xrange(1000), None)
-    assert all(sdict[key] == None for key in xrange(1000))
+    sdict = SortedDict.fromkeys(range(1000), None)
+    assert all(sdict[key] == None for key in range(1000))
 
 @actor
 def stress_contains(sdict):
@@ -40,7 +46,7 @@ def stress_contains(sdict):
 @actor
 def stress_delitem(sdict):
     keys = list(sdict)
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sdict))
         del sdict[keys[pos]]
         del keys[pos]
@@ -58,7 +64,7 @@ def stress_eq(sdict):
 @actor
 def stress_setitem_len(sdict):
     start_len = len(sdict)
-    keys = list(xrange(100))
+    keys = list(range(100))
     missing = sum(1 for val in keys if val not in sdict)
     for val in keys:
         sdict[val] = -val
@@ -71,7 +77,7 @@ def stress_copy(sdict):
 
 @actor
 def stress_get(sdict):
-    keys = list(xrange(100))
+    keys = list(range(100))
     for key in keys:
         if key in sdict:
             assert sdict.get(key, 1) == -key
@@ -80,7 +86,7 @@ def stress_get(sdict):
 
 @actor
 def stress_has_key(sdict):
-    keys = list(xrange(100))
+    keys = list(range(100))
     for key in keys:
         assert all((key in sdict) == (sdict.has_key(key)) for key in sdict)
 
@@ -98,7 +104,7 @@ def stress_iter_items_keys_values(sdict):
 
 @actor
 def stress_pop(sdict):
-    keys = list(xrange(200))
+    keys = list(range(200))
     for key in keys:
         if key in sdict:
             val = sdict[key]
@@ -108,14 +114,14 @@ def stress_pop(sdict):
 
 @actor
 def stress_popitem(sdict):
-    items = [sdict.popitem() for rpt in xrange(100)]
+    items = [sdict.popitem() for rpt in range(100)]
     keys = [item[0] for item in items]
-    assert all(keys[pos - 1] > keys[pos] for pos in xrange(1, len(keys)))
+    assert all(keys[pos - 1] > keys[pos] for pos in range(1, len(keys)))
     assert all(key == -value for key, value in items)
 
 @actor
 def stress_setdefault(sdict):
-    keys = list(xrange(200))
+    keys = list(range(200))
     for key in keys:
         if key in sdict:
             assert sdict.setdefault(key) == -key
@@ -126,23 +132,23 @@ def stress_setdefault(sdict):
 
 @actor
 def stress_update(sdict):
-    sdict.update((val, -val) for val in xrange(100))
+    sdict.update((val, -val) for val in range(100))
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     sdict.update(**dict((val, val) for val in letters))
     for letter in letters:
         del sdict[letter]
 
 def test_stress(repeat=1000):
-    sdict = SortedDict((val, -val) for val in xrange(1000))
+    sdict = SortedDict((val, -val) for val in range(1000))
 
-    for rpt in xrange(repeat):
+    for rpt in range(repeat):
         action = random.choice(actions)
         action(sdict)
 
         try:
             sdict._check()
         except AssertionError:
-            print action
+            print(action)
             raise
 
         start_len = len(sdict)
@@ -167,17 +173,17 @@ if __name__ == '__main__':
 
     try:
         num = int(sys.argv[1])
-        print 'Setting iterations to', num
+        print('Setting iterations to', num)
     except:
-        print 'Setting iterations to 1000 (default)'
+        print('Setting iterations to 1000 (default)')
         num = 1000
 
     try:
         pea = int(sys.argv[2])
         random.seed(pea)
-        print 'Setting seed to', pea
+        print('Setting seed to', pea)
     except:
-        print 'Setting seed to 0 (default)'
+        print('Setting seed to 0 (default)')
         random.seed(0)
 
     try:
@@ -185,4 +191,4 @@ if __name__ == '__main__':
     except:
         raise
     finally:
-        print 'Exiting after', (datetime.now() - start)
+        print('Exiting after', (datetime.now() - start))

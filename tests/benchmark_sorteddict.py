@@ -44,7 +44,7 @@ def fill_values(obj, size):
 
 # Implementation imports.
 
-from context import sortedcontainers
+from .context import sortedcontainers
 from sortedcontainers import SortedDict
 from rbtree import rbtree
 from blist import sorteddict

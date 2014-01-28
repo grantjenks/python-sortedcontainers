@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function as print
+from sys import version_info
+
 import random
-from context import sortedcontainers
+from .context import sortedcontainers
 from sortedcontainers import SortedSet
 from nose.tools import raises
 from itertools import izip
 from functools import wraps
 import operator
+
+if version_info[0] == 2:
+    range = xrange
 
 random.seed(0)
 actions = []
@@ -25,8 +31,8 @@ def test_init():
     assert sst._list._half == 5000
     sst._check()
 
-    sst = SortedSet(xrange(10000))
-    assert all(tup[0] == tup[1] for tup in izip(sst, xrange(10000)))
+    sst = SortedSet(range(10000))
+    assert all(tup[0] == tup[1] for tup in izip(sst, range(10000)))
 
     sst.clear()
     assert len(sst) == 0
@@ -40,7 +46,7 @@ def stress_contains(sst):
 
 @actor
 def stress_delitem(sst):
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sst))
         del sst[pos]
 
@@ -54,7 +60,7 @@ def stress_operator(sst):
 @actor
 def stress_getitem(sst):
     other = list(sst)
-    assert all(sst[pos] == other[pos] for pos in xrange(len(sst)))
+    assert all(sst[pos] == other[pos] for pos in range(len(sst)))
     
 @actor
 def stress_reversed(sst):
@@ -63,7 +69,7 @@ def stress_reversed(sst):
     
 @actor
 def stress_add(sst):
-    for rpt in xrange(100):
+    for rpt in range(100):
         val = random.randrange(0, 1000)
         sst.add(val)
 
@@ -82,14 +88,14 @@ def stress_difference(sst):
 
 @actor
 def stress_discard(sst):
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sst))
         val = sst[pos]
         sst.discard(val)
 
 @actor
 def stress_index(sst):
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sst))
         val = sst[pos]
         assert pos == sst.index(val)
@@ -112,14 +118,14 @@ def stress_symmetric_difference(sst):
 def stress_pop(sst):
     val = sst[-1]
     assert val == sst.pop()
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sst))
         val = sst[pos]
         assert val == sst.pop(pos)
 
 @actor
 def stress_remove(sst):
-    for rpt in xrange(100):
+    for rpt in range(100):
         pos = random.randrange(0, len(sst))
         val = sst[pos]
         sst.remove(val)
@@ -127,7 +133,7 @@ def stress_remove(sst):
 @actor
 def stress_update(sst):
     def iter_randomly(start, stop, count):
-        for rpt in xrange(count):
+        for rpt in range(count):
             yield random.randrange(start, stop)
     sst.update(iter_randomly(0, 500, 100),
                iter_randomly(500, 1000, 100),
@@ -142,7 +148,7 @@ def stress_isdisjoint(sst):
 @actor
 def stress_issubset(sst):
     that = SortedSet(sst)
-    that.update(xrange(1000))
+    that.update(range(1000))
     assert sst.issubset(that)
 
 @actor
@@ -151,16 +157,16 @@ def stress_issuperset(sst):
     assert sst.issuperset(that)
 
 def test_stress(repeat=1000):
-    sst = SortedSet(xrange(1000))
+    sst = SortedSet(range(1000))
 
-    for rpt in xrange(repeat):
+    for rpt in range(repeat):
         action = random.choice(actions)
         action(sst)
 
         try:
             sst._check()
         except AssertionError:
-            print action
+            print(action)
             raise
 
         start_len = len(sst)
@@ -182,17 +188,17 @@ if __name__ == '__main__':
 
     try:
         num = int(sys.argv[1])
-        print 'Setting iterations to', num
+        print('Setting iterations to', num)
     except:
-        print 'Setting iterations to 1000 (default)'
+        print('Setting iterations to 1000 (default)')
         num = 1000
 
     try:
         pea = int(sys.argv[2])
         random.seed(pea)
-        print 'Setting seed to', pea
+        print('Setting seed to', pea)
     except:
-        print 'Setting seed to 0 (default)'
+        print('Setting seed to 0 (default)')
         random.seed(0)
 
     try:
@@ -200,4 +206,4 @@ if __name__ == '__main__':
     except:
         raise
     finally:
-        print 'Exiting after', (datetime.now() - start)
+        print('Exiting after', (datetime.now() - start))

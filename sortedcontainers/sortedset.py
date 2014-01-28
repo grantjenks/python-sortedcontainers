@@ -2,9 +2,16 @@
 Sorted set implementation.
 """
 
-from sortedlist import SortedList
+from sys import version_info
+
+from .sortedlist import SortedList
 from collections import MutableSet, Sequence
-from itertools import izip, chain
+
+if version_info[0] == 2:
+    from itertools import izip, chain
+else:
+    from itertools import chain
+    izip = zip
 
 class SortedSet(MutableSet, Sequence):
     def __init__(self, iterable=None, load=100, _set=None):

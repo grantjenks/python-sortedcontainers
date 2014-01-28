@@ -2,8 +2,18 @@
 Sorted list implementation.
 """
 
+from __future__ import print_function as print
+from sys import version_info
+
 from bisect import bisect_left, bisect_right, insort
-from itertools import chain, izip, imap
+
+if version_info[0] == 2:
+    from itertools import chain, izip, imap
+else:
+    from itertools import chain
+    izip = zip
+    imap = map
+
 from collections import MutableSequence
 from operator import iadd
 
@@ -728,9 +738,9 @@ class SortedList(MutableSequence):
 
             traceback.print_exc(file=sys.stdout)
 
-            print self._len, self._load, self._half, self._twice
-            print self._index
-            print self._maxes
-            print self._lists
+            print(self._len, self._load, self._half, self._twice)
+            print(self._index)
+            print(self._maxes)
+            print(self._lists)
 
             raise

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random, string
-from context import sortedcontainers
+from .context import sortedcontainers
 from sortedcontainers import SortedDict
 from nose.tools import raises
 from sys import hexversion
