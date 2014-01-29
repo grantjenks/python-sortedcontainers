@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function as print
+from __future__ import print_function
 from sys import version_info
 
 import random
@@ -8,9 +8,9 @@ from .context import sortedcontainers
 from sortedcontainers import SortedDict
 from nose.tools import raises
 from functools import wraps
-from itertools import izip
 
 if version_info[0] == 2:
+    from itertools import izip as zip
     range = xrange
 
 random.seed(0)
@@ -95,11 +95,11 @@ def stress_items_keys_values(sdict):
     items = sdict.items()
     keys = sdict.keys()
     values = sdict.values()
-    assert items == zip(keys, values)
+    assert list(items) == list(zip(keys, values))
 
 @actor
 def stress_iter_items_keys_values(sdict):
-    it = izip(sdict.iteritems(), sdict.iterkeys(), sdict.itervalues())
+    it = zip(sdict.iteritems(), sdict.iterkeys(), sdict.itervalues())
     assert all(tup[0] == (tup[1], tup[2]) for tup in it)
 
 @actor
@@ -129,14 +129,6 @@ def stress_setdefault(sdict):
             sdict.setdefault(key)
             assert sdict[key] == None
             del sdict[key]
-
-@actor
-def stress_update(sdict):
-    sdict.update((val, -val) for val in range(100))
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    sdict.update(**dict((val, val) for val in letters))
-    for letter in letters:
-        del sdict[letter]
 
 def test_stress(repeat=1000):
     sdict = SortedDict((val, -val) for val in range(1000))

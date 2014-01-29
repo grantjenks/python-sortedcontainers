@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function as print
+from __future__ import print_function
 from sys import version_info
 
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedSet
 from nose.tools import raises
-from itertools import izip
 from functools import wraps
 import operator
 
 if version_info[0] == 2:
+    from itertools import izip as zip
     range = xrange
 
 random.seed(0)
@@ -32,7 +32,7 @@ def test_init():
     sst._check()
 
     sst = SortedSet(range(10000))
-    assert all(tup[0] == tup[1] for tup in izip(sst, range(10000)))
+    assert all(tup[0] == tup[1] for tup in zip(sst, range(10000)))
 
     sst.clear()
     assert len(sst) == 0
@@ -65,7 +65,7 @@ def stress_getitem(sst):
 @actor
 def stress_reversed(sst):
     other = list(reversed(list(sst)))
-    assert all(tup[0] == tup[1] for tup in izip(reversed(sst), other))
+    assert all(tup[0] == tup[1] for tup in zip(reversed(sst), other))
     
 @actor
 def stress_add(sst):

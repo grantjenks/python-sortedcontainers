@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function as print
+from __future__ import print_function
 from sys import version_info
 
 import copy
@@ -10,9 +10,9 @@ from .context import sortedcontainers
 from sortedcontainers import SortedList
 from nose.tools import raises
 from functools import wraps
-from itertools import izip
 
 if version_info[0] == 2:
+    from itertools import izip as zip
     range = xrange
 
 random.seed(0)
@@ -45,7 +45,7 @@ def stress_clear(slt):
     else:
         values = list(slt)
         slt.clear()
-        slt.update(values[:len(values) / 2])
+        slt.update(values[:int(len(values) / 2)])
 
 @actor(1)
 def stress_add(slt):
@@ -136,7 +136,7 @@ def stress_setitem(slt):
 @actor(1)
 @not_empty
 def stress_setitem2(slt):
-    pos = random.randrange(len(slt) / 100) * 100
+    pos = random.randrange(int(len(slt) / 100)) * 100
     slt[pos] = slt[pos]
 
 @actor(1)
@@ -159,12 +159,12 @@ def stress_delitem_slice(slt):
 def stress_iter(slt):
     itr1 = iter(slt)
     itr2 = (slt[pos] for pos in range(len(slt)))
-    assert all(tup[0] == tup[1] for tup in izip(itr1, itr2))
+    assert all(tup[0] == tup[1] for tup in zip(itr1, itr2))
 
 @actor(1)
 def stress_reversed(slt):
     itr = reversed(list(reversed(slt)))
-    assert all(tup[0] == tup[1] for tup in izip(slt, itr))
+    assert all(tup[0] == tup[1] for tup in zip(slt, itr))
 
 @actor(1)
 def stress_bisect_left(slt):
@@ -285,7 +285,7 @@ def stress_reversed(slt):
     itr = slt.reversed()
     pos = random.randrange(1, len(slt))
     for rpt in range(pos):
-        val = itr.next()
+        val = next(itr)
     assert val == slt[-pos]
 
 @actor(1)

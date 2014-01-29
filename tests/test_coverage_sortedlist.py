@@ -6,9 +6,9 @@ import random
 from .context import sortedcontainers
 from sortedcontainers import SortedList
 from nose.tools import raises
-from itertools import izip
 
 if version_info[0] == 2:
+    from itertools import izip as zip
     range = xrange
 
 def test_init():
@@ -22,7 +22,7 @@ def test_init():
     slt._check()
 
     slt = SortedList(range(10000))
-    assert all(tup[0] == tup[1] for tup in izip(slt, range(10000)))
+    assert all(tup[0] == tup[1] for tup in zip(slt, range(10000)))
 
     slt.clear()
     assert slt._len == 0
@@ -51,7 +51,7 @@ def test_update():
     slt = SortedList()
 
     slt.update(range(1000))
-    assert all(tup[0] == tup[1] for tup in izip(slt, list(range(1000))))
+    assert all(tup[0] == tup[1] for tup in zip(slt, list(range(1000))))
     assert len(slt) == 1000
     slt._check()
 
@@ -88,7 +88,7 @@ def test_discard():
     slt.discard(2)
     slt._check()
 
-    assert all(tup[0] == tup[1] for tup in izip(slt, [1, 2, 2, 3, 3, 5]))
+    assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
 
 def test_remove():
     slt = SortedList()
@@ -105,7 +105,7 @@ def test_remove():
     slt._check()
     slt.discard(2)
 
-    assert all(tup[0] == tup[1] for tup in izip(slt, [1, 2, 2, 3, 3, 5]))
+    assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
 
 @raises(ValueError)
 def test_remove_valueerror1():
@@ -304,12 +304,12 @@ def test_setitem_valueerror2():
 def test_iter():
     slt = SortedList(range(10000))
     itr = iter(slt)
-    assert all(tup[0] == tup[1] for tup in izip(range(10000), itr))
+    assert all(tup[0] == tup[1] for tup in zip(range(10000), itr))
 
 def test_reversed():
     slt = SortedList(range(10000))
     rev = slt.reversed()
-    assert all(tup[0] == tup[1] for tup in izip(range(9999, -1, -1), rev))
+    assert all(tup[0] == tup[1] for tup in zip(range(9999, -1, -1), rev))
 
 def test_len():
     slt = SortedList()

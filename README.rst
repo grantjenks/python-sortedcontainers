@@ -17,8 +17,9 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 * Test Python 3.2
-  - Work through nosetests
+  - dict.keys should return view, not iterable in Python 3
   - Look for division
+  - Audit izip, imap, xrange
 * Test Python 3.3
 * Test Python 2.6, 2.7 again
 * Stress testing

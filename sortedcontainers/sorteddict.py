@@ -6,17 +6,18 @@ from .sortedset import SortedSet
 from .sortedlist import SortedList
 from collections import MutableMapping
 
+from sys import version_info
+
 _NotGiven = object()
 
 def not26(func):
     from functools import wraps
-    from sys import hexversion
 
     @wraps(func)
     def errfunc(*args, **kwargs):
         raise NotImplementedError
 
-    if hexversion < 0x02070000:
+    if version_info[0] == 2:
         return errfunc
     else:
         return func
@@ -76,23 +77,32 @@ class SortedDict(MutableMapping):
         return self._dict.get(key, default)
 
     def has_key(self, key):
-        return self._dict.has_key(key)
+        return key in self._dict
 
     def items(self):
-        return list(self.iteritems())
+        if version_info[0] == 2:
+            return self.iteritems()
+        else:
+            return list(self.iteritems())
 
     def iteritems(self):
         for key in self._list:
             yield key, self._dict[key]
 
     def keys(self):
-        return list(self.iterkeys())
+        if version_info[0] == 2:
+            return self.iterkeys()
+        else:
+            return list(self.iterkeys())
 
     def iterkeys(self):
         return iter(self._list)
 
     def values(self):
-        return list(self.itervalues())
+        if version_info[0] == 2:
+            return self.itervalues()
+        else:
+            return list(self.itervalues())
 
     def itervalues(self):
         for key in self._list:
@@ -123,7 +133,10 @@ class SortedDict(MutableMapping):
             return default
 
     def update(self, other=None, **kwargs):
-        itr = kwargs.iteritems() if other is None else iter(other)
+        if version_info[0] == 2:
+            itr = kwargs.iteritems() if other is None else iter(other)
+        else:
+            itr = kwargs.items() if other is None else iter(other)
 
         for key, value in itr:
             self[key] = value

@@ -1,4 +1,4 @@
-from __future__ import print_function as print
+from __future__ import print_function
 from sys import version_info
 
 import time, random, argparse
