@@ -6,12 +6,10 @@ from sys import version_info
 
 from .sortedlist import SortedList
 from collections import MutableSet, Sequence
+from itertools import chain
 
 if version_info[0] == 2:
-    from itertools import izip, chain
-else:
-    from itertools import chain
-    izip = zip
+    from itertools import izip as zip
 
 class SortedSet(MutableSet, Sequence):
     def __init__(self, iterable=None, load=100, _set=None):
@@ -48,7 +46,7 @@ class SortedSet(MutableSet, Sequence):
         if len(self) != len(that):
             return False
         if isinstance(that, SortedSet):
-            return all(lhs == rhs for lhs, rhs in izip(self, that))
+            return all(lhs == rhs for lhs, rhs in zip(self, that))
         elif isinstance(that, set):
             return (self._set == that)
         else:
@@ -57,7 +55,7 @@ class SortedSet(MutableSet, Sequence):
         if len(self) != len(that):
             return True
         if isinstance(that, SortedSet):
-            return any(lhs != rhs for lhs, rhs in izip(self, that))
+            return any(lhs != rhs for lhs, rhs in zip(self, that))
         elif isinstance(that, set):
             return (self._set != that)
         else:
