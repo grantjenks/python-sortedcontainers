@@ -6,7 +6,7 @@ from .sortedset import SortedSet
 from .sortedlist import SortedList
 from collections import MutableMapping
 
-from sys import version_info
+from sys import version_info, hexversion
 
 _NotGiven = object()
 
@@ -17,7 +17,7 @@ def not26(func):
     def errfunc(*args, **kwargs):
         raise NotImplementedError
 
-    if version_info[0] == 2:
+    if hexversion < 0x02070000:
         return errfunc
     else:
         return func
@@ -81,9 +81,9 @@ class SortedDict(MutableMapping):
 
     def items(self):
         if version_info[0] == 2:
-            return self.iteritems()
-        else:
             return list(self.iteritems())
+        else:
+            return ItemsView(self)
 
     def iteritems(self):
         for key in self._list:
@@ -91,18 +91,18 @@ class SortedDict(MutableMapping):
 
     def keys(self):
         if version_info[0] == 2:
-            return self.iterkeys()
-        else:
             return list(self.iterkeys())
+        else:
+            return KeysView(self)
 
     def iterkeys(self):
         return iter(self._list)
 
     def values(self):
         if version_info[0] == 2:
-            return self.itervalues()
-        else:
             return list(self.itervalues())
+        else:
+            return ValuesView(self)
 
     def itervalues(self):
         for key in self._list:
@@ -177,7 +177,10 @@ class SortedDict(MutableMapping):
 class KeysView:
     def __init__(self, sorted_dict):
         self._list = sorted_dict._list
-        self._view = sorted_dict._dict.viewkeys()
+        if version_info[0] == 2:
+            self._view = sorted_dict._dict.viewkeys()
+        else:
+            self._view = sorted_dict._dict.keys()
     def __len__(self):
         return len(self._view)
     def __contains__(self, key):
@@ -211,7 +214,10 @@ class ValuesView:
     def __init__(self, sorted_dict):
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        self._view = sorted_dict._dict.viewvalues()
+        if version_info[0] == 2:
+            self._view = sorted_dict._dict.viewvalues()
+        else:
+            self._view = sorted_dict._dict.values()
     def __len__(self):
         return len(self._dict)
     def __contains__(self, key):
@@ -241,7 +247,10 @@ class ItemsView:
     def __init__(self, sorted_dict):
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        self._view = sorted_dict._dict.viewitems()
+        if version_info[0] == 2:
+            self._view = sorted_dict._dict.viewitems()
+        else:
+            self._view = sorted_dict._dict.items()
     def __len__(self):
         return len(self._view)
     def __contains__(self, key):
