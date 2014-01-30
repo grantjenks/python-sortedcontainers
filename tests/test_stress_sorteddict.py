@@ -163,6 +163,8 @@ if __name__ == '__main__':
 
     start = datetime.now()
 
+    print('Python', sys.version_info)
+
     try:
         num = int(sys.argv[1])
         print('Setting iterations to', num)

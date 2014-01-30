@@ -8,22 +8,15 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Performance matters
 * Pure-Python
 * 100% test coverage
-* Stress testing
+* Hours of stress testing
 * Pragmatic design (e.g. use set for sortedset)
-* Tested on Python 2.6, 2.7, 3.2, and 3.3
 * Fully documented
 * Benchmark comparison
+* Developed on Python 2.7
+* Tested on Python 2.6, 2.7, 3.2, and 3.3
 
 # TODO
 
-* Test Python 3.2
-  - dict.keys should return view, not iterable in Python 3
-  - Look for division
-  - Audit izip, imap, xrange
-* Test Python 3.3
-* Test Python 2.6, 2.7 again
-* Stress testing
-  - Py 2.6, 2.7, 3.2, 3.3
 * Documentation
 * Parse benchmark results, plot, and integrate in docs
 
@@ -37,7 +30,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 * Test/benchmark with Cython
 * Test/benchmark with PyPI
 
-# Competitors
+# Benchmark Comparisons
 
 * https://pypi.python.org/pypi/rbtree
   - c-module
