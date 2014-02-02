@@ -13,8 +13,11 @@ def measure(test, func, size):
     end = time.clock()
     return (end - start)
 
-def benchmark(test, name, ctor, setup, func_name):
+def benchmark(test, name, ctor, setup, func_name, limit):
     for size in sizes:
+        if not args.no_limit and size > limit:
+            continue
+
         # warmup
 
         obj = ctor()
@@ -45,13 +48,16 @@ lists = {}
 
 parser = argparse.ArgumentParser(description='Benchmarking')
 parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--no-limit', default=False, action='store_true')
 parser.add_argument('--test', action='append')
 parser.add_argument('--kind', action='append')
 parser.add_argument('--size', type=int, action='append')
 args = parser.parse_args()
 
-def main():
+def main(name):
     global sizes, lists
+
+    print('Benchmarking:', name)
 
     print('Seed:', args.seed)
     random.seed(args.seed)
@@ -79,4 +85,6 @@ def main():
             if name not in kind_names:
                 continue
             details = impls[test][name]
-            benchmark(tests[test], name, details['ctor'], details['setup'], details['func'])
+            benchmark(tests[test], name, details['ctor'], details['setup'], details['func'], details['limit'])
+
+    print('Benchmark Stop')

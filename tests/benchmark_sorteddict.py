@@ -54,7 +54,7 @@ from skiplistcollections import SkipListDict
 
 kinds['SortedDict'] = SortedDict
 kinds['rbtree'] = rbtree
-kinds['sorteddict'] = sorteddict
+kinds['blist.sorteddict'] = sorteddict
 kinds['treap'] = treap
 kinds['FastAVLTree'] = FastAVLTree
 kinds['FastRBTree'] = FastRBTree
@@ -69,36 +69,41 @@ for name, kind in kinds.items():
     impls['getitem'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__getitem__'
+        'func': '__getitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['setitem'][name] = {
         'setup': do_nothing,
         'ctor': kind,
-        'func': '__setitem__'
+        'func': '__setitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['setitem_existing'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__setitem__'
+        'func': '__setitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['delitem'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__delitem__'
+        'func': '__delitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['iter'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__iter__'
+        'func': '__iter__',
+        'limit': 100000
     }
 
 if __name__ == '__main__':
-    main()
+    main('SortedDict')

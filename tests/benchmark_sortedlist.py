@@ -80,7 +80,7 @@ from sortedcontainers import SortedList
 from blist import sortedlist
 
 kinds['SortedList'] = SortedList
-kinds['sortedlist'] = sortedlist
+kinds['blist.sortedlist'] = sortedlist
 
 # Implementation configuration.
 
@@ -91,71 +91,81 @@ for name, kind in kinds.items():
     impls['add'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': 'add'
+        'func': 'add',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['update'][name] = {
         'setup': do_nothing,
         'ctor': kind,
-        'func': 'update'
+        'func': 'update',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['contains'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__contains__'
+        'func': '__contains__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['remove'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': 'remove'
+        'func': 'remove',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['delitem'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__delitem__'
+        'func': '__delitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['getitem'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__getitem__'
+        'func': '__getitem__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['pop'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': 'pop'
+        'func': 'pop',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['index'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': 'index'
+        'func': 'index',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['iter'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': '__iter__'
+        'func': '__iter__',
+        'limit': 100000
     }
 
 for name, kind in kinds.items():
     impls['count'][name] = {
         'setup': fill_values,
         'ctor': kind,
-        'func': 'count'
+        'func': 'count',
+        'limit': 100000
     }
 
 if __name__ == '__main__':
-    main()
+    main('SortedList')
