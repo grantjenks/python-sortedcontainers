@@ -17,8 +17,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-* Documentation
-* Parse benchmark results, plot, and integrate in docs
+* Documentation (include plots)
 
 # Future
 
