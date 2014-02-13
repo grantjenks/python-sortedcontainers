@@ -147,7 +147,11 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {
+    'index':    ['sidebarintro.html', 'sourcelink.html', 'searchbox.html'],
+    '**':       ['sidebarlogo.html', 'localtoc.html', 'relations.html',
+                 'sourcelink.html', 'searchbox.html']
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
@@ -260,3 +264,7 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+sys.path.append(os.path.abspath('_themes'))
+html_theme_path = ['_themes']
+html_theme = 'gj'
