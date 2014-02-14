@@ -1,14 +1,14 @@
-# Sorted Containers
+Sorted Containers
+=================
 
 Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
 - Documentation (include plots)
-  - sidebarlogo.html
-  - sidebarintro.html
-  - URL todos: http://todo
   - introduction
+    - SortedSet
+    - SortedDict
   - implementation
   - performance
   - development
@@ -16,9 +16,11 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
   - sorteddict
     - check for sortedset references
   - sortedset
+- URL todos: http://todo
 - document every function
 
-# License
+License
+-------
 
 Copyright 2014 Grant Jenks
 

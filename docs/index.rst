@@ -49,56 +49,30 @@ Feature Support
 - Performance matters (often faster than C implementations)
 - Compatible API (nearly identical to popular blist and rbtree modules)
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.iloc(-5:))
-- Pragmatic design (e.g. SortedSet is mostly a Python set with a SortedList index)
+- Pragmatic design (e.g. SortedSet is mostly a Python set with a SortedList
+  index)
 - Developed on Python 2.7
 - Tested on Python 2.6, 2.7, 3.2, and 3.3
 
-Installation
-------------
+Quickstart
+----------
 
-This part of the documentation covers the installation of SortedContainers.
-The first step to using any software package is getting it properly installed.
-
-
-Distribute & Pip
-................
-
-Installing SortedContainers is simple with `pip <http://www.pip-installer.org/>`_::
+Installing SortedContainers is simple with
+`pip <http://www.pip-installer.org/>`_::
 
     > pip install sortedcontainers
 
-or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
+You can access documentation in the interpreter with Python's built-in help
+function:
 
-    > easy_install sortedcontainers
-
-But, you really `shouldn't do that <http://www.pip-installer.org/en/latest/other-tools.html#pip-compared-to-easy-install>`_.
-
-Get the Code
-............
-
-SortedContainers is actively developed on GitHub, where the code is
-`always available <https://github.com/grantjenks/sortedcontainers>`_.
-
-You can either clone the public repository::
-
-    > git clone git://github.com/grantjenks/sortedcontainers.git
-
-Download the `tarball <https://github.com/grantjenks/sortedcontainers/tarball/master>`_::
-
-    > curl -OL https://github.com/grantjenks/sortedcontainers/tarball/master
-
-Or, download the `zipball <https://github.com/grantjenks/sortedcontainers/zipball/master>`_::
-
-    > curl -OL https://github.com/grantjenks/sortedcontainers/zipball/master
-
-
-Once you have a copy of the source, you can embed it in your Python package,
-or install it into your site-packages easily::
-
-    > python setup.py install
+    >>> from sortedcontainers import SortedList, SortedSet, SortedDict
+    >>> help(SortedList)
 
 User Guide
 ----------
+
+For those wanting more details, this part of the documentation describes
+installation, implementation, performance, and development.
 
 .. toctree::
    :maxdepth: 1
@@ -110,11 +84,6 @@ User Guide
 
 API Documentation
 -----------------
-
-You can access documentation in the interpreter with Python's built-in help function:
-
-    >>> from sortedcontainers import SortedList
-    >>> help(SortedList)
 
 If you are looking for information on a specific function, class or method, this
 part of the documentation is for you.
