@@ -7,7 +7,7 @@ written in pure-Python, and fast as C-extensions.
 Python's standard library is great until you need a sorted container type. Many
 will attest that you can get really far without one, but the moment you **really
 need** a sorted list, dict, or set, you're faced with a dozen different
-implementations, most using C extensions without great documentation and
+implementations, most using C-extensions without great documentation and
 benchmarking.
 
 Things shouldn't be this way. Not in Python.
@@ -72,14 +72,14 @@ User Guide
 ----------
 
 For those wanting more details, this part of the documentation describes
-installation, implementation, performance, and development.
+introduction, implementation, performance, and development.
 
 .. toctree::
    :maxdepth: 1
 
    introduction
-   implementation
    performance
+   implementation
    development
 
 API Documentation
@@ -105,8 +105,8 @@ Useful Links
 
 .. _`SortedContainers Project @ GrantJenks.com`: http://www.grantjenks.com/blog/portfolio-post/python-sortedcontainers-module/
 .. _`SortedContainers @ PyPI`: http://todo
-.. _`SortedContainers @ Github`: http://todo
-.. _`Issue Tracker`: http://todo
+.. _`SortedContainers @ Github`: https://github.com/grantjenks/sorted_containers
+.. _`Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
 
 Indices and Utilities
 ---------------------
