@@ -190,8 +190,9 @@ def test_update2():
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
-    assert temp.iloc(0) == 'a'
-    assert temp.iloc(-1) == 'z'
+    assert temp.iloc[0] == 'a'
+    assert temp.iloc[-1] == 'z'
+    assert temp.iloc[-3:] == ['x', 'y', 'z']
 
 def test_keysview():
     if hexversion < 0x02070000: return

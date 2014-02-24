@@ -22,10 +22,19 @@ def not26(func):
     else:
         return func
 
+class _IlocWrapper:
+    def __init__(self, _list):
+        self._list = _list
+    def __len__(self):
+        return len(self._list)
+    def __getitem__(self, index):
+        return self._list[index]
+
 class SortedDict(MutableMapping):
     def __init__(self, *args, **kwargs):
         self._dict = dict()
         self._list = SortedList()
+        self.iloc = _IlocWrapper(self._list)
 
         if len(args) > 0:
             self.update(args[0])
@@ -64,6 +73,7 @@ class SortedDict(MutableMapping):
         that = SortedDict()
         that._dict = self._dict
         that._list = self._list
+        that.iloc = self.iloc
         return that
 
     @classmethod
@@ -141,21 +151,11 @@ class SortedDict(MutableMapping):
         for key, value in itr:
             self[key] = value
 
-    def iloc(self, index):
+    def index(self, key):
         """
-        Return key(s) corresponding to index location.
-        Accepts slices.
-        Use to easily implement find_min or pop_max. For example:
-
-            def find_min(sdict):
-                return sdict.iloc(0)
-
-            def pop_max(sdict):
-                val = sdict.iloc(-1)
-                del sdict[val]
-                return val
+        Return index of key in iteration.
         """
-        return self._list[index]
+        return self._list.index(key)
 
     @not26
     def viewkeys(self):
