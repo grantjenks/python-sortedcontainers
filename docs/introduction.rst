@@ -47,7 +47,7 @@ SortedList
 ----------
 
 A SortedList is a finite sequence in which an order is imposed on the elements
-according to their inequality relation to each other. As with Python's built-in
+according to their ordered relation to each other. As with Python's built-in
 list data type, SortedList supports duplicate elements and fast random-access
 indexing. A SortedList may never contain its elements out of order.
 
@@ -81,7 +81,7 @@ location. Inserting an element out of order in this way will cause a ValueError.
 
 Removing elements from a SortedList is done with :ref:`discard
 <SortedList.discard>`, :ref:`remove <SortedList.remove>`, :ref:`__delitem__
-<SortedList.__delitem__`, or :ref:`pop <SortedList.pop>`. These functions work
+<SortedList.__delitem__>`, or :ref:`pop <SortedList.pop>`. These functions work
 identically to their list counterpart.
 
     >>> l[:] = range(10)
@@ -125,8 +125,75 @@ SortedList also works efficiently with other sequence data types. :ref:`Addition
 
 For more details, refer to the :doc:`SortedList API documentation <sortedlist>`.
 
+SortedDict
+----------
+
+A SortedDict is a container of key-value pairs in which an order is imposed on
+the keys according to their ordered relation to each other. As with Python's
+built-in dict data type, SortedDict supports fast insertion, deletion, and
+lookup by key. Iterating a SortedDict yields the keys in sorted order. The api
+strives to be as similar to the built-in dict type as possible.
+
+    >>> from sortedcontainers import SortedDict
+    >>> d = SortedDict()
+    >>> d.update(alice=518, bob=285, carol=925, dave=376, ellen=874)
+    >>> print(''.join(key[0] for key in d))
+    abcde
+    >>> d['frank'] = 102
+    >>> d['bob'] = 341
+    >>> del d['frank']
+    >>> 'ellen' in d
+    True
+    >>> d.get('frank', 0)
+    0
+    >>> d.pop()
+    'ellen'
+
+SortedDict also supports key, value, and item iteration/views according to the
+Python version. (Python 2.7 and higher supports views while Python 2.6 supports
+only iteration.) View operations like :ref:`and <sorteddict.KeysView.and>`,
+:ref:`or <sorteddict.KeysView.or>`, :ref:`sub <sorteddict.KeysView.sub>`, and
+:ref:`xor <sorteddict.KeysView.xor>` return a SortedSet container.
+
+    >>> d.clear()
+    >>> d.update(list(enumerate('0123456789')))
+    >>> keys = d.keys()
+    >>> len(keys)
+    10
+    >>> d[-1] = '-1'
+    >>> len(keys)
+    11
+    >>> s = SortedDict([(1, '1'), (2, '2'), (3, '3'), (10, '10')])
+    >>> s.keys() & keys
+    SortedSet([1, 2, 3])
+
+In addition to the normal dictionary operations, SortedDict supports fast
+:ref:`indexing with iloc<SortedDict.iloc>` and :ref:`key index
+lookup<SortedDict.index>`. Using indexing, you can quickly lookup the nth key in
+iteration. These utilities are not common in other implementations but can be
+extremely useful. Indexing also supports slice notation.
+
+    >>> d = SortedDict(b=2, d=4, c=3, e=5, a=1)
+    >>> d.iloc[0]
+    'a'
+    >>> d.iloc[-1]
+    'e'
+    >>> d.iloc[-3:]
+    ['c', 'd', 'e']
+    >>> d.index('c')
+    2
+
+For more details, refer to the :doc:`SortedDict API documentation <sorteddict>`.
+
 SortedSet
 ---------
 
-SortedDict
-----------
+A SortedSet is a collection of distinct objects in which an order is imposed on
+the members according to their ordered relation to each other. The API is
+similar to the :doc:`SortedList<sortedlist>` and built-in set containers.
+
+// similarity to built-in set container
+
+// sortedlist extensions
+
+// size-aware implementations of set operations
