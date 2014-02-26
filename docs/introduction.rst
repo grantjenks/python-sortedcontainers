@@ -188,12 +188,49 @@ For more details, refer to the :doc:`SortedDict API documentation <sorteddict>`.
 SortedSet
 ---------
 
-A SortedSet is a collection of distinct objects in which an order is imposed on
-the members according to their ordered relation to each other. The API is
-similar to the :doc:`SortedList<sortedlist>` and built-in set containers.
+A :doc:`SortedSet<sortedset>` is a collection of distinct objects in which an
+order is imposed on the members according to their ordered relation to each
+other. The API is similar to the :doc:`SortedList<sortedlist>` and built-in set
+containers. Iterating a SortedSet yields the items in sorted order.
 
-// similarity to built-in set container
+    >>> from sortedcontainers import SortedSet
+    >>> s = SortedSet([3, 1, 0, 2])
+    >>> list(s)
+    [0, 1, 2, 3]
 
-// sortedlist extensions
+Like the built-in set container type, SortedSet supports
+:ref:`difference<SortedSet.difference>`,
+:ref:`intersection<SortedSet.intersection>`,
+:ref:`symmetric_difference<SortedSet.symmetric_difference>`, and
+:ref:`union<SortedSet.union>` operations along with their _update counterparts.
 
-// size-aware implementations of set operations
+    >>> s.clear()
+    >>> s.add(-1)
+    >>> s.update(xrange(10))
+    >>> 5 in s
+    True
+    >>> s - [1, 2, 3]
+    SortedSet([-1, 0, 4, 5, 6, 7, 8, 9])
+    >>> s & [-3, -2, -1, 0]
+    SortedSet([-1, 0])
+    >>> s > [1, 2, 3]
+    True
+
+Adding and removing elements works the same as with the SortedList container
+although position-specifying updates are not permitted except for
+:ref:`__setitem__<SortedSet.__setitem__>` support. Unlike the built-in set type,
+SortedSet has full indexing support for :ref:`get<SortedSet.__getitem__>`,
+:ref:`set<SortedSet.__setitem>`, and :ref:`del<SortedSet.__delitem__>`
+operations.
+
+    >>> s.clear()
+    >>> s.update(xrange(100))
+    >>> s[5]
+    5
+    >>> s[2:10:2]
+    SortedSet([2, 4, 6, 8])
+    >>> del s[3:15:3]
+    >>> len(s)
+    96
+
+For more details, refer to the :doc:`SortedSet API documentation<sortedset>`.

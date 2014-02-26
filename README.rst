@@ -6,8 +6,6 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 - Documentation (include plots)
-  - introduction
-    - SortedSet
   - implementation
   - performance
   - development
@@ -16,7 +14,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
     - check for sortedset references
   - sortedset
 - URL todos: http://todo
-- document every function
+- document every function in source
 
 License
 -------
