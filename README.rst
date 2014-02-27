@@ -7,7 +7,6 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 - Documentation (include plots)
   - implementation
-  - performance
   - development
   - sortedlist
   - sorteddict

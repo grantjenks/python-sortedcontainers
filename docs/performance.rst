@@ -1,39 +1,80 @@
 Performance Comparison
 ======================
 
-# Benchmark Comparisons
+Measuring performance is a difficult task. All the benchmarks on this page are
+synthetic in the sense that they test one function repeatedly. Measurements in
+live systems are much harder to produce reliably. So take the following data
+with a grain of salt. That being said, a stated feature of the
+:doc:`sortedcontainers Module<index>` is performance so it would be negligent
+not to produce this page with comparisons.
 
-* https://pypi.python.org/pypi/rbtree
-  - c-module
-  - rbtree.rbtree is SortedDict
-  - rbtree.rbset is SortedSet
-* https://pypi.python.org/pypi/blist
-  - c and python implementations
-  - blist.sortedlist is SortedList
-  - blist.sorteddict is SortedDict
-  - blist.sortedset is SortedSet
-* https://pypi.python.org/pypi/treap
-  - depends on cython
-  - treap.treap is SortedDict
-* https://pypi.python.org/pypi/bintrees
-  - had to install from exe on Windows
-  - bintrees.FastAVLTree is SortedDict & SortedSet
-  - bintrees.FastRBTree is SortedDict & SortedSet
-* https://pypi.python.org/pypi/skiplistcollections
-  - pure python
-  - skiplistcollections.SkipListDict
-  - skiplistcollections.SkipListSet
+The source for all benchmarks can be found under the "tests" directory in the
+files prefixed "benchmark." Measurements are made from the min, max, and average
+of 5 repetitions. In the graphs below, the line follows the average and at each
+point, the min/max displays the bounds. Note that the axes are log-log so
+properly reading two different lines would describe one metric as "X times"
+faster rather than "X seconds" faster. In all graphs, lower is
+better. Measurements are made by powers of ten: 10, 100, 1000, 10000, 100000.
 
-## Not Easily Installable
+A good effort has been made to find competing implementations. Five in total
+were found with various list, set, and dict implementations.
 
-* http://newcenturycomputers.net/projects/rbtree.html
-* https://github.com/pgrafov/python-avl-tree
-* https://pypi.python.org/pypi/pyavl
-  - Fails to install on Windows
+rbtree
+  Provides a fast, C-implementation for dict and set data types.
+  `rbtree on PyPI <https://pypi.python.org/pypi/rbtree>`_
 
-# source/methodology, number of tries, etc.
-# tiny vs small vs medium vs large
-# missing data meant it either took too long or failed
+blist
+  Provides list, dict, and set containers based on the blist data-type.
+  Implemented in Python and C.
+  `blist on PyPI <https://pypi.python.org/pypi/blist>`_
+
+treap
+  Uses Cython for improved performance and provides a dict container.
+  `treap on PyPI <https://pypi.python.org/pypi/treap>`_
+
+bintrees
+  Provides several tree-based implementations for dict and set containers.
+  Fastest were AVL and Red-Black trees. Extends the conventional API to
+  provide set operations for the dict type. Implemented in C.
+  `bintrees on PyPI <https://pypi.python.org/pypi/bintrees>`_
+
+skiplistcollections
+  Pure-Python implementation based on skip-lists providing a limited-API
+  for dict and set types.
+  `skiplistcollections on PyPI <https://pypi.python.org/pypi/skiplistcollections>`_
+
+Several competing implementations were omitted because they were not easily
+installable or failed to build.
+
+rbtree from NewCenturyComputers
+  Pure-Python tree-based implementation. Not sure when this was last updated.
+  Unlikely to be fast.
+  `rbtree from NewCenturyComputers <http://newcenturycomputers.net/projects/rbtree.html>`_
+
+python-avl-tree from Github user pgrafov
+  Pure-Python tree-based implementation. Last updated 3 years ago. Unlikely
+  to be fast.
+  `python-avl-tree from Github user pgrafov <https://github.com/pgrafov/python-avl-tree>`_
+
+pyavl
+  C-implementation for AVL tree-based dict and set containers. Claims to be
+  fast. Last updated in 2012. Lacking documentation and failed to build on
+  Windows.
+  `pyavl on PyPI <https://pypi.python.org/pypi/pyavl>`_
+
+The most similar module to sortedcontainers is skiplistcollections given that
+each is implemented in Python. But as is displayed below, sortedcontainers is
+several times faster and provides a richer API. Often the pure-Python
+implementation in sortedcontainers is faster than the C-implementation
+counterparts. Where it lacks, performance is at least on the same magnitude.
+
+A couple final notes about the graphs below. Missing data indicates the
+benchmark either took too long or failed. The set operations with tiny, small,
+medium, and large variations indicate the size of the container involved in the
+right-hand-side of the operation: tiny is exactly 10 elements; small is 10% of
+the size of the left-hand-size; medium is 50%; and large is 100%. The
+sortedcontainers module uses a different algorithm based on the size of the
+right-hand-side for the operation for a dramatic improvement in performance.
 
 SortedList
 ----------
@@ -386,28 +427,28 @@ Set symmetric-difference using :ref:`SortedSet.symmetric_difference<SortedSet.sy
 
 .. image:: _static/SortedSet-symmetric_difference_tiny.png
 
-symmetric_difference_update_large
+symm_diff_update_large
 .................................
 
 Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_large.png
 
-symmetric_difference_update_medium
+symm_diff_update_medium
 ..................................
 
 Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_medium.png
 
-symmetric_difference_update_small
+symm_diff_update_small
 .................................
 
 Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_small.png
 
-symmetric_difference_update_tiny
+symm_diff_update_tiny
 ................................
 
 Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
