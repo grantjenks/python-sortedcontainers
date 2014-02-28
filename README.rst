@@ -6,14 +6,17 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 # TODO
 
 - Documentation (include plots)
-  - implementation
-  - development
   - sortedlist
   - sorteddict
     - check for sortedset references
   - sortedset
+  - README
 - URL todos: http://todo
-- document every function in source
+- document every function/class in source
+- deploy to pypi
+- publish online: grantjenks.com/docs/sortedcontainers/...
+- publish portfolio page
+- promote
 
 License
 -------
