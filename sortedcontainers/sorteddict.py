@@ -56,7 +56,12 @@ class SortedDict(MutableMapping):
         return self._dict[key]
 
     def __eq__(self, that):
-        return all(self[key] == that[key] for key in that)
+        return (len(self) == len(that)
+                and all(self[key] == that[key] for key in self))
+
+    def __ne__(self, that):
+        return (len(self) != len(that)
+                or any(self[key] != that[key] for key in self))
 
     def __iter__(self):
         return iter(self._list)
@@ -101,7 +106,7 @@ class SortedDict(MutableMapping):
 
     def keys(self):
         if version_info[0] == 2:
-            return list(self.iterkeys())
+            return SortedSet(self._dict)
         else:
             return KeysView(self)
 
@@ -129,6 +134,8 @@ class SortedDict(MutableMapping):
                 return default
 
     def popitem(self):
+        if len(self) == 0:
+            raise KeyError
         key = self._list.pop()
         value = self._dict[key]
         del self._dict[key]
@@ -187,6 +194,8 @@ class KeysView:
         return key in self._view
     def __iter__(self):
         return iter(self._list)
+    def __getitem__(self, index):
+        return self._list[index]
     def __eq__(self, that):
         return self._view == that
     def __ne__(self, that):
@@ -224,6 +233,11 @@ class ValuesView:
         return key in self._view
     def __iter__(self):
         return iter(self._dict[key] for key in self._list)
+    def __getitem__(self, index):
+        if isinstance(idx, slice):
+            return [self._dict[key] for key in self._list[index]]
+        else:
+            return self._dict[self._list[index]]
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
@@ -257,6 +271,12 @@ class ItemsView:
         return key in self._view
     def __iter__(self):
         return iter((key, self._dict[key]) for key in self._list)
+    def __getitem__(self, index):
+        if isinstance(idx, slice):
+            return [(key, self._dict[key]) for key in self._list[index]]
+        else:
+            key = self._list[index]
+            return (key, self._dict[key])
     def __eq__(self, that):
         return self._view == that
     def __ne__(self, that):
