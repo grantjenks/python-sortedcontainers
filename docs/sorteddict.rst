@@ -3,7 +3,7 @@ SortedDict
 
 .. currentmodule:: sortedcontainers
 
-.. class:: SortedDict([arg,] **kw)
+.. class:: SortedDict(*args, **kwargs)
 
    A :class:`SortedDict` provides the same methods as a :class:`dict`.
    Additionally, a :class:`SortedDict` efficiently maintains its keys
@@ -36,7 +36,7 @@ SortedDict
 
    .. method:: x in d
 
-      Returns True if and only if *x* is a key in the dictionary.
+      Return True if and only if *x* is a key in the dictionary.
 
       :rtype: :class:`bool`
 
@@ -51,16 +51,6 @@ SortedDict
       Return the item of *d* with key *key*.  Raises a :exc:`KeyError`
       if *key* is not in the dictionary.
 
-      If a subclass of dict defines a method :meth:`__missing__`, if
-      the key *key* is not present, the ``d[key]`` operation calls
-      that method with the key *key* as argument.  The ``d[key]``
-      operation then returns or raises whatever is returned or raised
-      by the ``__missing__(key)`` call if the key is not present. No
-      other operations or methods invoke :meth:`__missing__`. If
-      :meth:`__missing__` is not defined, :exc:`KeyError` is raised.
-      :meth:`__missing__` must be a method; it cannot be an instance
-      variable.
-
       :rtype: value
 
    .. method:: L == L2, L != L2
@@ -74,19 +64,19 @@ SortedDict
 
    .. method:: iter(d)
 
-      Creates an iterator over the sorted keys of the dictionary.
+      Create an iterator over the sorted keys of the dictionary.
 
       :rtype: iterator
 
    .. method:: len(d)
 
-      Returns the number of (key, value) pairs in the dictionary.
+      Return the number of (key, value) pairs in the dictionary.
 
       :rtype: :class:`int`
 
    .. method:: d[key] = value
 
-      Sets `d[key]` to *value*.
+      Set `d[key]` to *value*.
 
    .. method:: d.clear()
 
@@ -94,22 +84,21 @@ SortedDict
 
    .. method:: d.copy()
 
-      Creates a shallow copy of the dictionary.
+      Create a shallow copy of the dictionary.
 
       :rtype: :class:`SortedDict`
 
-   .. method:: d.fromkeys(seq[, value[, key]])
+   .. method:: d.fromkeys(seq, value=None)
 
       Create a new dictionary with keys from *seq* and values set to
-      *value*.  *key* specifies a function of one argument that is
-      used to extract a comparison sort key from each dict key.
+      *value*.
 
       :meth:`fromkeys` is a class method that returns a new
       dictionary.  *value* defaults to ``None``.
 
       :rtype: :class:`SortedDict`
 
-   .. method:: d.get(key[, default])
+   .. method:: d.get(key, default=None)
 
       Return the value for *key* if *key* is in the dictionary, else
       *default*.  If *default* is not given, it defaults to ``None``,
@@ -119,7 +108,7 @@ SortedDict
 
    .. method:: d.items()
 
-      In Python 2, returns a blist of the dictionary's items (``(key,
+      In Python 2, returns a list of the dictionary's items (``(key,
       value)`` pairs).
 
       In Python 3, returns a new :class:`ItemsView` of the dictionary's
@@ -127,7 +116,7 @@ SortedDict
       <http://docs.python.org/release/3.1/library/stdtypes.html#dictionary-view-objects>`_,
       the :class:`ItemsView` is indexable (e.g., ``d.items()[5]``).
 
-      :rtype: :class:`blist` or :class:`ItemsView`
+      :rtype: :class:`list` or :class:`ItemsView`
 
    .. _SortedDict.keys:
    .. method:: d.keys()
@@ -152,7 +141,7 @@ SortedDict
    .. _SortedDict.popitem:
    .. method:: d.popitem()
 
-      Remove and return the ``(key, value)`` pair with the least *key*
+      Remove and return the ``(key, value)`` pair with the greatest *key*
       from the dictionary.
 
       If the dictionary is empty, calling :meth:`popitem` raises a
@@ -160,7 +149,7 @@ SortedDict
 
       :rtype: ``(key, value)`` tuple
 
-   .. method:: d.setdefault(key[, default])
+   .. method:: d.setdefault(key, default=None)
 
        If *key* is in the dictionary, return its value.  If not,
        insert *key* with a value of *default* and return
@@ -179,14 +168,14 @@ SortedDict
 
    .. method:: d.values()
 
-      In Python 2, returns a blist of the dictionary's values.
+      In Python 2, returns a list of the dictionary's values.
 
       In Python 3, returns a new :class:`ValuesView` of the dictionary's
       values.  In addition to the methods provided by the built-in `view
       <http://docs.python.org/release/3.1/library/stdtypes.html#dictionary-view-objects>`_,
       the :class:`ValuesView` is indexable (e.g., ``d.values()[5]``).
 
-      :rtype: :class:`blist` or :class:`ValuesView`
+      :rtype: :class:`list` or :class:`ValuesView`
 
 .. class:: KeysView
 
