@@ -92,7 +92,7 @@ class SortedSet(MutableSet, Sequence):
         return iter(self._list)
     def __len__(self):
         return len(self._set)
-    def reversed(self):
+    def __reversed__(self):
         return reversed(self._list)
     def add(self, value):
         if value not in self._set:
