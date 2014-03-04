@@ -34,6 +34,15 @@ Requests for Contributions
 
 5. Find a way to allow objects of different types in dict and set types.
 
+6. Add abstract base classes to container types:
+
+  * SortedList: MutableSequence
+  * SortedDict: MutableMapping
+  * SortedSet: MutableSet
+  * KeysView: KeysView, Set, Sequence
+  * ValuesView: ValuesView, Sequence
+  * ItemsView: ItemsView, Set, Sequence
+
 Development Dependencies
 ------------------------
 
