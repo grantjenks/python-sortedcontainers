@@ -15,18 +15,18 @@ SortedSet
 
    .. method:: x in S
 
-      Returns True if and only if *x* is an element in the set.
+      Return True if and only if *x* is an element in the set.
 
       :rtype: :class:`bool`
 
    .. _SortedSet.delitem:
    .. method:: del S[i]
 
-      Removes the element located at index *i* from the set.
+      Remove the element located at index *i* from the set.
 
    .. method:: del S[i:j]
 
-      Removes the elements from *i* to *j* from the set.
+      Remove the elements from *i* to *j* from the set.
 
    .. method:: S < S2
 
@@ -44,43 +44,31 @@ SortedSet
 
    .. method:: S[i]
 
-      Returns the element at position *i*.
+      Return the element at position *i*.
 
       :rtype: item
 
    .. method:: S[i:j]
 
-      Returns a new SortedSet containing the elements from *i* to *j*.
+      Return a new SortedSet containing the elements from *i* to *j*.
 
       :rtype: :class:`SortedSet`
 
-   .. method:: S *= k
-
-      Increase the length of the set by a factor of *k*, by inserting
-      *k-1* additional shallow copies of each item in the set.
-
    .. method:: iter(S)
 
-      Creates an iterator over the set.
+      Create an iterator over the set.
 
       :rtype: iterator
 
    .. method:: len(S)
 
-      Returns the number of elements in the set.
+      Return the number of elements in the set.
 
       :rtype: :class:`int`
 
-   .. method:: S * k or k * S
-
-      Returns a new sorted set containing *k* shallow copies of each
-      item in S.
-
-      :rtype: :class:`SortedSet`
-
    .. method:: reversed(S)
 
-      Creates an iterator to traverse the set in reverse.
+      Create an iterator to traverse the set in reverse.
 
       :rtype: iterator
 
@@ -92,7 +80,7 @@ SortedSet
    .. _sortedlist.bisect_left:
    .. method:: L.bisect_left(value)
 
-      Similarly to the ``bisect`` module in the standard library, this
+      Similar to the ``bisect`` module in the standard library, this
       returns an appropriate index to insert *value* in *L*. If *value* is
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
@@ -103,7 +91,7 @@ SortedSet
 
    .. method:: L.bisect_right(value)
 
-      Same thing as :ref:`bisect_left <sortedlist.bisect_left>`, but if
+      Same as :ref:`bisect_left <sortedlist.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
 
@@ -113,13 +101,13 @@ SortedSet
 
    .. method:: S.copy()
 
-      Creates a shallow copy of the set.
+      Create a shallow copy of the set.
 
       :rtype: :class:`SortedSet`
 
    .. method:: S.count(value)
 
-      Returns the number of occurrences of *value* in the set.
+      Return the number of occurrences of *value* in the set.
 
       :rtype: :class:`int`
 
@@ -139,12 +127,12 @@ SortedSet
    .. _SortedSet.discard:
    .. method:: S.discard(value)
 
-      Removes the first occurrence of *value*.  If *value* is not a
+      Remove the first occurrence of *value*.  If *value* is not a
       member, does nothing.
 
    .. method:: S.index(value, [start, [stop]])
 
-      Returns the smallest *k* such that :math:`S[k] == x` and
+      Return the smallest *k* such that :math:`S[k] == x` and
       :math:`i <= k < j`.  Raises ValueError if *value* is not
       present.  *stop* defaults to the end of the set.  *start*
       defaults to the beginning.  Negative indexes are supported, as
@@ -202,7 +190,7 @@ SortedSet
 
    .. method:: S.pop([index])
 
-      Removes and return item at index (default last).  Raises
+      Remove and return item at index (default last).  Raises
       IndexError if set is empty or index is out of range.  Negative
       indexes are supported, as for slice indices.
 

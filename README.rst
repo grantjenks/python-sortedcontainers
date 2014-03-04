@@ -5,16 +5,7 @@ Sorted container data types: sorted list, sorted set, and sorted dict.
 
 # TODO
 
-- Documentation (include plots)
-  - Add Abstract Base Classes:
-    SortedList: MutableSequence
-    SortedDict: MutableMapping
-    SortedSet: MutableSet
-    KeysView: KeysView, Set, Sequence
-    ValuesView: ValuesView, Sequence
-    ItemsView: ItemsView, Set, Sequence
-  - sorteddict at KeysView; needs cross-ref
-  - sortedset review
+- Documentation
   - Fix warnings
   - README
 - URL todos: http://todo

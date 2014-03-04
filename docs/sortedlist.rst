@@ -8,7 +8,7 @@ SortedList
    use :ref:`add <SortedList.add>`.  To add several elements, use :ref:`update
    <SortedList.update>`.  To remove an element, use :ref:`discard
    <SortedList.discard>`, :ref:`remove <SortedList.remove>`, or :ref:`del L[i]
-   <SortedList.delitem>`.
+   <SortedList.__delitem__>`.
 
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedList`.
@@ -19,23 +19,24 @@ SortedList
 
    .. method:: x in L
 
-      Returns True if and only if *x* is an element in the list.
+      Return True if and only if *x* is an element in the list.
 
       :rtype: :class:`bool`
 
-   .. _SortedList.delitem:
+   .. _SortedList.__delitem__:
    .. method:: del L[i]
 
-      Removes the element located at index *i* from the list.
+      Remove the element located at index *i* from the list.
 
    .. method:: del L[i:j]
 
-      Removes the elements from *i* to *j* from the list. Also note that *step*
+      Remove the elements from *i* to *j* from the list. Also note that *step*
       is supported in slice syntax.
 
+   .. _SortedList.__eq__:
    .. method:: L == L2, L != L2, L < L2, L <= L2, L > L2, L >= L2
 
-      Compares two lists.  For full details see `Comparisons
+      Compare two lists.  For full details see `Comparisons
       <http://docs.python.org/reference/expressions.html>`_ in
       the Python language reference.
 
@@ -43,13 +44,13 @@ SortedList
 
    .. method:: L[i]
 
-      Returns the element at position *i*.
+      Return the element at position *i*.
 
       :rtype: item
 
    .. method:: L[i:j]
 
-      Returns a new :class:`list` containing the elements from *i* to *j*. Also
+      Return a new :class:`list` containing the elements from *i* to *j*. Also
       note that *step* is supported in slice syntax.
 
       :rtype: :class:`list`
@@ -61,29 +62,45 @@ SortedList
 
    .. method:: iter(L)
 
-      Creates an iterator over the list.
+      Create an iterator over the list.
 
       :rtype: iterator
 
    .. method:: len(L)
 
-      Returns the number of elements in the list.
+      Return the number of elements in the list.
 
       :rtype: :class:`int`
 
+   .. _SortedList.__mul__:
    .. method:: L * k or k * L
 
-      Returns a new sorted list containing *k* shallow copies of each
+      Return a new sorted list containing *k* shallow copies of each
       item in L.
 
       :rtype: :class:`SortedList`
 
+   .. _SortedList.__add__:
+   .. method:: L + k
+
+      Return a new sorted list extended by appending all elements from
+      *k*. Raises a :exc:`ValueError` if the sort order would be violated.
+
+      :rtype: :class:`SortedList`
+
+   .. _SortedList.__iadd__:
+   .. method:: L += k
+
+      Increase the length of the list by appending all elements from *k*. Raises
+      a :exc:`ValueError` if the sort order would be violated.
+
    .. method:: reversed(L)
 
-      Creates an iterator to traverse the list in reverse.
+      Create an iterator to traverse the list in reverse.
 
       :rtype: iterator
 
+   .. _SortedList.__setitem__:
    .. method:: L[i] = x
 
       Replace the item at position *i* of *L* with *x*.
@@ -101,11 +118,12 @@ SortedList
    .. _SortedList.bisect_left:
    .. method:: L.bisect_left(value)
 
-      Similarly to the ``bisect`` module in the standard library, this
+      Similar to the ``bisect`` module in the standard library, this
       returns an appropriate index to insert *value* in *L*. If *value* is
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
 
+   .. _SortedList.bisect:
    .. method:: L.bisect(value)
 
       Same as :ref:`bisect_left <SortedList.bisect_right>`.
@@ -113,25 +131,27 @@ SortedList
    .. _SortedList.bisect_right:
    .. method:: L.bisect_right(value)
 
-      Same thing as :ref:`bisect_left <SortedList.bisect_left>`, but if
+      Same as :ref:`bisect_left <SortedList.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
 
+   .. _SortedList.count:
    .. method:: L.count(value)
 
-      Returns the number of occurrences of *value* in the list.
+      Return the number of occurrences of *value* in the list.
 
       :rtype: :class:`int`
 
    .. _SortedList.discard:
    .. method:: L.discard(value)
 
-      Removes the first occurrence of *value*.  If *value* is not a
+      Remove the first occurrence of *value*.  If *value* is not a
       member, does nothing.
 
+   .. _SortedList.index:
    .. method:: L.index(value, [start, [stop]])
 
-      Returns the smallest *k* such that :math:`L[k] == x` and
+      Return the smallest *k* such that :math:`L[k] == x` and
       :math:`i <= k < j`.  Raises ValueError if *value* is not
       present.  *stop* defaults to the end of the list.  *start*
       defaults to the beginning.  Negative indexes are supported, as
@@ -139,9 +159,10 @@ SortedList
 
       :rtype: :class:`int`
 
+   .. _SortedList.pop:
    .. method:: L.pop([index])
 
-      Removes and return item at index (default last).  Raises
+      Remove and return item at index (default last).  Raises
       IndexError if list is empty or index is out of range.  Negative
       indexes are supported, as for slice indices.
 
@@ -162,16 +183,19 @@ SortedList
 
       Remove all the elements from the list.
 
+   .. _SortedList.append:
    .. method:: L.append(value)
 
       Append the element *value* to the list. Raises a :exc:`ValueError` if the
       *value* would violate the sort order.
 
+   .. _SortedList.extend:
    .. method:: L.extend(iterable)
 
       Extend the list by appending all elements from the *iterable*. Raises a
       :exc:`ValueError` if the sort order would be violated.
 
+   .. _SortedList.insert:
    .. method:: L.insert(index, value)
 
       Insert the element *value* into the list at *index*. Raises a
@@ -179,6 +203,6 @@ SortedList
 
    .. method:: L.as_list()
 
-      Very efficiently converts the :class:`SortedList` to a class:`list`.
+      Very efficiently convert the :class:`SortedList` to a class:`list`.
 
       :rtype: :class:`list`
