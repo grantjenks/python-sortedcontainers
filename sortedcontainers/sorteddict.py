@@ -158,11 +158,11 @@ class SortedDict(MutableMapping):
         for key, value in itr:
             self[key] = value
 
-    def index(self, key):
+    def index(self, key, start=None, stop=None):
         """
         Return index of key in iteration.
         """
-        return self._list.index(key)
+        return self._list.index(key, start, stop)
 
     @not26
     def viewkeys(self):
@@ -196,6 +196,12 @@ class KeysView:
         return iter(self._list)
     def __getitem__(self, index):
         return self._list[index]
+    def __reversed__(self):
+        return reversed(self._list)
+    def index(self, value, start=None, stop=None):
+        return self._list.index(value, start, stop)
+    def count(self, value):
+        return 1 if value in self._view else 0
     def __eq__(self, that):
         return self._view == that
     def __ne__(self, that):
@@ -216,6 +222,8 @@ class KeysView:
         return SortedSet(self._view - that)
     def __xor__(self, that):
         return SortedSet(self._view ^ that)
+    def isdisjoint(self, that):
+        return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
@@ -229,8 +237,8 @@ class ValuesView:
             self._view = sorted_dict._dict.values()
     def __len__(self):
         return len(self._dict)
-    def __contains__(self, key):
-        return key in self._view
+    def __contains__(self, value):
+        return value in self._view
     def __iter__(self):
         return iter(self._dict[key] for key in self._list)
     def __getitem__(self, index):
@@ -238,6 +246,16 @@ class ValuesView:
             return [self._dict[key] for key in self._list[index]]
         else:
             return self._dict[self._list[index]]
+    def __reversed__(self):
+        return iter(self._dict[key] for key in reversed(self._list))
+    def index(self, key):
+        for idx, value in enumerate(self):
+            if key == value:
+                return idx
+        else:
+            raise ValueError
+    def count(self, key):
+        return self._view.count(key)
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
@@ -277,6 +295,16 @@ class ItemsView:
         else:
             key = self._list[index]
             return (key, self._dict[key])
+    def __reversed__(self):
+        return iter((key, self._dict[key]) for key in reversed(self._list))
+    def index(self, key, start=None, stop=None):
+        pos = self._list.index(key[0], start, stop)
+        if key[1] == self._dict[key[0]]:
+            return pos
+        else:
+            raise ValueError
+    def count(self, key):
+        return self._view.count(key)
     def __eq__(self, that):
         return self._view == that
     def __ne__(self, that):
@@ -297,5 +325,7 @@ class ItemsView:
         return SortedSet(self._view - that)
     def __xor__(self, that):
         return SortedSet(self._view ^ that)
+    def isdisjoint(self, that):
+        return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_items({0})'.format(repr(list(self)))
