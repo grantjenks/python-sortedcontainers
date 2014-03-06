@@ -38,8 +38,8 @@ deployment and use of Python easy. There's no need to install a C compiler or
 pre-build and distribute custom extensions. Performance is a feature and testing
 has 100% coverage with unit tests and hours of stress.
 
-Feature Support
----------------
+Features
+--------
 
 - Pure-Python
 - Fully documented
@@ -98,13 +98,13 @@ part of the documentation is for you.
 Useful Links
 ------------
 
-- `SortedContainers Project @ GrantJenks.com`_
+- `SortedContainers Module @ GrantJenks.com`_
 - `SortedContainers @ PyPI`_
 - `SortedContainers @ Github`_
 - `Issue Tracker`_
 
-.. _`SortedContainers Project @ GrantJenks.com`: http://www.grantjenks.com/blog/portfolio-post/python-sortedcontainers-module/
-.. _`SortedContainers @ PyPI`: http://todo
+.. _`SortedContainers Module @ GrantJenks.com`: http://www.grantjenks.com/docs/sortedcontainers/
+.. _`SortedContainers @ PyPI`: https://pypi.python.org/pypi/sortedcontainers
 .. _`SortedContainers @ Github`: https://github.com/grantjenks/sorted_containers
 .. _`Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
 
