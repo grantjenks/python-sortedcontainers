@@ -1,8 +1,8 @@
 SortedContainers
 ================
 
-SortedContainers is an :ref:`Apache2 Licensed <apache2>` containers library,
-written in pure-Python, and fast as C-extensions.
+SortedContainers is an Apache2 licensed containers library, written in
+pure-Python, and fast as C-extensions.
 
 Python's standard library is great until you need a sorted container type. Many
 will attest that you can get really far without one, but the moment you **really
@@ -82,7 +82,7 @@ Collaborators are welcome!
 #. Check for open issues or open a fresh issue to start a discussion around a
    bug.  There is a Contributor Friendly tag for issues that should be used by
    people who are not very familiar with the codebase yet.
-#. Fork `the repository <https://github.com/grantjenks/sortedcontainers>`_ on
+#. Fork `the repository <https://github.com/grantjenks/sorted_containers>`_ on
    GitHub and start making your changes to a new branch.
 #. Write a test which shows that the bug was fixed.
 #. Send a pull request and bug the maintainer until it gets merged and
@@ -104,7 +104,19 @@ Useful Links
 SortedContainers License
 ------------------------
 
-    .. include:: ./LICENSE
+Copyright 2014 Grant Jenks
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 
 TODO
 ====

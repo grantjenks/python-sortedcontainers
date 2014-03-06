@@ -6,7 +6,7 @@ Collaborators are welcome!
 #. Check for open issues or open a fresh issue to start a discussion around a
    bug.  There is a Contributor Friendly tag for issues that should be used by
    people who are not very familiar with the codebase yet.
-#. Fork `the repository <https://github.com/grantjenks/sortedcontainers>`_ on
+#. Fork `the repository <https://github.com/grantjenks/sorted_containers>`_ on
    GitHub and start making your changes to a new branch.
 #. Write a test which shows that the bug was fixed.
 #. Send a pull request and bug the maintainer until it gets merged and
