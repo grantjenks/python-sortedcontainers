@@ -17,6 +17,7 @@ SortedList
    use a value that is the cube root of the list size. See :doc:`implementation
    details <implementation>` for more information.
 
+   .. _SortedList.__contains__:
    .. method:: x in L
 
       Return True if and only if *x* is an element in the list.
@@ -42,6 +43,7 @@ SortedList
 
       :rtype: :class:`bool`
 
+   .. _SortedList.__getitem__:
    .. method:: L[i]
 
       Return the element at position *i*.
@@ -60,6 +62,7 @@ SortedList
       Increase the length of the list by a factor of *k*, by inserting
       *k-1* additional shallow copies of each item in the list.
 
+   .. _SortedList.__iter__:
    .. method:: iter(L)
 
       Create an iterator over the list.

@@ -40,12 +40,13 @@ SortedDict
 
       :rtype: :class:`bool`
 
-   .. _SortedDict.delitem:
+   .. _SortedDict.__delitem__:
    .. method:: del d[key]
 
       Remove ``d[key]`` from *d*.  Raises a :exc:`KeyError` if *key*
       is not in the dictionary.
 
+   .. _SortedDict.__getitem__:
    .. method:: d[key]
 
       Return the item of *d* with key *key*.  Raises a :exc:`KeyError`
@@ -62,6 +63,7 @@ SortedDict
 
       :rtype: :class:`bool`
 
+   .. _SortedDict.__iter__:
    .. method:: iter(d)
 
       Create an iterator over the sorted keys of the dictionary.
@@ -74,6 +76,7 @@ SortedDict
 
       :rtype: :class:`int`
 
+   .. _SortedDict.__setitem__:
    .. method:: d[key] = value
 
       Set `d[key]` to *value*.
@@ -187,6 +190,7 @@ SortedDict
 
       :rtype: :class:`bool`
 
+   .. _SortedDict.index:
    .. method:: d.index(key, [start, [stop]])
 
       Return the smallest *k* such that :math:`d.iloc[k] == key` and
@@ -197,6 +201,7 @@ SortedDict
 
       :rtype: :class:`int`
 
+   .. _SortedDict.iloc:
    .. method:: d.iloc[pos]
 
       Return the key at index *pos* in iteration. Supports negative indices and
@@ -243,6 +248,7 @@ SortedDict
 
       :rtype: value
 
+   .. _KeysView.and:
    .. method:: keysview & other
 
       Return the intersection of the keys and the other object as
@@ -250,12 +256,14 @@ SortedDict
 
       :rtype: :class:`SortedSet`
 
+   .. _KeysView.or:
    .. method:: keysview | other
 
       Return the union of the keys and the other object as a new set.
 
       :rtype: :class:`SortedSet`
 
+   .. _KeysView.sub:
    .. describe:: keysview - other
 
       Return the difference between the keys and the other object (all
@@ -263,6 +271,7 @@ SortedDict
 
       :rtype: :class:`SortedSet`
 
+   .. _KeysView.xor:
    .. describe:: keysview ^ other
 
       Return the symmetric difference (all elements either in the keys

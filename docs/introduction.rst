@@ -151,9 +151,9 @@ strives to be as similar to the built-in dict type as possible.
 
 SortedDict also supports key, value, and item iteration/views according to the
 Python version. (Python 2.7 and higher supports views while Python 2.6 supports
-only iteration.) View operations like :ref:`and <sorteddict.KeysView.and>`,
-:ref:`or <sorteddict.KeysView.or>`, :ref:`sub <sorteddict.KeysView.sub>`, and
-:ref:`xor <sorteddict.KeysView.xor>` return a SortedSet container.
+only iteration.) View operations like :ref:`and <KeysView.and>`,
+:ref:`or <KeysView.or>`, :ref:`sub <KeysView.sub>`, and
+:ref:`xor <KeysView.xor>` return a SortedSet container.
 
     >>> d.clear()
     >>> d.update(list(enumerate('0123456789')))
@@ -217,11 +217,10 @@ Like the built-in set container type, SortedSet supports
     True
 
 Adding and removing elements works the same as with the SortedList container
-although position-specifying updates are not permitted except for
-:ref:`__setitem__<SortedSet.__setitem__>` support. Unlike the built-in set type,
-SortedSet has full indexing support for :ref:`get<SortedSet.__getitem__>`,
-:ref:`set<SortedSet.__setitem>`, and :ref:`del<SortedSet.__delitem__>`
-operations.
+although position-specifying updates are not permitted.Unlike the built-in set
+type, SortedSet has full indexing support for
+:ref:`set[index]<SortedSet.__getitem__>` and :ref:`del
+set[index]<SortedSet.__delitem__>` operations.
 
     >>> s.clear()
     >>> s.update(xrange(100))

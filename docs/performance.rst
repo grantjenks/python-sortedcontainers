@@ -206,7 +206,7 @@ Randomly add values using :ref:`SortedSet.add<SortedSet.add>`.
 contains
 ........
 
-Randomly test membership using :ref:`SortedSet.contains<SortedSet.contains>`.
+Randomly test membership using :ref:`SortedSet.__contains__<SortedSet.__contains__>`.
 
 .. image:: _static/SortedSet-contains.png
 
@@ -325,7 +325,7 @@ Set intersection using :ref:`SortedSet.intersection_update<SortedSet.intersectio
 iter
 ....
 
-Iterating a set using :ref:`SortedSet.iter<SortedSet.iter>`.
+Iterating a set using :ref:`iter(SortedSet)<SortedSet.__iter__>`.
 
 .. image:: _static/SortedSet-iter.png
 

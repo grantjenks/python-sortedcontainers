@@ -13,13 +13,14 @@ SortedSet
    Unlike a :class:`set`, a :class:`SortedSet` does not require items
    to be hashable. But it does require that items be comparable.
 
+   .. _SortedSet.__contains__:
    .. method:: x in S
 
       Return True if and only if *x* is an element in the set.
 
       :rtype: :class:`bool`
 
-   .. _SortedSet.delitem:
+   .. _SortedSet.__delitem__:
    .. method:: del S[i]
 
       Remove the element located at index *i* from the set.
@@ -42,6 +43,7 @@ SortedSet
 
       :rtype: :class:`bool`
 
+   .. _SortedSet.__getitem__:
    .. method:: S[i]
 
       Return the element at position *i*.
@@ -54,6 +56,7 @@ SortedSet
 
       :rtype: :class:`SortedSet`
 
+   .. _SortedSet.__iter__:
    .. method:: iter(S)
 
       Create an iterator over the set.
@@ -111,6 +114,7 @@ SortedSet
 
       :rtype: :class:`int`
 
+   .. _SortedSet.difference:
    .. method:: S.difference(S2, ...)
                S - S2 - ...
 
@@ -118,6 +122,7 @@ SortedSet
 
       :rtype: :class:`SortedSet`
 
+   .. _SortedSet.difference_update:
    .. method:: S.difference_update(S2, ...)
                S -= S2 | ...
 
@@ -140,6 +145,7 @@ SortedSet
 
       :rtype: :class:`int`
 
+   .. _SortedSet.intersection:
    .. method:: S.intersection(S2, ...)
                S & S2 & ...
 
@@ -147,6 +153,7 @@ SortedSet
 
       :rtype: :class:`SortedSet`
 
+   .. _SortedSet.intersection_update:
    .. method:: S.intersection_update(S2, ...)
                S &= S2 & ...
 
@@ -175,6 +182,7 @@ SortedSet
 
       :rtype: :class:`bool`
 
+   .. _SortedSet.symmetric_difference:
    .. method:: S.symmetric_difference(S2)
                S ^ S2
 
@@ -182,12 +190,14 @@ SortedSet
 
       :rtype: :class:`SortedSet`
 
+   .. _SortedSet.symmetric_difference_update:
    .. method:: S.symmetric_difference_update(S2)
                S ^= S2
 
       Update the set, keeping only elements found in either set, but
       not in both.
 
+   .. _SortedSet.pop:
    .. method:: S.pop([index])
 
       Remove and return item at index (default last).  Raises
@@ -202,6 +212,7 @@ SortedSet
       Remove first occurrence of *value*.  Raises ValueError if
       *value* is not present.
 
+   .. _SortedSet.union:
    .. method:: S.union(S2, ...)
                S | S2 | ...
 
@@ -211,6 +222,7 @@ SortedSet
 
       :rtype: :class:`SortedSet`
 
+   .. _SortedSet.update:
    .. method:: S.update(S2, ...)
                S |= S2 | ...
 
