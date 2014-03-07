@@ -23,18 +23,70 @@ def not26(func):
         return func
 
 class _IlocWrapper:
-    def __init__(self, _list):
-        self._list = _list
+    def __init__(self, _dict):
+        self._dict = _dict
     def __len__(self):
-        return len(self._list)
+        return len(self._dict)
     def __getitem__(self, index):
-        return self._list[index]
+        """
+        Very efficiently return the key at index *index* in iteration. Supports
+        negative indices and slice notation. Raises IndexError on invalid
+        *index*.
+        """
+        return self._dict._list[index]
+    def __delitem__(self, index):
+        """
+        Remove the ``sdict[sdict.iloc[index]]`` from *sdict*. Supports negative
+        indices and slice notation. Raises IndexError on invalid *index*.
+        """
+        if isinstance(index, slice):
+            keys = self._dict._list[index]
+            del self._dict._list[index]
+            for key in keys:
+                del self._dict._dict[key]
+        else:
+            key = self._dict._list[index]
+            del self._dict._list[index]
+            del self._dict._dict[key]
 
 class SortedDict(MutableMapping):
+    """
+    A SortedDict provides the same methods as a dict.  Additionally, a
+    SortedDict efficiently maintains its keys in sorted order. Consequently, the
+    keys method will return the keys in sorted order, the popitem method will
+    remove the item with the highest key, etc.
+    """
     def __init__(self, *args, **kwargs):
+        """
+        A SortedDict provides the same methods as a dict.  Additionally, a
+        SortedDict efficiently maintains its keys in sorted order. Consequently,
+        the keys method will return the keys in sorted order, the popitem method
+        will remove the item with the highest key, etc.
+
+        An optional *iterable* provides an initial series of items to populate
+        the SortedDict.  Each item in the series must itself contain two items.
+        The first is used as a key in the new dictionary, and the second as the
+        key's value. If a given key is seen more than once, the last value
+        associated with it is retained in the new dictionary.
+
+        If keyword arguments are given, the keywords themselves with their
+        associated values are added as items to the dictionary. If a key is
+        specified both in the positional argument and as a keyword argument, the
+        value associated with the keyword is retained in the dictionary. For
+        example, these all return a dictionary equal to ``{"one": 2, "two":
+        3}``:
+
+        * ``SortedDict(one=2, two=3)``
+        * ``SortedDict({'one': 2, 'two': 3})``
+        * ``SortedDict(zip(('one', 'two'), (2, 3)))``
+        * ``SortedDict([['two', 3], ['one', 2]])``
+
+        The first example only works for keys that are valid Python
+        identifiers; the others work with any valid keys.
+        """
         self._dict = dict()
         self._list = SortedList()
-        self.iloc = _IlocWrapper(self._list)
+        self.iloc = _IlocWrapper(self)
 
         if len(args) > 0:
             self.update(args[0])
@@ -42,39 +94,55 @@ class SortedDict(MutableMapping):
             self.update(**kwargs)
 
     def clear(self):
+        """Remove all elements from the dictionary."""
         self._dict.clear()
         self._list.clear()
 
     def __contains__(self, key):
+        """Return True if and only if *key* is in the dictionary."""
         return key in self._dict
 
     def __delitem__(self, key):
+        """
+        Remove ``d[key]`` from *d*.  Raises a KeyError if *key* is not in the
+        dictionary.
+        """
         del self._dict[key]
         self._list.remove(key)
 
     def __getitem__(self, key):
+        """
+        Return the item of *d* with key *key*.  Raises a KeyError if *key* is
+        not in the dictionary.
+        """
         return self._dict[key]
 
     def __eq__(self, that):
+        """Compare two iterables for equality."""
         return (len(self) == len(that)
                 and all(self[key] == that[key] for key in self))
 
     def __ne__(self, that):
+        """Compare two iterables for inequality."""
         return (len(self) != len(that)
                 or any(self[key] != that[key] for key in self))
 
     def __iter__(self):
+        """Create an iterator over the sorted keys of the dictionary."""
         return iter(self._list)
 
     def __len__(self):
+        """Return the number of (key, value) pairs in the dictionary."""
         return len(self._dict)
 
     def __setitem__(self, key, value):
+        """Set `d[key]` to *value*."""
         if key not in self._dict:
             self._list.add(key)
         self._dict[key] = value
 
     def copy(self):
+        """Create a shallow copy of the dictionary."""
         that = SortedDict()
         that._dict = self._dict
         that._list = self._list
@@ -83,47 +151,86 @@ class SortedDict(MutableMapping):
 
     @classmethod
     def fromkeys(cls, seq, value=None):
+        """
+        Create a new dictionary with keys from *seq* and values set to *value*.
+        """
         that = SortedDict()
         for key in seq:
             that[key] = value
         return that
 
     def get(self, key, default=None):
+        """
+        Return the value for *key* if *key* is in the dictionary, else
+        *default*.  If *default* is not given, it defaults to ``None``,
+        so that this method never raises a KeyError.
+        """
         return self._dict.get(key, default)
 
     def has_key(self, key):
+        """Return True if and only in *key* is in the dictionary."""
         return key in self._dict
 
     def items(self):
+        """
+        In Python 2, returns a list of the dictionary's items (``(key, value)``
+        pairs).
+
+        In Python 3, returns a new ItemsView of the dictionary's items.  In
+        addition to the methods provided by the built-in `view` the ItemsView is
+        indexable (e.g., ``d.items()[5]``).
+        """
         if version_info[0] == 2:
             return list(self.iteritems())
         else:
             return ItemsView(self)
 
     def iteritems(self):
+        """Return an iterable over the items (``(key, value)`` pairs)."""
         for key in self._list:
             yield key, self._dict[key]
 
     def keys(self):
+        """
+        In Python 2, return a SortedSet of the dictionary's keys.
+
+        In Python 3, return a new KeysView of the dictionary's keys.  In
+        addition to the methods provided by the built-in `view` the KeysView is
+        indexable (e.g., ``d.keys()[5]``).
+        """
         if version_info[0] == 2:
             return SortedSet(self._dict)
         else:
             return KeysView(self)
 
     def iterkeys(self):
+        """Return an iterable over the keys of the dictionary."""
         return iter(self._list)
 
     def values(self):
+        """
+        In Python 2, return a list of the dictionary's values.
+
+        In Python 3, return a new :class:`ValuesView` of the dictionary's
+        values.  In addition to the methods provided by the built-in `view`
+        the ValuesView is indexable (e.g., ``d.values()[5]``).
+        """
         if version_info[0] == 2:
             return list(self.itervalues())
         else:
             return ValuesView(self)
 
     def itervalues(self):
+        """Return an iterable over the values of the dictionary."""
         for key in self._list:
             yield self._dict[key]
 
     def pop(self, key, default=_NotGiven):
+        """
+        If *key* is in the dictionary, remove it and return its value,
+        else return *default*. If *default* is not given and *key* is not in
+        the dictionary, a KeyError is raised.
+        """
         if key in self._dict:
             self._list.remove(key)
             return self._dict.pop(key)
@@ -134,6 +241,13 @@ class SortedDict(MutableMapping):
                 return default
 
     def popitem(self):
+        """
+        Remove and return the ``(key, value)`` pair with the greatest *key*
+        from the dictionary.
+
+        If the dictionary is empty, calling `popitem` raises a
+        KeyError`.
+        """
         if len(self) == 0:
             raise KeyError
         key = self._list.pop()

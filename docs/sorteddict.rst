@@ -204,10 +204,16 @@ SortedDict
    .. _SortedDict.iloc:
    .. method:: d.iloc[pos]
 
-      Return the key at index *pos* in iteration. Supports negative indices and
-      slice notation.
+      Very efficiently return the key at index *pos* in iteration. Supports
+      negative indices and slice notation. Raises :exc:`IndexError` on invalid
+      *pos*.
 
       :rtype: key or :class:`list`
+
+   .. method:: del d.iloc[index]
+
+      Remove the ``d[d.iloc[index]]`` from *d*.  Supports negative indices and
+      slice notation.  Raises :exc:`IndexError` on invalid *index*.
 
 .. class:: KeysView
 

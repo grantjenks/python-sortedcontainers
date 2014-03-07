@@ -122,8 +122,11 @@ TODO
 ====
 
 - document every function/class in source
+  - sorteddict
+  - sortedset
 - make github public
 - deploy to pypi
+  - Review setup.py and conf.py files
   - Testing: 2.6, 2.7, 3.2, 3.3
   - Coverage
 - publish docs online: grantjenks.com/docs/sortedcontainers/...
@@ -137,4 +140,4 @@ TODO
   - email K Reitz
   - email John Cook (The Endeavor)
     - ask for help with big-O analysis
-  - email Danial Stutzbach (blist)
+  - email Daniel Stutzbach (blist)

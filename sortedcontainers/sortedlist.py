@@ -16,7 +16,22 @@ else:
     from functools import reduce
 
 class SortedList(MutableSequence):
+    """
+    SortedList provides most of the same methods as a list but keeps the items
+    in sorted order.
+    """
+
     def __init__(self, iterable=None, load=100):
+        """
+        SortedList provides most of the same methods as a list but keeps the
+        items in sorted order.
+
+        An optional *iterable* provides an initial series of items to populate
+        the SortedList.
+
+        An optional *load* specifies the load-factor of the list. Best practice
+        is to use a value that is the cube root of the list size.
+        """
         self.clear()
         self._load, self._twice, self._half = load, load * 2, int(load / 2)
 
@@ -24,10 +39,11 @@ class SortedList(MutableSequence):
             self.update(iterable)
 
     def clear(self):
+        """Remove all the elements from the list."""
         self._len, self._maxes, self._lists, self._index = 0, None, [], []
 
     def add(self, val):
-        """Add a val to the sorted list."""
+        """Add the element *val* to the list."""
         if self._maxes is None:
             self._maxes = [val]
             self._lists = [[val]]
@@ -56,7 +72,7 @@ class SortedList(MutableSequence):
             del self._index[pos:]
 
     def update(self, iterable):
-        """Update this sorted list with values from iterable."""
+        """Grow the list by appending all elements from the *iterable*."""
         values = sorted(iterable)
 
         if self._maxes is None and len(values) > 0:
@@ -70,7 +86,7 @@ class SortedList(MutableSequence):
                 self.add(val)
 
     def __contains__(self, val):
-        """Return True iff val in sorted list."""
+        """Return True if and only if *val* is an element in the list."""
         if self._maxes is None:
             return False
 
@@ -84,8 +100,11 @@ class SortedList(MutableSequence):
         return self._lists[pos][idx] == val
 
     def discard(self, val):
-        """Remove the first occurrence of val.
-        If val is not a member, does nothing."""
+        """
+        Remove the first occurrence of *val*.
+
+        If *val* is not a member, does nothing.
+        """
         if self._maxes is None:
             return
 
@@ -100,8 +119,11 @@ class SortedList(MutableSequence):
             self._delete(pos, idx)
 
     def remove(self, val):
-        """Remove the first occurrence of val.
-        If val is not a member, raise ValueError."""
+        """
+        Remove first occurrence of *val*.
+
+        Raises ValueError if *val* is not present.
+        """
         if self._maxes is None:
             raise ValueError
 
@@ -260,6 +282,7 @@ class SortedList(MutableSequence):
         return start, stop, step, indices
 
     def __delitem__(self, idx):
+        """Remove the element located at index *idx* from the list."""
         if isinstance(idx, slice):
             start, stop, step, indices = self._slice_indices(idx)
 
@@ -277,6 +300,7 @@ class SortedList(MutableSequence):
             self._delete(pos, idx)
 
     def __getitem__(self, idx):
+        """Return the element at position *idx*."""
         if isinstance(idx, slice):
             start, stop, step, indices = self._slice_indices(idx)
 
@@ -323,11 +347,7 @@ class SortedList(MutableSequence):
                 raise ValueError
 
     def __setitem__(self, index, value):
-        """
-        Set item should insert new items if len(value) is greater than len(index)
-        If step != 1 then len(index) must be equal to len(value)
-        """
-
+        """Replace the item at position *index* with *value*."""
         if isinstance(index, slice):
             start, stop, step, indices = self._slice_indices(index)
 
@@ -415,18 +435,26 @@ class SortedList(MutableSequence):
             self._lists[pos][loc] = value
 
     def __iter__(self):
+        """Create an iterator over the list."""
         return chain.from_iterable(self._lists)
 
     def reversed(self):
+        """Create an iterator to traverse the list in reverse."""
         start = len(self._lists) - 1
         iterable = (reversed(self._lists[pos])
                     for pos in range(start, -1, -1))
         return chain.from_iterable(iterable)
 
     def __len__(self):
+        """Return the number of elements in the list."""
         return self._len
 
     def bisect_left(self, val):
+        """
+        Similar to the *bisect* module in the standard library, this returns an
+        appropriate index to insert *val*. If *val* is already present, the
+        insertion point will be before (to the left of) any existing entries.
+        """
         if self._maxes is None:
             return 0
 
@@ -440,9 +468,14 @@ class SortedList(MutableSequence):
         return self._loc(pos, idx)
 
     def bisect(self, val):
+        """Same as bisect_left."""
         return self.bisect_left(val)
 
     def bisect_right(self, val):
+        """
+        Same as *bisect_left*, but if *val* is already present, the insertion
+        point will be after (to the right of) any existing entries.
+        """
         if self._maxes is None:
             return 0
 
@@ -456,6 +489,7 @@ class SortedList(MutableSequence):
         return self._loc(pos, idx)
 
     def count(self, val):
+        """Return the number of occurrences of *val* in the list."""
         if self._maxes is None:
             return 0
 
@@ -465,8 +499,9 @@ class SortedList(MutableSequence):
         return right - left
 
     def append(self, val):
-        """Append the given val to the end of the sorted list.
-        Raises ValueError if the val would make the list unsorted.
+        """
+        Append the element *value* to the list. Raises a ValueError if the *val*
+        would violate the sort order.
         """
         if self._maxes is None:
             self._maxes = [val]
@@ -487,8 +522,9 @@ class SortedList(MutableSequence):
         self._expand(pos)
 
     def extend(self, values):
-        """Extend this list with the given values.
-        Raises ValueError if the values would make the list unsorted.
+        """
+        Extend the list by appending all elements from the *values*. Raises a
+        ValueError if the sort order would be violated.
         """
         if not isinstance(values, list):
             values = list(values)
@@ -520,8 +556,9 @@ class SortedList(MutableSequence):
         del self._index[count:]
 
     def insert(self, idx, val):
-        """Insert the given val at idx.
-        Raise ValueError if the val at idx would make the list unsorted.
+        """
+        Insert the element *val* into the list at *idx*. Raises a ValueError if
+        the *val* at *idx* would violate the sort order.
         """
         if idx < 0:
             idx += self._len
@@ -577,6 +614,11 @@ class SortedList(MutableSequence):
             raise ValueError
 
     def pop(self, idx=-1):
+        """
+        Remove and return item at *idx* (default last).  Raises IndexError if
+        list is empty or index is out of range.  Negative indexes are supported,
+        as for slice indices.
+        """
         if (idx < 0 and -idx > self._len) or (idx >= self._len):
             raise IndexError
 
@@ -587,6 +629,12 @@ class SortedList(MutableSequence):
         return val
 
     def index(self, val, start=None, stop=None):
+        """
+        Return the smallest *k* such that L[k] == x and i <= k < j`.  Raises
+        ValueError if *val* is not present.  *stop* defaults to the end of the
+        list. *start* defaults to the beginning. Negative indexes are
+        supported, as for slice indices.
+        """
         if self._maxes is None:
             raise ValueError
 
@@ -624,54 +672,77 @@ class SortedList(MutableSequence):
         raise ValueError
 
     def as_list(self):
+        """Very efficiently convert the SortedList to a list."""
         return reduce(iadd, self._lists, [])
 
     def __add__(self, that):
+        """
+        Return a new sorted list extended by appending all elements from
+        *that*. Raises a ValueError if the sort order would be violated.
+        """
         values = self.as_list()
         values.extend(that)
         return SortedList(values)
 
     def __iadd__(self, that):
+        """
+        Increase the length of the list by appending all elements from
+        *that*. Raises a ValueError if the sort order would be violated.
+        """
         self.update(that)
         return self
 
     def __mul__(self, that):
+        """
+        Return a new sorted list containing *that* shallow copies of each item
+        in SortedList.
+        """
         values = self.as_list() * that
         return SortedList(values)
 
     def __imul__(self, that):
+        """
+        Increase the length of the list by appending *that* shallow copies of
+        each item.
+        """
         values = self.as_list() * that
         self.clear()
         self.update(values)
         return self
 
     def __eq__(self, that):
+        """Compare two iterables for equality."""
         return ((self._len == len(that))
                 and all(lhs == rhs for lhs, rhs in zip(self, that)))
 
     def __ne__(self, that):
+        """Compare two iterables for inequality."""
         return ((self._len != len(that))
                 or any(lhs != rhs for lhs, rhs in zip(self, that)))
 
     def __lt__(self, that):
+        """Compare two iterables for less than."""
         return ((self._len <= len(that))
                 and all(lhs < rhs for lhs, rhs in zip(self, that)))
 
     def __le__(self, that):
+        """Compare two iterables for less than equal."""
         return ((self._len <= len(that))
                 and all(lhs <= rhs for lhs, rhs in zip(self, that)))
 
     def __gt__(self, that):
+        """Compare two iterables for greater than."""
         return ((self._len >= len(that))
                 and all(lhs > rhs for lhs, rhs in zip(self, that)))
 
     def __ge__(self, that):
+        """Compare two iterables for greater than equal."""
         return ((self._len >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
     def __repr__(self):
-        reprs = (repr(value) for value in self)
-        return 'SortedList([{0}])'.format(', '.join(reprs))
+        """Return string representation of SortedList."""
+        return 'SortedList({0})'.format(repr(self.as_list()))
 
     def _check(self):
         try:

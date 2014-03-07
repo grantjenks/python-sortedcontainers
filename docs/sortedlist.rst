@@ -165,22 +165,22 @@ SortedList
    .. _SortedList.pop:
    .. method:: L.pop([index])
 
-      Remove and return item at index (default last).  Raises
-      IndexError if list is empty or index is out of range.  Negative
-      indexes are supported, as for slice indices.
+      Remove and return item at index (default last).  Raises :exc:`IndexError`
+      if list is empty or index is out of range.  Negative indexes are
+      supported, as for slice indices.
 
       :rtype: item
 
    .. _SortedList.remove:
    .. method:: L.remove(value)
 
-      Remove first occurrence of *value*.  Raises ValueError if
+      Remove first occurrence of *value*.  Raises :exc:`ValueError` if
       *value* is not present.
 
    .. _SortedList.update:
    .. method:: L.update(iterable)
 
-      Grow the list by inserting all elements from the iterable.
+      Grow the list by inserting all elements from the *iterable*.
 
    .. method:: L.clear()
 
