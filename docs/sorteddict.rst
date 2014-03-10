@@ -356,7 +356,7 @@ SortedDict
 
 .. class:: ItemsView
 
-   A ItemsView object is a dynamic view of the dictionary's ``(key,
+   An ItemsView object is a dynamic view of the dictionary's ``(key,
    value)`` pairs, which means that when the dictionary changes, the
    view reflects those changes.
 

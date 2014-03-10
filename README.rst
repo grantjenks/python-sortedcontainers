@@ -122,22 +122,16 @@ TODO
 ====
 
 - document every function/class in source
-  - sorteddict
   - sortedset
+- Final testing
+  - Testing: 2.6, 2.7, 3.2, 3.3
+  - Coverage
 - make github public
 - deploy to pypi
   - Review setup.py and conf.py files
-  - Testing: 2.6, 2.7, 3.2, 3.3
-  - Coverage
 - publish docs online: grantjenks.com/docs/sortedcontainers/...
 - create portfolio page
   - Blurb of thanks on project page in blog
     - Add that if K Reitz is known for taking complex APIs and making them
       simple then maybe someday I can be known for making slow APIs into
       fast ones.
-- promote
-  - email Armin Ronacher
-  - email K Reitz
-  - email John Cook (The Endeavor)
-    - ask for help with big-O analysis
-  - email Daniel Stutzbach (blist)

@@ -12,19 +12,48 @@ if version_info[0] == 2:
     from itertools import izip as zip
 
 class SortedSet(MutableSet, Sequence):
+    """
+    A `SortedSet` provides the same methods as a `set`.  Additionally, a
+    `SortedSet` maintains its items in sorted order, allowing the `SortedSet` to
+    be indexed.
+
+    Unlike a `set`, a `SortedSet` requires items be hashable and comparable.
+    """
     def __init__(self, iterable=None, load=100, _set=None):
+        """
+        A `SortedSet` provides the same methods as a `set`.  Additionally, a
+        `SortedSet` maintains its items in sorted order, allowing the
+        `SortedSet` to be indexed.
+
+        An optional *iterable* provides an initial series of items to populate the
+        `SortedSet`.
+
+        An optional *load* specifies the load-factor of the list. Best practice
+        is to use a value that is the cube root of the list size.
+        """
         self._set = set() if _set is None else _set
         self._list = SortedList(self._set, load=load)
         if iterable is not None:
             self.update(iterable)
     def __contains__(self, value):
+        """Return True if and only if *value* is an element in the set."""
         return (value in self._set)
     def __getitem__(self, index):
+        """
+        Return the element at position *index*.
+
+        Supports slice notation and negative indexes.
+        """
         if isinstance(index, slice):
             return SortedSet(self._list[index])
         else:
             return self._list[index]
     def __delitem__(self, index):
+        """
+        Remove the element at position *index*.
+
+        Supports slice notation and negative indexes.
+        """
         if isinstance(index, slice):
             values = self._list[index]
             self._set.difference_update(values)
@@ -33,6 +62,11 @@ class SortedSet(MutableSet, Sequence):
             self._set.remove(value)
         del self._list[index]
     def __setitem__(self, index, value):
+        """
+        Remove the element at position *index* and add *value* to the set.
+
+        Supports slice notation and negative indexes.
+        """
         if isinstance(index, slice):
             values = self._list[index]
             self._set.difference_update(values)
@@ -43,6 +77,7 @@ class SortedSet(MutableSet, Sequence):
             self._set.add(value)
         self._list[index] = value
     def __eq__(self, that):
+        """Return True if and only if self and *that* are equal sets."""
         if len(self) != len(that):
             return False
         if isinstance(that, SortedSet):
@@ -52,6 +87,7 @@ class SortedSet(MutableSet, Sequence):
         else:
             return all(val in self._set for val in that)
     def __ne__(self, that):
+        """Return True if and only if self and *that* are inequal sets."""
         if len(self) != len(that):
             return True
         if isinstance(that, SortedSet):
@@ -61,34 +97,54 @@ class SortedSet(MutableSet, Sequence):
         else:
             return any(val not in self._set for val in that)
     def __lt__(self, that):
+        """Return True if and only if self is a subset of *that*."""
         if isinstance(that, set):
             return (self._set < that)
         else:
             return (len(self) < len(that)) and all(val in that for val in self._list)
     def __gt__(self, that):
+        """Return True if and only if self is a superset of *that*."""
         if isinstance(that, set):
             return (self._set > that)
         else:
             return (len(self) > len(that)) and all(val in self._set for val in that)
     def __le__(self, that):
+        """Return True if and only if self is contained within *that*."""
         if isinstance(that, set):
             return (self._set <= that)
         else:
             return all(val in that for val in self._list)
     def __ge__(self, that):
+        """Return True if and only if *that* is contained within self."""
         if isinstance(that, set):
             return (self._set >= that)
         else:
             return all(val in self._set for val in that)
     def __and__(self, that):
+        """
+        Return a new SortedSet with the elements common to self and *that*.
+        """
         return self.intersection(that)
     def __or__(self, that):
+        """
+        Return a new SortedSet containing all the elements in self and *that*.
+        """
         return self.union(that)
     def __sub__(self, that):
+        """
+        Return a new SortedSet with elements in self that are not in *that*.
+        """
         return self.difference(that)
     def __xor__(self, that):
+        """
+        Return a new SortedSet with elements in self or *that* but not both.
+        """
         return self.symmetric_difference(that)
     def __iter__(self):
+        """
+        Return an iterator over the SortedSet. Elements are iterated over
+        in their sorted order.
+        """
         return iter(self._list)
     def __len__(self):
         return len(self._set)

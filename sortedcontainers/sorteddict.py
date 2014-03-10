@@ -4,13 +4,17 @@ Sorted dict implementation.
 
 from .sortedset import SortedSet
 from .sortedlist import SortedList
-from collections import MutableMapping
+from collections import MutableMapping, Set, Sequence
+from collections import KeysView as AbstractKeysView
+from collections import ValuesView as AbstractValuesView
+from collections import ItemsView as AbstractItemsView
 
 from sys import version_info, hexversion
 
 _NotGiven = object()
 
 def not26(func):
+    """Function decorator for methods not implemented in Python 2.6."""
     from functools import wraps
 
     @wraps(func)
@@ -256,6 +260,11 @@ class SortedDict(MutableMapping):
         return (key, value)
 
     def setdefault(self, key, default=None):
+        """
+        If *key* is in the dictionary, return its value.  If not, insert *key*
+        with a value of *default* and return *default*.  *default* defaults to
+        ``None``.
+        """
         if key in self._dict:
             return self._dict[key]
         else:
@@ -264,6 +273,15 @@ class SortedDict(MutableMapping):
             return default
 
     def update(self, other=None, **kwargs):
+        """
+        Update the dictionary with the key/value pairs from *other*, overwriting
+        existing keys.
+
+        *update* accepts either another dictionary object or an iterable of
+        key/value pairs (as a tuple or other iterable of length two).  If
+        keyword arguments are specified, the dictionary is then updated with
+        those key/value pairs: ``d.update(red=1, blue=2)``.
+        """
         if version_info[0] == 2:
             itr = kwargs.iteritems() if other is None else iter(other)
         else:
@@ -274,20 +292,41 @@ class SortedDict(MutableMapping):
 
     def index(self, key, start=None, stop=None):
         """
-        Return index of key in iteration.
+        Return the smallest *k* such that `d.iloc[k] == key` and `i <= k < j`.
+        Raises `ValueError` if *key* is not present.  *stop* defaults to the end
+        of the set.  *start* defaults to the beginning.  Negative indexes are
+        supported, as for slice indices.
         """
         return self._list.index(key, start, stop)
 
     @not26
     def viewkeys(self):
+        """
+        In Python 2.7 and later, return a new `KeysView` of the dictionary's
+        keys.
+
+        In Python 2.6, raise a NotImplementedError.
+        """
         return KeysView(self)
 
     @not26
     def viewvalues(self):
+        """
+        In Python 2.7 and later, return a new `ValuesView` of the dictionary's
+        values.
+
+        In Python 2.6, raise a NotImplementedError.
+        """
         return ValuesView(self)
 
     @not26
     def viewitems(self):
+        """
+        In Python 2.7 and later, return a new `ItemsView` of the dictionary's
+        items.
+
+        In Python 2.6, raise a NotImplementedError.
+        """
         return ItemsView(self)
 
     def _check(self):
@@ -295,54 +334,112 @@ class SortedDict(MutableMapping):
         assert len(self._dict) == len(self._list)
         assert all(val in self._dict for val in self._list)
 
-class KeysView:
+class KeysView(AbstractKeysView, Set, Sequence):
+    """
+    A KeysView object is a dynamic view of the dictionary's keys, which
+    means that when the dictionary's keys change, the view reflects
+    those changes.
+
+    The KeysView class implements the Set and Sequence Abstract Base Classes.
+    """
     def __init__(self, sorted_dict):
+        """
+        Initialize a KeysView from a SortedDict container as *sorted_dict*.
+        """
         self._list = sorted_dict._list
         if version_info[0] == 2:
             self._view = sorted_dict._dict.viewkeys()
         else:
             self._view = sorted_dict._dict.keys()
     def __len__(self):
+        """Return the number of entries in the dictionary."""
         return len(self._view)
     def __contains__(self, key):
+        """
+        Return True if and only if *key* is one of the underlying dictionary's
+        keys.
+        """
         return key in self._view
     def __iter__(self):
+        """
+        Return an iterable over the keys in the dictionary. Keys are iterated
+        over in their sorted order.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a RuntimeError or fail to iterate over all entries.
+        """
         return iter(self._list)
     def __getitem__(self, index):
+        """Return the key at position *index*."""
         return self._list[index]
     def __reversed__(self):
+        """
+        Return a reversed iterable over the keys in the dictionary. Keys are
+        iterated over in their reverse sort order.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a RuntimeError or fail to iterate over all entries.
+        """
         return reversed(self._list)
     def index(self, value, start=None, stop=None):
+        """
+        Return the smallest *k* such that `keysview[k] == value` and `start <= k
+        < end`.  Raises `KeyError` if *value* is not present.  *stop* defaults
+        to the end of the set.  *start* defaults to the beginning.  Negative
+        indexes are supported, as for slice indices.
+        """
         return self._list.index(value, start, stop)
     def count(self, value):
+        """Return the number of occurrences of *value* in the set."""
         return 1 if value in self._view else 0
     def __eq__(self, that):
+        """Test set-like equality with *that*."""
         return self._view == that
     def __ne__(self, that):
+        """Test set-like inequality with *that*."""
         return self._view != that
     def __lt__(self, that):
+        """Test whether self is a proper subset of *that*."""
         return self._view < that
     def __gt__(self, that):
+        """Test whether self is a proper superset of *that*."""
         return self._view > that
     def __le__(self, that):
+        """Test whether self is contained within *that*."""
         return self._view <= that
     def __ge__(self, that):
+        """Test whether *that* is contained within self."""
         return self._view >= that
     def __and__(self, that):
+        """Return a SortedSet of the intersection of self and *that*."""
         return SortedSet(self._view & that)
     def __or__(self, that):
+        """Return a SortedSet of the union of self and *that*."""
         return SortedSet(self._view | that)
     def __sub__(self, that):
+        """Return a SortedSet of the difference of self and *that*."""
         return SortedSet(self._view - that)
     def __xor__(self, that):
+        """Return a SortedSet of the symmetric difference of self and *that*."""
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
+        """Return True if and only if *that* is disjoint with self."""
         return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
-class ValuesView:
+class ValuesView(AbstractValuesView, Sequence):
+    """
+    A ValuesView object is a dynamic view of the dictionary's values, which
+    means that when the dictionary's values change, the view reflects those
+    changes.
+
+    The ValuesView class implements the Sequence Abstract Base Class.
+    """
     def __init__(self, sorted_dict):
+        """
+        Initialize a ValuesView from a SortedDict container as *sorted_dict*.
+        """
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
@@ -350,26 +447,56 @@ class ValuesView:
         else:
             self._view = sorted_dict._dict.values()
     def __len__(self):
+        """Return the number of entries in the dictionary."""
         return len(self._dict)
     def __contains__(self, value):
+        """
+        Return True if and only if *value* is on the underlying dictionary's
+        values.
+        """
         return value in self._view
     def __iter__(self):
+        """
+        Return an iterator over the values in the dictionary.  Values are
+        iterated over in sorted order of the keys.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a `RuntimeError` or fail to iterate over all entries.
+        """
         return iter(self._dict[key] for key in self._list)
     def __getitem__(self, index):
+        """
+        Efficiently return value at *index* in iteration.
+
+        Supports slice notation and negative indexes.
+        """
         if isinstance(idx, slice):
             return [self._dict[key] for key in self._list[index]]
         else:
             return self._dict[self._list[index]]
     def __reversed__(self):
+        """
+        Return a reverse iterator over the values in the dictionary.  Values are
+        iterated over in reverse sort order of the keys.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a `RuntimeError` or fail to iterate over all entries.
+        """
         return iter(self._dict[key] for key in reversed(self._list))
-    def index(self, key):
-        for idx, value in enumerate(self):
-            if key == value:
+    def index(self, value):
+        """
+        Return index of *value* in self.
+
+        Raises ValueError if *value* is not found.
+        """
+        for idx, val in enumerate(self):
+            if value == val:
                 return idx
         else:
             raise ValueError
-    def count(self, key):
-        return self._view.count(key)
+    def count(self, value):
+        """Return the number of occurrences of *value* in self."""
+        return self._view.count(value)
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
@@ -389,8 +516,20 @@ class ValuesView:
     def __repr__(self):
         return 'SortedDict_values({0})'.format(repr(list(self)))
 
-class ItemsView:
+class ItemsView(AbstractItemsView, Set, Sequence):
+    """
+    An ItemsView object is a dynamic view of the dictionary's ``(key,
+    value)`` pairs, which means that when the dictionary changes, the
+    view reflects those changes.
+
+    The ItemsView class implements the Set and Sequence Abstract Base Classes.
+    However, the set-like operations (``&``, ``|``, ``-``, ``^``) will only
+    operate correctly if all of the dictionary's values are hashable.
+    """
     def __init__(self, sorted_dict):
+        """
+        Initialize an ItemsView from a SortedDict container as *sorted_dict*.
+        """
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
@@ -398,48 +537,86 @@ class ItemsView:
         else:
             self._view = sorted_dict._dict.items()
     def __len__(self):
+        """Return the number of entries in the dictionary."""
         return len(self._view)
     def __contains__(self, key):
+        """
+        Return True if and only if *key* is one of the underlying dictionary's
+        items.
+        """
         return key in self._view
     def __iter__(self):
+        """
+        Return an iterable over the items in the dictionary. Items are iterated
+        over in their sorted order.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a RuntimeError or fail to iterate over all entries.
+        """
         return iter((key, self._dict[key]) for key in self._list)
     def __getitem__(self, index):
+        """Return the item as position *index*."""
         if isinstance(idx, slice):
             return [(key, self._dict[key]) for key in self._list[index]]
         else:
             key = self._list[index]
             return (key, self._dict[key])
     def __reversed__(self):
+        """
+        Return a reversed iterable over the items in the dictionary. Items are
+        iterated over in their reverse sort order.
+
+        Iterating views while adding or deleting entries in the dictionary may
+        raise a RuntimeError or fail to iterate over all entries.
+        """
         return iter((key, self._dict[key]) for key in reversed(self._list))
     def index(self, key, start=None, stop=None):
+        """
+        Return the smallest *k* such that `itemssview[k] == key` and `start <= k
+        < end`.  Raises `KeyError` if *key* is not present.  *stop* defaults
+        to the end of the set.  *start* defaults to the beginning.  Negative
+        indexes are supported, as for slice indices.
+        """
         pos = self._list.index(key[0], start, stop)
         if key[1] == self._dict[key[0]]:
             return pos
         else:
             raise ValueError
-    def count(self, key):
-        return self._view.count(key)
+    def count(self, item):
+        """Return the number of occurrences of *item* in the set."""
+        return self._view.count(item)
     def __eq__(self, that):
+        """Test set-like equality with *that*."""
         return self._view == that
     def __ne__(self, that):
+        """Test set-like inequality with *that*."""
         return self._view != that
     def __lt__(self, that):
+        """Test whether self is a proper subset of *that*."""
         return self._view < that
     def __gt__(self, that):
+        """Test whether self is a proper superset of *that*."""
         return self._view > that
     def __le__(self, that):
+        """Test whether self is contained within *that*."""
         return self._view <= that
     def __ge__(self, that):
+        """Test whether *that* is contained within self."""
         return self._view >= that
     def __and__(self, that):
+        """Return a SortedSet of the intersection of self and *that*."""
         return SortedSet(self._view & that)
     def __or__(self, that):
+        """Return a SortedSet of the union of self and *that*."""
         return SortedSet(self._view | that)
     def __sub__(self, that):
+        """Return a SortedSet of the difference of self and *that*."""
         return SortedSet(self._view - that)
     def __xor__(self, that):
+        """Return a SortedSet of the symmetric difference of self and *that*."""
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
+        """Return True if and only if *that* is disjoint with self."""
         return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_items({0})'.format(repr(list(self)))

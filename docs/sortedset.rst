@@ -4,14 +4,14 @@ SortedSet
 .. class:: SortedSet(iterable=None, load=100, _set=None):
 
    A :class:`SortedSet` provides the same methods as a :class:`set`.
-   Additionally, a :class:`SortedSet:` maintains its items in sorted
+   Additionally, a :class:`SortedSet` maintains its items in sorted
    order, allowing the :class:`SortedSet` to be indexed.
 
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedSet`.
 
-   Unlike a :class:`set`, a :class:`SortedSet` does not require items
-   to be hashable. But it does require that items be comparable.
+   Unlike a :class:`set`, a :class:`SortedSet` requires items
+   be hashable and comparable.
 
    .. _SortedSet.__contains__:
    .. method:: x in S
@@ -49,6 +49,11 @@ SortedSet
       Return the element at position *i*.
 
       :rtype: item
+
+   .. _SortedSet.__setitem__:
+   .. method:: S[i] = v
+
+      Remove the element located at index *i* from the set and add element *v*.
 
    .. method:: S[i:j]
 
@@ -186,7 +191,7 @@ SortedSet
    .. method:: S.symmetric_difference(S2)
                S ^ S2
 
-      Return a new set with element in either set but not both.
+      Return a new set with elements in either set but not both.
 
       :rtype: :class:`SortedSet`
 
