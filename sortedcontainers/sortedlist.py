@@ -1,6 +1,6 @@
-"""
-Sorted list implementation.
-"""
+# -*- coding: utf-8 -*-
+#
+# Sorted list implementation.
 
 from __future__ import print_function
 from sys import version_info

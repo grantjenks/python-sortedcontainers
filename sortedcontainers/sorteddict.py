@@ -1,6 +1,6 @@
-"""
-Sorted dict implementation.
-"""
+# -*- coding: utf-8 -*-
+#
+# Sorted dict implementation.
 
 from .sortedset import SortedSet
 from .sortedlist import SortedList
