@@ -222,8 +222,7 @@ SortedSet
                S | S2 | ...
 
       Return a new SortedSet with elements from the set and all
-      others.  The new SortedSet will be sorted according to the key
-      of the leftmost set.
+      others.
 
       :rtype: :class:`SortedSet`
 

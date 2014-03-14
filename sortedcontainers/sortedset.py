@@ -1,6 +1,6 @@
-"""
-Sorted set implementation.
-"""
+# -*- coding: utf-8 -*-
+#
+# Sorted set implementation.
 
 from sys import version_info
 
@@ -147,53 +147,104 @@ class SortedSet(MutableSet, Sequence):
         """
         return iter(self._list)
     def __len__(self):
+        """Return the number of elements in the set."""
         return len(self._set)
     def __reversed__(self):
+        """Create an iterator to traverse the set in reverse."""
         return reversed(self._list)
     def add(self, value):
+        """Add the element *value* to the set."""
         if value not in self._set:
             self._set.add(value)
             self._list.add(value)
     def bisect_left(self, value):
+        """
+        Similar to the ``bisect`` module in the standard library, this returns
+        an appropriate index to insert *value* in SortedSet. If *value* is
+        already present in SortedSet, the insertion point will be before (to the
+        left of) any existing entries.
+        """
         return self._list.bisect_left(value)
     def bisect(self, value):
+        """Same as bisect_left."""
         return self._list.bisect(value)
     def bisect_right(self, value):
+        """
+        Same as `bisect_left`, but if *value* is already present in SortedSet,
+        the insertion point will be after (to the right of) any existing
+        entries.
+        """
         return self._list.bisect_right(value)
     def clear(self):
+        """Remove all elements from the set."""
         self._set.clear()
         self._list.clear()
     def copy(self):
+        """Create a shallow copy of the set."""
         new_set = SortedSet()
         new_set._set = self._set
         new_set._list = self._list
         return new_set
     def count(self, value):
+        """Return the number of occurrences of *value* in the set."""
         return 1 if value in self._set else 0
     def discard(self, value):
+        """
+        Remove the first occurrence of *value*.  If *value* is not a member,
+        does nothing.
+        """
         if value in self._set:
             self._set.remove(value)
             self._list.discard(value)
     def index(self, value, start=None, stop=None):
+        """
+        Return the smallest *k* such that `SortedSet[k] == x` and `start <= k <
+        stop`.  Raises ValueError if *value* is not present.  *stop* defaults to
+        the end of the set.  *start* defaults to the beginning.  Negative
+        indexes are supported, as for slice indices.
+        """
         return self._list.index(value, start, stop)
     def isdisjoint(self, that):
+        """
+        Return True if the set has no elements in common with *that*.  Sets are
+        disjoint if and only if their intersection is the empty set.
+        """
         return self._set.isdisjoint(that)
     def issubset(self, that):
+        """Test whether every element in the set is in *that*."""
         return self._set.issubset(that)
     def issuperset(self, that):
+        """Test whether every element in *that* is in the set."""
         return self._set.issuperset(that)
     def pop(self, index=-1):
+        """
+        Remove and return item at *index* (default last).  Raises IndexError if
+        set is empty or index is out of range.  Negative indexes are supported,
+        as for slice indices.
+        """
         value = self._list.pop(index)
         self._set.remove(value)
         return value
     def remove(self, value):
+        """
+        Remove first occurrence of *value*.  Raises ValueError if
+        *value* is not present.
+        """
         self._set.remove(value)
         self._list.remove(value)
     def difference(self, *iterables):
+        """
+        Return a new set with elements in the set that are not in the
+        *iterables*.
+        """
         diff = self._set.difference(*iterables)
         new_set = SortedSet(load=self._list._load, _set=diff)
         return new_set
     def difference_update(self, *iterables):
+        """
+        Update the set, removing elements found in keeping only elements
+        found in any of the *iterables*.
+        """
         values = set(chain(*iterables))
         if (4 * len(values)) > len(self):
             self._set.difference_update(values)
@@ -203,25 +254,41 @@ class SortedSet(MutableSet, Sequence):
             for value in values:
                 self.discard(value)
     def intersection(self, *iterables):
+        """
+        Return a new set with elements common to the set and all *iterables*.
+        """
         comb = self._set.intersection(*iterables)
         new_set = SortedSet(load=self._list._load, _set=comb)
         return new_set
     def intersection_update(self, *iterables):
+        """
+        Update the set, keeping only elements found in it and all *iterables*.
+        """
         self._set.intersection_update(*iterables)
         self._list.clear()
         self._list.update(self._set)
     def symmetric_difference(self, that):
+        """
+        Return a new set with elements in either *self* or *that* but not both.
+        """
         diff = self._set.symmetric_difference(that)
         new_set = SortedSet(load=self._list._load, _set=diff)
         return new_set
     def symmetric_difference_update(self, that):
+        """
+        Update the set, keeping only elements found in either *self* or *that*,
+        but not in both.
+        """
         self._set.symmetric_difference_update(that)
         self._list.clear()
         self._list.update(self._set)
     def union(self, *iterables):
+        """
+        Return a new SortedSet with elements from the set and all *iterables*.
+        """
         return SortedSet(chain(iter(self), *iterables), load=self._list._load)
     def update(self, *iterables):
-        """Update sorted set with iterables."""
+        """Update the set, adding elements from all *iterables*."""
         values = set(chain(*iterables))
         if (4 * len(values)) > len(self):
             self._set.update(values)
