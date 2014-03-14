@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sortedcontainers
 from setuptools import setup, find_packages
 
 with open('README.rst') as fptr:
@@ -9,8 +10,8 @@ with open('LICENSE') as fptr:
     license = fptr.read()
 
 setup(
-    name='sortedcontainers',
-    version='0.1',
+    name=sortedcontainers.__title__,
+    version=sortedcontainers.__version__,
     description='Sorted container data types.',
     long_description=readme,
     author='Grant Jenks',
