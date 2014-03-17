@@ -81,7 +81,7 @@ class SortedSet(MutableSet, Sequence):
         if len(self) != len(that):
             return False
         if isinstance(that, SortedSet):
-            return all(lhs == rhs for lhs, rhs in zip(self, that))
+            return (self._list == that._list)
         elif isinstance(that, set):
             return (self._set == that)
         else:
@@ -91,7 +91,7 @@ class SortedSet(MutableSet, Sequence):
         if len(self) != len(that):
             return True
         if isinstance(that, SortedSet):
-            return any(lhs != rhs for lhs, rhs in zip(self, that))
+            return (self._list != that._list)
         elif isinstance(that, set):
             return (self._set != that)
         else:

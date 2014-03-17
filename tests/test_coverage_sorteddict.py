@@ -193,6 +193,16 @@ def test_iloc():
     assert temp.iloc[0] == 'a'
     assert temp.iloc[-1] == 'z'
     assert temp.iloc[-3:] == ['x', 'y', 'z']
+    del temp.iloc[0]
+    assert temp.iloc[0] == 'b'
+    del temp.iloc[-3:]
+    assert temp.iloc[-1] == 'w'
+
+def test_index():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert temp.index('a') == 0
+    assert temp.index('f', 3, -3) == 5
 
 def test_keysview():
     if hexversion < 0x02070000: return
@@ -204,6 +214,12 @@ def test_keysview():
     assert len(keys) == 13
     assert 'a' in keys
     assert list(keys) == [val for val, pos in mapping[:13]]
+    assert keys[0] == 'a'
+    assert list(reversed(keys)) == list(reversed(string.ascii_lowercase[:13]))
+    assert keys.index('f') == 5
+    assert keys.count('m') == 1
+    assert keys.count('0') == 0
+    assert keys.isdisjoint(['1', '2', '3'])
 
     temp.update(mapping[13:])
 
@@ -240,6 +256,11 @@ def test_valuesview():
     assert len(values) == 13
     assert 0 in values
     assert list(values) == [pos for val, pos in mapping[:13]]
+    assert values[0] == 0
+    assert values[-3:] == [10, 11, 12]
+    assert list(reversed(values)) == list(reversed(range(13)))
+    assert values.index(5) == 5
+    assert values.count(10) == 1
 
     temp.update(mapping[13:])
 
@@ -252,6 +273,16 @@ def test_valuesview():
 
     values = get_valuesview(SortedDict(mapping[:2]))
     assert repr(values) == "SortedDict_values([0, 1])"
+
+@raises(ValueError)
+def test_valuesview():
+    if hexversion < 0x02070000: raise ValueError
+
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping[:13])
+    values = get_valuesview(temp)
+
+    values.index(13)
 
 @raises(TypeError)
 def test_values_view_lt():
@@ -342,6 +373,13 @@ def test_itemsview():
     assert len(items) == 13
     assert ('a', 0) in items
     assert list(items) == mapping[:13]
+    assert items[0] == ('a', 0)
+    assert items[-3:] == [('k', 10), ('l', 11), ('m', 12)]
+    assert list(reversed(items)) == list(reversed(mapping[:13]))
+    assert items.index(('f', 5)) == 5
+    assert items.count(('m', 12)) == 1
+    assert items.isdisjoint([('0', 26), ('1', 27)])
+    assert not items.isdisjoint([('a', 0), ('b', 1)])
 
     temp.update(mapping[13:])
 

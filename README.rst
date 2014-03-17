@@ -121,9 +121,6 @@ Copyright 2014 Grant Jenks
 TODO
 ====
 
-- Final testing
-  - Coverage
-  - Testing: 2.6, 2.7, 3.2, 3.3
 - make github public
 - deploy to pypi
 - publish docs online: grantjenks.com/docs/sortedcontainers/...
@@ -132,3 +129,4 @@ TODO
     - Add that if K Reitz is known for taking complex APIs and making them
       simple then maybe someday I can be known for making slow APIs into
       fast ones.
+- add gumroad links

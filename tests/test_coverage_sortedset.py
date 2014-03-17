@@ -56,6 +56,8 @@ def test_eq():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(100), load=17)
     assert alpha == beta
+    assert alpha == beta._set
+    assert alpha == list(beta)
     beta.add(101)
     assert not (alpha == beta)
 
@@ -63,6 +65,8 @@ def test_ne():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(99), load=17)
     assert alpha != beta
+    assert alpha != beta._set
+    assert alpha != list(beta)
     beta[100:] = [101]
     assert alpha != beta
     beta = set(beta)
@@ -90,7 +94,7 @@ def test_len():
 
 def test_reversed():
     temp = SortedSet(range(100), load=7)
-    assert all(val == temp[val] for val in temp.reversed())
+    assert all(val == temp[val] for val in reversed(temp))
 
 def test_add():
     temp = SortedSet(range(100), load=7)

@@ -9,13 +9,13 @@ from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
 
+from functools import wraps
 from sys import version_info, hexversion
 
 _NotGiven = object()
 
 def not26(func):
     """Function decorator for methods not implemented in Python 2.6."""
-    from functools import wraps
 
     @wraps(func)
     def errfunc(*args, **kwargs):
@@ -424,7 +424,10 @@ class KeysView(AbstractKeysView, Set, Sequence):
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
         """Return True if and only if *that* is disjoint with self."""
-        return self._view.isdisjoint(that)
+        if version_info[0] == 2:
+            return not any(key in self._list for key in that)
+        else:
+            return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
@@ -470,7 +473,7 @@ class ValuesView(AbstractValuesView, Sequence):
 
         Supports slice notation and negative indexes.
         """
-        if isinstance(idx, slice):
+        if isinstance(index, slice):
             return [self._dict[key] for key in self._list[index]]
         else:
             return self._dict[self._list[index]]
@@ -496,7 +499,10 @@ class ValuesView(AbstractValuesView, Sequence):
             raise ValueError
     def count(self, value):
         """Return the number of occurrences of *value* in self."""
-        return self._view.count(value)
+        if version_info[0] == 2:
+            return sum(1 for val in self._dict.itervalues() if val == value)
+        else:
+            return sum(1 for val in self._dict.values() if val == value)
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
@@ -556,7 +562,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         return iter((key, self._dict[key]) for key in self._list)
     def __getitem__(self, index):
         """Return the item as position *index*."""
-        if isinstance(idx, slice):
+        if isinstance(index, slice):
             return [(key, self._dict[key]) for key in self._list[index]]
         else:
             key = self._list[index]
@@ -584,7 +590,8 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             raise ValueError
     def count(self, item):
         """Return the number of occurrences of *item* in the set."""
-        return self._view.count(item)
+        key, value = item
+        return 1 if key in self._dict and self._dict[key] == value else 0
     def __eq__(self, that):
         """Test set-like equality with *that*."""
         return self._view == that
@@ -617,6 +624,12 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
         """Return True if and only if *that* is disjoint with self."""
-        return self._view.isdisjoint(that)
+        if version_info[0] == 2:
+            for key, value in that:
+                if key in self._dict and self._dict[key] == value:
+                    return False
+            return True
+        else:
+            return self._view.isdisjoint(that)
     def __repr__(self):
         return 'SortedDict_items({0})'.format(repr(list(self)))
