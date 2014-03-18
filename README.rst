@@ -65,6 +65,8 @@ Installing SortedContainers is simple with
 You can access documentation in the interpreter with Python's built-in help
 function:
 
+::
+
     >>> from sortedcontainers import SortedList, SortedSet, SortedDict
     >>> help(SortedList)
 
@@ -117,16 +119,3 @@ Copyright 2014 Grant Jenks
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-TODO
-====
-
-- make github public
-- deploy to pypi
-- publish docs online: grantjenks.com/docs/sortedcontainers/...
-- create portfolio page
-  - Blurb of thanks on project page in blog
-    - Add that if K Reitz is known for taking complex APIs and making them
-      simple then maybe someday I can be known for making slow APIs into
-      fast ones.
-- add gumroad links
