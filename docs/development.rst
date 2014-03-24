@@ -85,10 +85,11 @@ Tested Runtimes
 
 SortedContainers currently supports the following versions of Python:
 
-* Python 2.6
-* Python 2.7
-* Python 3.2
-* Python 3.3
+* CPython 2.6
+* CPython 2.7
+* CPython 3.2
+* CPython 3.3
+* CPython 3.4
 
 Life will feel much saner if you use `virtualenv <http://www.virtualenv.org/>`_
 to manage each of the runtimes.
