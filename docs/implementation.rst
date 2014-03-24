@@ -5,7 +5,7 @@ The sorted container types are implemented based on a single observation:
 bisect.insort is fast, really fast. This is somewhat counter-intuitive since
 most schools teach that shifting elements in an array is slow. But modern
 processors do this really well. A lot of time has been spent optimizing
-memcopy/memmove-like operations both in hardward and software.
+memcopy/memmove-like operations both in hardware and software.
 
 But using only one list and bisect.insort would produce sluggish behavior for
 lengths exceeding one thousand. So the implementation of SortedList uses a list
