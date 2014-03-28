@@ -334,6 +334,9 @@ class SortedDict(MutableMapping):
         """
         return ItemsView(self)
 
+    def __repr__(self):
+        return 'SortedDict({0})'.format(repr(self._dict))
+
     def _check(self):
         self._list._check()
         assert len(self._dict) == len(self._list)
