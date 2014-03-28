@@ -4,7 +4,7 @@
 
 from .sortedset import SortedSet
 from .sortedlist import SortedList
-from collections import MutableMapping, Set, Sequence
+from collections import Mapping, MutableMapping, Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
@@ -282,10 +282,15 @@ class SortedDict(MutableMapping):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        if version_info[0] == 2:
-            itr = kwargs.iteritems() if other is None else iter(other)
+        mapobj = kwargs if other is None else other
+
+        if isinstance(mapobj, Mapping):
+            if version_info[0] == 2:
+                itr = mapobj.iteritems()
+            else:
+                itr = mapobj.items()
         else:
-            itr = kwargs.items() if other is None else iter(other)
+            itr = iter(mapobj)
 
         for key, value in itr:
             self[key] = value
