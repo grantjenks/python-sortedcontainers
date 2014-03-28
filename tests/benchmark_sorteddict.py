@@ -51,6 +51,7 @@ from blist import sorteddict
 from treap import treap
 from bintrees import FastAVLTree, FastRBTree
 from skiplistcollections import SkipListDict
+from banyan import SortedDict as BanyanSortedDict
 
 kinds['SortedDict'] = SortedDict
 kinds['rbtree'] = rbtree
@@ -59,6 +60,7 @@ kinds['treap'] = treap
 kinds['FastAVLTree'] = FastAVLTree
 kinds['FastRBTree'] = FastRBTree
 kinds['SkipListDict'] = SkipListDict
+kinds['banyan.SortedDict'] = BanyanSortedDict
 
 # Implementation configuration.
 

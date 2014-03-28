@@ -182,11 +182,13 @@ from sortedcontainers import SortedSet
 from rbtree import rbset
 from blist import sortedset
 from skiplistcollections import SkipListSet
+from banyan import SortedSet as BanyanSortedSet
 
 kinds['SortedSet'] = SortedSet
 kinds['rbset'] = rbset
 kinds['blist.sortedset'] = sortedset
 kinds['SkipListSet'] = SkipListSet
+kinds['banyan.SortedSet'] = BanyanSortedSet
 
 # Implementation configuration.
 

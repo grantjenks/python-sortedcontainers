@@ -71,6 +71,8 @@ def order_kinds(kinds):
     return kinds
 
 def test_plot(test):
+    ax = plt.gca()
+    ax.set_color_cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k', '0.8'])
     kinds = order_kinds(sorted(args.kind or list(data[test])))
     for kind in kinds:
         kind_plot(test, kind)
@@ -82,8 +84,12 @@ def test_plot(test):
 
 def kind_plot(test, kind):
     sizes = sorted(data[test][kind].keys())
-    yrange = [[(data[test][kind][size][5] - data[test][kind][size][3]) for size in sizes], [(data[test][kind][size][4] - data[test][kind][size][5]) for size in sizes]]
-    plt.errorbar(sizes, [data[test][kind][size][5] for size in sizes], yerr=yrange)
+    yrange = [[(data[test][kind][size][5] - data[test][kind][size][3])
+               for size in sizes],
+              [(data[test][kind][size][4] - data[test][kind][size][5])
+               for size in sizes]]
+    plt.errorbar(sizes, [data[test][kind][size][5] for size in sizes],
+                 yerr=yrange)
 
 tests = args.test or list(data)
 
