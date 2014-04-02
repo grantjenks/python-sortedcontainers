@@ -16,7 +16,7 @@ properly reading two different lines would describe one metric as "X times"
 faster rather than "X seconds" faster. In all graphs, lower is
 better. Measurements are made by powers of ten: 10, 100, 1000, 10000, 100000.
 
-A good effort has been made to find competing implementations. Five in total
+A good effort has been made to find competing implementations. Six in total
 were found with various list, set, and dict implementations.
 
 rbtree
@@ -37,6 +37,12 @@ bintrees
   Fastest were AVL and Red-Black trees. Extends the conventional API to
   provide set operations for the dict type. Implemented in C.
   `bintrees on PyPI <https://pypi.python.org/pypi/bintrees>`_
+
+banyan
+  Provides a fast, C-implementation for dict and set data types. Offers some
+  features also found in sortedcontainers like accessing the n-th item in a
+  set or dict.
+  `banyan on PyPI <https://pypi.python.org/pypi/Banyan>`_
 
 skiplistcollections
   Pure-Python implementation based on skip-lists providing a limited-API
@@ -66,7 +72,7 @@ The most similar module to sortedcontainers is skiplistcollections given that
 each is implemented in Python. But as is displayed below, sortedcontainers is
 several times faster and provides a richer API. Often the pure-Python
 implementation in sortedcontainers is faster than the C-implementation
-counterparts. Where it lacks, performance is at least on the same magnitude.
+counterparts. Where it lacks, performance is generally on the same magnitude.
 
 A couple final notes about the graphs below. Missing data indicates the
 benchmark either took too long or failed. The set operations with tiny, small,

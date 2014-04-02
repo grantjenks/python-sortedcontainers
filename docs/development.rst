@@ -44,6 +44,9 @@ Install development dependencies with `pip <http://www.pip-installer.org/>`_:
 This includes everything for building/running tests, benchmarks and
 documentation.
 
+Note that installing the Banyan module on Windows requires `patching the source
+<https://code.google.com/p/banyan/issues/detail?id=3>`_ in a couple places.
+
 Testing
 -------
 
