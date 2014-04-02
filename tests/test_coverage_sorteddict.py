@@ -178,7 +178,9 @@ def test_setdefault():
 def test_update():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict()
+    temp.update()
     temp.update(mapping)
+    temp.update(dict(mapping))
     assert list(temp.items()) == mapping
 
 def test_update2():
@@ -186,6 +188,10 @@ def test_update2():
     temp = SortedDict()
     temp.update(**dict(mapping))
     assert list(temp.items()) == mapping
+
+def test_repr():
+    temp = SortedDict({'a': 1})
+    assert repr(temp) == "SortedDict({'a': 1})"
 
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
