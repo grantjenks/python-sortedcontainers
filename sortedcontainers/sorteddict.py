@@ -123,12 +123,12 @@ class SortedDict(MutableMapping):
 
     def __eq__(self, that):
         """Compare two iterables for equality."""
-        return (len(self) == len(that)
+        return (len(self._dict) == len(that)
                 and all(self[key] == that[key] for key in self))
 
     def __ne__(self, that):
         """Compare two iterables for inequality."""
-        return (len(self) != len(that)
+        return (len(self._dict) != len(that)
                 or any(self[key] != that[key] for key in self))
 
     def __iter__(self):
@@ -158,9 +158,7 @@ class SortedDict(MutableMapping):
         """
         Create a new dictionary with keys from *seq* and values set to *value*.
         """
-        that = SortedDict()
-        for key in seq:
-            that[key] = value
+        that = SortedDict((key, value) for key in seq)
         return that
 
     def get(self, key, default=None):
@@ -191,8 +189,7 @@ class SortedDict(MutableMapping):
 
     def iteritems(self):
         """Return an iterable over the items (``(key, value)`` pairs)."""
-        for key in self._list:
-            yield key, self._dict[key]
+        return iter((key, self._dict[key]) for key in self._list)
 
     def keys(self):
         """
@@ -226,8 +223,7 @@ class SortedDict(MutableMapping):
 
     def itervalues(self):
         """Return an iterable over the values of the dictionary."""
-        for key in self._list:
-            yield self._dict[key]
+        return iter(self._dict[key] for key in self._list)
 
     def pop(self, key, default=_NotGiven):
         """
@@ -252,7 +248,7 @@ class SortedDict(MutableMapping):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        if len(self) == 0:
+        if len(self._dict) == 0:
             raise KeyError
         key = self._list.pop()
         value = self._dict[key]
@@ -292,8 +288,15 @@ class SortedDict(MutableMapping):
         else:
             itr = iter(mapobj)
 
-        for key, value in itr:
-            self[key] = value
+        if len(self._dict) == 0:
+            self._dict.update(itr)
+            if version_info[0] == 2:
+                self._list.update(self._dict.iterkeys())
+            else:
+                self._list.update(self._dict.keys())
+        else:
+            for key, value in itr:
+                self[key] = value
 
     def index(self, key, start=None, stop=None):
         """
