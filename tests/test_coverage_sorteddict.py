@@ -210,6 +210,13 @@ def test_index():
     assert temp.index('a') == 0
     assert temp.index('f', 3, -3) == 5
 
+def test_bisect():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert temp.bisect_left('a') == 0
+    assert temp.bisect_right('f') == 6
+    assert temp.bisect('b') == 1
+
 def test_keysview():
     if hexversion < 0x02070000: return
 

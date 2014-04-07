@@ -201,6 +201,32 @@ SortedDict
 
       :rtype: :class:`int`
 
+   .. _SortedDict.bisect_left:
+   .. method:: d.bisect_left(key)
+
+      Similar to the ``bisect`` module in the standard library, this returns an
+      appropriate index to insert *key* in SortedDict. If *key* is already
+      present in SortedDict, the insertion point will be before (to the left of)
+      any existing entries.
+
+      :rtype: :class:`int`
+
+   .. _SortedDict.bisect:
+   .. method:: d.bisect(key)
+
+      Same as :ref:`bisect_left<SortedDict.bisect_left>`.
+
+      :rtype: :class:`int`
+
+   .. _SortedDict.bisect_right:
+   .. method:: d.bisect_right(key)
+
+      Same as :ref:`bisect_left<SortedDict.bisect_left>`, but if *key* is
+      already present in SortedDict, the insertion index will be after (to the
+      right of) any existing entries.
+
+      :rtype: :class:`int`
+
    .. _SortedDict.iloc:
    .. method:: d.iloc[pos]
 

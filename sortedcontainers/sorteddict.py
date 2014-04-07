@@ -307,6 +307,27 @@ class SortedDict(MutableMapping):
         """
         return self._list.index(key, start, stop)
 
+    def bisect_left(self, key):
+        """
+        Similar to the ``bisect`` module in the standard library, this returns
+        an appropriate index to insert *key* in SortedDict. If *key* is
+        already present in SortedDict, the insertion point will be before (to the
+        left of) any existing entries.
+        """
+        return self._list.bisect_left(key)
+
+    def bisect(self, key):
+        """Same as bisect_left."""
+        return self._list.bisect(key)
+
+    def bisect_right(self, key):
+        """
+        Same as `bisect_left`, but if *key* is already present in SortedDict,
+        the insertion point will be after (to the right of) any existing
+        entries.
+        """
+        return self._list.bisect_right(key)
+
     @not26
     def viewkeys(self):
         """
