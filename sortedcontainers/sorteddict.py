@@ -67,11 +67,11 @@ class SortedDict(MutableMapping):
         the keys method will return the keys in sorted order, the popitem method
         will remove the item with the highest key, etc.
 
-        An optional *iterable* provides an initial series of items to populate
-        the SortedDict.  Each item in the series must itself contain two items.
-        The first is used as a key in the new dictionary, and the second as the
-        key's value. If a given key is seen more than once, the last value
-        associated with it is retained in the new dictionary.
+        An optional *iterable* provides an initial series of items to
+        populate the SortedDict.  Each item in the series must itself contain
+        two items.  The first is used as a key in the new dictionary, and the
+        second as the key's value. If a given key is seen more than once, the
+        last value associated with it is retained in the new dictionary.
 
         If keyword arguments are given, the keywords themselves with their
         associated values are added as items to the dictionary. If a key is
@@ -92,10 +92,7 @@ class SortedDict(MutableMapping):
         self._list = SortedList()
         self.iloc = _IlocWrapper(self)
 
-        if len(args) > 0:
-            self.update(args[0])
-        elif len(kwargs) > 0:
-            self.update(**kwargs)
+        self.update(*args, **kwargs)
 
     def clear(self):
         """Remove all elements from the dictionary."""
@@ -274,7 +271,7 @@ class SortedDict(MutableMapping):
             self._list.add(key)
             return default
 
-    def update(self, other=None, **kwargs):
+    def update(self, *args, **kwargs):
         """
         Update the dictionary with the key/value pairs from *other*, overwriting
         existing keys.
@@ -284,25 +281,15 @@ class SortedDict(MutableMapping):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        mapobj = kwargs if other is None else other
+        pairs = dict(*args, **kwargs)
 
-        if isinstance(mapobj, Mapping):
-            if version_info[0] == 2:
-                itr = mapobj.iteritems()
-            else:
-                itr = mapobj.items()
+        if (10 * len(pairs)) > len(self._dict):
+            self._dict.update(pairs)
+            self._list.clear()
+            self._list.update(self._dict)
         else:
-            itr = iter(mapobj)
-
-        if len(self._dict) == 0:
-            self._dict.update(itr)
-            if version_info[0] == 2:
-                self._list.update(self._dict.iterkeys())
-            else:
-                self._list.update(self._dict.keys())
-        else:
-            for key, value in itr:
-                self[key] = value
+            for key in pairs:
+                self[key] = pairs[key]
 
     def index(self, key, start=None, stop=None):
         """
