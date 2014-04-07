@@ -70,6 +70,13 @@ SortedDict
 
       :rtype: iterator
 
+   .. _SortedDict.__reversed__:
+   .. method:: reversed(d)
+
+      Create a reversed iterator over the sorted keys of the dictionary.
+
+      :rtype: iterator
+
    .. method:: len(d)
 
       Return the number of (key, value) pairs in the dictionary.
@@ -267,6 +274,16 @@ SortedDict
 
       :rtype: iterator
 
+   .. method:: reversed(keysview)
+
+      Return a reversed iterator over the keys in the dictionary.
+
+      Iterating views while adding or deleting entries in the dictionary
+      may raise a :exc:`RuntimeError` or fail to iterate over all
+      entries.
+
+      :rtype: iterator
+
    .. method:: x in keysview
 
       Return ``True`` iff *x* is one of the underlying dictionary's
@@ -354,6 +371,17 @@ SortedDict
 
       :rtype: iterator
 
+   .. method:: reversed(valuesview)
+
+      Return a reversed iterator over the values in the dictionary.  Values
+      are iterated over in reversed sorted order of the keys.
+
+      Iterating views while adding or deleting entries in the dictionary
+      may raise a :exc:`RuntimeError` or fail to iterate over all
+      entries.
+
+      :rtype: iterator
+
    .. method:: x in valuesview
 
       Return ``True`` iff *x* is one of the underlying dictionary's
@@ -401,6 +429,16 @@ SortedDict
 
       Return an iterator over the items in the dictionary.  Items are
       iterated over in sorted order of the keys.
+
+      Iterating views while adding or deleting entries in the dictionary
+      may raise a :exc:`RuntimeError` or fail to iterate over all
+      entries.
+
+      :rtype: iterator
+
+   .. method:: reversed(itemsview)
+
+      Return a reversed iterator over the items in the dictionary.
 
       Iterating views while adding or deleting entries in the dictionary
       may raise a :exc:`RuntimeError` or fail to iterate over all

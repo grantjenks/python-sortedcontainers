@@ -77,6 +77,12 @@ def test_iter():
     temp = SortedDict(mapping)
     assert all(lhs == rhs for lhs, rhs in zip(temp, string.ascii_lowercase))
 
+def test_reversed():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert all(lhs == rhs for lhs, rhs in
+               zip(reversed(temp), reversed(string.ascii_lowercase)))
+
 def test_len():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)

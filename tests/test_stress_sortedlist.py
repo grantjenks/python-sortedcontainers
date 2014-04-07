@@ -282,7 +282,7 @@ def stress_imul(slt):
 @actor(1)
 @not_empty
 def stress_reversed(slt):
-    itr = slt.reversed()
+    itr = reversed(slt)
     pos = random.randrange(1, len(slt))
     for rpt in range(pos):
         val = next(itr)

@@ -135,6 +135,12 @@ class SortedDict(MutableMapping):
         """Create an iterator over the sorted keys of the dictionary."""
         return iter(self._list)
 
+    def __reversed__(self):
+        """
+        Create a reversed iterator over the sorted keys of the dictionary.
+        """
+        return reversed(self._list)
+
     def __len__(self):
         """Return the number of (key, value) pairs in the dictionary."""
         return len(self._dict)
