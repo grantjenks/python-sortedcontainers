@@ -17,6 +17,8 @@ SortedList
    use a value that is the cube root of the list size. See :doc:`implementation
    details <implementation>` for more information.
 
+   :class:`SortedList` implements the MutableSequence Abstract Base Class type.
+
    .. _SortedList.__contains__:
    .. method:: x in L
 

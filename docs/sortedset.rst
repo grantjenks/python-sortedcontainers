@@ -10,8 +10,9 @@ SortedSet
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedSet`.
 
-   Unlike a :class:`set`, a :class:`SortedSet` requires items
-   be hashable and comparable.
+   Unlike a :class:`set`, a :class:`SortedSet` requires items be hashable and
+   comparable. :class:`SortedSet` implements the MutableSet and Sequence
+   Abstract Base Class types.
 
    .. _SortedSet.__contains__:
    .. method:: x in S

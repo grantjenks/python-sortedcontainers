@@ -34,6 +34,8 @@ SortedDict
    The first example only works for keys that are valid Python
    identifiers; the others work with any valid keys.
 
+   :class:`SortedDict` implements the MutableMapping Abstract Base Class type.
+
    .. method:: x in d
 
       Return True if and only if *x* is a key in the dictionary.
@@ -254,8 +256,8 @@ SortedDict
    means that when the dictionary's keys change, the view reflects
    those changes.
 
-   The KeysView class implements the Set_ and
-   Sequence_ Abstract Base Classes.
+   :class:`KeysView` implements the AbstractKeysView, Set, and Sequence Abstract
+   Base Class types.
 
    .. method:: len(keysview)
 
@@ -351,8 +353,8 @@ SortedDict
    which means that when the dictionary's values change, the view
    reflects those changes.
 
-   The ValuesView class implements the Sequence_ Abstract Base
-   Class.
+   :class:`ValuesView` implements the AbstractValuesView and Sequence Abstract
+   Base Class types.
 
    .. method:: len(valuesview)
 
@@ -414,10 +416,8 @@ SortedDict
    value)`` pairs, which means that when the dictionary changes, the
    view reflects those changes.
 
-   The ItemsView class implements the Set_ and
-   Sequence_ Abstract Base Classes.  However, the set-like
-   operations (``&``, ``|``, ``-``, ``^``) will only operate correctly
-   if all of the dictionary's values are hashable.
+   :class:`ItemsView` implements the AbstractItemsView, Set, and Sequence
+   Abstract Base Class types.
 
    .. method:: len(itemsview)
 
