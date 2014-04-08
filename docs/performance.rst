@@ -14,7 +14,18 @@ of 5 repetitions. In the graphs below, the line follows the average and at each
 point, the min/max displays the bounds. Note that the axes are log-log so
 properly reading two different lines would describe one metric as "X times"
 faster rather than "X seconds" faster. In all graphs, lower is
-better. Measurements are made by powers of ten: 10, 100, 1000, 10000, 100000.
+better. Measurements are made by powers of ten: 10, 100, 1,000, 10,000, and
+100,000.
+
+Measurements up to 100,000,000 elements have been successfully tested but are
+impractical for publishing. Only a couple implementations (including
+sortedcontainers) are capable of handling so many elements. The major limiting
+factor at that size is memory. Consider the simple case of storing Python's
+integers in a SortedList. Each integer object requires ~36 bytes so a hundred
+million elements will require about four gigabytes of memory. If the
+implemenation adds significant overhead then most systems will run out of
+memory. For all datasets which may be kept in memory, sortedcontainers is an
+excellent choice.
 
 A good effort has been made to find competing implementations. Six in total
 were found with various list, set, and dict implementations.
