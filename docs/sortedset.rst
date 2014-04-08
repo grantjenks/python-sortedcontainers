@@ -54,7 +54,9 @@ SortedSet
    .. _SortedSet.__setitem__:
    .. method:: S[i] = v
 
-      Remove the element located at index *i* from the set and add element *v*.
+      Remove the element located at index *i* from the set and insert element
+      *v*. Supports slice notation. Raises a :exc:`ValueError` if the sort order
+      would be violated.
 
    .. method:: S[i:j]
 

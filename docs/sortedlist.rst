@@ -108,7 +108,8 @@ SortedList
    .. _SortedList.__setitem__:
    .. method:: L[i] = x
 
-      Replace the item at position *i* of *L* with *x*.
+      Replace the item at position *i* of *L* with *x*. Supports slice
+      notation. Raises a :exc:`ValueError` if the sort order would be violated.
 
    .. method:: L[i:j] = iterable
 
