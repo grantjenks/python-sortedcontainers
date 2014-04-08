@@ -67,15 +67,15 @@ class SortedSet(MutableSet, Sequence):
 
         Supports slice notation and negative indexes.
         """
-        if isinstance(index, slice):
-            values = self._list[index]
-            self._set.difference_update(values)
-            self._set.update(value)
-        else:
-            value = self._list[index]
-            self._set.remove(value)
-            self._set.add(value)
+        prev = self._list[index]
         self._list[index] = value
+
+        if isinstance(index, slice):
+            self._set.difference_update(prev)
+            self._set.update(prev)
+        else:
+            self._set.remove(prev)
+            self._set.add(prev)
     def __eq__(self, that):
         """Return True if and only if self and *that* are equal sets."""
         if len(self) != len(that):
