@@ -1,12 +1,13 @@
 # Python byte-code
 *.py[co]
 
-# Anything under the virutalenv directory
+# virutalenv directories
 /env*/
 
-# Ignore coverage file
+# coverage files
 .coverage
 
-# Ignore Python setup sdist and upload directories.
+# setup sdist, test and upload directories
 /dist/
-/runstats.egg-info/
+/sortedcontainers.egg-info/
+/.tox/

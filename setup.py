@@ -1,7 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import sortedcontainers
+import sys
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
+
+import sortedcontainers
+
+class Tox(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run_tests(self):
+        import tox
+        errno = tox.cmdline(self.test_args)
+        sys.exit(errno)
 
 with open('README.rst') as fptr:
     readme = fptr.read()
@@ -19,6 +32,8 @@ setup(
     url='http://www.grantjenks.com/docs/sortedcontainers/',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
+    tests_require=['tox'],
+    cmdclass={'test': Tox},
     classifiers=(
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
