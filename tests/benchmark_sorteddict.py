@@ -2,6 +2,7 @@
 Benchmark Sorted Dictionary Datatypes
 """
 
+import warnings
 from benchmark import *
 
 # Tests.
@@ -46,21 +47,44 @@ def fill_values(obj, size):
 
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
-from rbtree import rbtree
-from blist import sorteddict
-from treap import treap
-from bintrees import FastAVLTree, FastRBTree
-from skiplistcollections import SkipListDict
-from banyan import SortedDict as BanyanSortedDict
-
 kinds['SortedDict'] = SortedDict
-kinds['rbtree'] = rbtree
-kinds['blist.sorteddict'] = sorteddict
-kinds['treap'] = treap
-kinds['FastAVLTree'] = FastAVLTree
-kinds['FastRBTree'] = FastRBTree
-kinds['SkipListDict'] = SkipListDict
-kinds['banyan.SortedDict'] = BanyanSortedDict
+
+try:
+    from rbtree import rbtree
+    kinds['rbtree'] = rbtree
+except ImportError:
+    warnings.warn('No module named rbtree', ImportWarning)
+
+try:
+    from blist import sorteddict
+    kinds['blist.sorteddict'] = sorteddict
+except ImportError:
+    warnings.warn('No module named blist', ImportWarning)
+
+try:
+    from treap import treap
+    kinds['treap'] = treap
+except ImportError:
+    warnings.warn('No module named treap', ImportWarning)
+
+try:
+    from bintrees import FastAVLTree, FastRBTree
+    kinds['FastAVLTree'] = FastAVLTree
+    kinds['FastRBTree'] = FastRBTree
+except ImportError:
+    warnings.warn('No module named bintrees', ImportWarning)
+
+try:
+    from skiplistcollections import SkipListDict
+    kinds['SkipListDict'] = SkipListDict
+except ImportError:
+    warnings.warn('No module named skiplistcollections', ImportWarning)
+
+try:
+    from banyan import SortedDict as BanyanSortedDict
+    kinds['banyan.SortedDict'] = BanyanSortedDict
+except ImportError:
+    warnings.warn('No module named banyan', ImportWarning)
 
 # Implementation configuration.
 

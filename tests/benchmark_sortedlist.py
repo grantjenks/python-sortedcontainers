@@ -2,6 +2,7 @@
 Benchmark Sorted List Datatypes
 """
 
+import warnings
 from benchmark import *
 
 # Tests.
@@ -77,10 +78,13 @@ def fill_values(obj, size):
 
 from .context import sortedcontainers
 from sortedcontainers import SortedList
-from blist import sortedlist
-
 kinds['SortedList'] = SortedList
-kinds['blist.sortedlist'] = sortedlist
+
+try:
+    from blist import sortedlist
+    kinds['blist.sortedlist'] = sortedlist
+except ImportError:
+    warnings.warn('No module named blist', ImportWarning)
 
 # Implementation configuration.
 
