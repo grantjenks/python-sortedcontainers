@@ -3,7 +3,7 @@ Benchmark Sorted List Datatypes
 """
 
 import warnings
-from benchmark import *
+from .benchmark import *
 
 # Tests.
 
@@ -15,7 +15,7 @@ def add(func, size):
 @register_test
 def update(func, size):
     pos = 0
-    chunk = size / 10
+    chunk = int(size / 10)
     while pos < size:
         func(lists[size][pos:(pos + chunk)])
         pos += chunk

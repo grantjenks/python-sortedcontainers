@@ -5,7 +5,7 @@ Benchmark Sorted Set Datatypes
 import warnings
 from sys import version_info
 
-from benchmark import *
+from .benchmark import *
 
 if version_info[0] == 2:
     range = xrange
@@ -35,15 +35,15 @@ def update_tiny(func, size):
 
 @register_test
 def update_small(func, size):
-    func(range(size, size + size / 10))
+    func(range(size, size + int(size / 10)))
 
 @register_test
 def update_medium(func, size):
-    func(range(size, size + size * 5 / 10))
+    func(range(size, size + int(size * 5 / 10)))
 
 @register_test
 def update_large(func, size):
-    func(range(size, size + size * 9 / 10))
+    func(range(size, size + int(size * 9 / 10)))
 
 @register_test
 def union_tiny(func, size):
@@ -51,15 +51,15 @@ def union_tiny(func, size):
 
 @register_test
 def union_small(func, size):
-    func(range(size, size + size / 10))
+    func(range(size, size + int(size / 10)))
 
 @register_test
 def union_medium(func, size):
-    func(range(size, size + size * 5 / 10))
+    func(range(size, size + int(size * 5 / 10)))
 
 @register_test
 def union_large(func, size):
-    func(range(size, size + size * 9 / 10))
+    func(range(size, size + int(size * 9 / 10)))
 
 @register_test
 def remove(func, size):
@@ -68,99 +68,99 @@ def remove(func, size):
 
 @register_test
 def difference_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def difference_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def difference_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def difference_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def difference_update_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def difference_update_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def difference_update_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def difference_update_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def intersection_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def intersection_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def intersection_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def intersection_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def intersection_update_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def intersection_update_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def intersection_update_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def intersection_update_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def symmetric_difference_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def symmetric_difference_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def symmetric_difference_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def symmetric_difference_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def symmetric_difference_update_tiny(func, size):
-    func(range(size / 2, size / 2 + 10))
+    func(range(int(size / 2), int(size / 2) + 10))
 
 @register_test
 def symmetric_difference_update_small(func, size):
-    func(range(size / 2, size / 2 + size / 10))
+    func(range(int(size / 2), int(size / 2) + int(size / 10)))
 
 @register_test
 def symmetric_difference_update_medium(func, size):
-    func(range(size / 2, size / 2 + size * 5 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 5 / 10)))
 
 @register_test
 def symmetric_difference_update_large(func, size):
-    func(range(size / 2, size / 2 + size * 9 / 10))
+    func(range(int(size / 2), int(size / 2) + int(size * 9 / 10)))
 
 @register_test
 def pop(func, size):

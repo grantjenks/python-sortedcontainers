@@ -3,7 +3,7 @@ Benchmark Sorted Dictionary Datatypes
 """
 
 import warnings
-from benchmark import *
+from .benchmark import *
 
 # Tests.
 

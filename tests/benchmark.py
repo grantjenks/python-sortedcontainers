@@ -2,10 +2,16 @@ from __future__ import print_function
 from sys import version_info
 
 import time, random, argparse
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except:
+    from ordereddict import OrderedDict
 
 if version_info[0] == 2:
     range = xrange
+    name_attr = 'func_name'
+else:
+    name_attr = '__name__'
 
 def measure(test, func, size):
     start = time.clock()
@@ -34,10 +40,10 @@ def benchmark(test, name, ctor, setup, func_name, limit):
             func = getattr(obj, func_name)
             times.append(measure(test, func, size))
 
-        print(test.func_name, name, size, min(times), max(times), times[2], sum(times) / len(times))
+        print(getattr(test, name_attr), name, size, min(times), max(times), times[2], sum(times) / len(times))
 
 def register_test(func):
-    tests[func.func_name] = func
+    tests[getattr(func, name_attr)] = func
     return func
 
 tests = OrderedDict()
@@ -73,8 +79,8 @@ def main(name):
     test_names = args.test or tests.keys()
     kind_names = args.kind or kinds.keys()
 
-    print('Tests:', test_names)
-    print('Kinds:', kind_names)
+    print('Tests:', list(test_names))
+    print('Kinds:', list(kind_names))
 
     print('test_name', 'data_type', 'size', 'min', 'max', 'median', 'mean')
 
