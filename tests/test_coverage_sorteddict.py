@@ -71,6 +71,16 @@ def test_eq():
     temp1 = SortedDict(mapping)
     temp2 = SortedDict(mapping)
     assert temp1 == temp2
+    assert not (temp1 != temp2)
+    temp2['a'] = 100
+    assert temp1 != temp2
+    assert not (temp1 == temp2)
+    del temp2['a']
+    assert temp1 != temp2
+    assert not (temp1 == temp2)
+    temp2['zz'] = 0
+    assert temp1 != temp2
+    assert not (temp1 == temp2)
 
 def test_iter():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
