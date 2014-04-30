@@ -1,6 +1,9 @@
 SortedContainers
 ================
 
+.. image:: https://api.travis-ci.org/grantjenks/sorted_containers.svg
+    :target: http://www.grantjenks.com/docs/sortedcontainers/
+
 SortedContainers is an Apache2 licensed containers library, written in
 pure-Python, and fast as C-extensions.
 
