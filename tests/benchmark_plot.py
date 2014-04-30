@@ -1,22 +1,17 @@
 """
 # Plotting Benchmark Results
 
-## Generating Benchmark Results
-
-python -m tests.benchmark_sortedlist > tests\results_sortedlist.txt
-python -m tests.benchmark_sorteddict > tests\results_sorteddict.txt
-python -m tests.benchmark_sortedset > tests\results_sortedset.txt
-
 ## Usage
 
     usage: benchmark_plot.py [-h] [--test TEST] [--kind KIND] [--show] [--save]
-                             filename
-    
+                             filename name
+
     Plotting
-    
+
     positional arguments:
       filename     path to file with benchmark data
-    
+      name         type name
+
     optional arguments:
       -h, --help   show this help message and exit
       --test TEST
@@ -24,9 +19,25 @@ python -m tests.benchmark_sortedset > tests\results_sortedset.txt
       --show
       --save
 
-## Example
+## Compare Implementations
 
-    python -m tests.benchmark_plot tests\results_sorteddict.txt --save
+    python -m tests.benchmark_sortedlist --bare > tests\results_sortedlist.txt
+    python -m tests.benchmark_plot tests\results_sortedlist.txt SortedList --save
+
+    python -m tests.benchmark_sorteddict --bare > tests\results_sorteddict.txt
+    python -m tests.benchmark_plot tests\results_sorteddict.txt SortedDict --save
+
+    python -m tests.benchmark_sortedset --bare > tests\results_sortedset.txt
+    python -m tests.benchmark_plot tests\results_sortedset.txt SortedSet --save
+
+## Compare Python Versions
+
+    del tests\results_python_sortedlist.txt
+    (py27) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py27 >> tests\results_python_sortedlist.txt
+    (py34) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py34 >> tests\results_python_sortedlist.txt
+    (pypy) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _PyPy >> tests\results_python_sortedlist.txt
+    python -m tests.benchmark_plot tests\results_python_sortedlist.txt SortedList --suffix -Python --save
+
 """
 
 from __future__ import print_function
@@ -40,8 +51,10 @@ def tree():
 
 parser = argparse.ArgumentParser(description='Plotting')
 parser.add_argument('filename', help='path to file with benchmark data')
+parser.add_argument('name', help='type name')
 parser.add_argument('--test', action='append')
 parser.add_argument('--kind', action='append')
+parser.add_argument('--suffix', default='')
 parser.add_argument('--show', action='store_true')
 parser.add_argument('--save', action='store_true')
 
@@ -51,10 +64,6 @@ text = open(args.filename).read()
 
 lines = text.splitlines()
 lines = [line.split() for line in lines]
-del lines[-1]
-name = lines[0][1]
-header = lines[5]
-del lines[0:6]
 for line in lines:
     line[2] = int(line[2])
     line[3:] = map(float, line[3:])
@@ -77,7 +86,7 @@ def test_plot(test):
     for kind in kinds:
         kind_plot(test, kind)
     plt.loglog()
-    plt.title(name + ' Performance: ' + test)
+    plt.title(args.name + ' Performance: ' + test)
     plt.ylabel('Seconds')
     plt.xlabel('List Size')
     plt.legend(kinds, loc=2)
@@ -100,6 +109,6 @@ for test in tests:
         plt.show()
 
     if args.save:
-        plt.savefig('{0}-{1}.png'.format(name, test))
+        plt.savefig('{0}{1}-{2}.png'.format(args.name, args.suffix, test))
 
     plt.close()
