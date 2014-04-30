@@ -7,4 +7,4 @@ python:
   - "3.4"
   - "pypy"
 install: true
-script:  python setup.py test
+script:  nosetests
