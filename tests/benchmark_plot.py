@@ -36,7 +36,19 @@
     (py27) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py27 >> tests\results_python_sortedlist.txt
     (py34) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py34 >> tests\results_python_sortedlist.txt
     (pypy) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _PyPy >> tests\results_python_sortedlist.txt
-    python -m tests.benchmark_plot tests\results_python_sortedlist.txt SortedList --suffix -Python --save
+    python -m tests.benchmark_plot tests\results_python_sortedlist.txt SortedList --suffix _Python --save
+
+    del tests\results_python_sorteddict.txt
+    (py27) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py27 >> tests\results_python_sorteddict.txt
+    (py34) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py34 >> tests\results_python_sorteddict.txt
+    (pypy) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _PyPy >> tests\results_python_sorteddict.txt
+    python -m tests.benchmark_plot tests\results_python_sorteddict.txt SortedDict --suffix _Python --save
+
+    del tests\results_python_sortedset.txt
+    (py27) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py27 >> tests\results_python_sortedset.txt
+    (py34) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py34 >> tests\results_python_sortedset.txt
+    (pypy) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _PyPy >> tests\results_python_sortedset.txt
+    python -m tests.benchmark_plot tests\results_python_sortedset.txt SortedSet --suffix _Python --save
 
 """
 
