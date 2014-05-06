@@ -64,11 +64,11 @@ def tree():
 parser = argparse.ArgumentParser(description='Plotting')
 parser.add_argument('filename', help='path to file with benchmark data')
 parser.add_argument('name', help='type name')
-parser.add_argument('--test', action='append')
-parser.add_argument('--kind', action='append')
-parser.add_argument('--suffix', default='')
-parser.add_argument('--show', action='store_true')
-parser.add_argument('--save', action='store_true')
+parser.add_argument('--test', action='append', help='filter tests by name')
+parser.add_argument('--kind', action='append', help='filter types by name')
+parser.add_argument('--suffix', default='', help='suffix for output')
+parser.add_argument('--show', action='store_true', help='show results')
+parser.add_argument('--save', action='store_true', help='save results')
 
 args = parser.parse_args()
 

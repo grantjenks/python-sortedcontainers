@@ -22,22 +22,38 @@ Requests for Contributions
 
 1. Testing / benchmarking with Cython.
 
-2. Testing / benchmarking with PyPy.
-
-3. Better compatibility with blist.
+2. Better compatibility with blist.
 
   * Add 'key' option.
 
-4. Better compatibility with rbtree.
+3. Better compatibility with rbtree.
 
   * Pop first item vs. last item.
 
-5. Find a way to allow objects of different types in dict and set types.
+4. Find a way to allow objects of different types in dict and set types.
+
+Get the Code
+------------
+
+SortedContainers is actively developed on GitHub, where the code is
+`always available <https://github.com/grantjenks/sortedcontainers>`_.
+
+You can either clone the public repository::
+
+    > git clone git://github.com/grantjenks/sortedcontainers.git
+
+Download the `tarball <https://github.com/grantjenks/sortedcontainers/tarball/master>`_::
+
+    > curl -OL https://github.com/grantjenks/sortedcontainers/tarball/master
+
+Or, download the `zipball <https://github.com/grantjenks/sortedcontainers/zipball/master>`_::
+
+    > curl -OL https://github.com/grantjenks/sortedcontainers/zipball/master
 
 Development Dependencies
 ------------------------
 
-Install development dependencies with `pip <http://www.pip-installer.org/>`_:
+Install development dependencies with `pip <http://www.pip-installer.org/>`_::
 
     > pip install -r requirements.txt
 
@@ -50,7 +66,68 @@ Note that installing the Banyan module on Windows requires `patching the source
 Testing
 -------
 
-Testing uses `nose <https://nose.readthedocs.org>`_:
+Testing uses `tox <https://pypi.python.org/pypi/tox>`_. If you don't want to
+install all the development requirements, then, after downloading, you can
+simply run::
+
+    > python setup.py test
+
+The test argument to setup.py will download a minimal testing infrastructure and
+run the tests.
+
+::
+
+    > tox
+    GLOB sdist-make: /repos/sorted_containers/setup.py
+    py26 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
+    py26 runtests: PYTHONHASHSEED='1205144536'
+    py26 runtests: commands[0] | nosetests
+    ...
+    ----------------------------------------------------------------------
+    Ran 150 tests in 7.080s
+    
+    OK
+    py27 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
+    py27 runtests: PYTHONHASHSEED='1205144536'
+    py27 runtests: commands[0] | nosetests
+    ...
+    ----------------------------------------------------------------------
+    Ran 150 tests in 6.670s
+    
+    OK
+    py32 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
+    py32 runtests: PYTHONHASHSEED='1205144536'
+    py32 runtests: commands[0] | nosetests
+    ...
+    ----------------------------------------------------------------------
+    Ran 150 tests in 10.254s
+    
+    OK
+    py33 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
+    py33 runtests: PYTHONHASHSEED='1205144536'
+    py33 runtests: commands[0] | nosetests
+    ...
+    ----------------------------------------------------------------------
+    Ran 150 tests in 10.485s
+    
+    OK
+    py34 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
+    py34 runtests: PYTHONHASHSEED='1205144536'
+    py34 runtests: commands[0] | nosetests
+    ...
+    ----------------------------------------------------------------------
+    Ran 150 tests in 11.350s
+    
+    OK
+    ___________________ summary _______________________
+      py26: commands succeeded
+      py27: commands succeeded
+      py32: commands succeeded
+      py33: commands succeeded
+      py34: commands succeeded
+      congratulations :)
+
+Coverage testing uses `nose <https://nose.readthedocs.org>`_:
 
 ::
 
@@ -69,9 +146,12 @@ Testing uses `nose <https://nose.readthedocs.org>`_:
     
     OK
 
-Its normal not to see 100% coverage. Some code is specific to the Python runtime.
+It's normal not to see 100% coverage. Some code is specific to the Python runtime.
 
-There is also stress testing.
+Stress testing is also based on nose but can be run independently as a
+module. Stress tests are kept in the tests directory and prefixed with
+test_stress. Stress tests accept two arguments: an iteration count and random
+seed value. For example, to run stress on the SortedList data type:
 
 ::
 
@@ -81,7 +161,24 @@ There is also stress testing.
     Setting seed to 0
     Exiting after 0:00:00.846000
 
-If stress exits normally then it worked successfully.
+If stress exits normally then it worked successfully. Some stress is run by tox
+and nose but the iteration count is limited at 1,000. More rigorous testing
+requires increasing the iteration count to millions. At that level, it's best to
+just let it run overnight. Stress testing will stop at the first failure.
+
+Running Benchmarks
+------------------
+
+Running and plotting benchmarks is a two step process. Each is a Python script
+in the tests directory. To run the benchmarks for SortedList, plot the results,
+and save the resulting graphs, run::
+
+    python -m tests.benchmark_sortedlist --bare > tests/results_sortedlist.txt
+    python -m tests.benchmark_plot tests/results_sortedlist.txt SortedList --save
+
+Each script has a handful of useful arguments. Use --help for a display of
+these. Consult the source for details. The file tests/benchmark_plot.py contains
+notes about benchmarking different Python runtimes against each other.
 
 Tested Runtimes
 ---------------
@@ -93,6 +190,7 @@ SortedContainers currently supports the following versions of Python:
 * CPython 3.2
 * CPython 3.3
 * CPython 3.4
+* PyPy 2.2
 
 Life will feel much saner if you use `virtualenv <http://www.virtualenv.org/>`_
 to manage each of the runtimes.

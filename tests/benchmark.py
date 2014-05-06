@@ -58,13 +58,17 @@ sizes = []
 lists = {}
 
 parser = argparse.ArgumentParser(description='Benchmarking')
-parser.add_argument('--seed', type=int, default=0)
-parser.add_argument('--no-limit', default=False, action='store_true')
-parser.add_argument('--test', action='append')
-parser.add_argument('--kind', action='append')
-parser.add_argument('--size', type=int, action='append')
-parser.add_argument('--suffix', default='')
-parser.add_argument('--bare', action='store_true', default=False)
+parser.add_argument('--seed', type=int, default=0,
+                    help='seed value for random')
+parser.add_argument('--no-limit', default=False, action='store_true',
+                    help='no limit on size')
+parser.add_argument('--test', action='append', help='filter tests by name')
+parser.add_argument('--kind', action='append', help='filter types by name')
+parser.add_argument('--size', type=int, action='append',
+                    help='specify sizes to test')
+parser.add_argument('--suffix', default='', help='suffix for kind name')
+parser.add_argument('--bare', action='store_true', default=False,
+                    help='hide header and footer info')
 args = parser.parse_args()
 
 def main(name):
