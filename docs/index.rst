@@ -38,6 +38,37 @@ deployment and use of Python easy. There's no need to install a C compiler or
 pre-build and distribute custom extensions. Performance is a feature and testing
 has 100% coverage with unit tests and hours of stress.
 
+Testimonials
+------------
+
+**Alex Martelli**, `Wikipedia`_
+
+Good stuff! ... I like the :doc:`simple, effective implementation
+<implementation>` idea of splitting the sorted containers into smaller
+"fragments" to avoid the O(N) insertion costs.
+
+.. _`Wikipedia`: http://en.wikipedia.org/wiki/Alex_Martelli
+
+**Jeff Knupp**, `Review of SortedContainers`_
+
+That last part, "fast as C-extensions," was difficult to believe. I would need
+some sort of :doc:`performance comparison <performance>` to be convinced this is
+true. The author includes this in the docs. It is.
+
+.. _`JeffKnupp.com`: http://jeffknupp.com/
+.. _`Review of SortedContainers`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
+
+**Kevin Samuel**, `Formations Python`_
+
+I'm quite amazed, not just by the code quality (it's incredibly
+readable and has more comment than code, wow), but the actual
+amount of work you put at stuff that is *not* code:
+documentation, benchmarking, implementation explanations. Even
+the git log is clean and the unit tests run out of the box on
+Python 2 and 3.
+
+.. _`Formations Python`: http://formationspython.com/
+
 Features
 --------
 
@@ -52,7 +83,7 @@ Features
 - Pragmatic design (e.g. SortedSet is mostly a Python set with a SortedList
   index)
 - Developed on Python 2.7
-- Tested on Python 2.6, 2.7, 3.2, 3.3, and 3.4
+- Tested on CPython 2.6, 2.7, 3.2, 3.3, 3.4 and PyPy 2.2
 
 Quickstart
 ----------
