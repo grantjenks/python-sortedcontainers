@@ -50,5 +50,6 @@ __copyright__ = 'Copyright 2014 Grant Jenks'
 from .sortedlist import SortedList
 from .sortedset import SortedSet
 from .sorteddict import SortedDict
+from .sortedlistwithkey import SortedListWithKey
 
-__all__ = [SortedList, SortedSet, SortedDict]
+__all__ = [SortedList, SortedSet, SortedDict, SortedListWithKey]
