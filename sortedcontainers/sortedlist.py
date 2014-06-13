@@ -630,10 +630,10 @@ class SortedList(MutableSequence):
 
     def index(self, val, start=None, stop=None):
         """
-        Return the smallest *k* such that L[k] == x and i <= k < j`.  Raises
+        Return the smallest *k* such that L[k] == val and i <= k < j`.  Raises
         ValueError if *val* is not present.  *stop* defaults to the end of the
-        list. *start* defaults to the beginning. Negative indexes are
-        supported, as for slice indices.
+        list. *start* defaults to the beginning. Negative indexes are supported,
+        as for slice indices.
         """
         if self._maxes is None:
             raise ValueError
