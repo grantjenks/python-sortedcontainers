@@ -2,7 +2,7 @@
 #
 # Sorted list with key implementation.
 
-from sortedlist import SortedList
+from .sortedlist import SortedList
 from collections import MutableSequence
 
 class SortedListWithKey(MutableSequence):
