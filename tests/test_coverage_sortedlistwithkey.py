@@ -588,6 +588,14 @@ def test_check():
     slt._list._len = 5
     slt._check()
 
+def test_incomparable_value():
+    class A:
+        pass
+
+    slt = SortedListWithKey(key=lambda x: 1)
+    slt.append(A())
+    slt.append(A())
+
 if __name__ == '__main__':
     import nose
     nose.main()

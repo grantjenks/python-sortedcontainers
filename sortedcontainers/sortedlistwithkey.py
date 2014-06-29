@@ -5,6 +5,32 @@
 from .sortedlist import SortedList
 from collections import MutableSequence
 
+class _KeyWrapper(object):
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
+    def __eq__(self, other):
+        return self.key == other.key and self.value == other.value
+
+    def __ne__(self, other):
+        return not(self == other)
+
+    def __lt__(self, other):
+        return self.key < other.key
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    def __gt__(self, other):
+        return self.key > other.key
+
+    def __ge__(self, other):
+        return self > other or self == other
+
+    def __iter__(self):
+        return iter((self.key, self.value))
+
 class SortedListWithKey(MutableSequence):
     def __init__(self, iterable=None, key=lambda val: val, load=100):
         self.key = key
@@ -17,22 +43,22 @@ class SortedListWithKey(MutableSequence):
         self._list.clear()
 
     def add(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         self._list.add(pair)
 
     def update(self, iterable):
-        self._list.update((self.key(val), val) for val in iterable)
+        self._list.update(_KeyWrapper(self.key(val), val) for val in iterable)
 
     def __contains__(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return pair in self._list
 
     def discard(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         self._list.discard(pair)
 
     def remove(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         self._list.remove(pair)
 
     def __delitem__(self, index):
@@ -40,61 +66,61 @@ class SortedListWithKey(MutableSequence):
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return list(tup[1] for tup in self._list[index])
+            return list(tup.value for tup in self._list[index])
         else:
-            return self._list[index][1]
+            return self._list[index].value
 
     def __setitem__(self, index, value):
         if isinstance(index, slice):
-            self._list[index] = list((self.key(val), val) for val in value)
+            self._list[index] = list(_KeyWrapper(self.key(val), val) for val in value)
         else:
-            self._list[index] = (self.key(value), value)
+            self._list[index] = _KeyWrapper(self.key(value), value)
 
     def __iter__(self):
-        return iter(tup[1] for tup in iter(self._list))
+        return iter(tup.value for tup in iter(self._list))
 
     def __reversed__(self):
-        return iter(tup[1] for tup in reversed(self._list))
+        return iter(tup.value for tup in reversed(self._list))
 
     def __len__(self):
         return len(self._list)
 
     def bisect_left(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return self._list.bisect_left(pair)
 
     def bisect(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return self._list.bisect(pair)
 
     def bisect_right(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return self._list.bisect_right(pair)
 
     def count(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return self._list.count(pair)
 
     def append(self, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         self._list.append(pair)
 
     def extend(self, iterable):
-        self._list.extend((self.key(val), val) for val in iterable)
+        self._list.extend(_KeyWrapper(self.key(val), val) for val in iterable)
 
     def insert(self, index, value):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         self._list.insert(index, pair)
 
     def pop(self, index=-1):
-        return self._list.pop(index)[1]
+        return self._list.pop(index).value
 
     def index(self, value, start=None, stop=None):
-        pair = (self.key(value), value)
+        pair = _KeyWrapper(self.key(value), value)
         return self._list.index(pair, start, stop)
 
     def as_list(self):
-        return list(tup[1] for tup in self._list.as_list())
+        return list(tup.value for tup in self._list.as_list())
 
     def __add__(self, that):
         result = SortedListWithKey(key=self.key)
