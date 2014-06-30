@@ -28,8 +28,12 @@ class SortedSet(MutableSet, Sequence):
         An optional *iterable* provides an initial series of items to populate the
         `SortedSet`.
 
-        An optional *load* specifies the load-factor of the list. Best practice
-        is to use a value that is the cube root of the list size.
+        An optional *load* specifies the load-factor of the set. The default
+        load factor of '100' works well for sets from tens to tens of millions
+        of elements.  Good practice is to use a value that is the cube root of
+        the set size.  With billions of elements, the best load factor depends
+        on your usage.  It's best to leave the load factor at the default until
+        you start benchmarking.
         """
         self._set = set() if _set is None else _set
         self._list = SortedList(self._set, load=load)

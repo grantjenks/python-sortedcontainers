@@ -13,9 +13,13 @@ SortedList
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedList`.
 
-   An optional *load* specifies the load-factor of the list. Best practice is to
-   use a value that is the cube root of the list size. See :doc:`implementation
-   details <implementation>` for more information.
+   An optional *load* specifies the load-factor of the list. The default load
+   factor of '100' works well for lists from tens to tens of millions of
+   elements.  Good practice is to use a value that is the cube root of the list
+   size.  With billions of elements, the best load factor depends on your usage.
+   It's best to leave the load factor at the default until you start
+   benchmarking. See :doc:`implementation details <implementation>` for more
+   information.
 
    :class:`SortedList` implements the MutableSequence Abstract Base Class type.
 

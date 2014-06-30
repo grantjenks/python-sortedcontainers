@@ -29,8 +29,12 @@ class SortedList(MutableSequence):
         An optional *iterable* provides an initial series of items to populate
         the SortedList.
 
-        An optional *load* specifies the load-factor of the list. Best practice
-        is to use a value that is the cube root of the list size.
+        An optional *load* specifies the load-factor of the list. The default
+        load factor of '100' works well for lists from tens to tens of millions
+        of elements.  Good practice is to use a value that is the cube root of
+        the list size.  With billions of elements, the best load factor depends
+        on your usage.  It's best to leave the load factor at the default until
+        you start benchmarking.
         """
         self.clear()
         self._load, self._twice, self._half = load, load * 2, int(load / 2)
