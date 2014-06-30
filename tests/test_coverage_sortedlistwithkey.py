@@ -33,6 +33,14 @@ def test_init():
     assert slt._list._lists == []
     slt._check()
 
+def test_key():
+    slt = SortedListWithKey(range(10000), key=lambda val: val % 10)
+    slt._check()
+
+    values = sorted(range(10000), key=lambda val: (val % 10, val))
+    assert slt == values
+    assert all(val in slt for val in range(10000))
+
 def test_add():
     random.seed(0)
     slt = SortedListWithKey(key=negate)
