@@ -93,6 +93,9 @@ def test_contains():
 
     slt._check()
 
+    slt = SortedListWithKey(range(10), key=modulo, value_orderable=False, load=4)
+    assert all(val not in slt for val in range(10, 20))
+
 def test_discard():
     slt = SortedListWithKey(key=modulo, value_orderable=False)
 
@@ -108,6 +111,10 @@ def test_discard():
     slt._check()
     slt.discard(2)
     slt._check()
+    slt.discard(11)
+    slt.discard(12)
+    slt.discard(13)
+    slt.discard(15)
 
     assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
 
@@ -139,6 +146,11 @@ def test_remove_valueerror2():
 def test_remove_valueerror3():
     slt = SortedListWithKey([1, 2, 2, 2, 3, 3, 5], key=modulo, value_orderable=False)
     slt.remove(4)
+
+@raises(ValueError)
+def test_remove_valueerror4():
+    slt = SortedListWithKey([1, 1, 1, 2, 2, 2], key=modulo, value_orderable=False)
+    slt.remove(12)
 
 def test_delete():
     slt = SortedListWithKey(range(20), load=4, key=modulo, value_orderable=False)
@@ -354,6 +366,9 @@ def test_count():
     for iii in range(100):
         assert slt.count(iii) == iii
 
+    slt = SortedListWithKey(range(8), key=modulo, value_orderable=False)
+    assert slt.count(9) == 0
+
 def test_append():
     slt = SortedListWithKey(load=4, key=modulo, value_orderable=False)
 
@@ -499,6 +514,16 @@ def test_index_valueerror5():
 def test_index_valueerror6():
     slt = SortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)
     slt.index(4, 5)
+
+@raises(ValueError)
+def test_index_valueerror7():
+    slt = SortedListWithKey(load=4, key=modulo, value_orderable=False)
+    slt.index(5)
+
+@raises(ValueError)
+def test_index_valueerror7():
+    slt = SortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)
+    slt.index(19)
 
 def test_mul():
     this = SortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)
