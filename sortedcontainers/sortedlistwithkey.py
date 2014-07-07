@@ -3,10 +3,10 @@
 # Sorted list with key implementation.
 
 from sys import hexversion
-
 from .sortedlist import SortedList
 from collections import MutableSequence
 from itertools import chain
+from bisect import bisect_left
 
 if hexversion < 0x03000000:
     range = xrange
@@ -84,19 +84,43 @@ class SortedListWithKey(MutableSequence):
             yield next(iterator)
 
     def __contains__(self, value):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            return pair in self._list
+            return _pair in _list
 
-        iterator = self._iter(pair)
-        next(iterator)
+        _maxes = _list._maxes
 
-        for duo in iterator:
-            if value == duo[1]:
-                return True
-        else:
+        if _maxes is None:
             return False
+
+        pos = bisect_left(_maxes, _pair)
+
+        if pos == len(_maxes):
+            return False
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
+                return False
+            if value == pair.value:
+                return True
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    return False
+                len_sublist = len(_lists[pos])
+                idx = 0
 
     def discard(self, value):
         pair = self._pair(self._key(value), value)
