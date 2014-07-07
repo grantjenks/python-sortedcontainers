@@ -3,10 +3,10 @@
 # Sorted list with key implementation.
 
 from sys import hexversion
-
 from .sortedlist import SortedList
 from collections import MutableSequence
 from itertools import chain
+from bisect import bisect_left
 
 if hexversion < 0x03000000:
     range = xrange
@@ -57,78 +57,126 @@ class SortedListWithKey(MutableSequence):
         _key, _pair = self._key, self._pair
         self._list.update(_pair(_key(val), val) for val in iterable)
 
-    def _iter(self, pair):
-        _list = self._list
-
-        start = _list.bisect_left(pair)
-        end = _list.bisect_right(pair)
-
-        yield start
-
-        if start == end:
-            return
-
-        start_pos, start_idx = _list._pos(start)
-        end_pos, end_idx = _list._pos(end - 1)
-
-        _lists = _list._lists
-        segments = (_lists[pos] for pos in range(start_pos, end_pos + 1))
-        iterator = chain.from_iterable(segments)
-
-        # Advance the iterator to the start of the items.
-
-        for rpt in range(start_idx):
-            next(iterator)
-
-        for rpt in range(end - start + 1):
-            yield next(iterator)
-
     def __contains__(self, value):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            return pair in self._list
+            return _pair in _list
 
-        iterator = self._iter(pair)
-        next(iterator)
+        _maxes = _list._maxes
 
-        for duo in iterator:
-            if value == duo[1]:
-                return True
-        else:
+        if _maxes is None:
             return False
 
+        pos = bisect_left(_maxes, _pair)
+
+        if pos == len(_maxes):
+            return False
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
+                return False
+            if value == pair.value:
+                return True
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    return False
+                len_sublist = len(_lists[pos])
+                idx = 0
+
     def discard(self, value):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            self._list.discard(pair)
+            _list.discard(_pair)
             return
 
-        iterator = self._iter(pair)
-        start = next(iterator)
+        _maxes = _list._maxes
 
-        for offset, duo in enumerate(iterator):
-            if value == duo[1]:
-                del self._list[start + offset]
+        if _maxes is None:
+            return
+
+        pos = bisect_left(_maxes, _pair)
+
+        if pos == len(_maxes):
+            return
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
                 return
+            if value == pair.value:
+                _list._delete(pos, idx)
+                return
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    return
+                len_sublist = len(_lists[pos])
+                idx = 0
 
     def remove(self, value):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            self._list.remove(pair)
+            _list.remove(_pair)
             return
 
-        iterator = self._iter(pair)
-        start = next(iterator)
+        _maxes = _list._maxes
 
-        for offset, duo in enumerate(iterator):
-            if value == duo[1]:
-                del self._list[start + offset]
-                return
-        else:
+        if _maxes is None:
             raise ValueError
+
+        pos = bisect_left(_maxes, _pair)
+
+        if pos == len(_maxes):
+            raise ValueError
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
+                raise ValueError
+            if value == pair.value:
+                _list._delete(pos, idx)
+                return
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    raise ValueError
+                len_sublist = len(_lists[pos])
+                idx = 0
 
     def __delitem__(self, index):
         del self._list[index]
@@ -168,15 +216,44 @@ class SortedListWithKey(MutableSequence):
         return self._list.bisect_right(pair)
 
     def count(self, value):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            return self._list.count(pair)
+            return _list.count(_pair)
 
-        iterator = self._iter(pair)
-        next(iterator)
+        _maxes = _list._maxes
 
-        return sum(1 for duo in iterator if duo[1] == value)
+        if _maxes is None:
+            return 0
+
+        pos = bisect_left(_maxes, _pair)
+
+        if pos == len(_maxes):
+            return 0
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        total = 0
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
+                return total
+            if value == pair.value:
+                total += 1
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    return total
+                len_sublist = len(_lists[pos])
+                idx = 0
 
     def append(self, value):
         pair = self._pair(self._key(value), value)
@@ -194,12 +271,14 @@ class SortedListWithKey(MutableSequence):
         return self._list.pop(index)[1]
 
     def index(self, value, start=None, stop=None):
-        pair = self._pair(self._key(value), value)
+        _list = self._list
+        _key =  self._key(value)
+        _pair = self._pair(_key, value)
 
         if self._ordered:
-            return self._list.index(pair, start, stop)
+            return _list.index(_pair, start, stop)
 
-        _len = self._list._len
+        _len = _list._len
 
         if start == None:
             start = 0
@@ -218,14 +297,34 @@ class SortedListWithKey(MutableSequence):
         if stop <= start:
             raise ValueError
 
-        iterator = self._iter(pair)
-        begin = next(iterator)
+        _maxes = _list._maxes
+        pos = bisect_left(_maxes, _pair)
 
-        for offset, val in enumerate(iterator):
-            if value == val[2] and start <= (begin + offset) < stop:
-                return begin + offset
-        else:
+        if pos == len(_maxes):
             raise ValueError
+
+        _lists = _list._lists
+
+        idx = bisect_left(_lists[pos], _pair)
+
+        len_lists = len(_lists)
+        len_sublist = len(_lists[pos])
+
+        while True:
+            pair = _lists[pos][idx]
+            if _key != pair.key:
+                raise ValueError
+            if value == pair.value:
+                loc = _list._loc(pos, idx)
+                if start <= loc < stop:
+                    return loc
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_lists:
+                    raise ValueError
+                len_sublist = len(_lists[pos])
+                idx = 0
 
     def as_list(self):
         return list(tup[1] for tup in self._list.as_list())
