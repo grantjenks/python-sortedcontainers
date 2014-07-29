@@ -354,7 +354,8 @@ class SortedDict(MutableMapping):
         return ItemsView(self)
 
     def __repr__(self):
-        return 'SortedDict({0})'.format(repr(self._dict))
+        items = ', '.join('{0!r}: {1!r}'.format(k, self[k]) for k in self._list)
+        return '{0}({{{1}}})'.format(self.__class__.__name__, items)
 
     def _check(self):
         self._list._check()
