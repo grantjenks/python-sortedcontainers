@@ -3,7 +3,7 @@
 # Sorted dict implementation.
 
 from .sortedset import SortedSet
-from .sortedlist import SortedList
+from .sortedlist import SortedList, recursive_repr
 from collections import Mapping, MutableMapping, Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
@@ -353,8 +353,11 @@ class SortedDict(MutableMapping):
         """
         return ItemsView(self)
 
+    @recursive_repr
     def __repr__(self):
-        items = ', '.join('{0!r}: {1!r}'.format(k, self[k]) for k in self._list)
+        _dict = self._dict
+        items = ', '.join('{0}: {1}'.format(repr(key), repr(_dict[key]))
+                          for key in self._list)
         return '{0}({{{1}}})'.format(self.__class__.__name__, items)
 
     def _check(self):
@@ -456,6 +459,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
             return not any(key in self._list for key in that)
         else:
             return self._view.isdisjoint(that)
+    @recursive_repr
     def __repr__(self):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
@@ -547,6 +551,7 @@ class ValuesView(AbstractValuesView, Sequence):
         raise TypeError
     def __xor__(self, that):
         raise TypeError
+    @recursive_repr
     def __repr__(self):
         return 'SortedDict_values({0})'.format(repr(list(self)))
 
@@ -659,5 +664,6 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             return True
         else:
             return self._view.isdisjoint(that)
+    @recursive_repr
     def __repr__(self):
         return 'SortedDict_items({0})'.format(repr(list(self)))

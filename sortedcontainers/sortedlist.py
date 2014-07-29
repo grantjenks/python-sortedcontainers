@@ -3,17 +3,46 @@
 # Sorted list implementation.
 
 from __future__ import print_function
-from sys import version_info
+from sys import hexversion
 
 from bisect import bisect_left, bisect_right, insort
 from itertools import chain
 from collections import MutableSequence
 from operator import iadd
+from functools import wraps
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     from itertools import izip as zip
+    try:
+        from thread import get_ident
+    except ImportError:
+        from dummy_thread import get_ident
 else:
     from functools import reduce
+    try:
+        from _thread import get_ident
+    except ImportError:
+        from _dummy_thread import get_ident
+
+def recursive_repr(func):
+    """Decorator to prevent infinite repr recursion."""
+    repr_running = set()
+
+    @wraps(func)
+    def wrapper(self):
+        key = id(self), get_ident()
+
+        if key in repr_running:
+            return '...'
+
+        repr_running.add(key)
+
+        try:
+            return func(self)
+        finally:
+            repr_running.discard(key)
+
+    return wrapper
 
 class SortedList(MutableSequence):
     """
@@ -744,9 +773,10 @@ class SortedList(MutableSequence):
         return ((self._len >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
+    @recursive_repr
     def __repr__(self):
         """Return string representation of SortedList."""
-        return 'SortedList({0})'.format(repr(self.as_list()))
+        return '{0}({1})'.format(self.__class__.__name__, repr(self.as_list()))
 
     def _check(self):
         try:

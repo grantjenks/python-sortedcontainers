@@ -4,7 +4,7 @@
 
 from sys import version_info
 
-from .sortedlist import SortedList
+from .sortedlist import SortedList, recursive_repr
 from collections import MutableSet, Sequence
 from itertools import chain
 
@@ -301,8 +301,9 @@ class SortedSet(MutableSet, Sequence):
         else:
             for value in values:
                 self.add(value)
+    @recursive_repr
     def __repr__(self):
-        return 'SortedSet({0})'.format(repr(list(self)))
+        return '{0}({1})'.format(self.__class__.__name__, repr(list(self)))
     def _check(self):
         self._list._check()
         assert len(self._set) == len(self._list)

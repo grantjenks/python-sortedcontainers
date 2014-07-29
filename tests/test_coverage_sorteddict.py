@@ -206,16 +206,19 @@ def test_update2():
     assert list(temp.items()) == mapping
 
 def test_repr():
-    temp = SortedDict({'a': 1})
-    assert repr(temp) == "SortedDict({'a': 1})"
+    temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
+    assert repr(temp) == "SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
-def test_repr_is_sorted():
-    temp = SortedDict([ ('Andrew', 1), ('Ace', 4), ('Joel', 4), ('Caitlin', 3)])
-    assert repr(temp) == "SortedDict({'Ace': 4, 'Andrew': 1, 'Caitlin': 3, 'Joel': 4})"
+def test_repr_recursion():
+    temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
+    temp['bob'] = temp
+    assert repr(temp) == "SortedDict({'alice': 3, 'bob': ..., 'carol': 2, 'dave': 4})"
 
-    class SortedDictSubclass(SortedDict): pass
-    temp = SortedDictSubclass([ ('Andrew', 1), ('Ace', 4), ('Joel', 4), ('Caitlin', 3)])
-    assert repr(temp) == "SortedDictSubclass({'Ace': 4, 'Andrew': 1, 'Caitlin': 3, 'Joel': 4})"
+def test_repr_subclass():
+    class CustomSortedDict(SortedDict):
+        pass
+    temp = CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
+    assert repr(temp) == "CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]

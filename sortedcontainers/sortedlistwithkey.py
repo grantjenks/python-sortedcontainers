@@ -3,7 +3,7 @@
 # Sorted list with key implementation.
 
 from sys import hexversion
-from .sortedlist import SortedList
+from .sortedlist import SortedList, recursive_repr
 from collections import MutableSequence
 from itertools import chain
 from bisect import bisect_left
@@ -29,6 +29,7 @@ class Pair:
         return self.key >= that.key
     def __getitem__(self, index):
         return self.key if index == 0 else self.value
+    @recursive_repr
     def __repr__(self):
         return 'Pair({0}, {1})'.format(repr(self.key), repr(self.value))
 
@@ -383,9 +384,11 @@ class SortedListWithKey(MutableSequence):
         return ((len(self) >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
+    @recursive_repr
     def __repr__(self):
-        temp = 'SortedListWithKey({0}, key={1}, value_orderable={2}, load={3})'
+        temp = '{0}({1}, key={2}, value_orderable={3}, load={4})'
         return temp.format(
+            self.__class__.__name__,
             repr(self.as_list()),
             repr(self._key),
             repr(self._ordered),

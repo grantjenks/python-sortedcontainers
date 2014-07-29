@@ -224,6 +224,15 @@ def test_repr():
     temp = SortedSet(range(0, 10), load=7)
     assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])'
 
+def test_repr_recursion():
+    class HashableSortedSet(SortedSet):
+        def __hash__(self):
+            return hash(tuple(self))
+
+    temp = HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2])])
+    temp.add(temp)
+    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2]), ...])'
+
 if __name__ == '__main__':
     import nose
     nose.main()

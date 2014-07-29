@@ -595,6 +595,12 @@ def test_repr():
     this = SortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)
     assert repr(this).startswith('SortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
 
+def test_repr_subclass():
+    class CustomSortedListWithKey(SortedListWithKey):
+        pass
+    this = CustomSortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)
+    assert repr(this).startswith('CustomSortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
+
 @raises(AssertionError)
 def test_check():
     slt = SortedListWithKey(range(10), load=4, key=modulo, value_orderable=False)

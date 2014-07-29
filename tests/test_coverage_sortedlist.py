@@ -579,6 +579,17 @@ def test_repr():
     this = SortedList(range(10), load=4)
     assert repr(this) == 'SortedList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])'
 
+def test_repr_recursion():
+    this = SortedList([[1], [2], [3], [4]])
+    this.append(this)
+    assert repr(this) == 'SortedList([[1], [2], [3], [4], ...])'
+
+def test_repr_subclass():
+    class CustomSortedList(SortedList):
+        pass
+    this = CustomSortedList([1, 2, 3, 4])
+    assert repr(this) == 'CustomSortedList([1, 2, 3, 4])'
+
 @raises(AssertionError)
 def test_check():
     slt = SortedList(range(10), load=4)
