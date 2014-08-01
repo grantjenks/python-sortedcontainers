@@ -66,7 +66,7 @@ class SortedList(MutableSequence):
         you start benchmarking.
         """
         self.clear()
-        self._load, self._twice, self._half = load, load * 2, int(load / 2)
+        self._load, self._twice, self._half = load, load * 2, load >> 1
 
         if iterable is not None:
             self.update(iterable)
@@ -783,7 +783,7 @@ class SortedList(MutableSequence):
             # Check load parameters.
 
             assert self._load >= 4
-            assert self._half == int(self._load / 2)
+            assert self._half == (self._load >> 1)
             assert self._twice == (self._load * 2)
 
             # Check empty sorted list case.
