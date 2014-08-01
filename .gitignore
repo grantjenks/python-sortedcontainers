@@ -11,3 +11,5 @@
 /dist/
 /sortedcontainers.egg-info/
 /.tox/
+
+.DS_Store
