@@ -218,36 +218,36 @@ class SortedList(MutableSequence):
         return self._index[pos - 1] + idx
 
     def _pos(self, idx):
-        if self._maxes is None:
-            raise IndexError
+        _len, _lists = self._len, self._lists
 
         if idx < 0:
-            last_len = len(self._lists[-1])
-            if -idx <= last_len:
-                return (len(self._lists) - 1, last_len + idx)
-            idx += self._len
-        if idx < 0:
-            raise IndexError
-        if idx >= self._len:
+            last_len = len(_lists[-1])
+            if (-idx) <= last_len:
+                return len(_lists) - 1, last_len + idx
+            idx += _len
+            if idx < 0:
+                raise IndexError
+        elif idx >= _len:
             raise IndexError
 
-        pos = bisect_right(self._index, idx)
+        if idx < len(_lists[0]):
+            return 0, idx
 
-        if pos == len(self._index):
-            prev = self._index[-1] if pos > 0 else 0
+        _index = self._index
+
+        pos = bisect_right(_index, idx)
+
+        if pos == len(_index):
+            prev = pos and _index[-1]
 
             while prev <= idx:
-                next = prev + len(self._lists[pos])
-                self._index.append(next)
-                prev = next
+                prev += len(_lists[pos])
+                _index.append(prev)
                 pos += 1
 
             pos -= 1
 
-        if pos == 0:
-            return (pos, idx)
-        else:
-            return (pos, (idx - self._index[pos - 1]))
+        return pos, (idx - _index[pos - 1])
 
     def _slice_indices(self, slc):
         start, stop, step = slc.start, slc.stop, slc.step
