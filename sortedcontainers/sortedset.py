@@ -58,28 +58,30 @@ class SortedSet(MutableSet, Sequence):
 
         Supports slice notation and negative indexes.
         """
+        _list = self._list
         if isinstance(index, slice):
-            values = self._list[index]
+            values = _list[index]
             self._set.difference_update(values)
         else:
-            value = self._list[index]
+            value = _list[index]
             self._set.remove(value)
-        del self._list[index]
+        del _list[index]
     def __setitem__(self, index, value):
         """
         Remove the element at position *index* and add *value* to the set.
 
         Supports slice notation and negative indexes.
         """
-        prev = self._list[index]
-        self._list[index] = value
+        _list, _set = self._list, self._set
+        prev = _list[index]
+        _list[index] = value
 
         if isinstance(index, slice):
-            self._set.difference_update(prev)
-            self._set.update(prev)
+            _set.difference_update(prev)
+            _set.update(prev)
         else:
-            self._set.remove(prev)
-            self._set.add(prev)
+            _set.remove(prev)
+            _set.add(prev)
     def __eq__(self, that):
         """Return True if and only if self and *that* are equal sets."""
         if len(self) != len(that):
@@ -89,7 +91,8 @@ class SortedSet(MutableSet, Sequence):
         elif isinstance(that, set):
             return (self._set == that)
         else:
-            return all(val in self._set for val in that)
+            _set = self._set
+            return all(val in _set for val in that)
     def __ne__(self, that):
         """Return True if and only if self and *that* are inequal sets."""
         if len(self) != len(that):
@@ -99,7 +102,8 @@ class SortedSet(MutableSet, Sequence):
         elif isinstance(that, set):
             return (self._set != that)
         else:
-            return any(val not in self._set for val in that)
+            _set = self._set
+            return any(val not in _set for val in that)
     def __lt__(self, that):
         """Return True if and only if self is a subset of *that*."""
         if isinstance(that, set):
@@ -111,7 +115,8 @@ class SortedSet(MutableSet, Sequence):
         if isinstance(that, set):
             return (self._set > that)
         else:
-            return (len(self) > len(that)) and all(val in self._set for val in that)
+            _set = self._set
+            return (len(self) > len(that)) and all(val in _set for val in that)
     def __le__(self, that):
         """Return True if and only if self is contained within *that*."""
         if isinstance(that, set):
@@ -123,7 +128,8 @@ class SortedSet(MutableSet, Sequence):
         if isinstance(that, set):
             return (self._set >= that)
         else:
-            return all(val in self._set for val in that)
+            _set = self._set
+            return all(val in _set for val in that)
     def __and__(self, that):
         """
         Return a new SortedSet with the elements common to self and *that*.
@@ -255,8 +261,9 @@ class SortedSet(MutableSet, Sequence):
             self._list.clear()
             self._list.update(self._set)
         else:
+            _discard = self.discard
             for value in values:
-                self.discard(value)
+                _discard(value)
     def intersection(self, *iterables):
         """
         Return a new set with elements common to the set and all *iterables*.
@@ -299,12 +306,14 @@ class SortedSet(MutableSet, Sequence):
             self._list.clear()
             self._list.update(self._set)
         else:
+            _add = self.add
             for value in values:
-                self.add(value)
+                _add(value)
     @recursive_repr
     def __repr__(self):
         return '{0}({1})'.format(self.__class__.__name__, repr(list(self)))
     def _check(self):
         self._list._check()
         assert len(self._set) == len(self._list)
-        assert all(val in self._set for val in self._list)
+        _set = self._set
+        assert all(val in _set for val in self._list)
