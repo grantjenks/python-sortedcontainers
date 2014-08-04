@@ -43,15 +43,18 @@ class _IlocWrapper:
         Remove the ``sdict[sdict.iloc[index]]`` from *sdict*. Supports negative
         indices and slice notation. Raises IndexError on invalid *index*.
         """
+        _temp = self._dict
+        _list, _dict = _temp._list, _temp._dict
+
         if isinstance(index, slice):
-            keys = self._dict._list[index]
-            del self._dict._list[index]
+            keys = _list[index]
+            del _list[index]
             for key in keys:
-                del self._dict._dict[key]
+                del _dict[key]
         else:
-            key = self._dict._list[index]
-            del self._dict._list[index]
-            del self._dict._dict[key]
+            key = _list[index]
+            del _list[index]
+            del _dict[key]
 
 class SortedDict(MutableMapping):
     """
@@ -146,9 +149,10 @@ class SortedDict(MutableMapping):
 
     def __setitem__(self, key, value):
         """Set `d[key]` to *value*."""
-        if key not in self._dict:
+        _dict = self._dict
+        if key not in _dict:
             self._list.add(key)
-        self._dict[key] = value
+        _dict[key] = value
 
     def copy(self):
         """Create a shallow copy of the dictionary."""
@@ -194,7 +198,8 @@ class SortedDict(MutableMapping):
 
     def iteritems(self):
         """Return an iterable over the items (``(key, value)`` pairs)."""
-        return iter((key, self._dict[key]) for key in self._list)
+        _dict = self._dict
+        return iter((key, _dict[key]) for key in self._list)
 
     def keys(self):
         """
@@ -228,7 +233,8 @@ class SortedDict(MutableMapping):
 
     def itervalues(self):
         """Return an iterable over the values of the dictionary."""
-        return iter(self._dict[key] for key in self._list)
+        _dict = self._dict
+        return iter(_dict[key] for key in self._list)
 
     def pop(self, key, default=_NotGiven):
         """
@@ -253,11 +259,15 @@ class SortedDict(MutableMapping):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        if len(self._dict) == 0:
+        _dict, _list = self._dict, self._list
+
+        if len(_dict) == 0:
             raise KeyError
-        key = self._list.pop()
-        value = self._dict[key]
-        del self._dict[key]
+
+        key = _list.pop()
+        value = _dict[key]
+        del _dict[key]
+
         return (key, value)
 
     def setdefault(self, key, default=None):
@@ -266,10 +276,11 @@ class SortedDict(MutableMapping):
         with a value of *default* and return *default*.  *default* defaults to
         ``None``.
         """
-        if key in self._dict:
-            return self._dict[key]
+        _dict = self._dict
+        if key in _dict:
+            return _dict[key]
         else:
-            self._dict[key] = default
+            _dict[key] = default
             self._list.add(key)
             return default
 
@@ -287,8 +298,9 @@ class SortedDict(MutableMapping):
 
         if (10 * len(pairs)) > len(self._dict):
             self._dict.update(pairs)
-            self._list.clear()
-            self._list.update(self._dict)
+            _list = self._list
+            _list.clear()
+            _list.update(self._dict)
         else:
             for key in pairs:
                 self[key] = pairs[key]
@@ -498,17 +510,19 @@ class ValuesView(AbstractValuesView, Sequence):
         Iterating views while adding or deleting entries in the dictionary may
         raise a `RuntimeError` or fail to iterate over all entries.
         """
-        return iter(self._dict[key] for key in self._list)
+        _dict = self._dict
+        return iter(_dict[key] for key in self._list)
     def __getitem__(self, index):
         """
         Efficiently return value at *index* in iteration.
 
         Supports slice notation and negative indexes.
         """
+        _dict, _list = self._dict, self._list
         if isinstance(index, slice):
-            return [self._dict[key] for key in self._list[index]]
+            return [_dict[key] for key in _list[index]]
         else:
-            return self._dict[self._list[index]]
+            return _dict[_list[index]]
     def __reversed__(self):
         """
         Return a reverse iterator over the values in the dictionary.  Values are
@@ -517,7 +531,8 @@ class ValuesView(AbstractValuesView, Sequence):
         Iterating views while adding or deleting entries in the dictionary may
         raise a `RuntimeError` or fail to iterate over all entries.
         """
-        return iter(self._dict[key] for key in reversed(self._list))
+        _dict = self._dict
+        return iter(_dict[key] for key in reversed(self._list))
     def index(self, value):
         """
         Return index of *value* in self.
@@ -531,10 +546,11 @@ class ValuesView(AbstractValuesView, Sequence):
             raise ValueError
     def count(self, value):
         """Return the number of occurrences of *value* in self."""
+        _dict = self._dict
         if version_info[0] == 2:
-            return sum(1 for val in self._dict.itervalues() if val == value)
+            return sum(1 for val in _dict.itervalues() if val == value)
         else:
-            return sum(1 for val in self._dict.values() if val == value)
+            return sum(1 for val in _dict.values() if val == value)
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
@@ -592,14 +608,16 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         Iterating views while adding or deleting entries in the dictionary may
         raise a RuntimeError or fail to iterate over all entries.
         """
-        return iter((key, self._dict[key]) for key in self._list)
+        _dict = self._dict
+        return iter((key, _dict[key]) for key in self._list)
     def __getitem__(self, index):
         """Return the item as position *index*."""
+        _dict, _list = self._dict, self._list
         if isinstance(index, slice):
-            return [(key, self._dict[key]) for key in self._list[index]]
+            return [(key, _dict[key]) for key in _list[index]]
         else:
-            key = self._list[index]
-            return (key, self._dict[key])
+            key = _list[index]
+            return (key, _dict[key])
     def __reversed__(self):
         """
         Return a reversed iterable over the items in the dictionary. Items are
@@ -608,7 +626,8 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         Iterating views while adding or deleting entries in the dictionary may
         raise a RuntimeError or fail to iterate over all entries.
         """
-        return iter((key, self._dict[key]) for key in reversed(self._list))
+        _dict = self._dict
+        return iter((key, _dict[key]) for key in reversed(self._list))
     def index(self, key, start=None, stop=None):
         """
         Return the smallest *k* such that `itemssview[k] == key` and `start <= k
@@ -658,8 +677,9 @@ class ItemsView(AbstractItemsView, Set, Sequence):
     def isdisjoint(self, that):
         """Return True if and only if *that* is disjoint with self."""
         if version_info[0] == 2:
+            _dict = self._dict
             for key, value in that:
-                if key in self._dict and self._dict[key] == value:
+                if key in _dict and _dict[key] == value:
                     return False
             return True
         else:
