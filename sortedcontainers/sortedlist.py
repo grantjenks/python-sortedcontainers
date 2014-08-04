@@ -65,7 +65,7 @@ class SortedList(MutableSequence):
         on your usage.  It's best to leave the load factor at the default until
         you start benchmarking.
         """
-        self.clear()
+        self._len, self._maxes, self._lists, self._index = 0, [], [], []
         self._load, self._twice, self._half = load, load * 2, load >> 1
 
         if iterable is not None:
@@ -73,14 +73,14 @@ class SortedList(MutableSequence):
 
     def clear(self):
         """Remove all the elements from the list."""
-        self._len, self._maxes, self._lists, self._index = 0, None, [], []
+        self._len = 0
+        del self._maxes[:]
+        del self._lists[:]
+        del self._index[:]
 
     def add(self, val):
         """Add the element *val* to the list."""
-        if self._maxes is None:
-            self._maxes = [val]
-            self._lists = [[val]]
-        else:
+        if self._maxes:
             pos = bisect_right(self._maxes, val)
 
             if pos == len(self._maxes):
@@ -92,6 +92,9 @@ class SortedList(MutableSequence):
 
             del self._index[pos:]
             self._expand(pos)
+        else:
+            self._maxes.append(val)
+            self._lists.append([val])
 
         self._len += 1
 
@@ -108,10 +111,10 @@ class SortedList(MutableSequence):
         """Grow the list by appending all elements from the *iterable*."""
         values = sorted(iterable)
 
-        if self._maxes is None and len(values) > 0:
-            self._lists = [values[pos:(pos + self._load)]
-                          for pos in range(0, len(values), self._load)]
-            self._maxes = [sublist[-1] for sublist in self._lists]
+        if not self._maxes and len(values) > 0:
+            self._lists.extend(values[pos:(pos + self._load)]
+                               for pos in range(0, len(values), self._load))
+            self._maxes.extend(sublist[-1] for sublist in self._lists)
             self._len = len(values)
             del self._index[:]
         else:
@@ -120,7 +123,7 @@ class SortedList(MutableSequence):
 
     def __contains__(self, val):
         """Return True if and only if *val* is an element in the list."""
-        if self._maxes is None:
+        if not self._maxes:
             return False
 
         pos = bisect_left(self._maxes, val)
@@ -138,7 +141,7 @@ class SortedList(MutableSequence):
 
         If *val* is not a member, does nothing.
         """
-        if self._maxes is None:
+        if not self._maxes:
             return
 
         pos = bisect_left(self._maxes, val)
@@ -157,7 +160,7 @@ class SortedList(MutableSequence):
 
         Raises ValueError if *val* is not present.
         """
-        if self._maxes is None:
+        if not self._maxes:
             raise ValueError
 
         pos = bisect_left(self._maxes, val)
@@ -182,10 +185,6 @@ class SortedList(MutableSequence):
         if len(self._lists[pos]) == 0:
             del self._maxes[pos]
             del self._lists[pos]
-
-            if len(self._maxes) == 0:
-                self._maxes = None
-                self._lists = []
         else:
             self._maxes[pos] = self._lists[pos][-1]
 
@@ -488,7 +487,7 @@ class SortedList(MutableSequence):
         appropriate index to insert *val*. If *val* is already present, the
         insertion point will be before (to the left of) any existing entries.
         """
-        if self._maxes is None:
+        if not self._maxes:
             return 0
 
         pos = bisect_left(self._maxes, val)
@@ -509,7 +508,7 @@ class SortedList(MutableSequence):
         Same as *bisect_left*, but if *val* is already present, the insertion
         point will be after (to the right of) any existing entries.
         """
-        if self._maxes is None:
+        if not self._maxes:
             return 0
 
         pos = bisect_right(self._maxes, val)
@@ -523,7 +522,7 @@ class SortedList(MutableSequence):
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
-        if self._maxes is None:
+        if not self._maxes:
             return 0
 
         left = self.bisect_left(val)
@@ -536,9 +535,9 @@ class SortedList(MutableSequence):
         Append the element *value* to the list. Raises a ValueError if the *val*
         would violate the sort order.
         """
-        if self._maxes is None:
-            self._maxes = [val]
-            self._lists = [[val]]
+        if not self._maxes:
+            self._maxes.append(val)
+            self._lists.append([val])
             self._len = 1
             return
 
@@ -569,10 +568,7 @@ class SortedList(MutableSequence):
         offset = 0
         count = len(self._lists) - 1
 
-        if self._maxes is None:
-            self._maxes = []
-            self._lists = []
-        else:
+        if self._maxes:
             if values[0] < self._lists[-1][-1]:
                 raise ValueError
 
@@ -600,10 +596,10 @@ class SortedList(MutableSequence):
         if idx > self._len:
             idx = self._len
 
-        if self._maxes is None:
+        if not self._maxes:
             # The idx must be zero by the inequalities above.
-            self._maxes = [val]
-            self._lists = [[val]]
+            self._maxes.append(val)
+            self._lists.append([val])
             self._len = 1
             return
 
@@ -668,7 +664,7 @@ class SortedList(MutableSequence):
         list. *start* defaults to the beginning. Negative indexes are supported,
         as for slice indices.
         """
-        if self._maxes is None:
+        if not self._maxes:
             raise ValueError
 
         if start == None:
@@ -788,7 +784,7 @@ class SortedList(MutableSequence):
 
             # Check empty sorted list case.
 
-            if self._maxes is None:
+            if self._maxes == []:
                 assert self._lists == []
                 return
 

@@ -26,7 +26,7 @@ def test_init():
 
     slt.clear()
     assert slt._len == 0
-    assert slt._maxes == None
+    assert slt._maxes == []
     assert slt._lists == []
     slt._check()
 
@@ -126,7 +126,7 @@ def test_delete():
         slt.remove(val)
         slt._check()
     assert len(slt) == 0
-    assert slt._maxes == None
+    assert slt._maxes == []
     assert slt._lists == []
 
 def test_getitem():
