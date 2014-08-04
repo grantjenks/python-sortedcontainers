@@ -111,13 +111,8 @@ class SortedList(MutableSequence):
         """Grow the list by appending all elements from the *iterable*."""
         values = sorted(iterable)
 
-        len_values = len(values)
-
-        if len_values == 0:
-            return
-
         if self._maxes:
-            if len_values * 4 >= self._len:
+            if len(values) * 4 >= self._len:
                 values.extend(chain.from_iterable(self._lists))
                 values.sort()
                 self.clear()
@@ -316,19 +311,13 @@ class SortedList(MutableSequence):
             elif stop > len(self):
                 stop = len(self)
 
-        # Build iterator for indices.
-
-        if step < 0:
-            indices = range(start, stop, step)
-        else:
-            indices = range(start, stop, step)
-
-        return start, stop, step, indices
+        return start, stop, step
 
     def __delitem__(self, idx):
         """Remove the element located at index *idx* from the list."""
         if isinstance(idx, slice):
-            start, stop, step, indices = self._slice_indices(idx)
+            start, stop, step = self._slice_indices(idx)
+            indices = range(start, stop, step)
 
             # Delete items from greatest index to least so
             # that the indices remain valid throughout iteration.
@@ -346,12 +335,40 @@ class SortedList(MutableSequence):
     def __getitem__(self, idx):
         """Return the element at position *idx*."""
         if isinstance(idx, slice):
-            start, stop, step, indices = self._slice_indices(idx)
+            start, stop, step = self._slice_indices(idx)
+
+            if step == 1 and start < stop:
+                if start == 0 and stop == self._len:
+                    return self.as_list()
+
+                start_pos, start_idx = self._pos(start)
+
+                if stop == self._len:
+                    stop_pos = len(self._lists) - 1
+                    stop_idx = len(self._lists[stop_pos])
+                else:
+                    stop_pos, stop_idx = self._pos(stop)
+
+                if start_pos == stop_pos:
+                    return self._lists[start_pos][start_idx:stop_idx]
+
+                prefix = self._lists[start_pos][start_idx:]
+                middle = self._lists[(start_pos + 1):stop_pos]
+                result = reduce(iadd, middle, prefix)
+                result += self._lists[stop_pos][:stop_idx]
+
+                return result
+
+            if step == -1 and start > stop:
+                result = self[(stop + 1):(start + 1)]
+                result.reverse()
+                return result
 
             # Return a list because a negative step could
             # reverse the order of the items and this could
             # be the desired behavior.
 
+            indices = range(start, stop, step)
             return list(self[index] for index in indices)
         else:
             pos, idx = self._pos(idx)
@@ -393,7 +410,8 @@ class SortedList(MutableSequence):
     def __setitem__(self, index, value):
         """Replace the item at position *index* with *value*."""
         if isinstance(index, slice):
-            start, stop, step, indices = self._slice_indices(index)
+            start, stop, step = self._slice_indices(index)
+            indices = range(start, stop, step)
 
             if step != 1:
                 if not hasattr(value, '__len__'):
