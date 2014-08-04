@@ -111,15 +111,27 @@ class SortedList(MutableSequence):
         """Grow the list by appending all elements from the *iterable*."""
         values = sorted(iterable)
 
-        if not self._maxes and len(values) > 0:
-            self._lists.extend(values[pos:(pos + self._load)]
-                               for pos in range(0, len(values), self._load))
-            self._maxes.extend(sublist[-1] for sublist in self._lists)
-            self._len = len(values)
-            del self._index[:]
-        else:
-            for val in values:
-                self.add(val)
+        len_values = len(values)
+
+        if len_values == 0:
+            return
+
+        if self._maxes:
+            if len_values * 4 >= self._len:
+                values.extend(chain.from_iterable(self._lists))
+                values.sort()
+                self.clear()
+            else:
+                for val in values:
+                    self.add(val)
+                return
+
+        _load = self._load
+        self._lists.extend(values[pos:(pos + _load)]
+                           for pos in range(0, len(values), _load))
+        self._maxes.extend(sublist[-1] for sublist in self._lists)
+        self._len = len(values)
+        del self._index[:]
 
     def __contains__(self, val):
         """Return True if and only if *val* is an element in the list."""
