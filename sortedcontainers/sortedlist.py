@@ -255,7 +255,7 @@ class SortedList(MutableSequence):
 
         return pos, (idx - _index[pos - 1])
 
-    def _slice_indices(self, slc):
+    def _slice(self, slc):
         start, stop, step = slc.start, slc.stop, slc.step
 
         if step == 0:
@@ -316,7 +316,18 @@ class SortedList(MutableSequence):
     def __delitem__(self, idx):
         """Remove the element located at index *idx* from the list."""
         if isinstance(idx, slice):
-            start, stop, step = self._slice_indices(idx)
+            start, stop, step = self._slice(idx)
+
+            if ((step == 1) and (start < stop)
+                and ((stop - start) * 8 >= self._len)):
+
+                values = self[:start]
+                if stop < self._len:
+                    values += self[stop:]
+                self.clear()
+                self.update(values)
+                return
+
             indices = range(start, stop, step)
 
             # Delete items from greatest index to least so
@@ -335,7 +346,7 @@ class SortedList(MutableSequence):
     def __getitem__(self, idx):
         """Return the element at position *idx*."""
         if isinstance(idx, slice):
-            start, stop, step = self._slice_indices(idx)
+            start, stop, step = self._slice(idx)
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
@@ -410,7 +421,7 @@ class SortedList(MutableSequence):
     def __setitem__(self, index, value):
         """Replace the item at position *index* with *value*."""
         if isinstance(index, slice):
-            start, stop, step = self._slice_indices(index)
+            start, stop, step = self._slice(index)
             indices = range(start, stop, step)
 
             if step != 1:
