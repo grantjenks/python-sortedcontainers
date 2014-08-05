@@ -46,20 +46,20 @@ Testimonials
 
 **Alex Martelli**, `Wikipedia`_
 
-Good stuff! ... I like the :doc:`simple, effective implementation
-<implementation>` idea of splitting the sorted containers into smaller
-"fragments" to avoid the O(N) insertion costs.
+Good stuff! ... I like the `simple, effective implementation`_ idea of splitting
+the sorted containers into smaller "fragments" to avoid the O(N) insertion costs.
 
 .. _`Wikipedia`: http://en.wikipedia.org/wiki/Alex_Martelli
+.. _`simple, effective implementation`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 
 **Jeff Knupp**, `Review of SortedContainers`_
 
 That last part, "fast as C-extensions," was difficult to believe. I would need
-some sort of :doc:`performance comparison <performance>` to be convinced this is
-true. The author includes this in the docs. It is.
+some sort of `performance comparison`_ to be convinced this is true. The author
+includes this in the docs. It is.
 
-.. _`JeffKnupp.com`: http://jeffknupp.com/
 .. _`Review of SortedContainers`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
+.. _`performance comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
 
 **Kevin Samuel**, `Formations Python`_
 
