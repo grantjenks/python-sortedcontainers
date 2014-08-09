@@ -294,7 +294,17 @@ class SortedDict(MutableMapping):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        pairs = dict(*args, **kwargs)
+        _dict, _list = self._dict, self._list
+
+        if len(_dict) == 0:
+            _dict.update(*args, **kwargs)
+            _list.update(_dict)
+            return
+
+        if (len(kwargs) == 0 and len(args) == 1 and isinstance(args[0], dict)):
+            pairs = args[0]
+        else:
+            pairs = dict(*args, **kwargs)
 
         if (10 * len(pairs)) > len(self._dict):
             self._dict.update(pairs)
