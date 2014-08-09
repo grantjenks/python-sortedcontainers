@@ -91,8 +91,14 @@ class SortedDict(MutableMapping):
         The first example only works for keys that are valid Python
         identifiers; the others work with any valid keys.
         """
+        if len(args) > 0 and type(args[0]) == int:
+            load = args[0]
+            args = args[1:]
+        else:
+            load = 100
+
         self._dict = dict()
-        self._list = SortedList()
+        self._list = SortedList(load=load)
         self.iloc = _IlocWrapper(self)
 
         self.update(*args, **kwargs)
