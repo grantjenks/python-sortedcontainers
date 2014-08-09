@@ -3,31 +3,28 @@ Benchmark Sorted Set Datatypes
 """
 
 import warnings
-from sys import version_info
+from sys import hexversion
 
 from .benchmark import *
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     range = xrange
 
 # Tests.
 
 @register_test
 def contains(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val)
 
 @register_test
 def iter(func, size):
-    count = 0
-    for val in func():
-        assert val == count
-        count += 1
+    assert all(idx == val for idx, val in enumerate(func()))
 
 @register_test
 def add(func, size):
-    for val in lists[size]:
-        func(val)
+    for val in lists[size][::100]:
+        func(-val)
 
 @register_test
 def update_tiny(func, size):
@@ -63,7 +60,7 @@ def union_large(func, size):
 
 @register_test
 def remove(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val)
 
 @register_test
@@ -164,7 +161,7 @@ def symmetric_difference_update_large(func, size):
 
 @register_test
 def pop(func, size):
-    for rpt in range(size):
+    for rpt in range(int(size / 100)):
         func()
 
 # Setups.
@@ -173,8 +170,11 @@ def do_nothing(obj, size):
     pass
 
 def fill_values(obj, size):
-    for val in lists[size]:
-        obj.add(val)
+    if hasattr(obj, 'update'):
+        obj.update(sorted(lists[size]))
+    else:
+        for val in lists[size]:
+            obj.add(val)
 
 # Implementation imports.
 
@@ -224,7 +224,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__contains__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -232,15 +232,15 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__iter__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
     impls['add'][name] = {
-        'setup': do_nothing,
+        'setup': fill_values,
         'ctor': kind,
         'func': 'add',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('add', 'blist.sortedset', 10000)
@@ -250,7 +250,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -258,7 +258,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -266,7 +266,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('update_medium', 'blist.sortedset', 10000)
@@ -276,7 +276,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('update_large', 'blist.sortedset', 10000)
@@ -291,7 +291,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'union',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -299,7 +299,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'union',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -307,7 +307,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'union',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('union_medium', 'blist.sortedset', 10000)
@@ -317,7 +317,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'union',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('union_large', 'blist.sortedset', 10000)
@@ -332,7 +332,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'remove',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('remove', 'blist.sortedset', 10000)
@@ -342,7 +342,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -350,7 +350,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('difference_small', 'rbset', 10000)
@@ -360,7 +360,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('difference_medium', 'rbset', 10000)
@@ -371,7 +371,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('difference_large', 'rbset', 10000)
@@ -387,7 +387,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -395,7 +395,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -403,7 +403,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('difference_update_medium', 'blist.sortedset', 10000)
@@ -413,7 +413,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('difference_update_large', 'blist.sortedset', 10000)
@@ -428,7 +428,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_tiny', 'blist.sortedset', 10000)
@@ -438,7 +438,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_small', 'rbset', 10000)
@@ -449,7 +449,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_medium', 'rbset', 10000)
@@ -460,7 +460,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_large', 'rbset', 10000)
@@ -476,7 +476,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_update_tiny', 'rbset', 10000)
@@ -487,7 +487,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_update_small', 'rbset', 10000)
@@ -498,7 +498,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_update_medium', 'rbset', 10000)
@@ -509,7 +509,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'intersection_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('intersection_update_large', 'rbset', 10000)
@@ -525,7 +525,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_tiny', 'blist.sortedset', 10000)
@@ -535,7 +535,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_small', 'rbset', 10000)
@@ -546,7 +546,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_medium', 'rbset', 10000)
@@ -557,7 +557,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_large', 'rbset', 10000)
@@ -573,7 +573,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_update_tiny', 'blist.sortedset', 10000)
@@ -583,7 +583,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_update_small', 'rbset', 10000)
@@ -594,7 +594,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_update_medium', 'rbset', 10000)
@@ -605,7 +605,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'symmetric_difference_update',
-        'limit': 100000
+        'limit': 1000000
     }
 
 limit('symmetric_difference_update_large', 'rbset', 10000)
@@ -625,7 +625,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'pop',
-        'limit': 100000
+        'limit': 1000000
     }
 
 if __name__ == '__main__':

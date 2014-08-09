@@ -1,13 +1,14 @@
 from __future__ import print_function
-from sys import version_info
+from sys import hexversion
 
 import time, random, argparse
+from functools import partial
 try:
     from collections import OrderedDict
 except:
     from ordereddict import OrderedDict
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     range = xrange
     name_attr = 'func_name'
 else:
@@ -27,6 +28,12 @@ def benchmark(test, name, ctor, setup, func_name, limit):
     for size in sizes:
         if not args.no_limit and size > limit:
             continue
+
+        if args.load > 0:
+            if name == 'SortedDict':
+                ctor = partial(ctor, args.load)
+            else:
+                ctor = partial(ctor, load=args.load)
 
         # warmup
 
@@ -69,6 +76,8 @@ parser.add_argument('--size', type=int, action='append',
 parser.add_argument('--suffix', default='', help='suffix for kind name')
 parser.add_argument('--bare', action='store_true', default=False,
                     help='hide header and footer info')
+parser.add_argument('--load', type=int, default=0,
+                    help='load value for sorted container types')
 args = parser.parse_args()
 
 def main(name):
@@ -79,7 +88,7 @@ def main(name):
     detail('Seed:', args.seed)
     random.seed(args.seed)
 
-    sizes.extend(args.size or [10, 100, 1000, 10000, 100000])
+    sizes.extend(args.size or [100, 1000, 10000, 100000, 1000000, 10000000])
 
     detail('Sizes:', sizes)
 

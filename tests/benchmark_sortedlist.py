@@ -9,61 +9,55 @@ from .benchmark import *
 
 @register_test
 def add(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val)
 
 @register_test
-def update(func, size):
-    pos = 0
-    chunk = int(size / 10)
-    while pos < size:
-        func(lists[size][pos:(pos + chunk)])
-        pos += chunk
+def update_small(func, size):
+    func(lists[size][::10])
+
+@register_test
+def update_large(func, size):
+    func(lists[size])
 
 @register_test
 def contains(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val)
 
 @register_test
 def remove(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val)
 
 @register_test
 def delitem(func, size):
-    while size > 0:
-        pos = random.randrange(size)
+    for val in range(int(size / 100)):
+        pos = random.randrange(size - val)
         func(pos)
-        size -= 1
 
 @register_test
 def getitem(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val) == val
 
 @register_test
 def pop(func, size):
-    size -= 1
-    while size >= 0:
-        assert func() == size
-        size -= 1
+    for val in range(int(size / 100)):
+        assert func() == (size - val - 1)
 
 @register_test
 def index(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val) == val
 
 @register_test
 def iter(func, size):
-    count = 0
-    for val in func():
-        assert val == count
-        count += 1
+    assert all(idx == val for idx, val in enumerate(func()))
 
 @register_test
 def count(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val) == 1
 
 # Setups.
@@ -72,7 +66,7 @@ def do_nothing(obj, size):
     pass
 
 def fill_values(obj, size):
-    obj.update(lists[size])
+    obj.update(sorted(lists[size]))
 
 # Implementation imports.
 
@@ -96,15 +90,23 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'add',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
-    impls['update'][name] = {
-        'setup': do_nothing,
+    impls['update_small'][name] = {
+        'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 100000
+        'limit': 1000000
+    }
+
+for name, kind in kinds.items():
+    impls['update_large'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'update',
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -112,7 +114,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__contains__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -120,7 +122,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'remove',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -128,7 +130,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__delitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -136,7 +138,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__getitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -144,7 +146,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'pop',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -152,7 +154,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'index',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -160,7 +162,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__iter__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -168,7 +170,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'count',
-        'limit': 100000
+        'limit': 1000000
     }
 
 if __name__ == '__main__':

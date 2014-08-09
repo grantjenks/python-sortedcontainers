@@ -8,31 +8,33 @@ from .benchmark import *
 # Tests.
 
 @register_test
+def contains(func, size):
+    for val in lists[size][::100]:
+        assert func(val)
+
+@register_test
 def getitem(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         assert func(val) == -val
 
 @register_test
 def setitem(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val, -val)
 
 @register_test
 def setitem_existing(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val, -val)
 
 @register_test
 def delitem(func, size):
-    for val in lists[size]:
+    for val in lists[size][::100]:
         func(val)
 
 @register_test
 def iter(func, size):
-    count = 0
-    for val in func():
-        assert val == count
-        count += 1
+    assert all(idx == val for idx, val in enumerate(func()))
 
 # Setups.
 
@@ -40,8 +42,11 @@ def do_nothing(obj, size):
     pass
 
 def fill_values(obj, size):
-    for val in lists[size]:
-        obj[val] = -val
+    if hasattr(obj, 'update'):
+        obj.update((val, -val) for val in range(size))
+    else:
+        for val in range(size):
+            obj[val] = -val
 
 # Implementation imports.
 
@@ -92,11 +97,21 @@ for name in tests:
     impls[name] = OrderedDict()
 
 for name, kind in kinds.items():
+    impls['contains'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': '__contains__',
+        'limit': 1000000
+    }
+
+del impls['contains']['treap']
+
+for name, kind in kinds.items():
     impls['getitem'][name] = {
         'setup': fill_values,
         'ctor': kind,
         'func': '__getitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -104,7 +119,7 @@ for name, kind in kinds.items():
         'setup': do_nothing,
         'ctor': kind,
         'func': '__setitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -112,7 +127,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__setitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -120,7 +135,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__delitem__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 for name, kind in kinds.items():
@@ -128,7 +143,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__iter__',
-        'limit': 100000
+        'limit': 1000000
     }
 
 if __name__ == '__main__':

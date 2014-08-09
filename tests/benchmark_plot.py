@@ -21,35 +21,54 @@
 
 ## Compare Implementations
 
-    python -m tests.benchmark_sortedlist --bare > tests\results_sortedlist.txt
-    python -m tests.benchmark_plot tests\results_sortedlist.txt SortedList --save
+    python -m tests.benchmark_sortedlist --bare > tests/results_sortedlist.txt
+    python -m tests.benchmark_plot tests/results_sortedlist.txt SortedList --save
 
-    python -m tests.benchmark_sorteddict --bare > tests\results_sorteddict.txt
-    python -m tests.benchmark_plot tests\results_sorteddict.txt SortedDict --save
+    python -m tests.benchmark_sorteddict --bare > tests/results_sorteddict.txt
+    python -m tests.benchmark_plot tests/results_sorteddict.txt SortedDict --save
 
-    python -m tests.benchmark_sortedset --bare > tests\results_sortedset.txt
-    python -m tests.benchmark_plot tests\results_sortedset.txt SortedSet --save
+    python -m tests.benchmark_sortedset --bare > tests/results_sortedset.txt
+    python -m tests.benchmark_plot tests/results_sortedset.txt SortedSet --save
 
 ## Compare Python Versions
 
-    del tests\results_python_sortedlist.txt
-    (py27) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py27 >> tests\results_python_sortedlist.txt
-    (py34) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py34 >> tests\results_python_sortedlist.txt
-    (pypy) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _PyPy >> tests\results_python_sortedlist.txt
-    python -m tests.benchmark_plot tests\results_python_sortedlist.txt SortedList --suffix _Python --save
+    rm tests/results_runtime_sortedlist.txt
+    (py27) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py27 >> tests/results_runtime_sortedlist.txt
+    (py34) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py34 >> tests/results_runtime_sortedlist.txt
+    (pypy) python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _PyPy >> tests/results_runtime_sortedlist.txt
+    python -m tests.benchmark_plot tests/results_runtime_sortedlist.txt SortedList --suffix -runtime --save
 
-    del tests\results_python_sorteddict.txt
-    (py27) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py27 >> tests\results_python_sorteddict.txt
-    (py34) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py34 >> tests\results_python_sorteddict.txt
-    (pypy) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _PyPy >> tests\results_python_sorteddict.txt
-    python -m tests.benchmark_plot tests\results_python_sorteddict.txt SortedDict --suffix _Python --save
+    rm tests/results_runtime_sorteddict.txt
+    (py27) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py27 >> tests/results_runtime_sorteddict.txt
+    (py34) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py34 >> tests/results_runtime_sorteddict.txt
+    (pypy) python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _PyPy >> tests/results_runtime_sorteddict.txt
+    python -m tests.benchmark_plot tests/results_runtime_sorteddict.txt SortedDict --suffix -runtime --save
 
-    del tests\results_python_sortedset.txt
-    (py27) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py27 >> tests\results_python_sortedset.txt
-    (py34) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py34 >> tests\results_python_sortedset.txt
-    (pypy) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _PyPy >> tests\results_python_sortedset.txt
-    python -m tests.benchmark_plot tests\results_python_sortedset.txt SortedSet --suffix _Python --save
+    rm tests/results_runtime_sortedset.txt
+    (py27) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py27 >> tests/results_runtime_sortedset.txt
+    (py34) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py34 >> tests/results_runtime_sortedset.txt
+    (pypy) python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _PyPy >> tests/results_runtime_sortedset.txt
+    python -m tests.benchmark_plot tests/results_runtime_sortedset.txt SortedSet --suffix -runtime --save
 
+## Compare Loads
+
+    rm tests/results_load_sortedlist.txt
+    python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _100 --load 100 --no-limit >> tests/results_load_sortedlist.txt
+    python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _1000 --load 1000 --no-limit >> tests/results_load_sortedlist.txt
+    python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _10000 --load 10000 --no-limit >> tests/results_load_sortedlist.txt
+    python -m tests.benchmark_plot tests/results_load_sortedlist.txt SortedList --suffix -load --save
+
+    rm tests/results_load_sorteddict.txt
+    python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _100 --load 100 --no-limit >> tests/results_load_sorteddict.txt
+    python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _1000 --load 1000 --no-limit >> tests/results_load_sorteddict.txt
+    python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _10000 --load 10000 --no-limit >> tests/results_load_sorteddict.txt
+    python -m tests.benchmark_plot tests/results_load_sorteddict.txt SortedDict --suffix -load --save
+
+    rm tests/results_load_sortedset.txt
+    python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _100 --load 100 --no-limit >> tests/results_load_sortedset.txt
+    python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _1000 --load 1000 --no-limit >> tests/results_load_sortedset.txt
+    python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _10000 --load 10000 --no-limit >> tests/results_load_sortedset.txt
+    python -m tests.benchmark_plot tests/results_load_sortedset.txt SortedSet --suffix -load --save
 """
 
 from __future__ import print_function
