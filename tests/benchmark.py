@@ -25,15 +25,15 @@ def measure(test, func, size):
     return (end - start)
 
 def benchmark(test, name, ctor, setup, func_name, limit):
+    if args.load > 0:
+        if name == 'SortedDict':
+            ctor = partial(ctor, args.load)
+        else:
+            ctor = partial(ctor, load=args.load)
+
     for size in sizes:
         if not args.no_limit and size > limit:
             continue
-
-        if args.load > 0:
-            if name == 'SortedDict':
-                ctor = partial(ctor, args.load)
-            else:
-                ctor = partial(ctor, load=args.load)
 
         # warmup
 
