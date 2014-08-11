@@ -118,11 +118,15 @@ introduction, implementation, performance, and development.
 
 - `Introduction`_
 - `Performace Comparison`_
+- `Load Factor Performace Comparison`_
+- `Runtime Performace Comparison`_
 - `Implementation Details`_
 - `Developing and Contributing`_
 
 .. _`Introduction`: http://www.grantjenks.com/docs/sortedcontainers/introduction.html
 .. _`Performace Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
+.. _`Load Factor Performace Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-load.html
+.. _`Runtime Performace Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-runtime.html
 .. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 .. _`Developing and Contributing`: http://www.grantjenks.com/docs/sortedcontainers/development.html
 
