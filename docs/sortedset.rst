@@ -12,11 +12,11 @@ SortedSet
 
    An optional *load* specifies the load-factor of the set. The default load
    factor of '1000' works well for sets from tens to tens of millions of
-   elements.  Good practice is to use a value that is the cube root of the set
-   size.  With billions of elements, the best load factor depends on your usage.
-   It's best to leave the load factor at the default until you start
-   benchmarking. See :doc:`implementation details <implementation>` for more
-   information.
+   elements.  Good practice is to use a value that is the square or cube root of
+   the set size.  With billions of elements, the best load factor depends on
+   your usage.  It's best to leave the load factor at the default until you
+   start benchmarking. See :doc:`implementation details <implementation>` for
+   more information.
 
    Unlike a :class:`set`, a :class:`SortedSet` requires items be hashable and
    comparable. :class:`SortedSet` implements the MutableSet and Sequence

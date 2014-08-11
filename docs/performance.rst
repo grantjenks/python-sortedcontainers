@@ -90,6 +90,12 @@ directly on the Python runtime. A :doc:`runtime performance
 comparison<performance-runtime>` is also included with data from popular
 runtimes.
 
+SortedContainers uses a segmented-list data structure similar to a B-tree
+limited to two levels of nodes. As part of the implementation, a load factor is
+used to determine how many values should be stored in each node. This can have a
+significant impact on performance and a :doc:`load factor performance
+comparison<performance-load>` is also provided.
+
 A couple final notes about the graphs below. Missing data indicates the
 benchmark either took too long or failed. The set operations with tiny, small,
 medium, and large variations indicate the size of the container involved in the

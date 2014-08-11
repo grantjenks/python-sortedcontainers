@@ -15,11 +15,11 @@ SortedList
 
    An optional *load* specifies the load-factor of the list. The default load
    factor of '1000' works well for lists from tens to tens of millions of
-   elements.  Good practice is to use a value that is the cube root of the list
-   size.  With billions of elements, the best load factor depends on your usage.
-   It's best to leave the load factor at the default until you start
-   benchmarking. See :doc:`implementation details <implementation>` for more
-   information.
+   elements.  Good practice is to use a value that is the square or cube root of
+   the list size.  With billions of elements, the best load factor depends on
+   your usage.  It's best to leave the load factor at the default until you
+   start benchmarking. See :doc:`implementation details <implementation>` for
+   more information.
 
    :class:`SortedList` implements the MutableSequence Abstract Base Class type.
 

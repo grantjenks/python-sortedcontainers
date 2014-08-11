@@ -110,6 +110,7 @@ introduction, implementation, performance, and development.
 
    introduction
    performance
+   performance-load
    performance-runtime
    implementation
    development

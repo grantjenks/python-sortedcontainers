@@ -15,9 +15,10 @@ SortedDict
    to maintain sort order. If present, this argument must come first and must be
    an integer. The default load factor of '1000' works well for lists from tens
    to tens of millions of elements.  Good practice is to use a value that is the
-   cube root of the list size.  With billions of elements, the best load factor
-   depends on your usage.  It's best to leave the load factor at the default
-   until you start benchmarking.
+   square or cube root of the list size.  With billions of elements, the best
+   load factor depends on your usage.  It's best to leave the load factor at the
+   default until you start benchmarking. See :doc:`implementation details
+   <implementation>` for more information.
 
    An optional *iterable* provides an initial series of items to populate the
    :class:`SortedDict`.  Each item in the series must itself contain two items.
