@@ -191,6 +191,13 @@ SortedDict
 
 Graphs comparing :doc:`SortedDict<sorteddict>` performance.
 
+__contains__
+............
+
+Given a key at random, test whether the key is in the dictionary using :ref:`SortedDict.__contains__<SortedDict.__contains__>`.
+
+.. image:: _static/SortedDict-contains.png
+
 __getitem__
 ...........
 

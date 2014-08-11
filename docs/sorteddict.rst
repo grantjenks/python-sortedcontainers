@@ -42,6 +42,7 @@ SortedDict
 
    :class:`SortedDict` implements the MutableMapping Abstract Base Class type.
 
+   .. _SortedDict.__contains__:
    .. method:: x in d
 
       Return True if and only if *x* is a key in the dictionary.
