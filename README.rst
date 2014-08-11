@@ -117,9 +117,9 @@ For those wanting more details, this part of the documentation describes
 introduction, implementation, performance, and development.
 
 - `Introduction`_
-- `Performace Comparison`_
-- `Load Factor Performace Comparison`_
-- `Runtime Performace Comparison`_
+- `Performance Comparison`_
+- `Load Factor Performance Comparison`_
+- `Runtime Performance Comparison`_
 - `Implementation Details`_
 - `Developing and Contributing`_
 
