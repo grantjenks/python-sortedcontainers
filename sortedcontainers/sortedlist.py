@@ -603,6 +603,14 @@ class SortedList(MutableSequence):
 
         return right - left
 
+    def copy(self):
+        """Return a shallow copy of the sorted list."""
+        return SortedList(self, load=self._load)
+
+    def __copy__(self):
+        """Return a shallow copy of the sorted list."""
+        return self.copy()
+
     def append(self, val):
         """
         Append the element *value* to the list. Raises a ValueError if the *val*

@@ -161,12 +161,12 @@ class SortedDict(MutableMapping):
         _dict[key] = value
 
     def copy(self):
-        """Create a shallow copy of the dictionary."""
-        that = SortedDict()
-        that._dict = self._dict
-        that._list = self._list
-        that.iloc = self.iloc
-        return that
+        """Return a shallow copy of the sorted dictionary."""
+        return SortedDict(self._list._load, self._dict)
+
+    def __copy__(self):
+        """Return a shallow copy of the sorted dictionary."""
+        return self.copy()
 
     @classmethod
     def fromkeys(cls, seq, value=None):

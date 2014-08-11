@@ -256,6 +256,16 @@ class SortedListWithKey(MutableSequence):
                 len_sublist = len(_lists[pos])
                 idx = 0
 
+    def copy(self):
+        """Return a shallow copy of the sorted list with key."""
+        _key, _ordered, _load = self._key, self._ordered, self._list._load
+        kwargs = dict(key=_key, value_orderable=_ordered, load=_load)
+        return SortedListWithKey(self, **kwargs)
+
+    def __copy__(self):
+        """Return a shallow copy of the sorted list with key."""
+        return self.copy()
+
     def append(self, value):
         pair = self._pair(self._key(value), value)
         self._list.append(pair)
