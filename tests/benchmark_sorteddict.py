@@ -43,7 +43,7 @@ def do_nothing(obj, size):
 
 def fill_values(obj, size):
     if hasattr(obj, 'update'):
-        obj.update((val, -val) for val in range(size))
+        obj.update({val: -val for val in range(size)})
     else:
         for val in range(size):
             obj[val] = -val
@@ -104,7 +104,8 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-del impls['contains']['treap']
+if 'treap' in impls['contains']:
+    del impls['contains']['treap']
 
 for name, kind in kinds.items():
     impls['getitem'][name] = {
