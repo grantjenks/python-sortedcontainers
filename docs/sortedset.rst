@@ -1,7 +1,7 @@
 SortedSet
 =========
 
-.. class:: SortedSet(iterable=None, load=100, _set=None):
+.. class:: SortedSet(iterable=None, load=1000, _set=None):
 
    A :class:`SortedSet` provides the same methods as a :class:`set`.
    Additionally, a :class:`SortedSet` maintains its items in sorted
@@ -11,7 +11,7 @@ SortedSet
    populate the :class:`SortedSet`.
 
    An optional *load* specifies the load-factor of the set. The default load
-   factor of '100' works well for sets from tens to tens of millions of
+   factor of '1000' works well for sets from tens to tens of millions of
    elements.  Good practice is to use a value that is the cube root of the set
    size.  With billions of elements, the best load factor depends on your usage.
    It's best to leave the load factor at the default until you start

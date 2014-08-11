@@ -72,7 +72,7 @@ class SortedDict(MutableMapping):
 
         An optional *load* argument defines the load factor of the internal list
         used to maintain sort order. If present, this argument must come first
-        and must be an integer. The default load factor of '100' works well for
+        and must be an integer. The default load factor of '1000' works well for
         lists from tens to tens of millions of elements.  Good practice is to
         use a value that is the cube root of the list size.  With billions of
         elements, the best load factor depends on your usage.  It's best to
@@ -103,7 +103,7 @@ class SortedDict(MutableMapping):
             load = args[0]
             args = args[1:]
         else:
-            load = 100
+            load = 1000
 
         self._dict = dict()
         self._list = SortedList(load=load)

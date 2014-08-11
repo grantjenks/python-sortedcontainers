@@ -34,7 +34,7 @@ class Pair:
         return 'Pair({0}, {1})'.format(repr(self.key), repr(self.value))
 
 class SortedListWithKey(MutableSequence):
-    def __init__(self, iterable=None, key=lambda val: val, value_orderable=True, load=100):
+    def __init__(self, iterable=None, key=lambda val: val, value_orderable=True, load=1000):
         self._key = key
         self._list = SortedList(load=load)
         self._ordered = value_orderable

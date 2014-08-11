@@ -21,7 +21,7 @@ lists. With that we can index efficiently.
 
 Lists are kept balanced using the _load factor. If an internal list's length
 exceeds double the load then it is split in two. Likewise at half the load it is
-combined with its neighbor. By default this factor is 100 which seems to work
+combined with its neighbor. By default this factor is 1000 which seems to work
 well for lengths up to about ten million. Lengths above that are recommended a
 load factor that is the cube root of the average length. So for a list of a
 billion elements, a load factor of one thousand should be

@@ -1,7 +1,7 @@
 SortedList
 ==========
 
-.. class:: SortedList(iterable=None, load=100)
+.. class:: SortedList(iterable=None, load=1000)
 
    A :class:`SortedList` provides most of the same methods as a :class:`list`,
    but keeps the items in sorted order.  To add an element to the SortedList,
@@ -14,7 +14,7 @@ SortedList
    populate the :class:`SortedList`.
 
    An optional *load* specifies the load-factor of the list. The default load
-   factor of '100' works well for lists from tens to tens of millions of
+   factor of '1000' works well for lists from tens to tens of millions of
    elements.  Good practice is to use a value that is the cube root of the list
    size.  With billions of elements, the best load factor depends on your usage.
    It's best to leave the load factor at the default until you start
