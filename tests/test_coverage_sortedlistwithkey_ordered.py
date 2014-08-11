@@ -354,7 +354,7 @@ def test_bisect_right():
     assert slt.bisect_right(0) == 200
 
 def test_copy():
-    slt = SortedListWithKey(xrange(100), load=7, key=negate)
+    slt = SortedListWithKey(range(100), load=7, key=negate)
     two = slt.copy()
     slt.add(100)
     assert len(slt) == 101
@@ -362,7 +362,7 @@ def test_copy():
 
 def test_copy_copy():
     import copy
-    slt = SortedListWithKey(xrange(100), load=7, key=negate)
+    slt = SortedListWithKey(range(100), load=7, key=negate)
     two = copy.copy(slt)
     slt.add(100)
     assert len(slt) == 101
