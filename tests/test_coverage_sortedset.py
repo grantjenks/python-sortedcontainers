@@ -65,24 +65,26 @@ def test_ne():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(99), load=17)
     assert alpha != beta
+    beta.add(100)
+    assert alpha != beta
     assert alpha != beta._set
     assert alpha != list(beta)
-    beta[100:] = [101]
-    assert alpha != beta
-    beta = set(beta)
-    assert alpha != beta
 
 def test_lt_gt():
     temp = SortedSet(range(100), load=7)
     that = SortedSet(range(25, 75), load=9)
     assert that < temp
+    assert that < temp._set
     assert temp > that
+    assert temp > that._set
 
 def test_le_ge():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(101), load=17)
     assert alpha <= beta
+    assert alpha <= beta._set
     assert beta >= alpha
+    assert beta >= alpha._set
 
 def test_iter():
     temp = SortedSet(range(100), load=7)
@@ -119,8 +121,16 @@ def test_copy():
     temp = SortedSet(range(100), load=7)
     that = temp.copy()
     that.add(1000)
+    assert len(temp) == 100
     assert len(that) == 101
-    assert len(temp) == 101
+
+def test_copy_copy():
+    import copy
+    temp = SortedSet(range(100), load=7)
+    that = copy.copy(temp)
+    that.add(1000)
+    assert len(temp) == 100
+    assert len(that) == 101
 
 def test_count():
     temp = SortedSet(range(100), load=7)

@@ -118,8 +118,21 @@ def test_copy():
     temp = SortedDict(mapping)
     dup = temp.copy()
     assert len(temp) == 26
+    assert len(dup) == 26
     dup.clear()
-    assert len(temp) == 0
+    assert len(temp) == 26
+    assert len(dup) == 0
+
+def test_copy_copy():
+    import copy
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    dup = copy.copy(temp)
+    assert len(temp) == 26
+    assert len(dup) == 26
+    dup.clear()
+    assert len(temp) == 26
+    assert len(dup) == 0
 
 def test_fromkeys():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -184,6 +197,11 @@ def test_popitem():
     temp = SortedDict(mapping)
     assert temp.popitem() == ('z', 25)
 
+@raises(KeyError)
+def test_popitem2():
+    temp = SortedDict()
+    temp.popitem()
+
 def test_setdefault():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
@@ -197,6 +215,7 @@ def test_update():
     temp.update()
     temp.update(mapping)
     temp.update(dict(mapping))
+    temp.update(mapping[5:7])
     assert list(temp.items()) == mapping
 
 def test_update2():

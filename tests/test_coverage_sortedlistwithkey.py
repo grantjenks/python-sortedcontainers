@@ -353,6 +353,21 @@ def test_bisect_right():
     assert slt.bisect_right(10) == 20
     assert slt.bisect_right(0) == 20
 
+def test_copy():
+    slt = SortedListWithKey(xrange(100), load=7, key=modulo, value_orderable=False)
+    two = slt.copy()
+    slt.add(100)
+    assert len(slt) == 101
+    assert len(two) == 100
+
+def test_copy_copy():
+    import copy
+    slt = SortedListWithKey(xrange(100), load=7, key=modulo, value_orderable=False)
+    two = copy.copy(slt)
+    slt.add(100)
+    assert len(slt) == 101
+    assert len(two) == 100
+
 def test_count():
     slt = SortedListWithKey(load=7, key=modulo, value_orderable=False)
 
