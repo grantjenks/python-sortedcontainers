@@ -6,33 +6,38 @@ SortedDict
 .. class:: SortedDict(*args, **kwargs)
 
    A :class:`SortedDict` provides the same methods as a :class:`dict`.
-   Additionally, a :class:`SortedDict` efficiently maintains its keys
-   in sorted order.  Consequently, the :ref:`keys <SortedDict.keys>`
-   method will return the keys in sorted order, the :ref:`popitem
-   <SortedDict.popitem>` method will remove the item with the highest
-   key, etc.
+   Additionally, a :class:`SortedDict` efficiently maintains its keys in sorted
+   order.  Consequently, the :ref:`keys <SortedDict.keys>` method will return
+   the keys in sorted order, the :ref:`popitem <SortedDict.popitem>` method will
+   remove the item with the highest key, etc.
 
-   An optional *iterable* provides an initial series of items to
-   populate the :class:`SortedDict`.  Each item in the series must
-   itself contain two items.  The first is used as a key in the new
-   dictionary, and the second as the key's value. If a given key is
-   seen more than once, the last value associated with it is retained
-   in the new dictionary.
+   An optional *load* argument defines the load factor of the internal list used
+   to maintain sort order. If present, this argument must come first and must be
+   an integer. The default load factor of '100' works well for lists from tens
+   to tens of millions of elements.  Good practice is to use a value that is the
+   cube root of the list size.  With billions of elements, the best load factor
+   depends on your usage.  It's best to leave the load factor at the default
+   until you start benchmarking.
 
-   If keyword arguments are given, the keywords themselves with their
-   associated values are added as items to the dictionary. If a key is
-   specified both in the positional argument and as a keyword argument,
-   the value associated with the keyword is retained in the
-   dictionary. For example, these all return a dictionary equal to
-   ``{"one": 2, "two": 3}``:
+   An optional *iterable* provides an initial series of items to populate the
+   :class:`SortedDict`.  Each item in the series must itself contain two items.
+   The first is used as a key in the new dictionary, and the second as the key's
+   value. If a given key is seen more than once, the last value associated with
+   it is retained in the new dictionary.
+
+   If keyword arguments are given, the keywords themselves with their associated
+   values are added as items to the dictionary. If a key is specified both in
+   the positional argument and as a keyword argument, the value associated with
+   the keyword is retained in the dictionary. For example, these all return a
+   dictionary equal to ``{"one": 2, "two": 3}``:
 
    * ``SortedDict(one=2, two=3)``
    * ``SortedDict({'one': 2, 'two': 3})``
    * ``SortedDict(zip(('one', 'two'), (2, 3)))``
    * ``SortedDict([['two', 3], ['one', 2]])``
 
-   The first example only works for keys that are valid Python
-   identifiers; the others work with any valid keys.
+   The first example only works for keys that are valid Python identifiers; the
+   others work with any valid keys.
 
    :class:`SortedDict` implements the MutableMapping Abstract Base Class type.
 

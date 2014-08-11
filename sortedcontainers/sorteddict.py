@@ -70,7 +70,15 @@ class SortedDict(MutableMapping):
         the keys method will return the keys in sorted order, the popitem method
         will remove the item with the highest key, etc.
 
-        An optional *iterable* provides an initial series of items to
+        An optional *load* argument defines the load factor of the internal list
+        used to maintain sort order. If present, this argument must come first
+        and must be an integer. The default load factor of '100' works well for
+        lists from tens to tens of millions of elements.  Good practice is to
+        use a value that is the cube root of the list size.  With billions of
+        elements, the best load factor depends on your usage.  It's best to
+        leave the load factor at the default until you start benchmarking.
+
+        An optional *iterable* argument provides an initial series of items to
         populate the SortedDict.  Each item in the series must itself contain
         two items.  The first is used as a key in the new dictionary, and the
         second as the key's value. If a given key is seen more than once, the
