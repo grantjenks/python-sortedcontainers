@@ -6,10 +6,11 @@ from __future__ import print_function
 from sys import hexversion
 
 from bisect import bisect_left, bisect_right, insort
-from itertools import chain
+from itertools import chain, repeat
 from collections import MutableSequence
 from operator import iadd
 from functools import wraps
+from math import log
 
 if hexversion < 0x03000000:
     from itertools import izip as zip
@@ -202,7 +203,13 @@ class SortedList(MutableSequence):
 
         del _lists[pos][idx]
         self._len -= 1
-        del _index[pos:]
+
+        if len(_index) > 0:
+            child = self._offset + pos
+            while child > 0:
+                _index[child] -= 1
+                child = (child - 1) >> 1
+            _index[0] -= 1
 
         if len(_lists[pos]) == 0:
             del _maxes[pos]
@@ -217,7 +224,7 @@ class SortedList(MutableSequence):
                 _maxes[prev] = _lists[prev][-1]
                 del _maxes[pos]
                 del _lists[pos]
-                del _index[prev:]
+                del _index[:]
                 self._expand(prev)
 
     def _loc(self, pos, idx):
@@ -225,20 +232,21 @@ class SortedList(MutableSequence):
             return idx
 
         _index = self._index
-        end = len(_index)
 
-        if pos >= end:
+        if len(_index) == 0:
+            self._build_index()
 
-            repeat = pos - end + 1
-            prev = _index[-1] if end > 0 else 0
-            _lists = self._lists
+        total = 0
+        pos += self._offset
 
-            for rpt in range(repeat):
-                next = prev + len(_lists[end + rpt])
-                _index.append(next)
-                prev = next
+        while pos:
 
-        return _index[pos - 1] + idx
+            if not (pos & 1):
+                total += _index[pos - 1]
+
+            pos = (pos - 1) >> 1
+
+        return total + idx
 
     def _pos(self, idx):
         _len, _lists = self._len, self._lists
@@ -258,19 +266,42 @@ class SortedList(MutableSequence):
 
         _index = self._index
 
-        pos = bisect_right(_index, idx)
+        if len(_index) == 0:
+            self._build_index()
 
-        if pos == len(_index):
-            prev = pos and _index[-1]
+        pos = 0
+        len_index = len(_index)
 
-            while prev <= idx:
-                prev += len(_lists[pos])
-                _index.append(prev)
-                pos += 1
+        while True:
+            child = pos * 2 + 1
 
-            pos -= 1
+            if child < len_index:
+                index_child = _index[child]
 
-        return pos, (idx - _index[pos - 1])
+                if idx < index_child:
+                    pos = child
+                else:
+                    idx -= index_child
+                    pos = child + 1
+            else:
+                return (pos - self._offset, idx)
+
+    def _build_index(self):
+        tree = [[len(sublist) for sublist in self._lists]]
+
+        prev = tree[0]
+        row1 = [prev[val - 1] + prev[val] for val in range(1, len(prev), 2)]
+        size = 2 ** (int(log(len(row1) - 1, 2)) + 1)
+        row1.extend(repeat(0, size - len(row1)))
+        tree.append(row1)
+
+        while len(tree[-1]) > 1:
+            prev = tree[-1]
+            row = [prev[val - 1] + prev[val] for val in range(1, len(prev), 2)]
+            tree.append(row)
+
+        self._index[:] = reduce(iadd, reversed(tree), [])
+        self._offset = size * 2 - 1
 
     def _slice(self, slc):
         start, stop, step = slc.start, slc.stop, slc.step
