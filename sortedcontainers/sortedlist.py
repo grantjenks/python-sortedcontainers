@@ -287,13 +287,26 @@ class SortedList(MutableSequence):
                 return (pos - self._offset, idx)
 
     def _build_index(self):
-        tree = [[len(sublist) for sublist in self._lists]]
+        row0 = [len(sublist) for sublist in self._lists]
 
-        prev = tree[0]
-        row1 = [prev[val - 1] + prev[val] for val in range(1, len(prev), 2)]
+        if len(row0) == 1:
+            self._index[:] = row0
+            self._offset = 0
+            return
+
+        row1 = [row0[val - 1] + row0[val] for val in range(1, len(row0), 2)]
+
+        if len(row0) & 1:
+            row1.append(row0[-1])
+
+        if len(row1) == 1:
+            self._index[:] = row1 + row0
+            self._offset = 1
+            return
+
         size = 2 ** (int(log(len(row1) - 1, 2)) + 1)
         row1.extend(repeat(0, size - len(row1)))
-        tree.append(row1)
+        tree = [row0, row1]
 
         while len(tree[-1]) > 1:
             prev = tree[-1]
