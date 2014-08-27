@@ -93,7 +93,6 @@ class SortedList(MutableSequence):
             else:
                 insort(_lists[pos], val)
 
-            del _index[pos:]
             self._expand(pos)
         else:
             _maxes.append(val)
@@ -102,16 +101,23 @@ class SortedList(MutableSequence):
         self._len += 1
 
     def _expand(self, pos):
-        _lists = self._lists
+        _lists, _index = self._lists, self._index
 
         if len(_lists[pos]) > self._twice:
-            _maxes, _index, _load = self._maxes, self._index, self._load
+            _maxes, _load = self._maxes, self._load
             half = _lists[pos][_load:]
             _lists[pos] = _lists[pos][:_load]
             _maxes[pos] = _lists[pos][-1]
             _maxes.insert(pos + 1, half[-1])
             _lists.insert(pos + 1, half)
             del _index[pos:]
+        else:
+            if len(_index) > 0:
+                child = self._offset + pos
+                while child > 0:
+                    _index[child] += 1
+                    child = (child - 1) >> 1
+                _index[0] += 1
 
     def update(self, iterable):
         """Grow the list by appending all elements from the *iterable*."""
@@ -201,31 +207,43 @@ class SortedList(MutableSequence):
         Combines lists that are less than half the load level."""
         _maxes, _lists, _index = self._maxes, self._lists, self._index
 
-        del _lists[pos][idx]
+        lists_pos = _lists[pos]
+
+        del lists_pos[idx]
         self._len -= 1
 
-        if len(_index) > 0:
-            child = self._offset + pos
-            while child > 0:
-                _index[child] -= 1
-                child = (child - 1) >> 1
-            _index[0] -= 1
+        len_lists_pos = len(lists_pos)
 
-        if len(_lists[pos]) == 0:
+        if len_lists_pos > self._half:
+
+            _maxes[pos] = lists_pos[-1]
+
+            if len(_index) > 0:
+                child = self._offset + pos
+                while child > 0:
+                    _index[child] -= 1
+                    child = (child - 1) >> 1
+                _index[0] -= 1
+
+        elif len(_lists) > 1:
+
+            if pos == 0: pos += 1
+
+            prev = pos - 1
+            _lists[prev].extend(_lists[pos])
+            _maxes[prev] = _lists[prev][-1]
+
             del _maxes[pos]
             del _lists[pos]
-        else:
-            _maxes[pos] = _lists[pos][-1]
+            del _index[:]
 
-            if len(_lists) > 1 and len(_lists[pos]) < self._half:
-                if pos == 0: pos += 1
-                prev = pos - 1
-                _lists[prev].extend(_lists[pos])
-                _maxes[prev] = _lists[prev][-1]
-                del _maxes[pos]
-                del _lists[pos]
-                del _index[:]
-                self._expand(prev)
+            self._expand(prev)
+
+        elif not len_lists_pos:
+
+            del _maxes[pos]
+            del _lists[pos]
+            del _index[:]
 
     def _loc(self, pos, idx):
         if pos == 0:
@@ -676,8 +694,6 @@ class SortedList(MutableSequence):
         _maxes[pos] = val
         _lists[pos].append(val)
         self._len += 1
-        del self._index[pos:]
-
         self._expand(pos)
 
     def extend(self, values):
@@ -711,6 +727,7 @@ class SortedList(MutableSequence):
             _maxes.append(_lists[-1][-1])
 
         self._len += len(values)
+        # TODO
         del self._index[count:]
 
     def insert(self, idx, val):
