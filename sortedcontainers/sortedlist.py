@@ -6,14 +6,15 @@ from __future__ import print_function
 from sys import hexversion
 
 from bisect import bisect_left, bisect_right, insort
-from itertools import chain, repeat
+from itertools import chain, repeat, starmap
 from collections import MutableSequence
-from operator import iadd
+from operator import iadd, add
 from functools import wraps
 from math import log
 
 if hexversion < 0x03000000:
     from itertools import izip as zip
+    from itertools import imap as map
     try:
         from thread import get_ident
     except ImportError:
@@ -319,24 +320,16 @@ class SortedList(MutableSequence):
                 return (pos - self._offset, idx)
 
     def _build_index(self):
-        """
-        # TODO: Faster
-
-        def sum2(l):
-            one = iter(l)
-            two = islice(one, 1, len(l))
-            return [x + y for x, y in izip(one, two, fillvalue=0)]
-
-        row0 = list(imap(len, self._lists))
-        """
-        row0 = [len(sublist) for sublist in self._lists]
+        row0 = list(map(len, self._lists))
 
         if len(row0) == 1:
             self._index[:] = row0
             self._offset = 0
             return
 
-        row1 = [row0[val - 1] + row0[val] for val in range(1, len(row0), 2)]
+        head = iter(row0)
+        tail = iter(head)
+        row1 = list(starmap(add, zip(head, tail)))
 
         if len(row0) & 1:
             row1.append(row0[-1])
@@ -351,11 +344,12 @@ class SortedList(MutableSequence):
         tree = [row0, row1]
 
         while len(tree[-1]) > 1:
-            prev = tree[-1]
-            row = [prev[val - 1] + prev[val] for val in range(1, len(prev), 2)]
+            head = iter(tree[-1])
+            tail = iter(head)
+            row = list(starmap(add, zip(head, tail)))
             tree.append(row)
 
-        self._index[:] = reduce(iadd, reversed(tree), [])
+        reduce(iadd, reversed(tree), self._index)
         self._offset = size * 2 - 1
 
     def _slice(self, slc):
