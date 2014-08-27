@@ -220,7 +220,8 @@ def test_delitem():
     random.seed(0)
     slt = SortedList(range(100), load=17)
     while len(slt) > 0:
-        del slt[random.randrange(len(slt))]
+        pos = random.randrange(len(slt))
+        del slt[pos]
         slt._check()
 
 def test_delitem_slice():

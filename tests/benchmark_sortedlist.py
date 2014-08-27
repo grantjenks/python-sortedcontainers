@@ -37,6 +37,11 @@ def delitem(func, size):
         func(pos)
 
 @register_test
+def bisect(func, size):
+    for val in lists[size][::100]:
+        func(val)
+
+@register_test
 def getitem(func, size):
     for val in lists[size][::100]:
         assert func(val) == val
@@ -130,6 +135,14 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__delitem__',
+        'limit': 1000000
+    }
+
+for name, kind in kinds.items():
+    impls['bisect'][name] = {
+        'setup': fill_values,
+        'ctor': kind,
+        'func': 'bisect',
         'limit': 1000000
     }
 

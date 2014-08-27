@@ -81,7 +81,7 @@ class SortedList(MutableSequence):
 
     def add(self, val):
         """Add the element *val* to the list."""
-        _maxes, _lists, _index = self._maxes, self._lists, self._index
+        _maxes, _lists = self._maxes, self._lists
 
         if _maxes:
             pos = bisect_right(_maxes, val)
@@ -110,7 +110,7 @@ class SortedList(MutableSequence):
             _maxes[pos] = _lists[pos][-1]
             _maxes.insert(pos + 1, half[-1])
             _lists.insert(pos + 1, half)
-            del _index[pos:]
+            del _index[:]
         else:
             if len(_index) > 0:
                 child = self._offset + pos
@@ -239,7 +239,11 @@ class SortedList(MutableSequence):
 
             self._expand(prev)
 
-        elif not len_lists_pos:
+        elif len_lists_pos:
+
+            _maxes[pos] = lists_pos[-1]
+
+        else:
 
             del _maxes[pos]
             del _lists[pos]
@@ -255,12 +259,22 @@ class SortedList(MutableSequence):
             self._build_index()
 
         total = 0
+
+        # Increment pos to point in the index to len(self._lists[pos]).
+
         pos += self._offset
+
+        # Iterate until reaching the root of the index tree at pos = 0.
 
         while pos:
 
+            # Right-child nodes are at odd indices. At such indices
+            # account the total below the left child node.
+
             if not (pos & 1):
                 total += _index[pos - 1]
+
+            # Advance pos to the parent node.
 
             pos = (pos - 1) >> 1
 
@@ -291,7 +305,7 @@ class SortedList(MutableSequence):
         len_index = len(_index)
 
         while True:
-            child = pos * 2 + 1
+            child = (pos << 1) + 1
 
             if child < len_index:
                 index_child = _index[child]
@@ -305,6 +319,16 @@ class SortedList(MutableSequence):
                 return (pos - self._offset, idx)
 
     def _build_index(self):
+        """
+        # TODO: Faster
+
+        def sum2(l):
+            one = iter(l)
+            two = islice(one, 1, len(l))
+            return [x + y for x, y in izip(one, two, fillvalue=0)]
+
+        row0 = list(imap(len, self._lists))
+        """
         row0 = [len(sublist) for sublist in self._lists]
 
         if len(row0) == 1:
@@ -722,13 +746,27 @@ class SortedList(MutableSequence):
                 _maxes[-1] = _lists[-1][-1]
                 offset = _load
 
+        len_lists = len(_lists)
+
         for idx in range(offset, len(values), _load):
             _lists.append(values[idx:(idx + _load)])
             _maxes.append(_lists[-1][-1])
 
+        _index = self._index
+
+        if len_lists == len(_lists):
+            len_index = len(_index)
+            if len_index > 0:
+                len_values = len(values)
+                child = len_index - 1
+                while child:
+                    _index[child] += len_values
+                    child = (child - 1) >> 1
+                _index[0] += len_values
+        else:
+            del self._index[:]
+
         self._len += len(values)
-        # TODO
-        del self._index[count:]
 
     def insert(self, idx, val):
         """
@@ -758,7 +796,6 @@ class SortedList(MutableSequence):
                 _lists[0].insert(0, val)
                 self._expand(0)
                 self._len += 1
-                del self._index[:]
                 return
 
         if idx == _len:
@@ -770,7 +807,6 @@ class SortedList(MutableSequence):
                 _maxes[pos] = _lists[pos][-1]
                 self._expand(pos)
                 self._len += 1
-                del self._index[pos:]
                 return
 
         pos, idx = self._pos(idx)
@@ -786,14 +822,13 @@ class SortedList(MutableSequence):
             _lists[pos].insert(idx, val)
             self._expand(pos)
             self._len += 1
-            del self._index[pos:]
         else:
             raise ValueError
 
     def pop(self, idx=-1):
         """
         Remove and return item at *idx* (default last).  Raises IndexError if
-        list is empty or index is out of range.  Negative indexes are supported,
+        list is empty or index is out of range.  Negative indices are supported,
         as for slice indices.
         """
         if (idx < 0 and -idx > self._len) or (idx >= self._len):
@@ -809,7 +844,7 @@ class SortedList(MutableSequence):
         """
         Return the smallest *k* such that L[k] == val and i <= k < j`.  Raises
         ValueError if *val* is not present.  *stop* defaults to the end of the
-        list. *start* defaults to the beginning. Negative indexes are supported,
+        list. *start* defaults to the beginning. Negative indices are supported,
         as for slice indices.
         """
         _len = self._len
@@ -974,15 +1009,23 @@ class SortedList(MutableSequence):
 
             assert self._len == sum(len(sublist) for sublist in self._lists)
 
-            # Check cumulative sum cache.
+            # Check index.
 
-            cumulative_sum_len = [len(self._lists[0])]
-            for pos in range(1, len(self._index)):
-                cumulative_sum_len.append(cumulative_sum_len[-1] + len(self._lists[pos]))
-            assert all((self._index[pos] == cumulative_sum_len[pos])
-                       for pos in range(len(self._index)))
+            if len(self._index):
+                assert len(self._index) == self._offset + len(self._lists)
+                assert self._len == self._index[0]
+                assert all(self._index[self._offset + pos] == len(self._lists[pos])
+                           for pos in range(len(self._lists)))
+                for pos in range(self._offset):
+                    child = (pos << 1) + 1
+                    if self._index[pos] == 0:
+                        assert child >= len(self._index)
+                    elif child + 1 == len(self._index):
+                        assert self._index[pos] == self._index[child]
+                    else:
+                        assert self._index[pos] == self._index[child] + self._index[child + 1]
 
-        except AssertionError:
+        except:
             import sys, traceback
 
             traceback.print_exc(file=sys.stdout)
