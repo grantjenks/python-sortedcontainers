@@ -1033,15 +1033,14 @@ class SortedList(MutableSequence):
 
         left = self._loc(pos_left, idx_left)
 
-        if start <= left <= stop:
-            return left
+        if start <= left:
+            if left <= stop:
+                return left
+        else:
+            right = self.bisect_right(val) - 1
 
-        right = self.bisect_right(val) - 1
-
-        pos = max(start, left)
-
-        if pos <= right and pos <= stop:
-            return pos
+            if start <= right:
+                return start
 
         raise ValueError
 
