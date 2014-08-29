@@ -997,9 +997,9 @@ class SortedList(MutableSequence):
         list. *start* defaults to the beginning. Negative indices are supported,
         as for slice indices.
         """
-        _len = self._len
+        _len, _maxes = self._len, self._maxes
 
-        if not self._maxes:
+        if not _maxes:
             raise ValueError
 
         if start == None:
@@ -1020,11 +1020,21 @@ class SortedList(MutableSequence):
             raise ValueError
 
         stop -= 1
+        pos_left = bisect_left(_maxes, val)
 
-        left = self.bisect_left(val)
-
-        if (left == _len) or (self[left] != val):
+        if pos_left == len(_maxes):
             raise ValueError
+
+        _lists = self._lists
+        idx_left = bisect_left(_lists[pos_left], val)
+
+        if _lists[pos_left][idx_left] != val:
+            raise ValueError
+
+        left = self._loc(pos_left, idx_left)
+
+        if start <= left <= stop:
+            return left
 
         right = self.bisect_right(val) - 1
 
