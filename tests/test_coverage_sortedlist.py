@@ -606,6 +606,11 @@ def test_repr_subclass():
     this = CustomSortedList([1, 2, 3, 4])
     assert repr(this) == 'CustomSortedList([1, 2, 3, 4])'
 
+def test_build_index():
+    slt = SortedList([0], load=4)
+    slt._build_index()
+    slt._check()
+
 @raises(AssertionError)
 def test_check():
     slt = SortedList(range(10), load=4)
