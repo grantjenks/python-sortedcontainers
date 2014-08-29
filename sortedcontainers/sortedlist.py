@@ -812,11 +812,30 @@ class SortedList(MutableSequence):
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
-        if not self._maxes:
+        _maxes = self._maxes
+
+        if not _maxes:
             return 0
 
-        left = self.bisect_left(val)
-        right = self.bisect_right(val)
+        pos_left = bisect_left(_maxes, val)
+
+        if pos_left == len(_maxes):
+            return 0
+
+        _lists = self._lists
+        idx_left = bisect_left(_lists[pos_left], val)
+        pos_right = bisect_right(_maxes, val)
+
+        if pos_right == len(_maxes):
+            return self._len - self._loc(pos_left, idx_left)
+
+        idx_right = bisect_right(_lists[pos_right], val)
+
+        if pos_left == pos_right:
+            return idx_right - idx_left
+
+        right = self._loc(pos_right, idx_right)
+        left = self._loc(pos_left, idx_left)
 
         return right - left
 
