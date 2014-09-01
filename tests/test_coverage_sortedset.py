@@ -152,6 +152,12 @@ def test_difference_update():
     temp.difference_update(range(0, 10), range(10, 20))
     assert all((val + 20) == temp[val] for val in range(80))
 
+def test_isub():
+    temp = SortedSet(range(100), load=7)
+    temp -= range(0, 10)
+    temp -= range(10, 20)
+    assert all((val + 20) == temp[val] for val in range(80))
+
 def test_discard():
     temp = SortedSet(range(100), load=7)
     temp.discard(0)
@@ -173,7 +179,8 @@ def test_intersection():
 
 def test_intersection_update():
     temp = SortedSet(range(100), load=7)
-    temp.intersection_update(range(0, 20), range(10, 30))
+    temp &= range(0, 20)
+    temp &= range(10, 30)
     assert all(temp[val] == (val + 10) for val in range(10))
 
 def test_isdisjoint():
@@ -203,7 +210,7 @@ def test_symmetric_difference():
 def test_symmetric_difference_update():
     temp = SortedSet(range(0, 75), load=7)
     that = SortedSet(range(25, 100), load=9)
-    temp.symmetric_difference_update(that)
+    temp ^= that
     assert all(temp[val] == val for val in range(25))
     assert all(temp[val + 25] == (val + 75) for val in range(25))
 
@@ -228,6 +235,12 @@ def test_union():
 def test_update():
     temp = SortedSet(range(0, 80), load=7)
     temp.update(range(80, 90), range(90, 100))
+    assert all(temp[val] == val for val in range(100))
+
+def test_ior():
+    temp = SortedSet(range(0, 80), load=7)
+    temp |= range(80, 90)
+    temp |= range(90, 100)
     assert all(temp[val] == val for val in range(100))
 
 def test_repr():

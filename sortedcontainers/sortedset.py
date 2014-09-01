@@ -135,21 +135,45 @@ class SortedSet(MutableSet, Sequence):
         Return a new SortedSet with the elements common to self and *that*.
         """
         return self.intersection(that)
+    def __iand__(self, that):
+        """
+        Update the set, keeping only elements found in self and *that*.
+        """
+        self.intersection_update(that)
+        return self
     def __or__(self, that):
         """
-        Return a new SortedSet containing all the elements in self and *that*.
+        Return a new SortedSet containing all the elements in self or *that*.
         """
         return self.union(that)
+    def __ior__(self, that):
+        """
+        Update the set, adding elements found in *that*.
+        """
+        self.update(that)
+        return self
     def __sub__(self, that):
         """
         Return a new SortedSet with elements in self that are not in *that*.
         """
         return self.difference(that)
+    def __isub__(self, that):
+        """
+        Update the set, removing elements found in *that*.
+        """
+        self.difference_update(that)
+        return self
     def __xor__(self, that):
         """
         Return a new SortedSet with elements in self or *that* but not both.
         """
         return self.symmetric_difference(that)
+    def __ixor__(self, that):
+        """
+        Update the set, include only elements in self or *that* but not both.
+        """
+        self.symmetric_difference_update(that)
+        return self
     def __iter__(self):
         """
         Return an iterator over the SortedSet. Elements are iterated over
