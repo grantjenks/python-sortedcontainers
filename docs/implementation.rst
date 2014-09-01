@@ -79,8 +79,9 @@ finally:
 
 With this list, we can efficiently compute the index of an item in a sublist
 and, vice-versa, find an item given an index. Details of the algorithms to do so
-are contained in the source at SortedList._loc and SortedList._pos. Maintaining
-the position index in this way has several advantages:
+are contained in the docstring for SortedList._loc and
+SortedList._pos. Maintaining the position index in this way has several
+advantages:
 
 * It's easy to traverse to children/parent. The children of a position in the
 _index are at (pos * 2) + 1 and (pos * 2) + 2. The parent is at (pos - 1)
