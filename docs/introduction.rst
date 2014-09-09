@@ -125,6 +125,28 @@ SortedList also works efficiently with other sequence data types. :ref:`Addition
 
 For more details, refer to the :doc:`SortedList API documentation <sortedlist>`.
 
+SortedListWithKey
+-----------------
+
+The SortedContainers project also maintains a specialized SortedList-like type
+that accepts a key-parameter as found with Python's built-in *sorted* function.
+A SortedListWithKey provides the same functionality as a SortedList but
+maintains the order of contained values based on the applied key-function. This
+simplifies the pattern of boxing/un-boxing which would otherwise be required.
+
+    >>> from sortedcontainers import SortedListWithKey
+    >>> l = SortedListWithKey(key=lambda val: -val, value_orderable=True)
+
+Two more keyword arguments are supported: *key* and *value_orderable*. The first
+defines the key-function. In our example above we apply the negation
+operator. Doing so would maintain a list of integers in reverse.
+
+The other keyword argument, *value_orderable* specifies whether the inserted
+values are orderable. When values are not comparable, you must specify False in
+the constructor. A significant performance improvement is possible when True.
+
+For more details, refer to the :doc:`SortedListWithKey API documentation <sortedlistwithkey>`.
+
 SortedDict
 ----------
 

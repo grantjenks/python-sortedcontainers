@@ -127,7 +127,7 @@ class SortedList(MutableSequence):
                 _index[0] += 1
 
     def update(self, iterable):
-        """Grow the list by appending all elements from the *iterable*."""
+        """Update the list by adding all elements from *iterable*."""
         _maxes, _lists = self._maxes, self._lists
         values = sorted(iterable)
 
@@ -548,7 +548,7 @@ class SortedList(MutableSequence):
         return start, stop, step
 
     def __delitem__(self, idx):
-        """Remove the element located at index *idx* from the list."""
+        """Remove the element at *idx*. Supports slicing."""
         if isinstance(idx, slice):
             start, stop, step = self._slice(idx)
 
@@ -580,7 +580,7 @@ class SortedList(MutableSequence):
             self._delete(pos, idx)
 
     def __getitem__(self, idx):
-        """Return the element at position *idx*."""
+        """Return the element at *idx*. Supports slicing."""
         _lists = self._lists
 
         if isinstance(idx, slice):
@@ -659,7 +659,11 @@ class SortedList(MutableSequence):
                 raise ValueError
 
     def __setitem__(self, index, value):
-        """Replace the item at position *index* with *value*."""
+        """
+        Replace the item at position *index* with *value*.
+
+        Supports slicing.
+        """
         _pos, _lists, _check_order = self._pos, self._lists, self._check_order
 
         if isinstance(index, slice):
@@ -849,7 +853,7 @@ class SortedList(MutableSequence):
 
     def append(self, val):
         """
-        Append the element *value* to the list. Raises a ValueError if the *val*
+        Append the element *val* to the list. Raises a ValueError if the *val*
         would violate the sort order.
         """
         _maxes, _lists = self._maxes, self._lists
@@ -1050,8 +1054,9 @@ class SortedList(MutableSequence):
 
     def __add__(self, that):
         """
-        Return a new sorted list extended by appending all elements from
-        *that*. Raises a ValueError if the sort order would be violated.
+        Return a new sorted list containing all the elements in *self* and
+        *that*. Elements in *that* do not need to be properly ordered with
+        respect to *self*.
         """
         values = self.as_list()
         values.extend(that)
@@ -1059,8 +1064,8 @@ class SortedList(MutableSequence):
 
     def __iadd__(self, that):
         """
-        Increase the length of the list by appending all elements from
-        *that*. Raises a ValueError if the sort order would be violated.
+        Update *self* to include all values in *that*. Elements in *that* do not
+        need to be properly ordered with respect to *self*.
         """
         self.update(that)
         return self

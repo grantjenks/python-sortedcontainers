@@ -1,17 +1,18 @@
-SortedList
-==========
+SortedListWithKey
+=================
 
-.. class:: SortedList(iterable=None, load=1000)
+.. class:: SortedListWithKey(iterable=None, load=1000, key=lambda val: val, value_orderable=True)
 
-   A :class:`SortedList` provides most of the same methods as a :class:`list`,
-   but keeps the items in sorted order.  To add an element to the SortedList,
-   use :ref:`add <SortedList.add>`.  To add several elements, use :ref:`update
-   <SortedList.update>`.  To remove an element, use :ref:`discard
-   <SortedList.discard>`, :ref:`remove <SortedList.remove>`, or :ref:`del L[i]
-   <SortedList.__delitem__>`.
+   A :class:`SortedListWithKey` provides most of the same methods as a
+   :class:`list`, but keeps the items in sorted order.  To add an element to the
+   SortedListWithKey, use :ref:`add <SortedListWithKey.add>`.  To add several
+   elements, use :ref:`update <SortedListWithKey.update>`.  To remove an
+   element, use :ref:`discard <SortedListWithKey.discard>`, :ref:`remove
+   <SortedListWithKey.remove>`, or :ref:`del L[i]
+   <SortedListWithKey.__delitem__>`.
 
    An optional *iterable* provides an initial series of items to
-   populate the :class:`SortedList`.
+   populate the :class:`SortedListWithKey`.
 
    An optional *load* specifies the load-factor of the list. The default load
    factor of '1000' works well for lists from tens to tens of millions of
@@ -21,16 +22,25 @@ SortedList
    start benchmarking. See :doc:`implementation details <implementation>` for
    more information.
 
-   :class:`SortedList` implements the MutableSequence Abstract Base Class type.
+   An optional *key* specifies a key function to apply to inserted
+   values. Values will be ordered by their key. A :class:`SortedListWithKey`
+   must maintain the sort order at all times.
 
-   .. _SortedList.__contains__:
+   An optional *value_orderable* specifies whether the inserted values are
+   orderable with respect to each other regardless of the key. There is a
+   significant performance improvement possible when values themselves have a
+   total ordering.
+
+   :class:`SortedListWithKey` implements the MutableSequence Abstract Base Class type.
+
+   .. _SortedListWithKey.__contains__:
    .. method:: x in L
 
       Return True if and only if *x* is an element in the list.
 
       :rtype: :class:`bool`
 
-   .. _SortedList.__delitem__:
+   .. _SortedListWithKey.__delitem__:
    .. method:: del L[i]
 
       Remove the element located at index *i* from the list.
@@ -40,16 +50,16 @@ SortedList
       Remove the elements from *i* to *j* from the list. Also note that *step*
       is supported in slice syntax.
 
-   .. _SortedList.__eq__:
+   .. _SortedListWithKey.__eq__:
    .. method:: L == L2, L != L2, L < L2, L <= L2, L > L2, L >= L2
 
-      Compare two lists.  For full details see `Comparisons
+      Compare two lists. For full details see `Comparisons
       <http://docs.python.org/reference/expressions.html>`_ in
       the Python language reference.
 
       :rtype: :class:`bool`
 
-   .. _SortedList.__getitem__:
+   .. _SortedListWithKey.__getitem__:
    .. method:: L[i]
 
       Return the element at position *i*.
@@ -68,7 +78,7 @@ SortedList
       Increase the length of the list by a factor of *k*, by inserting
       *k-1* additional shallow copies of each item in the list.
 
-   .. _SortedList.__iter__:
+   .. _SortedListWithKey.__iter__:
    .. method:: iter(L)
 
       Create an iterator over the list.
@@ -81,24 +91,31 @@ SortedList
 
       :rtype: :class:`int`
 
-   .. _SortedList.__mul__:
+   .. _SortedListWithKey.__mul__:
    .. method:: L * k or k * L
 
       Return a new sorted list containing *k* shallow copies of each
-      item in L.
+      item in *L*.
 
-      :rtype: :class:`SortedList`
+      :rtype: :class:`SortedListWithKey`
 
-   .. _SortedList.__add__:
+   .. _SortedListWithKey.__imul__:
+   .. method:: L *= k
+
+      Update *L* to include *k* shallow copies of each item in *L*.
+
+      :rtype: :class:`SortedListWithKey`
+
+   .. _SortedListWithKey.__add__:
    .. method:: L + k
 
       Return a new sorted list containing all the elements in *L* and
       *k*. Elements in *k* do not need to be properly ordered with respect to
       *L*.
 
-      :rtype: :class:`SortedList`
+      :rtype: :class:`SortedListWithKey`
 
-   .. _SortedList.__iadd__:
+   .. _SortedListWithKey.__iadd__:
    .. method:: L += k
 
       Update *L* to include all values in *k*. Elements in *k* do not
@@ -110,7 +127,7 @@ SortedList
 
       :rtype: iterator
 
-   .. _SortedList.__setitem__:
+   .. _SortedListWithKey.__setitem__:
    .. method:: L[i] = x
 
       Replace the item at position *i* of *L* with *x*. Supports slice
@@ -121,12 +138,12 @@ SortedList
       Replace the items at positions *i* through *j* with the contents of
       *iterable*. Also note that *step* is supported in slice syntax.
 
-   .. _SortedList.add:
+   .. _SortedListWithKey.add:
    .. method:: L.add(value)
 
       Add the element *value* to the list.
 
-   .. _SortedList.bisect_left:
+   .. _SortedListWithKey.bisect_left:
    .. method:: L.bisect_left(value)
 
       Similar to the ``bisect`` module in the standard library, this
@@ -134,39 +151,39 @@ SortedList
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
 
-   .. _SortedList.bisect:
+   .. _SortedListWithKey.bisect:
    .. method:: L.bisect(value)
 
-      Same as :ref:`bisect_left <SortedList.bisect_right>`.
+      Same as :ref:`bisect_left <SortedListWithKey.bisect_right>`.
 
-   .. _SortedList.bisect_right:
+   .. _SortedListWithKey.bisect_right:
    .. method:: L.bisect_right(value)
 
-      Same as :ref:`bisect_left <SortedList.bisect_left>`, but if
+      Same as :ref:`bisect_left <SortedListWithKey.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
 
-   .. _SortedList.count:
+   .. _SortedListWithKey.count:
    .. method:: L.count(value)
 
       Return the number of occurrences of *value* in the list.
 
       :rtype: :class:`int`
 
-   .. _SortedList.copy:
+   .. _SortedListWithKey.copy:
    .. method:: L.copy()
 
-      Return a shallow copy of the sorted list.
+      Return a shallow copy of the sorted list with key.
 
-      :rtype: :class:`SortedList`
+      :rtype: :class:`SortedListWithKey`
 
-   .. _SortedList.discard:
+   .. _SortedListWithKey.discard:
    .. method:: L.discard(value)
 
       Remove the first occurrence of *value*.  If *value* is not a
       member, does nothing.
 
-   .. _SortedList.index:
+   .. _SortedListWithKey.index:
    .. method:: L.index(value, [start, [stop]])
 
       Return the smallest *k* such that :math:`L[k] == x` and
@@ -177,7 +194,7 @@ SortedList
 
       :rtype: :class:`int`
 
-   .. _SortedList.pop:
+   .. _SortedListWithKey.pop:
    .. method:: L.pop([index])
 
       Remove and return item at index (default last).  Raises :exc:`IndexError`
@@ -186,13 +203,13 @@ SortedList
 
       :rtype: item
 
-   .. _SortedList.remove:
+   .. _SortedListWithKey.remove:
    .. method:: L.remove(value)
 
       Remove first occurrence of *value*.  Raises :exc:`ValueError` if
       *value* is not present.
 
-   .. _SortedList.update:
+   .. _SortedListWithKey.update:
    .. method:: L.update(iterable)
 
       Grow the list by inserting all elements from the *iterable*.
@@ -201,19 +218,19 @@ SortedList
 
       Remove all the elements from the list.
 
-   .. _SortedList.append:
+   .. _SortedListWithKey.append:
    .. method:: L.append(value)
 
       Append the element *value* to the list. Raises a :exc:`ValueError` if the
       *value* would violate the sort order.
 
-   .. _SortedList.extend:
+   .. _SortedListWithKey.extend:
    .. method:: L.extend(iterable)
 
       Extend the list by appending all elements from the *iterable*. Raises a
       :exc:`ValueError` if the sort order would be violated.
 
-   .. _SortedList.insert:
+   .. _SortedListWithKey.insert:
    .. method:: L.insert(index, value)
 
       Insert the element *value* into the list at *index*. Raises a
@@ -221,6 +238,6 @@ SortedList
 
    .. method:: L.as_list()
 
-      Very efficiently convert the :class:`SortedList` to a class:`list`.
+      Very efficiently convert the :class:`SortedListWithKey` to a class:`list`.
 
       :rtype: :class:`list`

@@ -84,23 +84,23 @@ SortedList._pos. Maintaining the position index in this way has several
 advantages:
 
 * It's easy to traverse to children/parent. The children of a position in the
-_index are at (pos * 2) + 1 and (pos * 2) + 2. The parent is at (pos - 1)
-// 2. We can even identify left/right-children easily. Each left-child is at an
-odd index and each right-child is at an even index.
+  _index are at (pos * 2) + 1 and (pos * 2) + 2. The parent is at (pos - 1)
+  // 2. We can even identify left/right-children easily. Each left-child is at an
+  odd index and each right-child is at an even index.
 
 * It's not built unless needed. If no indexing occurs, the memory and time
-accounting for position is skipped.
+  accounting for position is skipped.
 
 * It's fast to build. Calculating sums pair-wise and concatenating lists can all
-be done within C-routines in the Python interpreter.
+  be done within C-routines in the Python interpreter.
 
 * It's space efficient. The whole index is no more than twice the size of the
-length of the _lists and contains only integers.
+  length of the _lists and contains only integers.
 
 * It's easy to update. Adding or removing an item involves incrementing or
-decrementing only log(len(_index)) items in the index. The only caveat to this
-is when a new sublist is created/deleted. In those scenarios the entire index
-is deleted and not rebuilt until needed.
+  decrementing only log(len(_index)) items in the index. The only caveat to this
+  is when a new sublist is created/deleted. In those scenarios the entire index
+  is deleted and not rebuilt until needed.
 
 The construction and maintainence of the index is unusual compared to other
 designs described in research. Whether the design is novel, I (Grant Jenks) do

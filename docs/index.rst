@@ -125,6 +125,7 @@ part of the documentation is for you.
    :maxdepth: 1
 
    sortedlist
+   sortedlistwithkey
    sorteddict
    sortedset
 
