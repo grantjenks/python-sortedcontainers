@@ -114,7 +114,10 @@ SortedList
    .. method:: L[i] = x
 
       Replace the item at position *i* of *L* with *x*. Supports slice
-      notation. Raises a :exc:`ValueError` if the sort order would be violated.
+      notation. Raises a :exc:`ValueError` if the sort order would be
+      violated. When used with a slice and iterable, the :exc:`ValueError` is
+      raised before the list is mutated if the sort order would be violated by
+      the operation.
 
    .. method:: L[i:j] = iterable
 

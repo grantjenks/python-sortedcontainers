@@ -662,7 +662,10 @@ class SortedList(MutableSequence):
         """
         Replace the item at position *index* with *value*.
 
-        Supports slicing.
+        Supports slice notation. Raises a :exc:`ValueError` if the sort order
+        would be violated. When used with a slice and iterable, the
+        :exc:`ValueError` is raised before the list is mutated if the sort order
+        would be violated by the operation.
         """
         _pos, _lists, _check_order = self._pos, self._lists, self._check_order
 

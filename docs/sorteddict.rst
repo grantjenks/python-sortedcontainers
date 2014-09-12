@@ -263,7 +263,7 @@ SortedDict
    means that when the dictionary's keys change, the view reflects
    those changes.
 
-   :class:`KeysView` implements the AbstractKeysView, Set, and Sequence Abstract
+   :class:`KeysView` implements the KeysView, Set, and Sequence Abstract
    Base Class types.
 
    .. method:: len(keysview)
@@ -360,7 +360,7 @@ SortedDict
    which means that when the dictionary's values change, the view
    reflects those changes.
 
-   :class:`ValuesView` implements the AbstractValuesView and Sequence Abstract
+   :class:`ValuesView` implements the ValuesView and Sequence Abstract
    Base Class types.
 
    .. method:: len(valuesview)
@@ -423,7 +423,7 @@ SortedDict
    value)`` pairs, which means that when the dictionary changes, the
    view reflects those changes.
 
-   :class:`ItemsView` implements the AbstractItemsView, Set, and Sequence
+   :class:`ItemsView` implements the ItemsView, Set, and Sequence
    Abstract Base Class types.
 
    .. method:: len(itemsview)
