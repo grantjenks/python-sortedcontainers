@@ -41,8 +41,8 @@ has 100% coverage with unit tests and hours of stress.
 """
 
 __title__ = 'sortedcontainers'
-__version__ = '0.8.5'
-__build__ = 0x000805
+__version__ = '0.9.0'
+__build__ = 0x000900
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2014 Grant Jenks'
