@@ -4,7 +4,7 @@
 
 from .sortedset import SortedSet
 from .sortedlist import SortedList, recursive_repr
-from collections import Mapping, MutableMapping, Set, Sequence
+from collections import MutableMapping, Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
@@ -342,8 +342,8 @@ class SortedDict(MutableMapping):
         """
         Similar to the ``bisect`` module in the standard library, this returns
         an appropriate index to insert *key* in SortedDict. If *key* is
-        already present in SortedDict, the insertion point will be before (to the
-        left of) any existing entries.
+        already present in SortedDict, the insertion point will be before (to
+        the left of) any existing entries.
         """
         return self._list.bisect_left(key)
 

@@ -2,14 +2,9 @@
 #
 # Sorted set implementation.
 
-from sys import version_info
-
 from .sortedlist import SortedList, recursive_repr
 from collections import MutableSet, Sequence
 from itertools import chain
-
-if version_info[0] == 2:
-    from itertools import izip as zip
 
 class SortedSet(MutableSet, Sequence):
     """
@@ -25,8 +20,8 @@ class SortedSet(MutableSet, Sequence):
         `SortedSet` maintains its items in sorted order, allowing the
         `SortedSet` to be indexed.
 
-        An optional *iterable* provides an initial series of items to populate the
-        `SortedSet`.
+        An optional *iterable* provides an initial series of items to populate
+        the `SortedSet`.
 
         An optional *load* specifies the load-factor of the set. The default
         load factor of '1000' works well for sets from tens to tens of millions
@@ -109,7 +104,8 @@ class SortedSet(MutableSet, Sequence):
         if isinstance(that, set):
             return (self._set < that)
         else:
-            return (len(self) < len(that)) and all(val in that for val in self._list)
+            return ((len(self) < len(that))
+                    and all(val in that for val in self._list))
     def __gt__(self, that):
         """Return True if and only if self is a superset of *that*."""
         if isinstance(that, set):

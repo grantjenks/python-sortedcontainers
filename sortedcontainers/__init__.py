@@ -8,10 +8,10 @@ SortedContainers is an Apache2 licensed containers library, written in
 pure-Python, and fast as C-extensions.
 
 Python's standard library is great until you need a sorted container type. Many
-will attest that you can get really far without one, but the moment you **really
-need** a sorted list, dict, or set, you're faced with a dozen different
-implementations, most using C-extensions without great documentation and
-benchmarking.
+will attest that you can get really far without one, but the moment you
+**really need** a sorted list, dict, or set, you're faced with a dozen
+different implementations, most using C-extensions without great documentation
+and benchmarking.
 
 Things shouldn't be this way. Not in Python.
 
@@ -32,8 +32,8 @@ Things shouldn't be this way. Not in Python.
 
 SortedContainers takes all of the work out of Python sorted types - making your
 deployment and use of Python easy. There's no need to install a C compiler or
-pre-build and distribute custom extensions. Performance is a feature and testing
-has 100% coverage with unit tests and hours of stress.
+pre-build and distribute custom extensions. Performance is a feature and
+testing has 100% coverage with unit tests and hours of stress.
 
 :copyright: (c) 2014 by Grant Jenks.
 :license: Apache 2.0, see LICENSE for more details.

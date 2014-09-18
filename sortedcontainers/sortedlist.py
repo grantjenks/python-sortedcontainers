@@ -144,7 +144,7 @@ class SortedList(MutableSequence):
 
         _load, _index = self._load, self._index
         _lists.extend(values[pos:(pos + _load)]
-                           for pos in range(0, len(values), _load))
+                      for pos in range(0, len(values), _load))
         _maxes.extend(sublist[-1] for sublist in _lists)
         self._len = len(values)
         del _index[:]
@@ -240,7 +240,8 @@ class SortedList(MutableSequence):
 
         elif len(_lists) > 1:
 
-            if pos == 0: pos += 1
+            if pos == 0:
+                pos += 1
 
             prev = pos - 1
             _lists[prev].extend(_lists[pos])
@@ -269,11 +270,11 @@ class SortedList(MutableSequence):
         Most queries require the index be built. Details of the index are
         described in self._build_index.
 
-        Indexing requires traversing the tree from a leaf node to the root. The parent
-        of each node is easily computable at (pos - 1) // 2.
+        Indexing requires traversing the tree from a leaf node to the root. The
+        parent of each node is easily computable at (pos - 1) // 2.
 
-        Left-child nodes are always at odd indices and right-child nodes are always
-        at even indices.
+        Left-child nodes are always at odd indices and right-child nodes are
+        always at even indices.
 
         When traversing up from a right-child node, increment the total by the
         left-child node.
@@ -553,7 +554,7 @@ class SortedList(MutableSequence):
             start, stop, step = self._slice(idx)
 
             if ((step == 1) and (start < stop)
-                and ((stop - start) * 8 >= self._len)):
+                    and ((stop - start) * 8 >= self._len)):
 
                 values = self[:start]
                 if stop < self._len:
@@ -628,7 +629,8 @@ class SortedList(MutableSequence):
 
         pos, loc = self._pos(idx)
 
-        if idx < 0: idx += _len
+        if idx < 0:
+            idx += _len
 
         # Check that the inserted value is not less than the
         # previous value.
@@ -892,7 +894,6 @@ class SortedList(MutableSequence):
             raise ValueError
 
         offset = 0
-        count = len(_lists) - 1
 
         if _maxes:
             if values[0] < _lists[-1][-1]:
@@ -1009,14 +1010,14 @@ class SortedList(MutableSequence):
         if not _maxes:
             raise ValueError
 
-        if start == None:
+        if start is None:
             start = 0
         if start < 0:
             start += _len
         if start < 0:
             start = 0
 
-        if stop == None:
+        if stop is None:
             stop = _len
         if stop < 0:
             stop += _len
@@ -1181,8 +1182,14 @@ class SortedList(MutableSequence):
             if len(self._index):
                 assert len(self._index) == self._offset + len(self._lists)
                 assert self._len == self._index[0]
-                assert all(self._index[self._offset + pos] == len(self._lists[pos])
+
+                def test_offset_pos(pos):
+                    from_index = self._index[self._offset + pos]
+                    return from_index == len(self._lists[pos])
+
+                assert all(test_offset_pos(pos)
                            for pos in range(len(self._lists)))
+
                 for pos in range(self._offset):
                     child = (pos << 1) + 1
                     if self._index[pos] == 0:
@@ -1190,10 +1197,12 @@ class SortedList(MutableSequence):
                     elif child + 1 == len(self._index):
                         assert self._index[pos] == self._index[child]
                     else:
-                        assert self._index[pos] == self._index[child] + self._index[child + 1]
+                        child_sum = self._index[child] + self._index[child + 1]
+                        assert self._index[pos] == child_sum
 
         except:
-            import sys, traceback
+            import sys
+            import traceback
 
             traceback.print_exc(file=sys.stdout)
 

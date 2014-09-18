@@ -5,7 +5,6 @@
 from sys import hexversion
 from .sortedlist import SortedList, recursive_repr
 from collections import MutableSequence
-from itertools import chain
 from bisect import bisect_left
 
 if hexversion < 0x03000000:
@@ -39,10 +38,11 @@ class SortedListWithKey(MutableSequence):
     items in sorted order.
     """
 
-    def __init__(self, iterable=None, load=1000, key=lambda val: val, value_orderable=True):
+    def __init__(self, iterable=None, load=1000, key=lambda val: val,
+                 value_orderable=True):
         """
-        A SortedListWithKey provides most of the same methods as a list, but keeps
-        the items in sorted order.
+        A SortedListWithKey provides most of the same methods as a list, but
+        keeps the items in sorted order.
 
         An optional *iterable* provides an initial series of items to
         populate the SortedListWithKey.
@@ -61,10 +61,11 @@ class SortedListWithKey(MutableSequence):
 
         An optional *value_orderable* specifies whether the inserted values are
         orderable with respect to each other regardless of the key. There is a
-        significant performance improvement possible when values themselves have a
-        total ordering.
+        significant performance improvement possible when values themselves have
+        a total ordering.
 
-        SortedListWithKey implements the MutableSequence Abstract Base Class type.
+        SortedListWithKey implements the MutableSequence Abstract Base Class
+        type.
         """
         self._key = key
         self._list = SortedList(load=load)
@@ -95,7 +96,7 @@ class SortedListWithKey(MutableSequence):
     def __contains__(self, value):
         """Return True if and only if *value* is an element in the list."""
         _list = self._list
-        _key =  self._key(value)
+        _key = self._key(value)
         _pair = self._pair(_key, value)
 
         if self._ordered:
@@ -139,7 +140,7 @@ class SortedListWithKey(MutableSequence):
         If *value* is not a member, does nothing.
         """
         _list = self._list
-        _key =  self._key(value)
+        _key = self._key(value)
         _pair = self._pair(_key, value)
 
         if self._ordered:
@@ -185,7 +186,7 @@ class SortedListWithKey(MutableSequence):
         Raises ValueError if *value* is not present.
         """
         _list = self._list
-        _key =  self._key(value)
+        _key = self._key(value)
         _pair = self._pair(_key, value)
 
         if self._ordered:
@@ -292,7 +293,7 @@ class SortedListWithKey(MutableSequence):
     def count(self, value):
         """Return the number of occurrences of *value* in the list."""
         _list = self._list
-        _key =  self._key(value)
+        _key = self._key(value)
         _pair = self._pair(_key, value)
 
         if self._ordered:
@@ -342,8 +343,8 @@ class SortedListWithKey(MutableSequence):
 
     def append(self, value):
         """
-        Append the element *value* to the list. Raises a ValueError if the *value*
-        would violate the sort order.
+        Append the element *value* to the list. Raises a ValueError if the
+        *value* would violate the sort order.
         """
         pair = self._pair(self._key(value), value)
         self._list.append(pair)
@@ -358,8 +359,8 @@ class SortedListWithKey(MutableSequence):
 
     def insert(self, index, value):
         """
-        Insert the element *value* into the list at *index*. Raises a ValueError if
-        the *value* at *index* would violate the sort order.
+        Insert the element *value* into the list at *index*. Raises a ValueError
+        if the *value* at *index* would violate the sort order.
         """
         pair = self._pair(self._key(value), value)
         self._list.insert(index, pair)
@@ -380,7 +381,7 @@ class SortedListWithKey(MutableSequence):
         as for slice indices.
         """
         _list = self._list
-        _key =  self._key(value)
+        _key = self._key(value)
         _pair = self._pair(_key, value)
 
         if self._ordered:
@@ -388,14 +389,14 @@ class SortedListWithKey(MutableSequence):
 
         _len = _list._len
 
-        if start == None:
+        if start is None:
             start = 0
         if start < 0:
             start += _len
         if start < 0:
             start = 0
 
-        if stop == None:
+        if stop is None:
             stop = _len
         if stop < 0:
             stop += _len
@@ -469,7 +470,7 @@ class SortedListWithKey(MutableSequence):
         """
         values = self.as_list() * that
         return SortedListWithKey(
-            values, 
+            values,
             key=self._key,
             value_orderable=self._ordered,
             load=self._list._load
