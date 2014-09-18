@@ -72,6 +72,10 @@ Simulates a *Priority Queue* workload as described above. The mix of operations 
 
 .. image:: _static/SortedList-priorityqueue.png
 
+.. image:: _static/SortedList_runtime-priorityqueue.png
+
+.. image:: _static/SortedList_load-priorityqueue.png
+
 Multiset
 ........
 
@@ -83,6 +87,10 @@ Simulates a *Multiset* workload as described above. The mix of operations and th
 * 5% :ref:`getitem<SortedList.__getitem__>`
 
 .. image:: _static/SortedList-multiset.png
+
+.. image:: _static/SortedList_runtime-multiset.png
+
+.. image:: _static/SortedList_load-multiset.png
 
 Ranking
 .......
@@ -96,6 +104,10 @@ Simulates a *Ranking* workload as described above. The mix of operations and the
 
 .. image:: _static/SortedList-ranking.png
 
+.. image:: _static/SortedList_runtime-ranking.png
+
+.. image:: _static/SortedList_load-ranking.png
+
 Neighbor
 ........
 
@@ -107,6 +119,10 @@ Simulates a *Neighbor* workload as described above. The mix of operations and th
 * 5% :ref:`iter<SortedList.__iter__>` (limited to first 100 elements)
 
 .. image:: _static/SortedList-neighbor.png
+
+.. image:: _static/SortedList_runtime-neighbor.png
+
+.. image:: _static/SortedList_load-neighbor.png
 
 Intervals
 .........
@@ -121,6 +137,10 @@ Simulates an *Intervals* workload as described above. The mix of operations and 
 * 10% :ref:`discard<SortedList.discard>`
 
 .. image:: _static/SortedList-intervals.png
+
+.. image:: _static/SortedList_runtime-intervals.png
+
+.. image:: _static/SortedList_load-intervals.png
 
 Other Performance Comparisons
 -----------------------------
