@@ -120,6 +120,7 @@ introduction, implementation, performance, and development.
 - `Performance Comparison`_
 - `Load Factor Performance Comparison`_
 - `Runtime Performance Comparison`_
+- `Simulated Workload Performance Comparison`_
 - `Implementation Details`_
 - `Developing and Contributing`_
 
@@ -127,6 +128,7 @@ introduction, implementation, performance, and development.
 .. _`Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
 .. _`Load Factor Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-load.html
 .. _`Runtime Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-runtime.html
+.. _`Simulated Workload Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-workload.html
 .. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 .. _`Developing and Contributing`: http://www.grantjenks.com/docs/sortedcontainers/development.html
 
@@ -137,10 +139,12 @@ If you are looking for information on a specific function, class or method, this
 part of the documentation is for you.
 
 - `SortedList`_
+- `SortedListWithKey`_
 - `SortedDict`_
 - `SortedSet`_
 
 .. _`SortedList`: http://www.grantjenks.com/docs/sortedcontainers/sortedlist.html
+.. _`SortedListWithKey`: http://www.grantjenks.com/docs/sortedcontainers/sortedlistwithkey.html
 .. _`SortedDict`: http://www.grantjenks.com/docs/sortedcontainers/sorteddict.html
 .. _`SortedSet`: http://www.grantjenks.com/docs/sortedcontainers/sortedset.html
 
