@@ -261,7 +261,7 @@ def test_bisect():
     temp = SortedDict(mapping)
     assert temp.bisect_left('a') == 0
     assert temp.bisect_right('f') == 6
-    assert temp.bisect('b') == 1
+    assert temp.bisect('f') == 6
 
 def test_keysview():
     if hexversion < 0x02070000: return

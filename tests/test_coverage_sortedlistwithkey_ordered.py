@@ -337,12 +337,12 @@ def test_bisect_left():
 
 def test_bisect():
     slt = SortedListWithKey(key=negate)
-    assert slt.bisect(0) == 0
+    assert slt.bisect(10) == 0
     slt = SortedListWithKey(range(100), load=17, key=negate)
     slt.update(range(100))
     slt._check()
-    assert slt.bisect(50) == 98
-    assert slt.bisect(0) == 198
+    assert slt.bisect(10) == 180
+    assert slt.bisect(0) == 200
 
 def test_bisect_right():
     slt = SortedListWithKey(key=negate)

@@ -106,7 +106,7 @@ SortedSet
 
    .. method:: L.bisect(value)
 
-      Same as :ref:`bisect_left <sortedlist.bisect_right>`.
+      Same as :ref:`bisect_right <sortedlist.bisect_right>`.
 
    .. method:: L.bisect_right(value)
 

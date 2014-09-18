@@ -154,7 +154,7 @@ SortedListWithKey
    .. _SortedListWithKey.bisect:
    .. method:: L.bisect(value)
 
-      Same as :ref:`bisect_left <SortedListWithKey.bisect_right>`.
+      Same as :ref:`bisect_right <SortedListWithKey.bisect_right>`.
 
    .. _SortedListWithKey.bisect_right:
    .. method:: L.bisect_right(value)

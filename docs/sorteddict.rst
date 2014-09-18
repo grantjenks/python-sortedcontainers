@@ -230,14 +230,14 @@ SortedDict
    .. _SortedDict.bisect:
    .. method:: d.bisect(key)
 
-      Same as :ref:`bisect_left<SortedDict.bisect_left>`.
+      Same as :ref:`bisect_right <SortedDict.bisect_right>`.
 
       :rtype: :class:`int`
 
    .. _SortedDict.bisect_right:
    .. method:: d.bisect_right(key)
 
-      Same as :ref:`bisect_left<SortedDict.bisect_left>`, but if *key* is
+      Same as :ref:`bisect_left <SortedDict.bisect_left>`, but if *key* is
       already present in SortedDict, the insertion index will be after (to the
       right of) any existing entries.
 

@@ -797,8 +797,8 @@ class SortedList(MutableSequence):
         return self._loc(pos, idx)
 
     def bisect(self, val):
-        """Same as bisect_left."""
-        return self.bisect_left(val)
+        """Same as bisect_right."""
+        return self.bisect_right(val)
 
     def bisect_right(self, val):
         """

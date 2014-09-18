@@ -108,7 +108,7 @@ def test_add():
 def test_bisect():
     temp = SortedSet(range(100), load=7)
     assert all(temp.bisect_left(val) == val for val in range(100))
-    assert all(temp.bisect(val) == val for val in range(100))
+    assert all(temp.bisect(val) == (val + 1) for val in range(100))
     assert all(temp.bisect_right(val) == (val + 1) for val in range(100))
 
 def test_clear():

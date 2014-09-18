@@ -348,8 +348,8 @@ class SortedDict(MutableMapping):
         return self._list.bisect_left(key)
 
     def bisect(self, key):
-        """Same as bisect_left."""
-        return self._list.bisect(key)
+        """Same as bisect_right."""
+        return self._list.bisect_right(key)
 
     def bisect_right(self, key):
         """

@@ -278,9 +278,9 @@ class SortedListWithKey(MutableSequence):
         return self._list.bisect_left(pair)
 
     def bisect(self, value):
-        """Same as bisect_left."""
+        """Same as bisect_right."""
         pair = self._pair(self._key(value), value)
-        return self._list.bisect(pair)
+        return self._list.bisect_right(pair)
 
     def bisect_right(self, value):
         """

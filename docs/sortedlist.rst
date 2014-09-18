@@ -140,7 +140,7 @@ SortedList
    .. _SortedList.bisect:
    .. method:: L.bisect(value)
 
-      Same as :ref:`bisect_left <SortedList.bisect_right>`.
+      Same as :ref:`bisect_right <SortedList.bisect_right>`.
 
    .. _SortedList.bisect_right:
    .. method:: L.bisect_right(value)

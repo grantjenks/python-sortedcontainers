@@ -327,11 +327,11 @@ def test_bisect_left():
 
 def test_bisect():
     slt = SortedList()
-    assert slt.bisect(0) == 0
+    assert slt.bisect(10) == 0
     slt = SortedList(range(100), load=17)
     slt.update(range(100))
     slt._check()
-    assert slt.bisect(50) == 100
+    assert slt.bisect(10) == 22
     assert slt.bisect(200) == 200
 
 def test_bisect_right():

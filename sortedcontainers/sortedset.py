@@ -196,8 +196,8 @@ class SortedSet(MutableSet, Sequence):
         """
         return self._list.bisect_left(value)
     def bisect(self, value):
-        """Same as bisect_left."""
-        return self._list.bisect(value)
+        """Same as bisect_right."""
+        return self._list.bisect_right(value)
     def bisect_right(self, value):
         """
         Same as `bisect_left`, but if *value* is already present in SortedSet,
