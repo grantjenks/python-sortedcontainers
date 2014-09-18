@@ -240,6 +240,9 @@ def test_setitem():
     for pos, val in values:
         slt[pos] = val
 
+    slt[-2] = 85
+    slt._check()
+
 def test_setitem_slice():
     slt = SortedList(range(100), load=17)
     slt[:10] = iter(range(10))
@@ -256,6 +259,7 @@ def test_setitem_slice():
     assert slt == list(range(90))
     slt[:10] = []
     assert slt == list(range(10, 90))
+    slt._check()
 
 @raises(ValueError)
 def test_setitem_slice_bad():
@@ -278,6 +282,7 @@ def test_setitem_extended_slice():
     lst[10:90:10] = range(105, 905, 100)
     slt[10:90:10] = range(105, 905, 100)
     assert slt == lst
+    slt._check()
 
 @raises(ValueError)
 def test_setitem_extended_slice_bad1():

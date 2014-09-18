@@ -669,7 +669,8 @@ class SortedList(MutableSequence):
         :exc:`ValueError` is raised before the list is mutated if the sort order
         would be violated by the operation.
         """
-        _pos, _lists, _check_order = self._pos, self._lists, self._check_order
+        _maxes, _lists, _pos = self._maxes, self._lists, self._pos
+        _check_order = self._check_order
 
         if isinstance(index, slice):
             start, stop, step = self._slice(index)
@@ -697,6 +698,8 @@ class SortedList(MutableSequence):
                     pos, loc = _pos(idx)
                     _append((idx, _lists[pos][loc], val))
                     _lists[pos][loc] = val
+                    if len(_lists[pos]) == (loc + 1):
+                        _maxes[pos] = val
 
                 try:
                     # Validate ordering of new values.
@@ -711,6 +714,8 @@ class SortedList(MutableSequence):
                     for idx, oldval, newval in log:
                         pos, loc = _pos(idx)
                         _lists[pos][loc] = oldval
+                        if len(_lists[pos]) == (loc + 1):
+                            _maxes[pos] = oldval
 
                     raise
             else:
@@ -759,6 +764,8 @@ class SortedList(MutableSequence):
             pos, loc = _pos(index)
             _check_order(index, value)
             _lists[pos][loc] = value
+            if len(_lists[pos]) == (loc + 1):
+                _maxes[pos] = value
 
     def __iter__(self):
         """Create an iterator over the list."""
