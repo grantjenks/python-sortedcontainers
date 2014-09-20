@@ -104,7 +104,7 @@ class SortedListWithKey(MutableSequence):
 
         _maxes = _list._maxes
 
-        if _maxes is None:
+        if not _maxes:
             return False
 
         pos = bisect_left(_maxes, _pair)
@@ -149,7 +149,7 @@ class SortedListWithKey(MutableSequence):
 
         _maxes = _list._maxes
 
-        if _maxes is None:
+        if not _maxes:
             return
 
         pos = bisect_left(_maxes, _pair)
@@ -195,7 +195,7 @@ class SortedListWithKey(MutableSequence):
 
         _maxes = _list._maxes
 
-        if _maxes is None:
+        if not _maxes:
             raise ValueError
 
         pos = bisect_left(_maxes, _pair)
@@ -301,7 +301,7 @@ class SortedListWithKey(MutableSequence):
 
         _maxes = _list._maxes
 
-        if _maxes is None:
+        if not _maxes:
             return 0
 
         pos = bisect_left(_maxes, _pair)
