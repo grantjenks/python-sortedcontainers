@@ -141,6 +141,12 @@ def test_count():
     assert temp.count(0) == 1
     temp._check()
 
+def test_sub():
+    temp = SortedSet(range(100), load=7)
+    that = temp - range(0, 10) - range(10, 20)
+    assert all(val == temp[val] for val in range(100))
+    assert all((val + 20) == that[val] for val in range(80))
+
 def test_difference():
     temp = SortedSet(range(100), load=7)
     that = temp.difference(range(0, 10), range(10, 20))
@@ -171,6 +177,12 @@ def test_index():
     temp = SortedSet(range(100), load=7)
     assert all(temp.index(val) == val for val in range(100))
 
+def test_and():
+    temp = SortedSet(range(100), load=7)
+    that = temp & range(20) & range(10, 30)
+    assert all(that[val] == (val + 10) for val in range(10))
+    assert all(temp[val] == val for val in range(100))
+
 def test_intersection():
     temp = SortedSet(range(100), load=7)
     that = temp.intersection(range(0, 20), range(10, 30))
@@ -198,6 +210,15 @@ def test_issuperset():
     that = SortedSet(range(25, 75), load=9)
     assert temp.issuperset(that)
 
+def test_xor():
+    temp = SortedSet(range(0, 75), load=7)
+    that = SortedSet(range(25, 100), load=9)
+    result = temp ^ that
+    assert all(result[val] == val for val in range(25))
+    assert all(result[val + 25] == (val + 75) for val in range(25))
+    assert all(temp[val] == val for val in range(75))
+    assert all(that[val] == (val + 25) for val in range(75))
+
 def test_symmetric_difference():
     temp = SortedSet(range(0, 75), load=7)
     that = SortedSet(range(25, 100), load=9)
@@ -223,6 +244,14 @@ def test_pop():
 def test_remove():
     temp = SortedSet(range(0, 100), load=7)
     temp.remove(50)
+
+def test_or():
+    temp = SortedSet(range(0, 50), load=7)
+    that = SortedSet(range(50, 100), load=9)
+    result = temp | that
+    assert all(result[val] == val for val in range(100))
+    assert all(temp[val] == val for val in range(50))
+    assert all(that[val] == (val + 50) for val in range(50))
 
 def test_union():
     temp = SortedSet(range(0, 50), load=7)
