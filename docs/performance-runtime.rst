@@ -27,6 +27,11 @@ used to determine how many values should be stored in each node. This can have a
 significant impact on performance and a :doc:`load factor performance
 comparison<performance-load>` is also provided.
 
+Though these benchmarks exercise only one API repeatedly, an effort has also
+been made to simulate real-world workloads. The :doc:`simulated workload
+performance comparison<performance-workload>` contains examples with comparisons
+to other implementations, load factors, and runtimes.
+
 SortedList
 ----------
 

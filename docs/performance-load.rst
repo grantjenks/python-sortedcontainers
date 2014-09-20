@@ -23,6 +23,11 @@ on the Python runtime. A :doc:`runtime performance
 comparison<performance-runtime>` is also included with data from popular Python
 runtimes.
 
+Though these benchmarks exercise only one API repeatedly, an effort has also
+been made to simulate real-world workloads. The :doc:`simulated workload
+performance comparison<performance-workload>` contains examples with comparisons
+to other implementations, load factors, and runtimes.
+
 SortedList
 ----------
 
