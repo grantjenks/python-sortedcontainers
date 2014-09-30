@@ -8,4 +8,4 @@ python:
   - "pypy"
   - "pypy3"
 install: true
-script:  nosetests
+script:  nosetests -v
