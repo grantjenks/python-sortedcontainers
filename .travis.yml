@@ -6,5 +6,6 @@ python:
   - "3.3"
   - "3.4"
   - "pypy"
+  - "pypy3"
 install: true
-script:  nosetests
+script:  nosetests -v
