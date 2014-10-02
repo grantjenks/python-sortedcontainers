@@ -83,7 +83,7 @@ Features
 - Pragmatic design (e.g. SortedSet is mostly a Python set with a SortedList
   index)
 - Developed on Python 2.7
-- Tested on CPython 2.6, 2.7, 3.2, 3.3, 3.4 and PyPy 2.2
+- Tested on CPython 2.6, 2.7, 3.2, 3.3, 3.4, PyPy 2.2+ and PyPy3 2.3.1+.
 
 Quickstart
 ----------
