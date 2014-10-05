@@ -52,4 +52,4 @@ from .sortedset import SortedSet
 from .sorteddict import SortedDict
 from .sortedlistwithkey import SortedListWithKey
 
-__all__ = [SortedList, SortedSet, SortedDict, SortedListWithKey]
+__all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey']
