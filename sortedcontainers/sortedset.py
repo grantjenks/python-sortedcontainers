@@ -73,10 +73,10 @@ class SortedSet(MutableSet, Sequence):
 
         if isinstance(index, slice):
             _set.difference_update(prev)
-            _set.update(prev)
+            _set.update(value)
         else:
             _set.remove(prev)
-            _set.add(prev)
+            _set.add(value)
     def __eq__(self, that):
         """Return True if and only if self and *that* are equal sets."""
         if len(self) != len(that):

@@ -45,12 +45,14 @@ def test_delitem_slice():
 def test_setitem():
     temp = SortedSet(range(0, 1000, 10), load=7)
     temp[10] = 105
+    temp._check()
 
 def test_setitem_slice():
-    vals = list(range(100))
+    vals = list(range(50, 150))
     temp = SortedSet(vals, load=7)
     temp[:25] = range(25)
-    assert temp == vals
+    assert temp == list(range(25)) + list(range(75, 150))
+    temp._check()
 
 def test_eq():
     alpha = SortedSet(range(100), load=7)
