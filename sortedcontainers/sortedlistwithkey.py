@@ -38,7 +38,7 @@ class SortedListWithKey(MutableSequence):
     items in sorted order.
     """
 
-    def __init__(self, iterable=None, load=1000, key=lambda val: val,
+    def __init__(self, iterable=None, key=lambda val: val, load=1000,
                  value_orderable=True):
         """
         A SortedListWithKey provides most of the same methods as a list, but
