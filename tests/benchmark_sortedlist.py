@@ -104,6 +104,9 @@ from .context import sortedcontainers
 from sortedcontainers import SortedList
 kinds['SortedList'] = SortedList
 
+from sortedcontainers import SortedListWithKey
+kinds['SortedListWithKey'] = SortedListWithKey
+
 try:
     from blist import sortedlist
     kinds['blist.sortedlist'] = sortedlist
