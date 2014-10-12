@@ -36,7 +36,7 @@ class SortedSet(MutableSet, Sequence):
         if key is None:
             self._list = SortedList(self._set, load=load)
         else:
-            self._list = SortedListWithKey(self._set, load=load, key=key)
+            self._list = SortedListWithKey(self._set, key=key, load=load)
         if iterable is not None:
             self.update(iterable)
     def __contains__(self, value):
