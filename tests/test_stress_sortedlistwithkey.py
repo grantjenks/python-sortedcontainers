@@ -13,7 +13,7 @@ from functools import wraps
 
 class SortedList(SortedListWithKey):
     def __init__(self, *args):
-        super(SortedList, self).__init__(*args, value_orderable=False)
+        super(SortedList, self).__init__(*args)
     @property
     def _maxes(self):
         return self._list._maxes
