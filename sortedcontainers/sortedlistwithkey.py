@@ -32,13 +32,16 @@ class Pair:
     def __repr__(self):
         return 'Pair({0}, {1})'.format(repr(self.key), repr(self.value))
 
+def identity(value):
+    return value
+
 class SortedListWithKey(MutableSequence):
     """
     SortedListWithKey provides most of the same methods as a list but keeps the
     items in sorted order.
     """
 
-    def __init__(self, iterable=None, key=lambda val: val, load=1000):
+    def __init__(self, iterable=None, key=identity, load=1000):
         """
         A SortedListWithKey provides most of the same methods as a list, but
         keeps the items in sorted order.
