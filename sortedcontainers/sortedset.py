@@ -14,7 +14,7 @@ class SortedSet(MutableSet, Sequence):
 
     Unlike a `set`, a `SortedSet` requires items be hashable and comparable.
     """
-    def __init__(self, iterable=None, load=1000, _set=None):
+    def __init__(self, iterable=None, key=None, load=1000, _set=None):
         """
         A `SortedSet` provides the same methods as a `set`.  Additionally, a
         `SortedSet` maintains its items in sorted order, allowing the
@@ -30,8 +30,13 @@ class SortedSet(MutableSet, Sequence):
         on your usage.  It's best to leave the load factor at the default until
         you start benchmarking.
         """
-        self._set = set() if _set is None else _set
-        self._list = SortedList(self._set, load=load)
+        self._key = key
+        self._load = load
+        self._set = _set or set()
+        if key is None:
+            self._list = SortedList(self._set, load=load)
+        else:
+            self._list = SortedListWithKey(self._set, load=load, key=key)
         if iterable is not None:
             self.update(iterable)
     def __contains__(self, value):
@@ -44,7 +49,7 @@ class SortedSet(MutableSet, Sequence):
         Supports slice notation and negative indexes.
         """
         if isinstance(index, slice):
-            return SortedSet(self._list[index])
+            return SortedSet(self._list[index], key=self._key, load=self._load)
         else:
             return self._list[index]
     def __delitem__(self, index):
@@ -211,7 +216,7 @@ class SortedSet(MutableSet, Sequence):
         self._list.clear()
     def copy(self):
         """Create a shallow copy of the sorted set."""
-        return SortedSet(load=self._list._load, _set=set(self._set))
+        return SortedSet(key=self._key, load=self._load, _set=set(self._set))
     def __copy__(self):
         """Create a shallow copy of the sorted set."""
         return self.copy()
@@ -268,7 +273,7 @@ class SortedSet(MutableSet, Sequence):
         *iterables*.
         """
         diff = self._set.difference(*iterables)
-        new_set = SortedSet(load=self._list._load, _set=diff)
+        new_set = SortedSet(key=self._key, load=self._load, _set=diff)
         return new_set
     def difference_update(self, *iterables):
         """
@@ -289,7 +294,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements common to the set and all *iterables*.
         """
         comb = self._set.intersection(*iterables)
-        new_set = SortedSet(load=self._list._load, _set=comb)
+        new_set = SortedSet(key=self._key, load=self._load, _set=comb)
         return new_set
     def intersection_update(self, *iterables):
         """
@@ -303,7 +308,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements in either *self* or *that* but not both.
         """
         diff = self._set.symmetric_difference(that)
-        new_set = SortedSet(load=self._list._load, _set=diff)
+        new_set = SortedSet(key=self._key, load=self._load, _set=diff)
         return new_set
     def symmetric_difference_update(self, that):
         """
@@ -317,7 +322,7 @@ class SortedSet(MutableSet, Sequence):
         """
         Return a new SortedSet with elements from the set and all *iterables*.
         """
-        return SortedSet(chain(iter(self), *iterables), load=self._list._load)
+        return SortedSet(chain(iter(self), *iterables), key=self._key, load=self._load)
     def update(self, *iterables):
         """Update the set, adding elements from all *iterables*."""
         values = set(chain(*iterables))
