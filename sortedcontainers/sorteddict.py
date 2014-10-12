@@ -44,19 +44,20 @@ class _IlocWrapper:
         indices and slice notation. Raises IndexError on invalid *index*.
         """
         _temp = self._dict
-        _list, _dict = _temp._list, _temp._dict
+        _list = _temp._list
+        _delitem = _temp._delitem
 
         if isinstance(index, slice):
             keys = _list[index]
             del _list[index]
             for key in keys:
-                del _dict[key]
+                _delitem(key)
         else:
             key = _list[index]
             del _list[index]
-            del _dict[key]
+            _delitem(key)
 
-class SortedDict(MutableMapping):
+class SortedDict(dict):
     """
     A SortedDict provides the same methods as a dict.  Additionally, a
     SortedDict efficiently maintains its keys in sorted order. Consequently, the
@@ -105,47 +106,50 @@ class SortedDict(MutableMapping):
         else:
             load = 1000
 
-        self._dict = dict()
+        self._load = load
+
+        # Cache function pointers to dict methods.
+
+        _dict = super(SortedDict, self)
+        self._clear = _dict.clear
+        self._delitem = _dict.__delitem__
+        self._iter = _dict.__iter__
+        self._pop = _dict.pop
+        self._setdefault = _dict.setdefault
+        self._setitem = _dict.__setitem__
+        self._update = _dict.update
+        self._viewitems = _dict.viewitems
+        self._viewkeys = _dict.viewkeys
+        self._viewvalues = _dict.viewvalues
+
+        # Cache function pointers to SortedList methods.
+
         self._list = SortedList(load=load)
+        self._list_add = self._list.add
+        self._list_bisect_left = self._list.bisect_left
+        self._list_bisect_right = self._list.bisect_right
+        self._list_clear = self._list.clear
+        self._list_index = self._list.index
+        self._list_pop = self._list.pop
+        self._list_remove = self._list.remove
+        self._list_update = self._list.update
+
         self.iloc = _IlocWrapper(self)
 
         self.update(*args, **kwargs)
 
     def clear(self):
         """Remove all elements from the dictionary."""
-        self._dict.clear()
-        self._list.clear()
-
-    def __contains__(self, key):
-        """Return True if and only if *key* is in the dictionary."""
-        return key in self._dict
+        self._clear()
+        self._list_clear()
 
     def __delitem__(self, key):
         """
         Remove ``d[key]`` from *d*.  Raises a KeyError if *key* is not in the
         dictionary.
         """
-        del self._dict[key]
-        self._list.remove(key)
-
-    def __getitem__(self, key):
-        """
-        Return the item of *d* with key *key*.  Raises a KeyError if *key* is
-        not in the dictionary.
-        """
-        return self._dict[key]
-
-    def __eq__(self, that):
-        """Compare two iterables for equality."""
-        return (len(self._dict) == len(that)
-                and all((key in that) and (self[key] == that[key])
-                        for key in self))
-
-    def __ne__(self, that):
-        """Compare two iterables for inequality."""
-        return (len(self._dict) != len(that)
-                or any((key not in that) or (self[key] != that[key])
-                       for key in self))
+        self._delitem(key)
+        self._list_remove(key)
 
     def __iter__(self):
         """Create an iterator over the sorted keys of the dictionary."""
@@ -157,20 +161,15 @@ class SortedDict(MutableMapping):
         """
         return reversed(self._list)
 
-    def __len__(self):
-        """Return the number of (key, value) pairs in the dictionary."""
-        return len(self._dict)
-
     def __setitem__(self, key, value):
         """Set `d[key]` to *value*."""
-        _dict = self._dict
-        if key not in _dict:
-            self._list.add(key)
-        _dict[key] = value
+        if key not in self:
+            self._list_add(key)
+        self._setitem(key, value)
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return SortedDict(self._list._load, self._dict)
+        return SortedDict(self._load, self.iteritems())
 
     def __copy__(self):
         """Return a shallow copy of the sorted dictionary."""
@@ -183,18 +182,6 @@ class SortedDict(MutableMapping):
         """
         that = SortedDict((key, value) for key in seq)
         return that
-
-    def get(self, key, default=None):
-        """
-        Return the value for *key* if *key* is in the dictionary, else
-        *default*.  If *default* is not given, it defaults to ``None``,
-        so that this method never raises a KeyError.
-        """
-        return self._dict.get(key, default)
-
-    def has_key(self, key):
-        """Return True if and only in *key* is in the dictionary."""
-        return key in self._dict
 
     def items(self):
         """
@@ -212,8 +199,7 @@ class SortedDict(MutableMapping):
 
     def iteritems(self):
         """Return an iterable over the items (``(key, value)`` pairs)."""
-        _dict = self._dict
-        return iter((key, _dict[key]) for key in self._list)
+        return iter((key, self[key]) for key in self._list)
 
     def keys(self):
         """
@@ -224,7 +210,7 @@ class SortedDict(MutableMapping):
         indexable (e.g., ``d.keys()[5]``).
         """
         if version_info[0] == 2:
-            return SortedSet(self._dict)
+            return SortedSet(self._list)
         else:
             return KeysView(self)
 
@@ -247,8 +233,7 @@ class SortedDict(MutableMapping):
 
     def itervalues(self):
         """Return an iterable over the values of the dictionary."""
-        _dict = self._dict
-        return iter(_dict[key] for key in self._list)
+        return iter(self[key] for key in self._list)
 
     def pop(self, key, default=_NotGiven):
         """
@@ -256,9 +241,9 @@ class SortedDict(MutableMapping):
         else return *default*. If *default* is not given and *key* is not in
         the dictionary, a KeyError is raised.
         """
-        if key in self._dict:
-            self._list.remove(key)
-            return self._dict.pop(key)
+        if key in self:
+            self._list_remove(key)
+            return self._pop(key)
         else:
             if default == _NotGiven:
                 raise KeyError
@@ -273,14 +258,11 @@ class SortedDict(MutableMapping):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        _dict, _list = self._dict, self._list
-
-        if len(_dict) == 0:
+        if len(self) == 0:
             raise KeyError
 
-        key = _list.pop()
-        value = _dict[key]
-        del _dict[key]
+        key = self._list_pop()
+        value = self._pop(key)
 
         return (key, value)
 
@@ -290,12 +272,11 @@ class SortedDict(MutableMapping):
         with a value of *default* and return *default*.  *default* defaults to
         ``None``.
         """
-        _dict = self._dict
-        if key in _dict:
-            return _dict[key]
+        if key in self:
+            return self[key]
         else:
-            _dict[key] = default
-            self._list.add(key)
+            self._setitem(key, default)
+            self._list_add(key)
             return default
 
     def update(self, *args, **kwargs):
@@ -308,11 +289,9 @@ class SortedDict(MutableMapping):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        _dict, _list = self._dict, self._list
-
-        if len(_dict) == 0:
-            _dict.update(*args, **kwargs)
-            _list.update(_dict)
+        if len(self) == 0:
+            self._update(*args, **kwargs)
+            self._list_update(self._iter())
             return
 
         if (len(kwargs) == 0 and len(args) == 1 and isinstance(args[0], dict)):
@@ -320,11 +299,10 @@ class SortedDict(MutableMapping):
         else:
             pairs = dict(*args, **kwargs)
 
-        if (10 * len(pairs)) > len(self._dict):
-            self._dict.update(pairs)
-            _list = self._list
-            _list.clear()
-            _list.update(self._dict)
+        if (10 * len(pairs)) > len(self):
+            self._update(pairs)
+            self._list_clear()
+            self._list_update(self._iter())
         else:
             for key in pairs:
                 self[key] = pairs[key]
@@ -336,7 +314,7 @@ class SortedDict(MutableMapping):
         of the set.  *start* defaults to the beginning.  Negative indexes are
         supported, as for slice indices.
         """
-        return self._list.index(key, start, stop)
+        return self._list_index(key, start, stop)
 
     def bisect_left(self, key):
         """
@@ -345,11 +323,11 @@ class SortedDict(MutableMapping):
         already present in SortedDict, the insertion point will be before (to
         the left of) any existing entries.
         """
-        return self._list.bisect_left(key)
+        return self._list_bisect_left(key)
 
     def bisect(self, key):
         """Same as bisect_right."""
-        return self._list.bisect_right(key)
+        return self._list_bisect_right(key)
 
     def bisect_right(self, key):
         """
@@ -357,7 +335,7 @@ class SortedDict(MutableMapping):
         the insertion point will be after (to the right of) any existing
         entries.
         """
-        return self._list.bisect_right(key)
+        return self._list_bisect_right(key)
 
     @not26
     def viewkeys(self):
@@ -391,15 +369,14 @@ class SortedDict(MutableMapping):
 
     @recursive_repr
     def __repr__(self):
-        _dict = self._dict
-        items = ', '.join('{0}: {1}'.format(repr(key), repr(_dict[key]))
+        items = ', '.join('{0}: {1}'.format(repr(key), repr(self[key]))
                           for key in self._list)
         return '{0}({{{1}}})'.format(self.__class__.__name__, items)
 
     def _check(self):
         self._list._check()
-        assert len(self._dict) == len(self._list)
-        assert all(val in self._dict for val in self._list)
+        assert len(self) == len(self._list)
+        assert all(val in self for val in self._list)
 
 class KeysView(AbstractKeysView, Set, Sequence):
     """
@@ -415,7 +392,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         """
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._dict.viewkeys()
+            self._view = sorted_dict._viewkeys()
         else:
             self._view = sorted_dict._dict.keys()
     def __len__(self):
@@ -514,7 +491,7 @@ class ValuesView(AbstractValuesView, Sequence):
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._dict.viewvalues()
+            self._view = sorted_dict._viewvalues()
         else:
             self._view = sorted_dict._dict.values()
     def __len__(self):
@@ -612,7 +589,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._dict.viewitems()
+            self._view = sorted_dict._viewitems()
         else:
             self._view = sorted_dict._dict.items()
     def __len__(self):
