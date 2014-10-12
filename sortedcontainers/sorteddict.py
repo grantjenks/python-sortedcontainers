@@ -4,6 +4,7 @@
 
 from .sortedset import SortedSet
 from .sortedlist import SortedList, recursive_repr
+from .sortedlistwithkey import SortedListWithKey
 from collections import MutableMapping, Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
@@ -100,13 +101,22 @@ class SortedDict(dict):
         The first example only works for keys that are valid Python
         identifiers; the others work with any valid keys.
         """
-        if len(args) > 0 and type(args[0]) == int:
-            load = args[0]
+        if len(args) > 0 and (args[0] is None or callable(args[0])):
+            self._key = args[0]
             args = args[1:]
         else:
-            load = 1000
+            self._key = None
 
-        self._load = load
+        if len(args) > 0 and type(args[0]) == int:
+            self._load = args[0]
+            args = args[1:]
+        else:
+            self._load = 1000
+
+        if self._key is None:
+            self._list = SortedList(load=self._load)
+        else:
+            self._list = SortedListWithKey(key=self._key, load=self._load)
 
         # Cache function pointers to dict methods.
 
@@ -124,7 +134,6 @@ class SortedDict(dict):
 
         # Cache function pointers to SortedList methods.
 
-        self._list = SortedList(load=load)
         self._list_add = self._list.add
         self._list_bisect_left = self._list.bisect_left
         self._list_bisect_right = self._list.bisect_right
@@ -169,7 +178,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return SortedDict(self._load, self.iteritems())
+        return SortedDict(self._key, self._load, self.iteritems())
 
     def __copy__(self):
         """Return a shallow copy of the sorted dictionary."""
@@ -210,7 +219,7 @@ class SortedDict(dict):
         indexable (e.g., ``d.keys()[5]``).
         """
         if version_info[0] == 2:
-            return SortedSet(self._list)
+            return SortedSet(self._list, key=self._key, load=self._load)
         else:
             return KeysView(self)
 
