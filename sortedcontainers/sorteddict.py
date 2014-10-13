@@ -121,6 +121,7 @@ class SortedDict(dict):
         # Cache function pointers to dict methods.
 
         _dict = super(SortedDict, self)
+        self._dict = _dict
         self._clear = _dict.clear
         self._delitem = _dict.__delitem__
         self._iter = _dict.__iter__
@@ -128,9 +129,6 @@ class SortedDict(dict):
         self._setdefault = _dict.setdefault
         self._setitem = _dict.__setitem__
         self._update = _dict.update
-        self._viewitems = _dict.viewitems
-        self._viewkeys = _dict.viewkeys
-        self._viewvalues = _dict.viewvalues
 
         # Cache function pointers to SortedList methods.
 
@@ -401,7 +399,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         """
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._viewkeys()
+            self._view = sorted_dict._dict.viewkeys()
         else:
             self._view = sorted_dict._dict.keys()
     def __len__(self):
@@ -500,7 +498,7 @@ class ValuesView(AbstractValuesView, Sequence):
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._viewvalues()
+            self._view = sorted_dict._dict.viewvalues()
         else:
             self._view = sorted_dict._dict.values()
     def __len__(self):
@@ -598,7 +596,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         self._dict = sorted_dict
         self._list = sorted_dict._list
         if version_info[0] == 2:
-            self._view = sorted_dict._viewitems()
+            self._view = sorted_dict._dict.viewitems()
         else:
             self._view = sorted_dict._dict.items()
     def __len__(self):

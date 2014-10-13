@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from sys import version_info
+from sys import hexversion
 
 import random
 from .context import sortedcontainers
@@ -9,7 +9,7 @@ from sortedcontainers import SortedDict
 from nose.tools import raises
 from functools import wraps
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     from itertools import izip as zip
     range = xrange
 
@@ -86,6 +86,8 @@ def stress_get(sdict):
 
 @actor
 def stress_has_key(sdict):
+    if hexversion > 0x03000000:
+        return
     keys = list(range(100))
     for key in keys:
         assert all((key in sdict) == (sdict.has_key(key)) for key in sdict)
