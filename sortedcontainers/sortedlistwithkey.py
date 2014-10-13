@@ -26,8 +26,6 @@ class Pair:
         return self.key > that.key
     def __ge__(self, that):
         return self.key >= that.key
-    def __getitem__(self, index):
-        return self.key if index == 0 else self.value
     @recursive_repr
     def __repr__(self):
         return 'Pair({0}, {1})'.format(repr(self.key), repr(self.value))
@@ -220,9 +218,9 @@ class SortedListWithKey(MutableSequence):
         Supports slicing.
         """
         if isinstance(index, slice):
-            return list(tup[1] for tup in self._list[index])
+            return list(tup.value for tup in self._list[index])
         else:
-            return self._list[index][1]
+            return self._list[index].value
 
     def __setitem__(self, index, value):
         """
@@ -238,11 +236,11 @@ class SortedListWithKey(MutableSequence):
 
     def __iter__(self):
         """Create an iterator over the list."""
-        return iter(tup[1] for tup in iter(self._list))
+        return iter(tup.value for tup in iter(self._list))
 
     def __reversed__(self):
         """Create an iterator to traverse the list in reverse."""
-        return iter(tup[1] for tup in reversed(self._list))
+        return iter(tup.value for tup in reversed(self._list))
 
     def __len__(self):
         """Return the number of elements in the list."""
@@ -341,7 +339,7 @@ class SortedListWithKey(MutableSequence):
         list is empty or index is out of range.  Negative indices are supported,
         as for slice indices.
         """
-        return self._list.pop(index)[1]
+        return self._list.pop(index).value
 
     def index(self, value, start=None, stop=None):
         """
@@ -403,7 +401,7 @@ class SortedListWithKey(MutableSequence):
 
     def as_list(self):
         """Very efficiently convert the SortedListWithKey to a list."""
-        return list(tup[1] for tup in self._list.as_list())
+        return list(tup.value for tup in self._list.as_list())
 
     def __add__(self, that):
         """
@@ -487,4 +485,4 @@ class SortedListWithKey(MutableSequence):
     def _check(self):
         _list, _key = self._list, self._key
         _list._check()
-        assert all(pair[0] == _key(pair[1]) for pair in _list)
+        assert all(pair.key == _key(pair.value) for pair in _list)
