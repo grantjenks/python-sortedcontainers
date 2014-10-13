@@ -110,6 +110,10 @@ kinds['SortedListWithKey'] = SortedListWithKey
 try:
     from blist import sortedlist
     kinds['blist.sortedlist'] = sortedlist
+    from functools import partial
+    def identity(value):
+        return value
+    kinds['blist.sortedlist(key=identity)'] = partial(sortedlist, key=identity)
 except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
