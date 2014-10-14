@@ -250,7 +250,7 @@ class SortedDict(dict):
             self._list_remove(key)
             return self._pop(key)
         else:
-            if default == _NotGiven:
+            if default is _NotGiven:
                 raise KeyError
             else:
                 return default
