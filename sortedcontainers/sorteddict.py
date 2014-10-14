@@ -185,7 +185,7 @@ class SortedDict(dict):
         """
         Create a new dictionary with keys from *seq* and values set to *value*.
         """
-        that = SortedDict((key, value) for key in seq)
+        that = cls((key, value) for key in seq)
         return that
 
     def items(self):
