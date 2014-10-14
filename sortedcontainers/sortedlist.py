@@ -859,9 +859,7 @@ class SortedList(MutableSequence):
         """Return a shallow copy of the sorted list."""
         return SortedList(self, load=self._load)
 
-    def __copy__(self):
-        """Return a shallow copy of the sorted list."""
-        return self.copy()
+    __copy__ = copy
 
     def append(self, val):
         """

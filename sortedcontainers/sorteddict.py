@@ -178,9 +178,7 @@ class SortedDict(dict):
         """Return a shallow copy of the sorted dictionary."""
         return SortedDict(self._key, self._load, self.iteritems())
 
-    def __copy__(self):
-        """Return a shallow copy of the sorted dictionary."""
-        return self.copy()
+    __copy__ = copy
 
     @classmethod
     def fromkeys(cls, seq, value=None):

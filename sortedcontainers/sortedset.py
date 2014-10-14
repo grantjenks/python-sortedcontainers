@@ -217,9 +217,7 @@ class SortedSet(MutableSet, Sequence):
     def copy(self):
         """Create a shallow copy of the sorted set."""
         return SortedSet(key=self._key, load=self._load, _set=set(self._set))
-    def __copy__(self):
-        """Create a shallow copy of the sorted set."""
-        return self.copy()
+    __copy__ = copy
     def count(self, value):
         """Return the number of occurrences of *value* in the set."""
         return 1 if value in self._set else 0

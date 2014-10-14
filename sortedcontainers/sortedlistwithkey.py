@@ -307,9 +307,7 @@ class SortedListWithKey(MutableSequence):
         """Return a shallow copy of the sorted list with key."""
         return SortedListWithKey(self, key=self._key, load=self._load)
 
-    def __copy__(self):
-        """Return a shallow copy of the sorted list with key."""
-        return self.copy()
+    __copy__ = copy
 
     def append(self, value):
         """
