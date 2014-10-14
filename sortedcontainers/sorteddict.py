@@ -263,7 +263,7 @@ class SortedDict(dict):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        if len(self) == 0:
+        if not len(self):
             raise KeyError
 
         key = self._list_pop()
@@ -294,7 +294,7 @@ class SortedDict(dict):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        if len(self) == 0:
+        if not len(self):
             self._update(*args, **kwargs)
             self._list_update(self._iter())
             return

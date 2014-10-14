@@ -240,7 +240,7 @@ class SortedList(MutableSequence):
 
         elif len(_lists) > 1:
 
-            if pos == 0:
+            if not pos:
                 pos += 1
 
             prev = pos - 1
@@ -307,12 +307,12 @@ class SortedList(MutableSequence):
 
         Computing the index is the sum of the total and beta: 5 + 3 = 8.
         """
-        if pos == 0:
+        if not pos:
             return idx
 
         _index = self._index
 
-        if len(_index) == 0:
+        if not len(_index):
             self._build_index()
 
         total = 0
@@ -404,7 +404,7 @@ class SortedList(MutableSequence):
 
         _index = self._index
 
-        if len(_index) == 0:
+        if not len(_index):
             self._build_index()
 
         pos = 0
@@ -735,14 +735,14 @@ class SortedList(MutableSequence):
 
                 # Check ordering in context of sorted list.
 
-                if start == 0 or len(value) == 0:
+                if not start or not len(value):
                     # Nothing to check on the lhs.
                     pass
                 else:
                     if self[start - 1] > value[0]:
                         raise ValueError
 
-                if stop == len(self) or len(value) == 0:
+                if stop == len(self) or not len(value):
                     # Nothing to check on the rhs.
                     pass
                 else:
@@ -952,7 +952,7 @@ class SortedList(MutableSequence):
             self._len = 1
             return
 
-        if idx == 0:
+        if not idx:
             if val > _lists[0][0]:
                 raise ValueError
             else:
