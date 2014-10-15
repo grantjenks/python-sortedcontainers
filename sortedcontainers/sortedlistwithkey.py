@@ -174,12 +174,12 @@ class SortedListWithKey(MutableSequence):
         _maxes = _list._maxes
 
         if not _maxes:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         pos = bisect_left(_maxes, _pair)
 
         if pos == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _lists = _list._lists
 
@@ -191,7 +191,7 @@ class SortedListWithKey(MutableSequence):
         while True:
             pair = _lists[pos][idx]
             if _key != pair.key:
-                raise ValueError
+                raise ValueError('{0} is not in list'.format(repr(value)))
             if value == pair.value:
                 _list._delete(pos, idx)
                 return
@@ -199,7 +199,7 @@ class SortedListWithKey(MutableSequence):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_lists:
-                    raise ValueError
+                    raise ValueError('{0} is not in list'.format(repr(value)))
                 len_sublist = len(_lists[pos])
                 idx = 0
 
@@ -366,13 +366,13 @@ class SortedListWithKey(MutableSequence):
             stop = _len
 
         if stop <= start:
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _maxes = _list._maxes
         pos = bisect_left(_maxes, _pair)
 
         if pos == len(_maxes):
-            raise ValueError
+            raise ValueError('{0} is not in list'.format(repr(value)))
 
         _lists = _list._lists
 
@@ -384,7 +384,7 @@ class SortedListWithKey(MutableSequence):
         while True:
             pair = _lists[pos][idx]
             if _key != pair.key:
-                raise ValueError
+                raise ValueError('{0} is not in list'.format(repr(value)))
             if value == pair.value:
                 loc = _list._loc(pos, idx)
                 if start <= loc < stop:
@@ -393,7 +393,7 @@ class SortedListWithKey(MutableSequence):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_lists:
-                    raise ValueError
+                    raise ValueError('{0} is not in list'.format(repr(value)))
                 len_sublist = len(_lists[pos])
                 idx = 0
 

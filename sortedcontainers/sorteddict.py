@@ -251,7 +251,7 @@ class SortedDict(dict):
             return self._pop(key)
         else:
             if default is _NotGiven:
-                raise KeyError
+                raise KeyError(key)
             else:
                 return default
 
@@ -264,7 +264,7 @@ class SortedDict(dict):
         KeyError`.
         """
         if not len(self):
-            raise KeyError
+            raise KeyError('popitem(): dictionary is empty')
 
         key = self._list_pop()
         value = self._pop(key)
@@ -549,7 +549,7 @@ class ValuesView(AbstractValuesView, Sequence):
             if value == val:
                 return idx
         else:
-            raise ValueError
+            raise ValueError('{0} is not in dict'.format(repr(value)))
     def count(self, value):
         """Return the number of occurrences of *value* in self."""
         _dict = self._dict
@@ -641,11 +641,12 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         to the end of the set.  *start* defaults to the beginning.  Negative
         indexes are supported, as for slice indices.
         """
-        pos = self._list.index(key[0], start, stop)
-        if key[1] == self._dict[key[0]]:
+        temp, value = key
+        pos = self._list.index(temp, start, stop)
+        if value == self._dict[temp]:
             return pos
         else:
-            raise ValueError
+            raise ValueError('{0} is not in dict'.format(repr(key)))
     def count(self, item):
         """Return the number of occurrences of *item* in the set."""
         key, value = item
