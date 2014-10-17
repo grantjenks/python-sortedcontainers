@@ -6,6 +6,15 @@ from sortedcontainers import SortedDict
 from nose.tools import raises
 from sys import hexversion
 
+if hexversion < 0x03000000:
+    range = xrange
+
+def negate(value):
+    return -value
+
+def modulo(value):
+    return value % 10
+
 def get_keysview(dic):
     if hexversion < 0x03000000:
         return dic.viewkeys()
@@ -87,11 +96,20 @@ def test_iter():
     temp = SortedDict(mapping)
     assert all(lhs == rhs for lhs, rhs in zip(temp, string.ascii_lowercase))
 
+def test_iter_key():
+    temp = SortedDict(negate, 7, ((val, val) for val in range(100)))
+    assert all(lhs == rhs for lhs, rhs in zip(temp, reversed(range(100))))
+
 def test_reversed():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     assert all(lhs == rhs for lhs, rhs in
                zip(reversed(temp), reversed(string.ascii_lowercase)))
+
+def test_reversed_key():
+    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    values = sorted(range(100), key=modulo)
+    assert all(lhs == rhs for lhs, rhs in zip(reversed(temp), reversed(values)))
 
 def test_len():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -258,12 +276,22 @@ def test_index():
     assert temp.index('a') == 0
     assert temp.index('f', 3, -3) == 5
 
+def test_index_key():
+    temp = SortedDict(negate, 7, ((val, val) for val in range(100)))
+    assert all(temp.index(val) == (99 - val) for val in range(100))
+
 def test_bisect():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     assert temp.bisect_left('a') == 0
     assert temp.bisect_right('f') == 6
     assert temp.bisect('f') == 6
+
+def test_bisect_key():
+    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    assert all(temp.bisect(val) == ((val % 10) + 1) * 10 for val in range(100))
+    assert all(temp.bisect_right(val) == ((val % 10) + 1) * 10 for val in range(100))
+    assert all(temp.bisect_left(val) == (val % 10) * 10 for val in range(100))
 
 def test_keysview():
     if hexversion < 0x02070000: return
