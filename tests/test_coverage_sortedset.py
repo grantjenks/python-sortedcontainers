@@ -10,6 +10,12 @@ from nose.tools import raises
 if version_info[0] == 2:
     range = xrange
 
+def negate(value):
+    return -value
+
+def modulo(value):
+    return value % 10
+
 def test_init():
     temp = SortedSet(range(100), load=7)
     temp._check()
@@ -29,6 +35,10 @@ def test_getitem_slice():
     temp = SortedSet(vals, load=7)
     assert temp[20:30] == vals[20:30]
 
+def test_getitem_key():
+    temp = SortedSet(range(100), load=7, key=negate)
+    assert all(temp[val] == (99 - val) for val in range(100))
+
 def test_delitem():
     temp = SortedSet(range(100), load=7)
     for val in reversed(range(50)):
@@ -40,28 +50,28 @@ def test_delitem_slice():
     temp = SortedSet(vals, load=7)
     del vals[20:40:2]
     del temp[20:40:2]
-    assert temp == vals
+    assert temp == set(vals)
 
-def test_setitem():
-    temp = SortedSet(range(0, 1000, 10), load=7)
-    temp[10] = 105
-    temp._check()
-
-def test_setitem_slice():
-    vals = list(range(50, 150))
-    temp = SortedSet(vals, load=7)
-    temp[:25] = range(25)
-    assert temp == list(range(25)) + list(range(75, 150))
-    temp._check()
+def test_delitem_key():
+    temp = SortedSet(range(100), load=7, key=modulo)
+    values = sorted(range(100), key=modulo)
+    for val in range(10):
+        del temp[val]
+        del values[val]
+    assert list(temp) == list(values)
 
 def test_eq():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(100), load=17)
     assert alpha == beta
     assert alpha == beta._set
-    assert alpha == list(beta)
     beta.add(101)
     assert not (alpha == beta)
+
+@raises(TypeError)
+def test_eq_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha == list(range(100))
 
 def test_ne():
     alpha = SortedSet(range(100), load=7)
@@ -70,23 +80,51 @@ def test_ne():
     beta.add(100)
     assert alpha != beta
     assert alpha != beta._set
-    assert alpha != list(beta)
+
+@raises(TypeError)
+def test_ne_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha != list(range(1, 101))
 
 def test_lt_gt():
     temp = SortedSet(range(100), load=7)
     that = SortedSet(range(25, 75), load=9)
     assert that < temp
+    assert not (temp < that)
     assert that < temp._set
     assert temp > that
+    assert not (that > temp)
     assert temp > that._set
+
+@raises(TypeError)
+def test_lt_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha < list(range(1000))
+
+@raises(TypeError)
+def test_gt_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha > list(range(10))
 
 def test_le_ge():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(101), load=17)
     assert alpha <= beta
+    assert not (beta <= alpha)
     assert alpha <= beta._set
     assert beta >= alpha
+    assert not (alpha >= beta)
     assert beta >= alpha._set
+
+@raises(TypeError)
+def test_le_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha <= list(range(1000))
+
+@raises(TypeError)
+def test_ge_error():
+    alpha = SortedSet(range(100), load=7)
+    assert alpha >= list(range(10))
 
 def test_iter():
     temp = SortedSet(range(100), load=7)
