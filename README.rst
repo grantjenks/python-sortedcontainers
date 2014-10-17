@@ -72,6 +72,15 @@ Python 2 and 3.
 
 .. _`Formations Python`: http://formationspython.com/
 
+**Mark Summerfield**, a short plea for `Python Sorted Collections`_
+
+Python's "batteries included" standard library seems to have a battery
+missing. And the argument that "we never had it before" has worn thin. It is
+time that Python offered a full range of collection classes out of the box,
+including sorted ones.
+
+.. _`Python Sorted Collections`: http://www.qtrac.eu/pysorted.html
+
 Features
 --------
 
