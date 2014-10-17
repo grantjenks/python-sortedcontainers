@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from sys import version_info
+from sys import hexversion
 
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedList
 from nose.tools import raises
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     from itertools import izip as zip
     range = xrange
 

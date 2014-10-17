@@ -11,7 +11,7 @@ from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
 
 from functools import wraps
-from sys import version_info, hexversion
+from sys import hexversion
 
 _NotGiven = object()
 
@@ -197,7 +197,7 @@ class SortedDict(dict):
         addition to the methods provided by the built-in `view` the ItemsView is
         indexable (e.g., ``d.items()[5]``).
         """
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             return list(self.iteritems())
         else:
             return ItemsView(self)
@@ -214,7 +214,7 @@ class SortedDict(dict):
         addition to the methods provided by the built-in `view` the KeysView is
         indexable (e.g., ``d.keys()[5]``).
         """
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             return SortedSet(self._list, key=self._key, load=self._load)
         else:
             return KeysView(self)
@@ -231,7 +231,7 @@ class SortedDict(dict):
         values.  In addition to the methods provided by the built-in `view`
         the ValuesView is indexable (e.g., ``d.values()[5]``).
         """
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             return list(self.itervalues())
         else:
             return ValuesView(self)
@@ -396,7 +396,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         Initialize a KeysView from a SortedDict container as *sorted_dict*.
         """
         self._list = sorted_dict._list
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             self._view = sorted_dict._dict.viewkeys()
         else:
             self._view = sorted_dict._dict.keys()
@@ -473,7 +473,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
         """Return True if and only if *that* is disjoint with self."""
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             return not any(key in self._list for key in that)
         else:
             return self._view.isdisjoint(that)
@@ -495,7 +495,7 @@ class ValuesView(AbstractValuesView, Sequence):
         """
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             self._view = sorted_dict._dict.viewvalues()
         else:
             self._view = sorted_dict._dict.values()
@@ -553,7 +553,7 @@ class ValuesView(AbstractValuesView, Sequence):
     def count(self, value):
         """Return the number of occurrences of *value* in self."""
         _dict = self._dict
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             return sum(1 for val in _dict.itervalues() if val == value)
         else:
             return sum(1 for val in _dict.values() if val == value)
@@ -593,7 +593,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         """
         self._dict = sorted_dict
         self._list = sorted_dict._list
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             self._view = sorted_dict._dict.viewitems()
         else:
             self._view = sorted_dict._dict.items()
@@ -683,7 +683,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         return SortedSet(self._view ^ that)
     def isdisjoint(self, that):
         """Return True if and only if *that* is disjoint with self."""
-        if version_info[0] == 2:
+        if hexversion < 0x03000000:
             _dict = self._dict
             for key, value in that:
                 if key in _dict and _dict[key] == value:

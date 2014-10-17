@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from sys import version_info
+from sys import hexversion
 
 import copy
 import bisect
@@ -33,7 +33,7 @@ class SortedList(SortedListWithKey):
     def _index(self, value):
         self._list._index = value
 
-if version_info[0] == 2:
+if hexversion < 0x03000000:
     from itertools import izip as zip
     range = xrange
 
