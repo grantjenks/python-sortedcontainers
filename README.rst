@@ -86,16 +86,15 @@ Features
 
 - Pure-Python
 - Fully documented
-- Benchmark comparison
+- Benchmark comparison (alternatives, runtimes, load-factors)
 - 100% test coverage
 - Hours of stress testing
 - Performance matters (often faster than C implementations)
 - Compatible API (nearly identical to popular blist and rbtree modules)
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.iloc[-5:])
-- Pragmatic design (e.g. SortedSet is mostly a Python set with a SortedList
-  index)
+- Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
 - Developed on Python 2.7
-- Tested on Python 2.6, 2.7 (and PyPy), 3.2 (and PyPy 3), 3.3, and 3.4
+- Tested on CPython 2.6, 2.7, 3.2, 3.3, 3.4 and PyPy 2.2+, PyPy3 2.3.1+
 
 Quickstart
 ----------

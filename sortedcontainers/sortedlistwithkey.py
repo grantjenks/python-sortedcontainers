@@ -55,6 +55,10 @@ class SortedListWithKey(MutableSequence):
         default until you start benchmarking. See implementation details for
         more information.
 
+        An optional *key* argument defines a callable that, like the `key`
+        argument to Python's `sorted` function, extracts a comparison key from
+        each element. The default is the identity function.
+
         An optional *key* specifies a key function to apply to inserted
         values. Values will be ordered by their key. A SortedListWithKey
         must maintain the sort order at all times.

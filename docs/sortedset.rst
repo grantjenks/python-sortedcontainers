@@ -10,6 +10,11 @@ SortedSet
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedSet`.
 
+   An optional *key* argument defines a callable that, like the `key` argument
+   to Python's `sorted` function, extracts a comparison key from each set
+   item. If no function is specified, the default compares the set items
+   directly.
+
    An optional *load* specifies the load-factor of the set. The default load
    factor of '1000' works well for sets from tens to tens of millions of
    elements.  Good practice is to use a value that is the square or cube root of

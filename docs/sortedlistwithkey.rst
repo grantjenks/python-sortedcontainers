@@ -1,7 +1,7 @@
 SortedListWithKey
 =================
 
-.. class:: SortedListWithKey(iterable=None, load=1000, key=lambda val: val, value_orderable=True)
+.. class:: SortedListWithKey(iterable=None, load=1000, key=lambda val: val)
 
    A :class:`SortedListWithKey` provides most of the same methods as a
    :class:`list`, but keeps the items in sorted order.  To add an element to the
@@ -22,14 +22,9 @@ SortedListWithKey
    start benchmarking. See :doc:`implementation details <implementation>` for
    more information.
 
-   An optional *key* specifies a key function to apply to inserted
-   values. Values will be ordered by their key. A :class:`SortedListWithKey`
-   must maintain the sort order at all times.
-
-   An optional *value_orderable* specifies whether the inserted values are
-   orderable with respect to each other regardless of the key. There is a
-   significant performance improvement possible when values themselves have a
-   total ordering.
+   An optional *key* argument defines a callable that, like the `key`
+   argument to Python's `sorted` function, extracts a comparison key from
+   each element. The default is the identity function.
 
    :class:`SortedListWithKey` implements the MutableSequence Abstract Base Class type.
 

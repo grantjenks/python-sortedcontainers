@@ -135,15 +135,11 @@ maintains the order of contained values based on the applied key-function. This
 simplifies the pattern of boxing/un-boxing which would otherwise be required.
 
     >>> from sortedcontainers import SortedListWithKey
-    >>> l = SortedListWithKey(key=lambda val: -val, value_orderable=True)
+    >>> l = SortedListWithKey(key=lambda val: -val)
 
-Two more keyword arguments are supported: *key* and *value_orderable*. The first
-defines the key-function. In our example above we apply the negation
-operator. Doing so would maintain a list of integers in reverse.
-
-The other keyword argument, *value_orderable* specifies whether the inserted
-values are orderable. When values are not comparable, you must specify False in
-the constructor. A significant performance improvement is possible when True.
+The key function extracts a comparison key for ordering items in the list. In
+our example above we apply the negation operator. Doing so would maintain a list
+of integers in reverse.
 
 For more details, refer to the :doc:`SortedListWithKey API documentation <sortedlistwithkey>`.
 

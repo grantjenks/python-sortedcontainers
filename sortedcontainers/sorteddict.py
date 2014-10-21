@@ -5,7 +5,7 @@
 from .sortedset import SortedSet
 from .sortedlist import SortedList, recursive_repr
 from .sortedlistwithkey import SortedListWithKey
-from collections import MutableMapping, Set, Sequence
+from collections import Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
@@ -72,13 +72,19 @@ class SortedDict(dict):
         the keys method will return the keys in sorted order, the popitem method
         will remove the item with the highest key, etc.
 
+        An optional *key* argument defines a callable that, like the `key`
+        argument to Python's `sorted` function, extracts a comparison key from
+        each dict key. If no function is specified, the default compares the
+        dict keys directly. The `key` argument must be provided as a positional
+        argument and must come before all other arguments.
+
         An optional *load* argument defines the load factor of the internal list
-        used to maintain sort order. If present, this argument must come first
-        and must be an integer. The default load factor of '1000' works well for
-        lists from tens to tens of millions of elements.  Good practice is to
-        use a value that is the cube root of the list size.  With billions of
-        elements, the best load factor depends on your usage.  It's best to
-        leave the load factor at the default until you start benchmarking.
+        used to maintain sort order. If present, this argument must come before
+        an iterable. The default load factor of '1000' works well for lists from
+        tens to tens of millions of elements.  Good practice is to use a value
+        that is the cube root of the list size.  With billions of elements, the
+        best load factor depends on your usage.  It's best to leave the load
+        factor at the default until you start benchmarking.
 
         An optional *iterable* argument provides an initial series of items to
         populate the SortedDict.  Each item in the series must itself contain
