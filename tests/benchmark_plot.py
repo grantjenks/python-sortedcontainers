@@ -128,8 +128,9 @@ def kind_plot(test, kind):
                for size in sizes],
               [(data[test][kind][size][4] - data[test][kind][size][5])
                for size in sizes]]
-    plt.errorbar(sizes, [data[test][kind][size][5] for size in sizes],
-                 yerr=yrange)
+    # Timer isn't any better than micro-second resolution.
+    yvalues = [max(1e-6, data[test][kind][size][5]) for size in sizes]
+    plt.errorbar(sizes, yvalues, yerr=yrange)
 
 tests = args.test or list(data)
 
