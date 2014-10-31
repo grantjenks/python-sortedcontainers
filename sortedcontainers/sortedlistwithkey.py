@@ -309,7 +309,7 @@ class SortedListWithKey(MutableSequence):
 
     def copy(self):
         """Return a shallow copy of the sorted list with key."""
-        return SortedListWithKey(self, key=self._key, load=self._load)
+        return self.__class__(self, key=self._key, load=self._load)
 
     __copy__ = copy
 
@@ -411,7 +411,7 @@ class SortedListWithKey(MutableSequence):
         *that*. Elements in *that* do not need to be properly ordered with
         respect to *self*.
         """
-        result = SortedListWithKey(key=self._key, load=self._load)
+        result = self.__class__(key=self._key, load=self._load)
         values = self.as_list()
         values.extend(that)
         result.update(values)
@@ -431,7 +431,7 @@ class SortedListWithKey(MutableSequence):
         in SortedList.
         """
         values = self.as_list() * that
-        return SortedListWithKey(values, key=self._key, load=self._load)
+        return self.__class__(values, key=self._key, load=self._load)
 
     def __imul__(self, that):
         """

@@ -861,7 +861,7 @@ class SortedList(MutableSequence):
 
     def copy(self):
         """Return a shallow copy of the sorted list."""
-        return SortedList(self, load=self._load)
+        return self.__class__(self, load=self._load)
 
     __copy__ = copy
 
@@ -1078,7 +1078,7 @@ class SortedList(MutableSequence):
         """
         values = self.as_list()
         values.extend(that)
-        return SortedList(values)
+        return self.__class__(values)
 
     def __iadd__(self, that):
         """
@@ -1094,7 +1094,7 @@ class SortedList(MutableSequence):
         in SortedList.
         """
         values = self.as_list() * that
-        return SortedList(values)
+        return self.__class__(values)
 
     def __imul__(self, that):
         """

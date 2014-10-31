@@ -245,7 +245,7 @@ class SortedSet(MutableSet, Sequence):
 
     def copy(self):
         """Create a shallow copy of the sorted set."""
-        return SortedSet(key=self._key, load=self._load, _set=set(self._set))
+        return self.__class__(key=self._key, load=self._load, _set=set(self._set))
 
     __copy__ = copy
 
@@ -286,7 +286,7 @@ class SortedSet(MutableSet, Sequence):
         *iterables*.
         """
         diff = self._set.difference(*iterables)
-        new_set = SortedSet(key=self._key, load=self._load, _set=diff)
+        new_set = self.__class__(key=self._key, load=self._load, _set=diff)
         return new_set
 
     def difference_update(self, *iterables):
@@ -309,7 +309,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements common to the set and all *iterables*.
         """
         comb = self._set.intersection(*iterables)
-        new_set = SortedSet(key=self._key, load=self._load, _set=comb)
+        new_set = self.__class__(key=self._key, load=self._load, _set=comb)
         return new_set
 
     def intersection_update(self, *iterables):
@@ -325,7 +325,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements in either *self* or *that* but not both.
         """
         diff = self._set.symmetric_difference(that)
-        new_set = SortedSet(key=self._key, load=self._load, _set=diff)
+        new_set = self.__class__(key=self._key, load=self._load, _set=diff)
         return new_set
 
     def symmetric_difference_update(self, that):
@@ -341,7 +341,7 @@ class SortedSet(MutableSet, Sequence):
         """
         Return a new SortedSet with elements from the set and all *iterables*.
         """
-        return SortedSet(chain(iter(self), *iterables), key=self._key, load=self._load)
+        return self.__class__(chain(iter(self), *iterables), key=self._key, load=self._load)
 
     def update(self, *iterables):
         """Update the set, adding elements from all *iterables*."""

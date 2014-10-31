@@ -12,8 +12,8 @@ from nose.tools import raises
 from functools import wraps
 
 class SortedList(SortedListWithKey):
-    def __init__(self, *args):
-        super(SortedList, self).__init__(*args)
+    def __init__(self, *args, **kwargs):
+        super(SortedList, self).__init__(*args, **kwargs)
     @property
     def _maxes(self):
         return self._list._maxes

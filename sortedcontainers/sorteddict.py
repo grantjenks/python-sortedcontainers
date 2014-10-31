@@ -182,7 +182,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return SortedDict(self._key, self._load, self.iteritems())
+        return self.__class__(self._key, self._load, self.iteritems())
 
     __copy__ = copy
 
