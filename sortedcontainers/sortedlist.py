@@ -807,10 +807,6 @@ class SortedList(MutableSequence):
 
         return self._loc(pos, idx)
 
-    def bisect(self, val):
-        """Same as bisect_right."""
-        return self.bisect_right(val)
-
     def bisect_right(self, val):
         """
         Same as *bisect_left*, but if *val* is already present, the insertion
@@ -829,6 +825,8 @@ class SortedList(MutableSequence):
         idx = bisect_right(self._lists[pos], val)
 
         return self._loc(pos, idx)
+
+    bisect = bisect_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
