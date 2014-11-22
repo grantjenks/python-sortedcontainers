@@ -24,7 +24,7 @@ Get the Code
 ............
 
 SortedContainers is actively developed on GitHub, where the code is
-`always available <https://github.com/grantjenks/sortedcontainers>`_.
+`always available <https://github.com/grantjenks/sorted_containers>`_.
 
 You can either clone the public repository::
 
