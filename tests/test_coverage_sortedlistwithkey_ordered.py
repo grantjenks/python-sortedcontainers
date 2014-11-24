@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey
+from sortedcontainers import SortedListWithKey2 as SortedListWithKey
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -19,18 +19,18 @@ def test_init():
     slt._check()
 
     slt = SortedListWithKey(load=10000, key=negate)
-    assert slt._list._load == 10000
-    assert slt._list._twice == 20000
-    assert slt._list._half == 5000
+    assert slt._load == 10000
+    assert slt._twice == 20000
+    assert slt._half == 5000
     slt._check()
 
     slt = SortedListWithKey(range(10000), key=negate)
     assert all(tup[0] == tup[1] for tup in zip(slt, reversed(range(10000))))
 
     slt.clear()
-    assert slt._list._len == 0
-    assert slt._list._maxes == []
-    assert slt._list._lists == []
+    assert slt._len == 0
+    assert slt._maxes == []
+    assert slt._lists == []
     slt._check()
 
 def test_key():
@@ -99,6 +99,8 @@ def test_discard():
     slt.discard(2)
     slt._check()
 
+    print list(slt)
+
     assert all(tup[0] == tup[1] for tup in zip(slt, reversed([1, 2, 2, 3, 3, 5])))
 
 def test_remove():
@@ -137,8 +139,8 @@ def test_delete():
         slt.remove(val)
         slt._check()
     assert len(slt) == 0
-    assert slt._list._maxes == []
-    assert slt._list._lists == []
+    assert slt._maxes == []
+    assert slt._lists == []
 
 def test_getitem():
     random.seed(0)
@@ -603,17 +605,17 @@ def test_gte():
 
 def test_repr():
     this = SortedListWithKey(range(10), load=4, key=negate)
-    assert repr(this).startswith('SortedListWithKey([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
+    assert repr(this).startswith('SortedListWithKey2([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
 
 def test_repr_recursion():
     this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
     this.append(this)
-    assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
+    assert repr(this).startswith('SortedListWithKey2([[1], [2], [3], [4], ...], key=<function ')
 
 @raises(AssertionError)
 def test_check():
     slt = SortedListWithKey(range(10), load=4, key=negate)
-    slt._list._len = 5
+    slt._len = 5
     slt._check()
 
 if __name__ == '__main__':

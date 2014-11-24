@@ -64,13 +64,13 @@ class SortedListWithKey2(MutableSequence):
         key = self._key(val)
 
         if _maxes:
-            pos = bisect_right(_maxes, val)
+            pos = bisect_right(_maxes, key)
 
             if pos == len(_maxes):
                 pos -= 1
                 _maxes[pos] = key
-                _lists[pos].append(val)
                 _keys[pos].append(key)
+                _lists[pos].append(val)
             else:
                 idx = bisect_right(_keys[pos], key)
                 _keys[pos].insert(idx, key)
@@ -78,14 +78,15 @@ class SortedListWithKey2(MutableSequence):
 
             self._expand(pos)
         else:
-            _maxes.append(val)
-            _lists.append([val])
+            _maxes.append(key)
             _keys.append([key])
+            _lists.append([val])
 
         self._len += 1
 
     def _expand(self, pos):
-        """Splits sublists that are more than double the load level.
+        """
+        Splits sublists that are more than double the load level.
 
         Updates the index when the sublist length is less than double the load
         level. This requires incrementing the nodes in a traversal from the leaf
@@ -135,7 +136,7 @@ class SortedListWithKey2(MutableSequence):
         _lists.extend(values[pos:(pos + _load)]
                       for pos in range(0, len(values), _load))
         _keys.extend(list(map(self._key, _list)) for _list in _lists)
-        _maxes.extend(sublist[-1] for sublist in _lists)
+        _maxes.extend(sublist[-1] for sublist in _keys)
         self._len = len(values)
         del _index[:]
 
@@ -152,8 +153,9 @@ class SortedListWithKey2(MutableSequence):
         if pos == len(_maxes):
             return False
 
-        _lists = self._lists
         _keys = self._keys
+        _lists = self._lists
+
         idx = bisect_left(_keys[pos], key)
 
         len_keys = len(_keys)
@@ -184,13 +186,13 @@ class SortedListWithKey2(MutableSequence):
             return
 
         key = self._key(val)
-        pos = bisect_left(_maxes, val)
+        pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
             return
 
-        _lists = self._lists
         _keys = self._keys
+        _lists = self._lists
         idx = bisect_left(_keys[pos], key)
 
         len_keys = len(_keys)
@@ -222,13 +224,13 @@ class SortedListWithKey2(MutableSequence):
             raise ValueError('{0} not in list'.format(repr(val)))
 
         key = self._key(val)
-        pos = bisect_left(_maxes, val)
+        pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
             raise ValueError('{0} not in list'.format(repr(val)))
 
-        _lists = self._lists
         _keys = self._keys
+        _lists = self._lists
         idx = bisect_left(_keys[pos], key)
 
         len_keys = len(_keys)
@@ -249,7 +251,8 @@ class SortedListWithKey2(MutableSequence):
                 idx = 0
 
     def _delete(self, pos, idx):
-        """Delete the item at the given (pos, idx).
+        """
+        Delete the item at the given (pos, idx).
 
         Combines lists that are less than half the load level.
 
@@ -259,11 +262,11 @@ class SortedListWithKey2(MutableSequence):
         """
         _maxes, _lists, _keys, _index = self._maxes, self._lists, self._keys, self._index
 
-        lists_pos = _lists[pos]
         keys_pos = _keys[pos]
+        lists_pos = _lists[pos]
 
-        del lists_pos[idx]
         del keys_pos[idx]
+        del lists_pos[idx]
         self._len -= 1
 
         len_keys_pos = len(keys_pos)
@@ -285,13 +288,13 @@ class SortedListWithKey2(MutableSequence):
                 pos += 1
 
             prev = pos - 1
-            _lists[prev].extend(_lists[pos])
             _keys[prev].extend(_keys[pos])
+            _lists[prev].extend(_lists[pos])
             _maxes[prev] = _keys[prev][-1]
 
-            del _maxes[pos]
-            del _lists[pos]
             del _keys[pos]
+            del _lists[pos]
+            del _maxes[pos]
             del _index[:]
 
             self._expand(prev)
@@ -302,9 +305,9 @@ class SortedListWithKey2(MutableSequence):
 
         else:
 
-            del _maxes[pos]
-            del _lists[pos]
             del _keys[pos]
+            del _lists[pos]
+            del _maxes[pos]
             del _index[:]
 
     def _loc(self, pos, idx):
@@ -668,7 +671,7 @@ class SortedListWithKey2(MutableSequence):
             pos, idx = self._pos(idx)
             return _lists[pos][idx]
 
-    def _check_order(self, idx, val):
+    def _check_order(self, idx, key, val):
         _keys, _len = self._keys, self._len
 
         pos, loc = self._pos(idx)
@@ -708,7 +711,6 @@ class SortedListWithKey2(MutableSequence):
 
     def __setitem__(self, index, value):
         """
-        TODO
         Replace the item at position *index* with *value*.
 
         Supports slice notation. Raises a :exc:`ValueError` if the sort order
@@ -743,26 +745,29 @@ class SortedListWithKey2(MutableSequence):
 
                 for idx, val in zip(indices, value):
                     pos, loc = _pos(idx)
-                    _append((idx, _lists[pos][loc], val))
+                    key = self._key(val)
+                    _append((idx, _keys[pos][loc], key, _lists[pos][loc], val))
+                    _keys[pos][loc] = key
                     _lists[pos][loc] = val
-                    if len(_lists[pos]) == (loc + 1):
-                        _maxes[pos] = val
+                    if len(_keys[pos]) == (loc + 1):
+                        _maxes[pos] = key
 
                 try:
                     # Validate ordering of new values.
 
-                    for idx, oldval, newval in log:
-                        _check_order(idx, newval)
+                    for idx, oldkey, newkey, oldval, newval in log:
+                        _check_order(idx, newkey, newval)
 
                 except ValueError:
 
                     # Roll back changes from log.
 
-                    for idx, oldval, newval in log:
+                    for idx, oldkey, newkey, oldval, newval in log:
                         pos, loc = _pos(idx)
+                        _keys[pos][loc] = oldkey
                         _lists[pos][loc] = oldval
-                        if len(_lists[pos]) == (loc + 1):
-                            _maxes[pos] = oldval
+                        if len(_keys[pos]) == (loc + 1):
+                            _maxes[pos] = oldkey
 
                     raise
             else:
@@ -774,8 +779,9 @@ class SortedListWithKey2(MutableSequence):
 
                 # Check that the given values are ordered properly.
 
-                ordered = all(value[pos - 1] <= value[pos]
-                              for pos in range(1, len(value)))
+                keys = list(map(self._key, value))
+                ordered = all(keys[pos - 1] <= keys[pos]
+                              for pos in range(1, len(keys)))
 
                 if not ordered:
                     raise ValueError('given sequence not in sort order')
@@ -786,7 +792,8 @@ class SortedListWithKey2(MutableSequence):
                     # Nothing to check on the lhs.
                     pass
                 else:
-                    if self[start - 1] > value[0]:
+                    pos, loc = _pos(start - 1)
+                    if _keys[pos][loc] > keys[0]:
                         msg = '{0} not in sort order at index {1}'.format(repr(value[0]), start)
                         raise ValueError(msg)
 
@@ -796,7 +803,8 @@ class SortedListWithKey2(MutableSequence):
                 else:
                     # "stop" is exclusive so we don't need
                     # to add one for the index.
-                    if self[stop] < value[-1]:
+                    pos, loc = _pos(stop)
+                    if _keys[pos][loc] < keys[-1]:
                         msg = '{0} not in sort order at index {1}'.format(repr(value[-1]), stop)
                         raise ValueError(msg)
 
@@ -811,10 +819,12 @@ class SortedListWithKey2(MutableSequence):
                     _insert(start + idx, val)
         else:
             pos, loc = _pos(index)
-            _check_order(index, value)
+            key = self._key(value)
+            _check_order(index, key, value)
+            _keys[pos][loc] = key
             _lists[pos][loc] = value
             if len(_lists[pos]) == (loc + 1):
-                _maxes[pos] = value
+                _maxes[pos] = key
 
     def __iter__(self):
         """Create an iterator over the list."""
@@ -888,10 +898,12 @@ class SortedListWithKey2(MutableSequence):
         if pos == len(_maxes):
             return 0
 
-        _lists = self._lists
         _keys = self._keys
+        _lists = self._lists
+
         idx = bisect_left(_keys[pos], key)
 
+        total = 0
         len_keys = len(_keys)
         len_sublist = len(_keys[pos])
 
@@ -924,9 +936,9 @@ class SortedListWithKey2(MutableSequence):
         key = self._key(val)
 
         if not _maxes:
-            _maxes.append(val)
-            _lists.append([val])
+            _maxes.append(key)
             _keys.append([key])
+            _lists.append([val])
             self._len = 1
             return
 
@@ -936,9 +948,9 @@ class SortedListWithKey2(MutableSequence):
             msg = '{0} not in sort order at index {1}'.format(repr(val), self._len)
             raise ValueError(msg)
 
-        _maxes[pos] = val
-        _lists[pos].append(val)
+        _maxes[pos] = key
         _keys[pos].append(key)
+        _lists[pos].append(val)
         self._len += 1
         self._expand(pos)
 
@@ -947,7 +959,7 @@ class SortedListWithKey2(MutableSequence):
         Extend the list by appending all elements from the *values*. Raises a
         ValueError if the sort order would be violated.
         """
-        _maxes, _lists, _keys, _load = self._maxes, self._keys, self._lists, self._load
+        _maxes, _keys, _lists, _load = self._maxes, self._keys, self._lists, self._load
 
         if not isinstance(values, list):
             values = list(values)
@@ -980,7 +992,7 @@ class SortedListWithKey2(MutableSequence):
 
         _index = self._index
 
-        if len_lists == len(_lists):
+        if len_keys == len(_keys):
             len_index = len(_index)
             if len_index > 0:
                 len_values = len(values)
@@ -1012,7 +1024,7 @@ class SortedListWithKey2(MutableSequence):
 
         if not _maxes:
             # The idx must be zero by the inequalities above.
-            _maxes.append(val)
+            _maxes.append(key)
             _lists.append([val])
             _keys.append([key])
             self._len = 1
@@ -1023,8 +1035,8 @@ class SortedListWithKey2(MutableSequence):
                 msg = '{0} not in sort order at index {1}'.format(repr(val), 0)
                 raise ValueError(msg)
             else:
-                _lists[0].insert(0, val)
                 _keys[0].insert(0, key)
+                _lists[0].insert(0, val)
                 self._expand(0)
                 self._len += 1
                 return
@@ -1035,8 +1047,8 @@ class SortedListWithKey2(MutableSequence):
                 msg = '{0} not in sort order at index {1}'.format(repr(val), _len)
                 raise ValueError(msg)
             else:
-                _lists[pos].append(val)
                 _keys[pos].append(key)
+                _lists[pos].append(val)
                 _maxes[pos] = _lists[pos][-1]
                 self._expand(pos)
                 self._len += 1
@@ -1077,7 +1089,6 @@ class SortedListWithKey2(MutableSequence):
 
     def index(self, val, start=None, stop=None):
         """
-        TODO
         Return the smallest *k* such that L[k] == val and i <= k < j`.  Raises
         ValueError if *val* is not present.  *stop* defaults to the end of the
         list. *start* defaults to the beginning. Negative indices are supported,
@@ -1107,27 +1118,35 @@ class SortedListWithKey2(MutableSequence):
 
         stop -= 1
         key = self._key(val)
-        pos_left = bisect_left(_maxes, key)
+        pos = bisect_left(_maxes, key)
 
-        if pos_left == len(_maxes):
+        if pos == len(_maxes):
             raise ValueError('{0} is not in list'.format(repr(val)))
 
         _keys = self._keys
-        idx_left = bisect_left(_keys[pos_left], key)
+        _lists = self._lists
 
-        if _lists[pos_left][idx_left] != val:
-            raise ValueError('{0} is not in list'.format(repr(val)))
+        idx = bisect_left(_keys[pos], key)
 
-        left = self._loc(pos_left, idx_left)
+        len_keys = len(_keys)
+        len_sublist = len(_keys[pos])
 
-        if start <= left:
-            if left <= stop:
-                return left
-        else:
-            right = self.bisect_right(val) - 1
-
-            if start <= right:
-                return start
+        while True:
+            if _keys[pos][idx] != key:
+                raise ValueError('{0} is not in list'.format(repr(val)))
+            if _lists[pos][idx] == val:
+                loc = self._loc(pos, idx)
+                if start <= loc <= stop:
+                    return loc
+                elif loc > stop:
+                    break
+            idx += 1
+            if idx == len_sublist:
+                pos += 1
+                if pos == len_keys:
+                    raise ValueError('{0} is not in list'.format(repr(val)))
+                len_sublist = len(_keys[pos])
+                idx = 0
 
         raise ValueError('{0} is not in list'.format(repr(val)))
 
@@ -1172,39 +1191,45 @@ class SortedListWithKey2(MutableSequence):
         return self
 
     def __eq__(self, that):
-        """Compare two iterables for equality."""
+        """Compare two Sequences for equality."""
         return ((self._len == len(that))
                 and all(lhs == rhs for lhs, rhs in zip(self, that)))
 
     def __ne__(self, that):
-        """Compare two iterables for inequality."""
+        """Compare two Sequences for inequality."""
         return ((self._len != len(that))
                 or any(lhs != rhs for lhs, rhs in zip(self, that)))
 
     def __lt__(self, that):
-        """Compare two iterables for less than."""
+        """Compare two Sequences for less than."""
         return ((self._len <= len(that))
                 and all(lhs < rhs for lhs, rhs in zip(self, that)))
 
     def __le__(self, that):
-        """Compare two iterables for less than equal."""
+        """Compare two Sequences for less than equal."""
         return ((self._len <= len(that))
                 and all(lhs <= rhs for lhs, rhs in zip(self, that)))
 
     def __gt__(self, that):
-        """Compare two iterables for greater than."""
+        """Compare two Sequences for greater than."""
         return ((self._len >= len(that))
                 and all(lhs > rhs for lhs, rhs in zip(self, that)))
 
     def __ge__(self, that):
-        """Compare two iterables for greater than equal."""
+        """Compare two Sequences for greater than equal."""
         return ((self._len >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
     @recursive_repr
     def __repr__(self):
-        """Return string representation of SortedList."""
-        return '{0}({1})'.format(self.__class__.__name__, repr(self.as_list()))
+        """Return string representation of SortedListWithKey."""
+        temp = '{0}({1}, key={2}, load={3})'
+        return temp.format(
+            self.__class__.__name__,
+            repr(self.as_list()),
+            repr(self._key),
+            repr(self._load)
+        )
 
     def _check(self):
         try:
@@ -1217,25 +1242,26 @@ class SortedListWithKey2(MutableSequence):
             # Check empty sorted list case.
 
             if self._maxes == []:
+                assert self._keys == []
                 assert self._lists == []
                 return
 
-            assert len(self._maxes) > 0 and len(self._lists) > 0
+            assert len(self._maxes) > 0 and len(self._keys) > 0 and len(self._lists) > 0
 
             # Check all sublists are sorted.
 
             assert all(sublist[pos - 1] <= sublist[pos]
-                       for sublist in self._lists
+                       for sublist in self._keys
                        for pos in range(1, len(sublist)))
 
             # Check beginning/end of sublists are sorted.
 
-            for pos in range(1, len(self._lists)):
-                assert self._lists[pos - 1][-1] <= self._lists[pos][0]
+            for pos in range(1, len(self._keys)):
+                assert self._keys[pos - 1][-1] <= self._keys[pos][0]
 
             # Check length of _maxes and _lists match.
 
-            assert len(self._maxes) == len(self._lists)
+            assert len(self._maxes) == len(self._lists) == len(self._keys)
 
             # Check _keys matches _key mapped to _lists.
 
@@ -1245,9 +1271,9 @@ class SortedListWithKey2(MutableSequence):
                        zip((_val for _val_list in self._lists for _val in _val_list),
                            (_key for _key_list in self._keys for _key in _key_list)))
 
-            # Check _maxes is a map of _lists.
+            # Check _maxes is a map of _keys.
 
-            assert all(self._maxes[pos] == self._lists[pos][-1]
+            assert all(self._maxes[pos] == self._keys[pos][-1]
                        for pos in range(len(self._maxes)))
 
             # Check load level is less than _twice.
