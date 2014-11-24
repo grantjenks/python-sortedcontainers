@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey2 as SortedListWithKey
+from sortedcontainers import SortedListWithKey
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -605,12 +605,12 @@ def test_gte():
 
 def test_repr():
     this = SortedListWithKey(range(10), load=4, key=negate)
-    assert repr(this).startswith('SortedListWithKey2([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
+    assert repr(this).startswith('SortedListWithKey([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
 
 def test_repr_recursion():
     this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
     this.append(this)
-    assert repr(this).startswith('SortedListWithKey2([[1], [2], [3], [4], ...], key=<function ')
+    assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
 
 @raises(AssertionError)
 def test_check():

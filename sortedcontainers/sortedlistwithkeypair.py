@@ -33,7 +33,7 @@ class Pair:
 def identity(value):
     return value
 
-class SortedListWithKey(MutableSequence):
+class SortedListWithKeyPair(MutableSequence):
     """
     SortedListWithKey provides most of the same methods as a list but keeps the
     items in sorted order.

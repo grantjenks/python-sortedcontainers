@@ -22,7 +22,7 @@ else:
 def identity(value):
     return value
 
-class SortedListWithKey2(MutableSequence):
+class SortedListWithKey(MutableSequence):
     """
     SortedList provides most of the same methods as a list but keeps the items
     in sorted order.

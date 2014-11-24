@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey2 as SortedListWithKey
+from sortedcontainers import SortedListWithKey
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -608,7 +608,7 @@ def test_gte():
 
 def test_repr():
     this = SortedListWithKey(range(10), load=4, key=modulo)
-    assert repr(this).startswith('SortedListWithKey2([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
+    assert repr(this).startswith('SortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
 
 def test_repr_subclass():
     class CustomSortedListWithKey(SortedListWithKey):
