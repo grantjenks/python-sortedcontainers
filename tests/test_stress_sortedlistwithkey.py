@@ -322,6 +322,7 @@ def test_stress(repeat=1000):
             # of the sublists which helps coverage.
             pos = random.randrange(len(slt._maxes))
             del slt._maxes[pos]
+            del slt._keys[pos]
             del slt._lists[pos]
             slt._len = sum(len(sublist) for sublist in slt._lists)
             slt._index = []
