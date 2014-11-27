@@ -81,20 +81,21 @@ def test_update():
     slt._check()
 
 def test_contains():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedListWithKey(key=modulo, load=7)
+
     assert 0 not in slt
 
-    slt.update(range(10000))
+    slt.update(range(100))
 
-    for val in range(10000):
+    for val in range(100):
         assert val in slt
 
-    assert 10000 not in slt
+    assert 100 not in slt
 
     slt._check()
 
-    slt = SortedListWithKey(range(10), key=modulo, load=4)
-    assert all(val not in slt for val in range(10, 20))
+    slt = SortedListWithKey(range(100), key=modulo, load=4)
+    assert all(val not in slt for val in range(100, 200))
 
 def test_discard():
     slt = SortedListWithKey(key=modulo)
@@ -150,6 +151,11 @@ def test_remove_valueerror3():
 @raises(ValueError)
 def test_remove_valueerror4():
     slt = SortedListWithKey([1, 1, 1, 2, 2, 2], key=modulo)
+    slt.remove(13)
+
+@raises(ValueError)
+def test_remove_valueerror5():
+    slt = SortedListWithKey([1, 1, 1, 2, 2, 2], key=modulo)
     slt.remove(12)
 
 def test_delete():
@@ -165,6 +171,11 @@ def test_delete():
 def test_getitem():
     random.seed(0)
     slt = SortedListWithKey(load=17, key=modulo)
+
+    slt.append(5)
+    slt._build_index()
+    slt._check()
+    slt.clear()
 
     lst = list(random.random() for rpt in range(100))
     slt.update(lst)
@@ -482,14 +493,14 @@ def test_pop_indexerror2():
     slt.pop(10)
 
 def test_index():
-    slt = SortedListWithKey(range(100), load=17, key=modulo)
+    slt = SortedListWithKey(range(100), load=7, key=modulo)
 
     for pos, val in enumerate(sorted(range(100), key=modulo)):
         assert val == slt.index(pos)
 
     assert slt.index(9, 0, 1000) == 90
 
-    slt = SortedListWithKey((0 for rpt in range(100)), load=17, key=modulo)
+    slt = SortedListWithKey((0 for rpt in range(100)), load=7, key=modulo)
 
     for start in range(100):
         for stop in range(start, 100):
@@ -527,16 +538,26 @@ def test_index_valueerror5():
 
 @raises(ValueError)
 def test_index_valueerror6():
+    slt = SortedListWithKey(range(100), load=4, key=modulo)
+    slt.index(91, 0, 15)
+
+@raises(ValueError)
+def test_index_valueerror7():
+    slt = SortedListWithKey([0] * 10 + [1] * 10 + [2] * 10, load=4, key=modulo)
+    slt.index(1, 0, 10)
+
+@raises(ValueError)
+def test_index_valueerror8():
     slt = SortedListWithKey(range(10), load=4, key=modulo)
     slt.index(4, 5)
 
 @raises(ValueError)
-def test_index_valueerror7():
+def test_index_valueerror9():
     slt = SortedListWithKey(load=4, key=modulo)
     slt.index(5)
 
 @raises(ValueError)
-def test_index_valueerror7():
+def test_index_valueerror10():
     slt = SortedListWithKey(range(10), load=4, key=modulo)
     slt.index(19)
 

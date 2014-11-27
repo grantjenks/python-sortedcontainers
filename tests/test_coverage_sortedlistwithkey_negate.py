@@ -5,6 +5,7 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedListWithKey
+from itertools import chain
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -13,6 +14,10 @@ if hexversion < 0x03000000:
 
 def negate(val):
     return -val
+
+def test_identity():
+    slt = SortedListWithKey(range(100), load=7)
+    slt._check()
 
 def test_init():
     slt = SortedListWithKey(key=negate)
@@ -62,13 +67,19 @@ def test_update():
     slt = SortedListWithKey(key=negate)
 
     slt.update(range(1000))
-    assert all(tup[0] == tup[1] for tup in zip(slt, reversed(range(1000))))
     assert len(slt) == 1000
     slt._check()
 
-    slt.update(range(10000))
-    assert len(slt) == 11000
+    slt.update(range(100))
+    assert len(slt) == 1100
     slt._check()
+
+    slt.update(range(10000))
+    assert len(slt) == 11100
+    slt._check()
+
+    values = sorted((val for val in chain(range(100), range(1000), range(10000))), key=negate)
+    assert all(tup[0] == tup[1] for tup in zip(slt, values))
 
 def test_contains():
     slt = SortedListWithKey(key=negate)
@@ -80,6 +91,7 @@ def test_contains():
         assert val in slt
 
     assert 10000 not in slt
+    assert -1 not in slt
 
     slt._check()
 
@@ -145,6 +157,10 @@ def test_delete():
 def test_getitem():
     random.seed(0)
     slt = SortedListWithKey(load=17, key=negate)
+
+    slt.append(5)
+    assert slt[0] == 5
+    slt.clear()
 
     lst = list()
 
@@ -247,6 +263,9 @@ def test_setitem():
     random.seed(0)
     slt = SortedListWithKey(range(0, 100, 10), load=4, key=negate)
 
+    slt[-3] = 20
+    slt._check()
+
     values = list(enumerate(range(95, 5, -10)))
     random.shuffle(values)
     for pos, val in values:
@@ -256,7 +275,7 @@ def test_setitem_slice():
     slt = SortedListWithKey(range(100), load=17, key=negate)
     slt[:10] = iter(range(99, 89, -1))
     assert slt == list(range(99, -1, -1))
-    slt[:10:2] = [99, 97, 95, 93, 91]
+    slt[:10:2] = iter([99, 97, 95, 93, 91])
     assert slt == list(range(99, -1, -1))
     slt[-50:] = range(49, -51, -1)
     assert slt == list(range(99, -51, -1))
@@ -336,6 +355,7 @@ def test_bisect_left():
     slt._check()
     assert slt.bisect_left(50) == 98
     assert slt.bisect_left(0) == 198
+    assert slt.bisect_left(-1) == 200
 
 def test_bisect():
     slt = SortedListWithKey(key=negate)
@@ -407,7 +427,9 @@ def test_extend():
     slt._check()
 
     for val in range(100, 0, -1):
-        slt.extend([val] * (val))
+        del slt._index[:]
+        slt._build_index()
+        slt.extend([val] * (101 - val))
         slt._check()
 
 @raises(ValueError)
@@ -418,7 +440,7 @@ def test_extend_valueerror1():
 @raises(ValueError)
 def test_extend_valueerror2():
     slt = SortedListWithKey(range(20), load=4, key=negate)
-    slt.extend([17, 18, 19, 20, 21, 22, 23])
+    slt.extend([5, 4, 3, 2, 1])
 
 def test_insert():
     slt = SortedListWithKey(range(10), load=4, key=negate)
@@ -427,6 +449,8 @@ def test_insert():
     slt.insert(-100, 9)
     slt._check()
     slt.insert(0, 10)
+    slt._check()
+    slt.insert(14, -1)
     slt._check()
 
     slt = SortedListWithKey(load=4, key=negate)

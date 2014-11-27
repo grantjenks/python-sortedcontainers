@@ -5,6 +5,7 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedList
+from itertools import chain
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -51,13 +52,19 @@ def test_update():
     slt = SortedList()
 
     slt.update(range(1000))
-    assert all(tup[0] == tup[1] for tup in zip(slt, list(range(1000))))
     assert len(slt) == 1000
     slt._check()
 
-    slt.update(range(10000))
-    assert len(slt) == 11000
+    slt.update(range(100))
+    assert len(slt) == 1100
     slt._check()
+
+    slt.update(range(10000))
+    assert len(slt) == 11100
+    slt._check()
+
+    values = sorted(chain(range(1000), range(100), range(10000)))
+    assert all(tup[0] == tup[1] for tup in zip(slt, values))
 
 def test_contains():
     slt = SortedList()
@@ -376,6 +383,8 @@ def test_count():
     for iii in range(100):
         assert slt.count(iii) == iii
 
+    assert slt.count(100) == 0
+
 def test_append():
     slt = SortedList(load=17)
 
@@ -400,6 +409,8 @@ def test_extend():
     slt._check()
 
     for val in range(200, 300):
+        del slt._index[:]
+        slt._build_index()
         slt.extend([val] * (val - 199))
         slt._check()
 
@@ -525,6 +536,11 @@ def test_index_valueerror5():
 def test_index_valueerror6():
     slt = SortedList(range(10), load=4)
     slt.index(3, 5)
+
+@raises(ValueError)
+def test_index_valueerror7():
+    slt = SortedList([0] * 10 + [2] * 10, load=4)
+    slt.index(1, 0, 10)
 
 def test_mul():
     this = SortedList(range(10), load=4)

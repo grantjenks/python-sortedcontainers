@@ -45,6 +45,7 @@ class SortedListWithKey(MutableSequence):
         """
         self._len, self._maxes, self._lists, self._keys, self._index = 0, [], [], [], []
         self._key, self._load, self._twice, self._half = key, load, load * 2, load >> 1
+        self._offset = 0
 
         if iterable is not None:
             self.update(iterable)
@@ -1002,7 +1003,7 @@ class SortedListWithKey(MutableSequence):
                     child = (child - 1) >> 1
                 _index[0] += len_values
         else:
-            del self._index[:]
+            del _index[:]
 
         self._len += len(values)
 
@@ -1049,7 +1050,7 @@ class SortedListWithKey(MutableSequence):
             else:
                 _keys[pos].append(key)
                 _lists[pos].append(val)
-                _maxes[pos] = _lists[pos][-1]
+                _maxes[pos] = _keys[pos][-1]
                 self._expand(pos)
                 self._len += 1
                 return
@@ -1319,9 +1320,16 @@ class SortedListWithKey(MutableSequence):
 
             traceback.print_exc(file=sys.stdout)
 
-            print(self._len, self._load, self._half, self._twice)
-            print(self._index)
-            print(self._maxes)
-            print(self._lists)
+            print('len', self._len)
+            print('load', self._load, self._half, self._twice)
+            print('offset', self._offset)
+            print('len_index', len(self._index))
+            print('index', self._index)
+            print('len_maxes', len(self._maxes))
+            print('maxes', self._maxes)
+            print('len_keys', len(self._keys))
+            print('keys', self._keys)
+            print('len_lists', len(self._lists))
+            print('lists', self._lists)
 
             raise
