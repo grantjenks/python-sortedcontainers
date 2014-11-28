@@ -778,11 +778,7 @@ class SortedList(MutableSequence):
 
     def __reversed__(self):
         """Create an iterator to traverse the list in reverse."""
-        _lists = self._lists
-        start = len(_lists) - 1
-        iterable = (reversed(_lists[pos])
-                    for pos in range(start, -1, -1))
-        return chain.from_iterable(iterable)
+        return chain.from_iterable(map(reversed, reversed(self._lists)))
 
     def __len__(self):
         """Return the number of elements in the list."""
