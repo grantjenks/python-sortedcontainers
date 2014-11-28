@@ -1077,7 +1077,7 @@ class SortedList(MutableSequence):
         """
         values = self.as_list()
         values.extend(that)
-        return self.__class__(values)
+        return self.__class__(values, load=self._load)
 
     def __iadd__(self, that):
         """
@@ -1093,7 +1093,7 @@ class SortedList(MutableSequence):
         in SortedList.
         """
         values = self.as_list() * that
-        return self.__class__(values)
+        return self.__class__(values, load=self._load)
 
     def __imul__(self, that):
         """
@@ -1138,7 +1138,12 @@ class SortedList(MutableSequence):
     @recursive_repr
     def __repr__(self):
         """Return string representation of SortedList."""
-        return '{0}({1})'.format(self.__class__.__name__, repr(self.as_list()))
+        temp = '{0}({1}, load={2})'
+        return temp.format(
+            self.__class__.__name__,
+            repr(list(self)),
+            repr(self._load)
+        )
 
     def _check(self):
         try:

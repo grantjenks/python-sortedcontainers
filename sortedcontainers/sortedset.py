@@ -357,7 +357,13 @@ class SortedSet(MutableSet, Sequence):
 
     @recursive_repr
     def __repr__(self):
-        return '{0}({1})'.format(self.__class__.__name__, repr(list(self)))
+        temp = '{0}({1}, key={2}, load={3})'
+        return temp.format(
+            self.__class__.__name__,
+            repr(list(self)),
+            repr(self._key),
+            repr(self._load)
+        )
 
     def _check(self):
         self._list._check()

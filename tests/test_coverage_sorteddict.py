@@ -246,18 +246,18 @@ def test_update2():
 
 def test_repr():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
-    assert repr(temp) == "SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "SortedDict(None, 1000, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 def test_repr_recursion():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
     temp['bob'] = temp
-    assert repr(temp) == "SortedDict({'alice': 3, 'bob': ..., 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "SortedDict(None, 1000, {'alice': 3, 'bob': ..., 'carol': 2, 'dave': 4})"
 
 def test_repr_subclass():
     class CustomSortedDict(SortedDict):
         pass
     temp = CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
-    assert repr(temp) == "CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "CustomSortedDict(None, 1000, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]

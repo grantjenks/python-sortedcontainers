@@ -380,9 +380,15 @@ class SortedDict(dict):
 
     @recursive_repr
     def __repr__(self):
+        temp = '{0}({1}, {2}, {{{3}}})'
         items = ', '.join('{0}: {1}'.format(repr(key), repr(self[key]))
                           for key in self._list)
-        return '{0}({{{1}}})'.format(self.__class__.__name__, items)
+        return temp.format(
+            self.__class__.__name__,
+            repr(self._key),
+            repr(self._load),
+            items
+        )
 
     def _check(self):
         self._list._check()

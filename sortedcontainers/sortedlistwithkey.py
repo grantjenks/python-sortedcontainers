@@ -1227,7 +1227,7 @@ class SortedListWithKey(MutableSequence):
         temp = '{0}({1}, key={2}, load={3})'
         return temp.format(
             self.__class__.__name__,
-            repr(self.as_list()),
+            repr(list(self)),
             repr(self._key),
             repr(self._load)
         )

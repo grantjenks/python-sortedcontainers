@@ -314,7 +314,7 @@ def test_ior():
 
 def test_repr():
     temp = SortedSet(range(0, 10), load=7)
-    assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])'
+    assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=None, load=7)'
 
 def test_repr_recursion():
     class HashableSortedSet(SortedSet):
@@ -323,7 +323,7 @@ def test_repr_recursion():
 
     temp = HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2])])
     temp.add(temp)
-    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2]), ...])'
+    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1], key=None, load=1000), HashableSortedSet([1, 2], key=None, load=1000), ...], key=None, load=1000)'
 
 if __name__ == '__main__':
     import nose
