@@ -107,9 +107,6 @@ kinds['SortedList'] = SortedList
 from sortedcontainers import SortedListWithKey
 kinds['SortedListWithKey'] = SortedListWithKey
 
-from sortedcontainers import SortedListWithKeyPair
-kinds['SortedListWithKeyPair'] = SortedListWithKeyPair
-
 try:
     from blist import sortedlist
     kinds['blist.sortedlist'] = sortedlist
@@ -186,9 +183,6 @@ for name, kind in kinds.items():
         'func': 'update',
         'limit': 1000000
     }
-limit('update_large', 'SortedListWithKeyPair', 100000)
-limit('update_large', 'blist.sortedlist', 100000)
-limit('update_large', 'blist.sortedlist(key=identity)', 100000)
 limit('update_large', 'SortedCollection', 100000)
 
 for name, kind in kinds.items():

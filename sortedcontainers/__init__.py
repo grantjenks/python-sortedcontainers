@@ -51,6 +51,5 @@ from .sortedlist import SortedList
 from .sortedset import SortedSet
 from .sorteddict import SortedDict
 from .sortedlistwithkey import SortedListWithKey
-from .sortedlistwithkeypair import SortedListWithKeyPair
 
-__all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey', 'SortedListWithKeyPair']
+__all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey']
