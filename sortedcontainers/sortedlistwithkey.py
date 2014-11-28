@@ -100,8 +100,8 @@ class SortedListWithKey(MutableSequence):
 
             half = _keys[pos][_load:]
             half_list = _lists[pos][_load:]
-            _keys[pos] = _keys[pos][:_load]
-            _lists[pos] = _lists[pos][:_load]
+            del _keys[pos][_load:]
+            del _lists[pos][_load:]
             _maxes[pos] = _keys[pos][-1]
 
             _maxes.insert(pos + 1, half[-1])

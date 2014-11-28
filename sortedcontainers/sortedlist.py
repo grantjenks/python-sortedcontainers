@@ -114,7 +114,7 @@ class SortedList(MutableSequence):
         if len(_lists[pos]) > self._twice:
             _maxes, _load = self._maxes, self._load
             half = _lists[pos][_load:]
-            _lists[pos] = _lists[pos][:_load]
+            del _lists[pos][_load:]
             _maxes[pos] = _lists[pos][-1]
             _maxes.insert(pos + 1, half[-1])
             _lists.insert(pos + 1, half)
