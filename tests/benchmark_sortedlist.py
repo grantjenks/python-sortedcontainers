@@ -107,6 +107,9 @@ kinds['SortedList'] = SortedList
 from sortedcontainers import SortedListWithKey
 kinds['SortedListWithKey'] = SortedListWithKey
 
+from sortedcontainers import SortedListWithKeyPair
+kinds['SortedListWithKeyPair'] = SortedListWithKeyPair
+
 try:
     from blist import sortedlist
     kinds['blist.sortedlist'] = sortedlist
@@ -117,7 +120,44 @@ try:
 except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
+try:
+    from sortedcollection import SortedCollection
+    from bisect import bisect_left
+
+    SortedCollection.add = SortedCollection.insert
+
+    def update(self, iterable):
+        for value in iterable:
+            self.insert(value)
+    SortedCollection.update = update
+
+    def bisect(self, item):
+        key = self._key(item)
+        pos = bisect_left(self._keys, key)
+        return pos
+    SortedCollection.bisect = bisect
+
+    def pop(self):
+        self._keys.pop()
+        return self._items.pop()
+    SortedCollection.pop = pop
+
+    def discard(self, item):
+        try:
+            self.remove(item)
+        except ValueError:
+            pass
+    SortedCollection.discard = discard
+
+    kinds['SortedCollection'] = SortedCollection
+except ImportError:
+    warnings.warn('No module named sortedcollection', ImportWarning)
+
 # Implementation configuration.
+
+def limit(test, kind, value):
+    if kind in impls[test]:
+        impls[test][kind]['limit'] = value
 
 for name in tests:
     impls[name] = OrderedDict()
@@ -137,6 +177,7 @@ for name, kind in kinds.items():
         'func': 'update',
         'limit': 1000000
     }
+limit('update_small', 'SortedCollection', 100000)
 
 for name, kind in kinds.items():
     impls['update_large'][name] = {
@@ -145,6 +186,10 @@ for name, kind in kinds.items():
         'func': 'update',
         'limit': 1000000
     }
+limit('update_large', 'SortedListWithKeyPair', 100000)
+limit('update_large', 'blist.sortedlist', 100000)
+limit('update_large', 'blist.sortedlist(key=identity)', 100000)
+limit('update_large', 'SortedCollection', 100000)
 
 for name, kind in kinds.items():
     impls['contains'][name] = {
@@ -262,6 +307,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
+limit('priorityqueue', 'SortedCollection', 100000)
 
 class Multiset(Mixed):
     def run(self, value):
@@ -291,6 +337,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
+limit('multiset', 'SortedCollection', 100000)
 
 class Ranking(Mixed):
     def run(self, value):
@@ -320,6 +367,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
+limit('ranking', 'SortedCollection', 100000)
 
 class Neighbor(Mixed):
     def run(self, value):
@@ -350,6 +398,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
+limit('neighbor', 'SortedCollection', 100000)
 
 class Intervals(Mixed):
     def run(self, value):
@@ -389,6 +438,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
+limit('intervals', 'SortedCollection', 100000)
 
 if __name__ == '__main__':
     main('SortedList')

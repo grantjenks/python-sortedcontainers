@@ -12,26 +12,7 @@ from nose.tools import raises
 from functools import wraps
 
 class SortedList(SortedListWithKey):
-    def __init__(self, *args, **kwargs):
-        super(SortedList, self).__init__(*args, **kwargs)
-    @property
-    def _maxes(self):
-        return self._list._maxes
-    @property
-    def _lists(self):
-        return self._list._lists
-    @property
-    def _len(self):
-        return self._list._len
-    @_len.setter
-    def _len(self, value):
-        self._list._len = value
-    @property
-    def _index(self):
-        return self._list._index
-    @_index.setter
-    def _index(self, value):
-        self._list._index = value
+    pass
 
 if hexversion < 0x03000000:
     from itertools import izip as zip
@@ -341,6 +322,7 @@ def test_stress(repeat=1000):
             # of the sublists which helps coverage.
             pos = random.randrange(len(slt._maxes))
             del slt._maxes[pos]
+            del slt._keys[pos]
             del slt._lists[pos]
             slt._len = sum(len(sublist) for sublist in slt._lists)
             slt._index = []

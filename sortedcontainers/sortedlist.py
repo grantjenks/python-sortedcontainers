@@ -69,6 +69,7 @@ class SortedList(MutableSequence):
         """
         self._len, self._maxes, self._lists, self._index = 0, [], [], []
         self._load, self._twice, self._half = load, load * 2, load >> 1
+        self._offset = 0
 
         if iterable is not None:
             self.update(iterable)
@@ -931,7 +932,7 @@ class SortedList(MutableSequence):
                     child = (child - 1) >> 1
                 _index[0] += len_values
         else:
-            del self._index[:]
+            del _index[:]
 
         self._len += len(values)
 
@@ -1218,9 +1219,14 @@ class SortedList(MutableSequence):
 
             traceback.print_exc(file=sys.stdout)
 
-            print(self._len, self._load, self._half, self._twice)
-            print(self._index)
-            print(self._maxes)
-            print(self._lists)
+            print('len', self._len)
+            print('load', self._load, self._half, self._twice)
+            print('offset', self._offset)
+            print('len_index', len(self._index))
+            print('index', self._index)
+            print('len_maxes', len(self._maxes))
+            print('maxes', self._maxes)
+            print('len_lists', len(self._lists))
+            print('lists', self._lists)
 
             raise
