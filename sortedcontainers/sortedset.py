@@ -6,6 +6,7 @@ from .sortedlist import SortedList, recursive_repr
 from .sortedlistwithkey import SortedListWithKey
 from collections import Set, MutableSet, Sequence
 from itertools import chain
+import operator as op
 
 class SortedSet(MutableSet, Sequence):
     """
@@ -87,135 +88,29 @@ class SortedSet(MutableSet, Sequence):
             self._set.remove(value)
         del _list[index]
 
-    def __eq__(self, that):
-        """Return True if and only if self and *that* are equal sets."""
-        if len(self) != len(that):
-            return False
-        elif isinstance(that, SortedSet):
-            return (self._set == that._set)
-        elif isinstance(that, Set):
-            return (self._set == that)
-        else:
-            raise TypeError('can only compare to a Set')
+    def _make_cmp(set_op, doc):
+        def comparer(self, that):
+            if isinstance(that, SortedSet):
+                return set_op(self._set, that._set)
+            elif isinstance(that, Set):
+                return set_op(self._set, that)
+            else:
+                raise TypeError('can only compare to a Set')
 
-    def __ne__(self, that):
-        """Return True if and only if self and *that* are inequal sets."""
-        if len(self) != len(that):
-            return True
-        elif isinstance(that, SortedSet):
-            return (self._set != that._set)
-        elif isinstance(that, Set):
-            return (self._set != that)
-        else:
-            raise TypeError('can only compare to a Set')
+        comparer.__name__ = '__{0}__'.format(set_op.__name__)
+        comparer.__doc__ = 'Return True if and only if ' + doc
 
-    def __lt__(self, that):
-        """Return True if and only if self is a subset of *that*."""
-        if len(self) >= len(that):
-            return False
-        elif isinstance(that, SortedSet):
-            return (self._set < that._set)
-        elif isinstance(that, Set):
-            return (self._set < that)
-        else:
-            raise TypeError('can only compare to a Set')
+        return comparer
 
-    def __gt__(self, that):
-        """Return True if and only if self is a superset of *that*."""
-        if len(self) <= len(that):
-            return False
-        elif isinstance(that, SortedSet):
-            return (self._set > that._set)
-        elif isinstance(that, Set):
-            return (self._set > that)
-        else:
-            raise TypeError('can only compare to a Set')
-
-    def __le__(self, that):
-        """Return True if and only if self is contained within *that*."""
-        if len(self) > len(that):
-            return False
-        elif isinstance(that, SortedSet):
-            return (self._set <= that._set)
-        elif isinstance(that, Set):
-            return (self._set <= that)
-        else:
-            raise TypeError('can only compare to a Set')
-
-    def __ge__(self, that):
-        """Return True if and only if *that* is contained within self."""
-        if len(self) < len(that):
-            return False
-        elif isinstance(that, SortedSet):
-            return (self._set >= that._set)
-        elif isinstance(that, Set):
-            return (self._set >= that)
-        else:
-            raise TypeError('can only compare to a Set')
-
-    def __and__(self, that):
-        """
-        Return a new SortedSet with the elements common to self and *that*.
-        """
-        return self.intersection(that)
-
-    __rand__ = __and__
-
-    def __iand__(self, that):
-        """
-        Update the set, keeping only elements found in self and *that*.
-        """
-        self.intersection_update(that)
-        return self
-
-    def __or__(self, that):
-        """
-        Return a new SortedSet containing all the elements in self or *that*.
-        """
-        return self.union(that)
-
-    __ror__ = __or__
-
-    def __ior__(self, that):
-        """
-        Update the set, adding elements found in *that*.
-        """
-        self.update(that)
-        return self
-
-    def __sub__(self, that):
-        """
-        Return a new SortedSet with elements in self that are not in *that*.
-        """
-        return self.difference(that)
-
-    __rsub__ = __sub__
-
-    def __isub__(self, that):
-        """
-        Update the set, removing elements found in *that*.
-        """
-        self.difference_update(that)
-        return self
-
-    def __xor__(self, that):
-        """
-        Return a new SortedSet with elements in self or *that* but not both.
-        """
-        return self.symmetric_difference(that)
-
-    __rxor__ = __xor__
-
-    def __ixor__(self, that):
-        """
-        Update the set, include only elements in self or *that* but not both.
-        """
-        self.symmetric_difference_update(that)
-        return self
+    __eq__ = _make_cmp(op.eq, 'self and *that* are equal sets.')
+    __ne__ = _make_cmp(op.ne, 'self and *that* are inequal sets.')
+    __lt__ = _make_cmp(op.lt, 'self is a proper subset of *that*.')
+    __gt__ = _make_cmp(op.gt, 'self is a proper superset of *that*.')
+    __le__ = _make_cmp(op.le, 'self is a subset of *that*.')
+    __ge__ = _make_cmp(op.ge, 'self is a superset of *that*.')
 
     def __len__(self):
         """Return the number of elements in the set."""
-
         return len(self._set)
 
     def __iter__(self):
@@ -289,6 +184,9 @@ class SortedSet(MutableSet, Sequence):
         new_set = self.__class__(key=self._key, load=self._load, _set=diff)
         return new_set
 
+    __sub__ = difference
+    __rsub__ = __sub__
+
     def difference_update(self, *iterables):
         """
         Update the set, removing elements found in keeping only elements
@@ -303,6 +201,9 @@ class SortedSet(MutableSet, Sequence):
             _discard = self.discard
             for value in values:
                 _discard(value)
+        return self
+
+    __isub__ = difference_update
 
     def intersection(self, *iterables):
         """
@@ -312,6 +213,9 @@ class SortedSet(MutableSet, Sequence):
         new_set = self.__class__(key=self._key, load=self._load, _set=comb)
         return new_set
 
+    __and__ = intersection
+    __rand__ = __and__
+
     def intersection_update(self, *iterables):
         """
         Update the set, keeping only elements found in it and all *iterables*.
@@ -319,6 +223,9 @@ class SortedSet(MutableSet, Sequence):
         self._set.intersection_update(*iterables)
         self._list.clear()
         self._list.update(self._set)
+        return self
+
+    __iand__ = intersection_update
 
     def symmetric_difference(self, that):
         """
@@ -328,6 +235,9 @@ class SortedSet(MutableSet, Sequence):
         new_set = self.__class__(key=self._key, load=self._load, _set=diff)
         return new_set
 
+    __xor__ = symmetric_difference
+    __rxor__ = __xor__
+
     def symmetric_difference_update(self, that):
         """
         Update the set, keeping only elements found in either *self* or *that*,
@@ -336,12 +246,18 @@ class SortedSet(MutableSet, Sequence):
         self._set.symmetric_difference_update(that)
         self._list.clear()
         self._list.update(self._set)
+        return self
+
+    __ixor__ = symmetric_difference_update
 
     def union(self, *iterables):
         """
         Return a new SortedSet with elements from the set and all *iterables*.
         """
         return self.__class__(chain(iter(self), *iterables), key=self._key, load=self._load)
+
+    __or__ = union
+    __ror__ = __or__
 
     def update(self, *iterables):
         """Update the set, adding elements from all *iterables*."""
@@ -354,6 +270,9 @@ class SortedSet(MutableSet, Sequence):
             _add = self.add
             for value in values:
                 _add(value)
+        return self
+
+    __ior__ = union
 
     @recursive_repr
     def __repr__(self):
