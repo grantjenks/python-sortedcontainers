@@ -28,15 +28,15 @@ SortedContainers is actively developed on GitHub, where the code is
 
 You can either clone the public repository::
 
-    > git clone git://github.com/grantjenks/sortedcontainers.git
+    > git clone git://github.com/grantjenks/sorted_containers.git
 
-Download the `tarball <https://github.com/grantjenks/sortedcontainers/tarball/master>`_::
+Download the `tarball <https://github.com/grantjenks/sorted_containers/tarball/master>`_::
 
-    > curl -OL https://github.com/grantjenks/sortedcontainers/tarball/master
+    > curl -OL https://github.com/grantjenks/sorted_containers/tarball/master
 
-Or, download the `zipball <https://github.com/grantjenks/sortedcontainers/zipball/master>`_::
+Or, download the `zipball <https://github.com/grantjenks/sorted_containers/zipball/master>`_::
 
-    > curl -OL https://github.com/grantjenks/sortedcontainers/zipball/master
+    > curl -OL https://github.com/grantjenks/sorted_containers/zipball/master
 
 Once you have a copy of the source, you can embed it in your Python package,
 or install it into your site-packages easily::
