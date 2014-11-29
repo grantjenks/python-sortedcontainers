@@ -1102,32 +1102,32 @@ class SortedList(MutableSequence):
         return self
 
     def __eq__(self, that):
-        """Compare two iterables for equality."""
+        """Compare two Sequences for equality."""
         return ((self._len == len(that))
                 and all(lhs == rhs for lhs, rhs in zip(self, that)))
 
     def __ne__(self, that):
-        """Compare two iterables for inequality."""
+        """Compare two Sequences for inequality."""
         return ((self._len != len(that))
                 or any(lhs != rhs for lhs, rhs in zip(self, that)))
 
     def __lt__(self, that):
-        """Compare two iterables for less than."""
+        """Compare two Sequences for less than."""
         return ((self._len <= len(that))
                 and all(lhs < rhs for lhs, rhs in zip(self, that)))
 
     def __le__(self, that):
-        """Compare two iterables for less than equal."""
+        """Compare two Sequences for less than equal."""
         return ((self._len <= len(that))
                 and all(lhs <= rhs for lhs, rhs in zip(self, that)))
 
     def __gt__(self, that):
-        """Compare two iterables for greater than."""
+        """Compare two Sequences for greater than."""
         return ((self._len >= len(that))
                 and all(lhs > rhs for lhs, rhs in zip(self, that)))
 
     def __ge__(self, that):
-        """Compare two iterables for greater than equal."""
+        """Compare two Sequences for greater than equal."""
         return ((self._len >= len(that))
                 and all(lhs >= rhs for lhs, rhs in zip(self, that)))
 
