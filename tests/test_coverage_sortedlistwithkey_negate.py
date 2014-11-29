@@ -111,8 +111,6 @@ def test_discard():
     slt.discard(2)
     slt._check()
 
-    print list(slt)
-
     assert all(tup[0] == tup[1] for tup in zip(slt, reversed([1, 2, 2, 3, 3, 5])))
 
 def test_remove():
