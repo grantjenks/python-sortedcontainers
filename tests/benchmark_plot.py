@@ -116,6 +116,7 @@ def test_plot(test):
     kinds = order_kinds(sorted(args.kind or list(data[test])))
     for kind in kinds:
         kind_plot(test, kind)
+    plt.ylim(ymin=9e-7)
     plt.loglog()
     plt.title(args.name + ' Performance: ' + test)
     plt.ylabel('Seconds')
