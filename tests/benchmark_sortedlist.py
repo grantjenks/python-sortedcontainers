@@ -146,7 +146,7 @@ try:
             pass
     SortedCollection.discard = discard
 
-    kinds['SortedCollection'] = SortedCollection
+    kinds['sortedcollection'] = SortedCollection
 except ImportError:
     warnings.warn('No module named sortedcollection', ImportWarning)
 
@@ -174,7 +174,7 @@ for name, kind in kinds.items():
         'func': 'update',
         'limit': 1000000
     }
-limit('update_small', 'SortedCollection', 100000)
+limit('update_small', 'sortedcollection', 100000)
 
 for name, kind in kinds.items():
     impls['update_large'][name] = {
@@ -183,7 +183,7 @@ for name, kind in kinds.items():
         'func': 'update',
         'limit': 1000000
     }
-limit('update_large', 'SortedCollection', 100000)
+limit('update_large', 'sortedcollection', 100000)
 
 for name, kind in kinds.items():
     impls['contains'][name] = {
@@ -301,7 +301,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('priorityqueue', 'SortedCollection', 100000)
+limit('priorityqueue', 'sortedcollection', 100000)
 
 class Multiset(Mixed):
     def run(self, value):
@@ -331,7 +331,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('multiset', 'SortedCollection', 100000)
+limit('multiset', 'sortedcollection', 100000)
 
 class Ranking(Mixed):
     def run(self, value):
@@ -361,7 +361,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('ranking', 'SortedCollection', 100000)
+limit('ranking', 'sortedcollection', 100000)
 
 class Neighbor(Mixed):
     def run(self, value):
@@ -392,7 +392,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('neighbor', 'SortedCollection', 100000)
+limit('neighbor', 'sortedcollection', 100000)
 
 class Intervals(Mixed):
     def run(self, value):
@@ -432,7 +432,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('intervals', 'SortedCollection', 100000)
+limit('intervals', 'sortedcollection', 100000)
 
 if __name__ == '__main__':
     main('SortedList')
