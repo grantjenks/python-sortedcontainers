@@ -634,6 +634,14 @@ def test_repr_recursion():
     this.append(this)
     assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
 
+def test_pickle():
+    import pickle
+    alpha = SortedListWithKey(range(10000), key=negate, load=500)
+    beta = pickle.loads(pickle.dumps(alpha))
+    assert alpha == beta
+    assert alpha._key == beta._key
+    assert alpha._load == beta._load
+
 @raises(AssertionError)
 def test_check():
     slt = SortedListWithKey(range(10), load=4, key=negate)

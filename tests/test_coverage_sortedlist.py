@@ -627,6 +627,13 @@ def test_repr_subclass():
     this = CustomSortedList([1, 2, 3, 4])
     assert repr(this) == 'CustomSortedList([1, 2, 3, 4], load=1000)'
 
+def test_pickle():
+    import pickle
+    alpha = SortedList(range(10000), load=500)
+    beta = pickle.loads(pickle.dumps(alpha))
+    assert alpha == beta
+    assert alpha._load == beta._load
+
 def test_build_index():
     slt = SortedList([0], load=4)
     slt._build_index()

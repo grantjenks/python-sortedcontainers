@@ -495,6 +495,14 @@ def test_itemsview():
     items = SortedDict(mapping[:2]).viewitems()
     assert repr(items) == "SortedDict_items([('a', 0), ('b', 1)])"
 
+def test_pickle():
+    import pickle
+    alpha = SortedDict(negate, 500, zip(range(10000), range(10000)))
+    beta = pickle.loads(pickle.dumps(alpha))
+    assert alpha == beta
+    assert alpha._key == beta._key
+    assert alpha._load == beta._load
+
 if __name__ == '__main__':
     import nose
     nose.main()

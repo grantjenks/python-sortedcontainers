@@ -25,7 +25,7 @@ with open('LICENSE') as fptr:
 setup(
     name=sortedcontainers.__title__,
     version=sortedcontainers.__version__,
-    description='Sorted container data types.',
+    description='Python Sorted Container Types: SortedList, SortedDict, and SortedSet',
     long_description=readme,
     author='Grant Jenks',
     author_email='contact@grantjenks.com',

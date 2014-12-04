@@ -378,6 +378,9 @@ class SortedDict(dict):
         """
         return ItemsView(self)
 
+    def __reduce__(self):
+        return (self.__class__, (self._key, self._load, list(self.iteritems())))
+
     @recursive_repr
     def __repr__(self):
         temp = '{0}({1}, {2}, {{{3}}})'

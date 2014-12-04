@@ -325,6 +325,14 @@ def test_repr_recursion():
     temp.add(temp)
     assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1], key=None, load=1000), HashableSortedSet([1, 2], key=None, load=1000), ...], key=None, load=1000)'
 
+def test_pickle():
+    import pickle
+    alpha = SortedSet(range(10000), key=negate, load=500)
+    beta = pickle.loads(pickle.dumps(alpha))
+    assert alpha == beta
+    assert alpha._key == beta._key
+    assert alpha._load == beta._load
+
 if __name__ == '__main__':
     import nose
     nose.main()

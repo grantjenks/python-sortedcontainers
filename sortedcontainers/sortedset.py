@@ -274,6 +274,9 @@ class SortedSet(MutableSet, Sequence):
 
     __ior__ = union
 
+    def __reduce__(self):
+        return (self.__class__, ((), self._key, self._load, self._set))
+
     @recursive_repr
     def __repr__(self):
         temp = '{0}({1}, key={2}, load={3})'
