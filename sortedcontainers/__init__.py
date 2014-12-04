@@ -41,8 +41,8 @@ testing has 100% coverage with unit tests and hours of stress.
 """
 
 __title__ = 'sortedcontainers'
-__version__ = '0.9.3'
-__build__ = 0x000903
+__version__ = '0.9.4'
+__build__ = 0x000904
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2014 Grant Jenks'
