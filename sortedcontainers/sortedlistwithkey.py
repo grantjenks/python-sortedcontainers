@@ -435,29 +435,27 @@ class SortedListWithKey(MutableSequence):
         The final index pair from our example is (2, 3) which corresponds to
         index 8 in the sorted list.
         """
-        _len, _lists = self._len, self._lists
-
         if idx < 0:
-            last_len = len(_lists[-1])
+            last_len = len(self._lists[-1])
             if (-idx) <= last_len:
-                return len(_lists) - 1, last_len + idx
-            idx += _len
+                return len(self._lists) - 1, last_len + idx
+            idx += self._len
             if idx < 0:
                 raise IndexError('list index out of range')
-        elif idx >= _len:
+        elif idx >= self._len:
             raise IndexError('list index out of range')
 
-        if idx < len(_lists[0]):
+        if idx < len(self._lists[0]):
             return 0, idx
 
         _index = self._index
 
-        if not len(_index):
+        if not _index:
             self._build_index()
 
         pos = 0
+        child = 1
         len_index = len(_index)
-        child = (pos << 1) + 1
 
         while child < len_index:
             index_child = _index[child]
