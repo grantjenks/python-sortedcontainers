@@ -896,6 +896,8 @@ class SortedListWithKey(MutableSequence):
 
         return self._loc(pos, idx)
 
+    bisect_key = bisect_key_right
+
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
         _maxes = self._maxes

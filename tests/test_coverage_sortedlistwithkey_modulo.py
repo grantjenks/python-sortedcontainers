@@ -364,6 +364,36 @@ def test_bisect_right():
     assert slt.bisect_right(10) == 20
     assert slt.bisect_right(0) == 20
 
+def test_bisect_key_left():
+    slt = SortedListWithKey(key=modulo)
+    assert slt.bisect_key_left(10) == 0
+    slt = SortedListWithKey(range(100), load=17, key=modulo)
+    slt.update(range(100))
+    slt._check()
+    assert slt.bisect_key_left(0) == 0
+    assert slt.bisect_key_left(5) == 100
+    assert slt.bisect_key_left(10) == 200
+
+def test_bisect_key_right():
+    slt = SortedListWithKey(key=modulo)
+    assert slt.bisect_key_right(0) == 0
+    slt = SortedListWithKey(range(100), load=17, key=modulo)
+    slt.update(range(100))
+    slt._check()
+    assert slt.bisect_key_right(0) == 20
+    assert slt.bisect_key_right(5) == 120
+    assert slt.bisect_key_right(10) == 200
+
+def test_bisect_key():
+    slt = SortedListWithKey(key=modulo)
+    assert slt.bisect_key(0) == 0
+    slt = SortedListWithKey(range(100), load=17, key=modulo)
+    slt.update(range(100))
+    slt._check()
+    assert slt.bisect_key(0) == 20
+    assert slt.bisect_key(5) == 120
+    assert slt.bisect_key(10) == 200
+
 def test_copy():
     slt = SortedListWithKey(range(100), load=7, key=modulo)
     two = slt.copy()
