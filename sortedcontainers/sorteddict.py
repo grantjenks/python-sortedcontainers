@@ -261,10 +261,11 @@ class SortedDict(dict):
             else:
                 return default
 
-    def popitem(self):
+    def popitem(self, last=True):
         """
-        Remove and return the ``(key, value)`` pair with the greatest *key*
-        from the dictionary.
+        Remove and return a ``(key, value)`` pair from the dictionary. If
+        last=True (default) then remove the *greatest* `key` from the
+        diciontary. Else, remove the *least* key from the dictionary.
 
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
@@ -272,7 +273,7 @@ class SortedDict(dict):
         if not len(self):
             raise KeyError('popitem(): dictionary is empty')
 
-        key = self._list_pop()
+        key = self._list_pop(-1 if last else 0)
         value = self._pop(key)
 
         return (key, value)

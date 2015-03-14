@@ -164,10 +164,10 @@ SortedDict
       :rtype: value
 
    .. _SortedDict.popitem:
-   .. method:: d.popitem()
-
-      Remove and return the ``(key, value)`` pair with the greatest *key*
-      from the dictionary.
+   .. method:: d.popitem(last=True)
+      Remove and return a ``(key, value)`` pair from the dictionary. If
+      `last=True` (default) then remove the *greatest* key from the
+      diciontary. Else, remove the *least* key from the dictionary.
 
       If the dictionary is empty, calling :meth:`popitem` raises a
       :exc:`KeyError`.

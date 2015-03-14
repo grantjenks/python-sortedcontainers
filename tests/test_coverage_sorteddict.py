@@ -222,6 +222,11 @@ def test_popitem2():
     temp = SortedDict()
     temp.popitem()
 
+def test_popitem3():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert temp.popitem(last=False) == ('a', 0)
+
 def test_setdefault():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
