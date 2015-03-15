@@ -249,6 +249,33 @@ SortedDict
 
       :rtype: :class:`int`
 
+   .. _SortedDict.bisect_key_left:
+   .. method:: d.bisect_key_left(key)
+
+      Similar to the ``bisect`` module in the standard library, this returns an
+      appropriate index to insert a value with a given *key*. If values with
+      *key* are already present, the insertion point will be before (to the
+      left of) any existing entries. This method is present only if the sorted
+      dict was constructed with a key function. In this context, *key* refers
+      to the result of the key function applied to the dictionary key.
+
+      :rtype: :class:`int`
+
+   .. method:: d.bisect_key(key)
+
+      Same as :ref:`bisect_key_right <SortedDict.bisect_key_right>`.
+
+      :rtype: :class:`int`
+
+   .. _SortedDict.bisect_key_right:
+   .. method:: d.bisect_key_right(key)
+
+      Same as :ref:`bisect_key_left <SortedDict.bisect_key_left>`, but
+      if *key* is already present, the insertion point will be after (to the
+      right of) any existing entries.
+
+      :rtype: :class:`int`
+
    .. _SortedDict.iloc:
    .. method:: d.iloc[pos]
 

@@ -109,15 +109,47 @@ SortedSet
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
 
+      :rtype: :class:`int`
+
    .. method:: L.bisect(value)
 
       Same as :ref:`bisect_right <sortedlist.bisect_right>`.
+
+      :rtype: :class:`int`
 
    .. method:: L.bisect_right(value)
 
       Same as :ref:`bisect_left <sortedlist.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
+
+      :rtype: :class:`int`
+
+   .. _SortedSet.bisect_key_left:
+   .. method:: d.bisect_key_left(key)
+
+      Similar to the ``bisect`` module in the standard library, this returns an
+      appropriate index to insert a value with a given *key*. If values with
+      *key* are already present, the insertion point will be before (to the
+      left of) any existing entries. This method is present only if the sorted
+      set was constructed with a key function.
+
+      :rtype: :class:`int`
+
+   .. method:: d.bisect_key(key)
+
+      Same as :ref:`bisect_key_right <SortedSet.bisect_key_right>`.
+
+      :rtype: :class:`int`
+
+   .. _SortedSet.bisect_key_right:
+   .. method:: d.bisect_key_right(key)
+
+      Same as :ref:`bisect_key_left <SortedSet.bisect_key_left>`, but
+      if *key* is already present, the insertion point will be after (to the
+      right of) any existing entries.
+
+      :rtype: :class:`int`
 
    .. method:: S.clear()
 
