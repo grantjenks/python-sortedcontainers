@@ -151,6 +151,12 @@ def test_bisect():
     assert all(temp.bisect(val) == (val + 1) for val in range(100))
     assert all(temp.bisect_right(val) == (val + 1) for val in range(100))
 
+def test_bisect_key():
+    temp = SortedSet(range(100), key=lambda val: val, load=7)
+    assert all(temp.bisect_key_left(val) == val for val in range(100))
+    assert all(temp.bisect_key(val) == (val + 1) for val in range(100))
+    assert all(temp.bisect_key_right(val) == (val + 1) for val in range(100))
+
 def test_clear():
     temp = SortedSet(range(100), load=7)
     temp.clear()

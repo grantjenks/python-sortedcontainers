@@ -293,6 +293,12 @@ def test_bisect_key():
     assert all(temp.bisect_right(val) == ((val % 10) + 1) * 10 for val in range(100))
     assert all(temp.bisect_left(val) == (val % 10) * 10 for val in range(100))
 
+def test_bisect_key2():
+    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    assert all(temp.bisect_key(val) == ((val % 10) + 1) * 10 for val in range(10))
+    assert all(temp.bisect_key_right(val) == ((val % 10) + 1) * 10 for val in range(10))
+    assert all(temp.bisect_key_left(val) == (val % 10) * 10 for val in range(10))
+
 def test_keysview():
     if hexversion < 0x02070000: return
 
