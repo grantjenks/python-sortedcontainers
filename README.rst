@@ -33,8 +33,9 @@ Things shouldn't be this way. Not in Python.
 Python an integer requires at least 12 bytes. SortedList will add about 4
 bytes per object stored in the container. That's pretty hard to beat as it's
 the cost of a pointer to each object. It's also 66% less overhead than a
-typical binary tree implementation for which every node must also store two
-pointers to children nodes.
+typical binary tree implementation (e.g. red-black tree, avl tree, aa tree,
+splay tree, treap, etc.) for which every node must also store two pointers to
+children nodes.
 
 SortedContainers takes all of the work out of Python sorted types - making your
 deployment and use of Python easy. There's no need to install a C compiler or
