@@ -14,8 +14,7 @@ of 5 repetitions. In the graphs below, the line follows the average and at each
 point, the min/max displays the bounds. Note that the axes are log-log so
 properly reading two different lines would describe one metric as "X times"
 faster rather than "X seconds" faster. In all graphs, lower is
-better. Measurements are made by powers of ten: 10, 100, 1,000, 10,000, and
-100,000.
+better. Measurements are made by powers of ten: 100 through 1,000,000.
 
 Measurements up to 100,000,000 elements have been successfully tested but are
 impractical for publishing. Only a couple implementations (including
@@ -59,6 +58,12 @@ skiplistcollections
   Pure-Python implementation based on skip-lists providing a limited-API
   for dict and set types.
   `skiplistcollections on PyPI <https://pypi.python.org/pypi/skiplistcollections>`_
+
+sortedcollection
+  Pure-Python implementation of sorted list based solely on a list.
+  Feature-poor and inefficient for writes but included because it is written
+  by Raymond Hettinger and linked from the official Python docs.
+  `sortedcollection on ActiveState <http://code.activestate.com/recipes/577197-sortedcollection/>`_
 
 Several competing implementations were omitted because they were not easily
 installable or failed to build.
