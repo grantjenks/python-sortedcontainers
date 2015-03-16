@@ -58,6 +58,11 @@ class SortedSet(MutableSet, Sequence):
         self.bisect_right = _list.bisect_right
         self.index = _list.index
 
+        if key is not None:
+            self.bisect_key_left = _list.bisect_key_left
+            self.bisect_key_right = _list.bisect_key_right
+            self.bisect_key = _list.bisect_key
+
         if iterable is not None:
             self.update(iterable)
 

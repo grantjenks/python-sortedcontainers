@@ -146,10 +146,14 @@ SortedListWithKey
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
 
+      :rtype: :class:`int`
+
    .. _SortedListWithKey.bisect:
    .. method:: L.bisect(value)
 
       Same as :ref:`bisect_right <SortedListWithKey.bisect_right>`.
+
+      :rtype: :class:`int`
 
    .. _SortedListWithKey.bisect_right:
    .. method:: L.bisect_right(value)
@@ -157,6 +161,33 @@ SortedListWithKey
       Same as :ref:`bisect_left <SortedListWithKey.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
+
+      :rtype: :class:`int`
+
+   .. _SortedListWithKey.bisect_key_left:
+   .. method:: L.bisect_key_left(key)
+
+      Similar to the ``bisect`` module in the standard library, this returns an
+      appropriate index to insert a value with a given *key*. If values with
+      *key* are already present, the insertion point will be before (to the
+      left of) any existing entries.
+
+      :rtype: :class:`int`
+
+   .. method:: L.bisect_key(key)
+
+      Same as :ref:`bisect_key_right <SortedListWithKey.bisect_key_right>`.
+
+      :rtype: :class:`int`
+
+   .. _SortedListWithKey.bisect_key_right:
+   .. method:: L.bisect_key_right(key)
+
+      Same as :ref:`bisect_key_left <SortedListWithKey.bisect_key_left>`, but
+      if *key* is already present, the insertion point will be after (to the
+      right of) any existing entries.
+
+      :rtype: :class:`int`
 
    .. _SortedListWithKey.count:
    .. method:: L.count(value)

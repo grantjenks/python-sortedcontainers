@@ -843,12 +843,29 @@ class SortedListWithKey(MutableSequence):
         appropriate index to insert *val*. If *val* is already present, the
         insertion point will be before (to the left of) any existing entries.
         """
+        return self.bisect_key_left(self._key(val))
+
+    def bisect_right(self, val):
+        """
+        Same as *bisect_left*, but if *val* is already present, the insertion
+        point will be after (to the right of) any existing entries.
+        """
+        return self.bisect_key_right(self._key(val))
+
+    bisect = bisect_right
+
+    def bisect_key_left(self, key):
+        """
+        Similar to the *bisect* module in the standard library, this returns an
+        appropriate index to insert a value with a given *key*. If values with
+        *key* are already present, the insertion point will be before (to the
+        left of) any existing entries.
+        """
         _maxes = self._maxes
 
         if not _maxes:
             return 0
 
-        key = self._key(val)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
@@ -858,9 +875,9 @@ class SortedListWithKey(MutableSequence):
 
         return self._loc(pos, idx)
 
-    def bisect_right(self, val):
+    def bisect_key_right(self, key):
         """
-        Same as *bisect_left*, but if *val* is already present, the insertion
+        Same as *bisect_key_left*, but if *key* is already present, the insertion
         point will be after (to the right of) any existing entries.
         """
         _maxes = self._maxes
@@ -868,7 +885,6 @@ class SortedListWithKey(MutableSequence):
         if not _maxes:
             return 0
 
-        key = self._key(val)
         pos = bisect_right(_maxes, key)
 
         if pos == len(_maxes):
@@ -878,7 +894,7 @@ class SortedListWithKey(MutableSequence):
 
         return self._loc(pos, idx)
 
-    bisect = bisect_right
+    bisect_key = bisect_key_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""

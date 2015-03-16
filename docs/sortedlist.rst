@@ -137,10 +137,14 @@ SortedList
       already present in *L*, the insertion point will be before (to the
       left of) any existing entries.
 
+      :rtype: :class:`int`
+
    .. _SortedList.bisect:
    .. method:: L.bisect(value)
 
       Same as :ref:`bisect_right <SortedList.bisect_right>`.
+
+      :rtype: :class:`int`
 
    .. _SortedList.bisect_right:
    .. method:: L.bisect_right(value)
@@ -148,6 +152,8 @@ SortedList
       Same as :ref:`bisect_left <SortedList.bisect_left>`, but if
       *value* is already present in *L*, the insertion point will be after
       (to the right of) any existing entries.
+
+      :rtype: :class:`int`
 
    .. _SortedList.count:
    .. method:: L.count(value)

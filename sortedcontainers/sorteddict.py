@@ -138,14 +138,21 @@ class SortedDict(dict):
 
         # Cache function pointers to SortedList methods.
 
-        self._list_add = self._list.add
-        self._list_bisect_left = self._list.bisect_left
-        self._list_bisect_right = self._list.bisect_right
-        self._list_clear = self._list.clear
-        self._list_index = self._list.index
-        self._list_pop = self._list.pop
-        self._list_remove = self._list.remove
-        self._list_update = self._list.update
+        _list = self._list
+        self._list_add = _list.add
+        self.bisect_left = _list.bisect_left
+        self.bisect = _list.bisect_right
+        self.bisect_right = _list.bisect_right
+        self._list_clear = _list.clear
+        self.index = _list.index
+        self._list_pop = _list.pop
+        self._list_remove = _list.remove
+        self._list_update = _list.update
+
+        if self._key is not None:
+            self.bisect_key_left = _list.bisect_key_left
+            self.bisect_key_right = _list.bisect_key_right
+            self.bisect_key = _list.bisect_key
 
         self.iloc = _IlocWrapper(self)
 
@@ -318,36 +325,6 @@ class SortedDict(dict):
         else:
             for key in pairs:
                 self[key] = pairs[key]
-
-    def index(self, key, start=None, stop=None):
-        """
-        Return the smallest *k* such that `d.iloc[k] == key` and `i <= k < j`.
-        Raises `ValueError` if *key* is not present.  *stop* defaults to the end
-        of the set.  *start* defaults to the beginning.  Negative indexes are
-        supported, as for slice indices.
-        """
-        return self._list_index(key, start, stop)
-
-    def bisect_left(self, key):
-        """
-        Similar to the ``bisect`` module in the standard library, this returns
-        an appropriate index to insert *key* in SortedDict. If *key* is
-        already present in SortedDict, the insertion point will be before (to
-        the left of) any existing entries.
-        """
-        return self._list_bisect_left(key)
-
-    def bisect(self, key):
-        """Same as bisect_right."""
-        return self._list_bisect_right(key)
-
-    def bisect_right(self, key):
-        """
-        Same as `bisect_left`, but if *key* is already present in SortedDict,
-        the insertion point will be after (to the right of) any existing
-        entries.
-        """
-        return self._list_bisect_right(key)
 
     @not26
     def viewkeys(self):
