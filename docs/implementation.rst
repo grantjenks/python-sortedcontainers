@@ -58,24 +58,24 @@ realities of today's software and hardware.
 Indexing uses the _index list which operates as a tree of pair-wise sums of the
 lengths of the lists. The tree is maintained as a dense binary tree. It's
 easiest to explain with an example. Suppose _lists contains sublists with these
-lengths (in this example, we assume the _load parameter is 4):
+lengths (in this example, we assume the _load parameter is 4)::
 
     map(len, _lists) -> [3, 5, 4, 5, 6]
 
-Given these lengths, the first row in the index is the pair-wise sums:
+Given these lengths, the first row in the index is the pair-wise sums::
 
     [8, 9, 6, 0]
 
 We pad the first row with zeros to make its length a power of 2. The next rows
-of sums work similarly:
+of sums work similarly::
 
-    [15, 6]
-    [21]
+    [17, 6]
+    [23]
 
 Then all the rows are concatenated in reverse order so that the index is
-finally:
+finally::
 
-    [21, 15, 6, 8, 9, 6, 0, 3, 5, 4, 5, 6]
+    [23, 17, 6, 8, 9, 6, 0, 3, 5, 4, 5, 6]
 
 With this list, we can efficiently compute the index of an item in a sublist
 and, vice-versa, find an item given an index. Details of the algorithms to do so
