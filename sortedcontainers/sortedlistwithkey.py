@@ -5,7 +5,7 @@
 from __future__ import print_function
 from sys import hexversion
 
-from sortedlist import recursive_repr
+from .sortedlist import recursive_repr
 from bisect import bisect_left, bisect_right, insort
 from itertools import chain, repeat, starmap
 from collections import MutableSequence
