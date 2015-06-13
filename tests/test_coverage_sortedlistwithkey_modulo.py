@@ -330,6 +330,104 @@ def test_reversed():
     rev = reversed(slt)
     assert all(tup[0] == tup[1] for tup in zip(reversed(sorted(range(10000), key=modulo)), rev))
 
+def test_islice():
+    sl = SortedListWithKey(load=7, key=modulo)
+
+    assert [] == list(sl.islice())
+
+    values = sorted(range(100), key=modulo)
+    sl.update(values)
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(sl.islice(start, stop)) == values[start:stop]
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(sl.islice(start, stop, reverse=True)) == values[start:stop][::-1]
+
+    for start in range(53):
+        assert list(sl.islice(start=start)) == values[start:]
+        assert list(sl.islice(start=start, reverse=True)) == values[start:][::-1]
+
+    for stop in range(53):
+        assert list(sl.islice(stop=stop)) == values[:stop]
+        assert list(sl.islice(stop=stop, reverse=True)) == values[:stop][::-1]
+
+def test_irange():
+    values = sorted(range(100), key=modulo)
+
+    for load in range(5, 16):
+        slt = SortedListWithKey(range(100), load=load, key=modulo)
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange(start, end))
+                assert temp == values[(start * 10):((end + 1) * 10)]
+
+                temp = list(slt.irange(start, end, reverse=True))
+                assert temp == values[(start * 10):((end + 1) * 10)][::-1]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange(start, end, inclusive=(True, False)))
+                assert temp == values[(start * 10):(end * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange(start, end, (False, True)))
+                assert temp == values[((start + 1) * 10):((end + 1) * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange(start, end, inclusive=(False, False)))
+                assert temp == values[((start + 1) * 10):(end * 10)]
+
+        for start in range(10):
+            temp = list(slt.irange(minimum=start))
+            assert temp == values[(start * 10):]
+
+        for end in range(10):
+            temp = list(slt.irange(maximum=end))
+            assert temp == values[:(end + 1) * 10]
+
+def test_irange_key():
+    values = sorted(range(100), key=modulo)
+
+    for load in range(5, 16):
+        slt = SortedListWithKey(range(100), load=load, key=modulo)
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange_key(start, end))
+                assert temp == values[(start * 10):((end + 1) * 10)]
+
+                temp = list(slt.irange_key(start, end, reverse=True))
+                assert temp == values[(start * 10):((end + 1) * 10)][::-1]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange_key(start, end, inclusive=(True, False)))
+                assert temp == values[(start * 10):(end * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange_key(start, end, (False, True)))
+                assert temp == values[((start + 1) * 10):((end + 1) * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(slt.irange_key(start, end, inclusive=(False, False)))
+                assert temp == values[((start + 1) * 10):(end * 10)]
+
+        for start in range(10):
+            temp = list(slt.irange_key(min_key=start))
+            assert temp == values[(start * 10):]
+
+        for end in range(10):
+            temp = list(slt.irange_key(max_key=end))
+            assert temp == values[:(end + 1) * 10]
+
 def test_len():
     slt = SortedListWithKey(key=modulo)
 

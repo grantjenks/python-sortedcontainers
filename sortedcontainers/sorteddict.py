@@ -148,11 +148,14 @@ class SortedDict(dict):
         self._list_pop = _list.pop
         self._list_remove = _list.remove
         self._list_update = _list.update
+        self.irange = _list.irange
+        self.islice = _list.islice
 
         if self._key is not None:
             self.bisect_key_left = _list.bisect_key_left
             self.bisect_key_right = _list.bisect_key_right
             self.bisect_key = _list.bisect_key
+            self.irange_key = _list.irange_key
 
         self.iloc = _IlocWrapper(self)
 

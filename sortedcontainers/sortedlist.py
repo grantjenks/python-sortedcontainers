@@ -778,6 +778,149 @@ class SortedList(MutableSequence):
         """Create an iterator to traverse the list in reverse."""
         return chain.from_iterable(map(reversed, reversed(self._lists)))
 
+    def islice(self, start=None, stop=None, reverse=False):
+        """
+        Returns an iterator that slices `self` from `start` to `stop` index,
+        inclusive and exclusive respectively.
+
+        When `reverse` is `True`, values are yielded from the iterator in
+        reverse order.
+
+        Both `start` and `stop` default to `None` which is automatically
+        inclusive of the beginning and end.
+        """
+        _len = self._len
+
+        if not _len:
+            return iter(())
+
+        start, stop, step = self._slice(slice(start, stop))
+
+        if start >= stop:
+            return iter(())
+
+        _pos = self._pos
+
+        min_pos, min_idx = _pos(start)
+
+        if stop == _len:
+            max_pos = len(self._lists) - 1
+            max_idx = len(self._lists[-1])
+        else:
+            max_pos, max_idx = _pos(stop)
+
+        return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
+
+    def _islice(self, min_pos, min_idx, max_pos, max_idx, reverse):
+        """
+        Returns an iterator that slices `self` using two index pairs,
+        `(min_pos, min_idx)` and `(max_pos, max_idx)`; the first inclusive
+        and the latter exclusive. See `_pos` for details on how an index
+        is converted to an index pair.
+
+        When `reverse` is `True`, values are yielded from the iterator in
+        reverse order.
+        """
+        _lists = self._lists
+
+        if min_pos > max_pos:
+            return iter(())
+        elif min_pos == max_pos and not reverse:
+            return iter(_lists[min_pos][min_idx:max_idx])
+        elif min_pos == max_pos and reverse:
+            return reversed(_lists[min_pos][min_idx:max_idx])
+        elif min_pos + 1 == max_pos and not reverse:
+            return chain(_lists[min_pos][min_idx:], _lists[max_pos][:max_idx])
+        elif min_pos + 1 == max_pos and reverse:
+            return chain(
+                reversed(_lists[max_pos][:max_idx]),
+                reversed(_lists[min_pos][min_idx:]),
+            )
+        elif not reverse:
+            return chain(
+                _lists[min_pos][min_idx:],
+                chain.from_iterable(_lists[(min_pos + 1):max_pos]),
+                _lists[max_pos][:max_idx],
+            )
+        else:
+            temp = map(reversed, reversed(_lists[(min_pos + 1):max_pos]))
+            return chain(
+                reversed(_lists[max_pos][:max_idx]),
+                chain.from_iterable(temp),
+                reversed(_lists[min_pos][min_idx:]),
+            )
+
+    def irange(self, minimum=None, maximum=None, inclusive=(True, True),
+               reverse=False):
+        """
+        Create an iterator of values between `minimum` and `maximum`.
+
+        `inclusive` is a pair of booleans that indicates whether the minimum
+        and maximum ought to be included in the range, respectively. The
+        default is (True, True) such that the range is inclusive of both
+        minimum and maximum.
+
+        Both `minimum` and `maximum` default to `None` which is automatically
+        inclusive of the start and end of the list, respectively.
+
+        When `reverse` is `True` the values are yielded from the iterator in
+        reverse order; `reverse` defaults to `False`.
+        """
+        _maxes = self._maxes
+
+        if not _maxes:
+            return iter(())
+
+        _lists = self._lists
+
+        # Calculate the minimum (pos, idx) pair. By default this location
+        # will be inclusive in our calculation.
+
+        if minimum is None:
+            min_pos = 0
+            min_idx = 0
+        else:
+            if inclusive[0]:
+                min_pos = bisect_left(_maxes, minimum)
+
+                if min_pos == len(_maxes):
+                    return iter(())
+
+                min_idx = bisect_left(_lists[min_pos], minimum)
+            else:
+                min_pos = bisect_right(_maxes, minimum)
+
+                if min_pos == len(_maxes):
+                    return iter(())
+
+                min_idx = bisect_right(_lists[min_pos], minimum)
+
+        # Calculate the maximum (pos, idx) pair. By default this location
+        # will be exclusive in our calculation.
+
+        if maximum is None:
+            max_pos = len(_maxes) - 1
+            max_idx = len(_lists[max_pos])
+        else:
+            if inclusive[1]:
+                max_pos = bisect_right(_maxes, maximum)
+
+                if max_pos == len(_maxes):
+                    max_pos -= 1
+                    max_idx = len(_lists[max_pos])
+                else:
+                    max_idx = bisect_right(_lists[max_pos], maximum)
+            else:
+                max_pos = bisect_left(_maxes, maximum)
+
+                if max_pos == len(_maxes):
+                    max_pos -= 1
+                    max_idx = len(_lists[max_pos])
+                else:
+                    max_idx = bisect_left(_lists[max_pos], maximum)
+
+        return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
+
     def __len__(self):
         """Return the number of elements in the list."""
         return self._len

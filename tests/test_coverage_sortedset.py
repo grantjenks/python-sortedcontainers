@@ -130,13 +130,110 @@ def test_iter():
     temp = SortedSet(range(100), load=7)
     assert all(val == temp[val] for val in iter(temp))
 
-def test_len():
-    temp = SortedSet(range(100), load=7)
-    assert len(temp) == 100
-
 def test_reversed():
     temp = SortedSet(range(100), load=7)
     assert all(val == temp[val] for val in reversed(temp))
+
+def test_islice():
+    ss = SortedSet(load=7)
+
+    assert [] == list(ss.islice())
+
+    values = list(range(53))
+    ss.update(values)
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(ss.islice(start, stop)) == values[start:stop]
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(ss.islice(start, stop, reverse=True)) == values[start:stop][::-1]
+
+    for start in range(53):
+        assert list(ss.islice(start=start)) == values[start:]
+        assert list(ss.islice(start=start, reverse=True)) == values[start:][::-1]
+
+    for stop in range(53):
+        assert list(ss.islice(stop=stop)) == values[:stop]
+        assert list(ss.islice(stop=stop, reverse=True)) == values[:stop][::-1]
+
+def test_irange():
+    ss = SortedSet(load=7)
+
+    assert [] == list(ss.irange())
+
+    values = list(range(53))
+    ss.update(values)
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(ss.irange(start, end)) == values[start:(end + 1)]
+            assert list(ss.irange(start, end, reverse=True)) == values[start:(end + 1)][::-1]
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start, end)) == list(ss.irange(start, end, (True, False)))
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start + 1, end + 1)) == list(ss.irange(start, end, (False, True)))
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start + 1, end)) == list(ss.irange(start, end, (False, False)))
+
+    for start in range(53):
+        assert list(range(start, 53)) == list(ss.irange(start))
+
+    for end in range(53):
+        assert list(range(0, end)) == list(ss.irange(None, end, (True, False)))
+
+    assert values == list(ss.irange(inclusive=(False, False)))
+
+    assert [] == list(ss.irange(53))
+    assert values == list(ss.irange(None, 53, (True, False)))
+
+def test_irange_key():
+    values = sorted(range(100), key=modulo)
+
+    for load in range(5, 16):
+        ss = SortedSet(range(100), load=load, key=modulo)
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(ss.irange_key(start, end))
+                assert temp == values[(start * 10):((end + 1) * 10)]
+
+                temp = list(ss.irange_key(start, end, reverse=True))
+                assert temp == values[(start * 10):((end + 1) * 10)][::-1]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(ss.irange_key(start, end, inclusive=(True, False)))
+                assert temp == values[(start * 10):(end * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(ss.irange_key(start, end, (False, True)))
+                assert temp == values[((start + 1) * 10):((end + 1) * 10)]
+
+        for start in range(10):
+            for end in range(start, 10):
+                temp = list(ss.irange_key(start, end, inclusive=(False, False)))
+                assert temp == values[((start + 1) * 10):(end * 10)]
+
+        for start in range(10):
+            temp = list(ss.irange_key(min_key=start))
+            assert temp == values[(start * 10):]
+
+        for end in range(10):
+            temp = list(ss.irange_key(max_key=end))
+            assert temp == values[:(end + 1) * 10]
+
+def test_len():
+    temp = SortedSet(range(100), load=7)
+    assert len(temp) == 100
 
 def test_add():
     temp = SortedSet(range(100), load=7)

@@ -111,6 +111,31 @@ def test_reversed_key():
     values = sorted(range(100), key=modulo)
     assert all(lhs == rhs for lhs, rhs in zip(reversed(temp), reversed(values)))
 
+def test_islice():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(7, mapping)
+
+    for start in range(30):
+        for stop in range(30):
+            assert list(temp.islice(start, stop)) == list(string.ascii_lowercase[start:stop])
+
+def test_irange():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(7, mapping)
+    for start in range(26):
+        for stop in range(start + 1, 26):
+            result = list(string.ascii_lowercase[start:stop])
+            assert list(temp.irange(result[0], result[-1])) == result
+
+def test_irange_key():
+    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    values = sorted(range(100), key=modulo)
+
+    for start in range(10):
+        for stop in range(start, 10):
+            result = list(temp.irange_key(start, stop))
+            assert result == values[(start * 10):((stop + 1) * 10)]
+
 def test_len():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)

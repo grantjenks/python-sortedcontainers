@@ -321,6 +321,66 @@ def test_reversed():
     rev = reversed(slt)
     assert all(tup[0] == tup[1] for tup in zip(range(9999, -1, -1), rev))
 
+def test_islice():
+    sl = SortedList(load=7)
+
+    assert [] == list(sl.islice())
+
+    values = list(range(53))
+    sl.update(values)
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(sl.islice(start, stop)) == values[start:stop]
+
+    for start in range(53):
+        for stop in range(53):
+            assert list(sl.islice(start, stop, reverse=True)) == values[start:stop][::-1]
+
+    for start in range(53):
+        assert list(sl.islice(start=start)) == values[start:]
+        assert list(sl.islice(start=start, reverse=True)) == values[start:][::-1]
+
+    for stop in range(53):
+        assert list(sl.islice(stop=stop)) == values[:stop]
+        assert list(sl.islice(stop=stop, reverse=True)) == values[:stop][::-1]
+
+def test_irange():
+    sl = SortedList(load=7)
+
+    assert [] == list(sl.irange())
+
+    values = list(range(53))
+    sl.update(values)
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(sl.irange(start, end)) == values[start:(end + 1)]
+            assert list(sl.irange(start, end, reverse=True)) == values[start:(end + 1)][::-1]
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start, end)) == list(sl.irange(start, end, (True, False)))
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start + 1, end + 1)) == list(sl.irange(start, end, (False, True)))
+
+    for start in range(53):
+        for end in range(start, 53):
+            assert list(range(start + 1, end)) == list(sl.irange(start, end, (False, False)))
+
+    for start in range(53):
+        assert list(range(start, 53)) == list(sl.irange(start))
+
+    for end in range(53):
+        assert list(range(0, end)) == list(sl.irange(None, end, (True, False)))
+
+    assert values == list(sl.irange(inclusive=(False, False)))
+
+    assert [] == list(sl.irange(53))
+    assert values == list(sl.irange(None, 53, (True, False)))
+
 def test_len():
     slt = SortedList()
 

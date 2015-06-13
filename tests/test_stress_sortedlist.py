@@ -167,6 +167,21 @@ def stress_reversed(slt):
     assert all(tup[0] == tup[1] for tup in zip(slt, itr))
 
 @actor(1)
+def stress_islice(slt):
+    start = random.randrange(len(slt))
+    stop = random.randrange(start, len(slt))
+    itr = slt.islice(start, stop)
+    assert all(slt[pos] == next(itr) for pos in range(start, stop))
+
+@actor(1)
+def stress_irange(slt):
+    slt[:] = sorted(set(slt))
+    start = random.randrange(len(slt))
+    stop = random.randrange(start, len(slt))
+    itr = slt.irange(slt[start], slt[stop], inclusive=(True, False))
+    assert all(slt[pos] == next(itr) for pos in range(start, stop))
+
+@actor(1)
 def stress_bisect_left(slt):
     values = list(slt)
     value = random.random()
@@ -294,10 +309,10 @@ def stress_eq(slt):
     values = []
     assert not (values == slt)
 
-@actor(1) # Disabled!!!
+@actor(1)
 @not_empty
 def stress_lt(slt):
-    values = list(slt) # Doesn't work with nose!
+    values = list(slt)
     assert not (values < slt)
     values = SortedList(value - 1 for value in values)
     assert values < slt
