@@ -774,6 +774,44 @@ class SortedList(MutableSequence):
         """Create an iterator over the list."""
         return chain.from_iterable(self._lists)
 
+    def iterate_between(self, minimum, maximum):
+        """
+        Create an iterator for the elements in the list which lay
+        between *minimum* and *maximum*, both bounds inclusive.
+        """
+        _maxes = self._maxes
+        start = bisect_left(_maxes, minimum)
+        end = bisect_right(_maxes, maximum)
+
+        if start == end:
+            # If these are equal, the values between minimum and
+            # maximum are either absent or all in one list.
+            sublist = self._lists[start]
+            substart = bisect_left(sublist, minimum)
+            subend = bisect_right(sublist, maximum)
+            return iter(sublist[substart:subend])
+
+        # Otherwise, we have *startlist* containing the smallest
+        # element larger or equal to the minimum. We return all
+        # elements from that element onwards.
+        startlist = self._lists[start]
+        substart = bisect_left(startlist, minimum)
+        startslice = startlist[substart:]
+
+        # We may have some lists of which all elements are between
+        # minimum and maximum. If there are none, this will just be
+        # empty.
+        complete_lists = chain.from_iterable(self._lists[start+1:end])
+
+        # And we have an *endlist* containing the largest element
+        # smaller or equal to the maximum. We return all elements up
+        # to and including that element.
+        endlist = self._lists[end]
+        subend = bisect_right(endlist, maximum)
+        endslice = endlist[:subend]
+
+        return chain(startslice, complete_lists, endslice)
+
     def __reversed__(self):
         """Create an iterator to traverse the list in reverse."""
         return chain.from_iterable(map(reversed, reversed(self._lists)))
