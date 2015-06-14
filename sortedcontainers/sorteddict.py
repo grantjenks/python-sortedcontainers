@@ -148,7 +148,7 @@ class SortedDict(dict):
         self._list_pop = _list.pop
         self._list_remove = _list.remove
         self._list_update = _list.update
-        self.iterkeys_between = _list.iterate_between
+        self.range = _list.range
 
         if self._key is not None:
             self.bisect_key_left = _list.bisect_key_left

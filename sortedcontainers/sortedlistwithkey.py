@@ -829,7 +829,7 @@ class SortedListWithKey(MutableSequence):
         """Create an iterator over the list."""
         return chain.from_iterable(self._lists)
 
-    def iterate_between(self, minimum, maximum):
+    def range(self, minimum, maximum):
         """
         Create an iterator for the elements in the list which lay
         between *minimum* and *maximum*, both bounds inclusive.
