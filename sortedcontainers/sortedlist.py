@@ -774,21 +774,43 @@ class SortedList(MutableSequence):
         """Create an iterator over the list."""
         return chain.from_iterable(self._lists)
 
-    def iterate_between(self, minimum, maximum):
+    def range(self, minimum=None, maximum=None, exclusive=False):
         """
         Create an iterator for the elements in the list which lay
-        between *minimum* and *maximum*, both bounds inclusive.
+        between *minimum* and *maximum*. The lower bound, *minimum* is
+        always inclusive. The upper bound is inclusive by default, but
+        can be set to exclusive by passing `exclusive=True`.
+
+        Leaving out the lower bound will start the iteration at the
+        lowest element in the list and continue up to the upper bound.
+        Vice versa when leaving out the upper bound. Leaving out both
+        is a synonym for *__iter__*.
         """
+
+        # Makes no sense not to include a none-existing upper bound.
+        if not maximum: inclusive = True
+
+        # No bounds means iterating everything.
+        if not minimum and not maximum:
+            return iter(self)
+
+        # Default values for the bounds.
+        minimum = minimum or self._lists[0][0]
+        maximum = maximum or self._maxes[-1]
+
         _maxes = self._maxes
         start = bisect_left(_maxes, minimum)
         end = bisect_right(_maxes, maximum)
+
+        # Preparing both inclusive and exclusive upper bounds.
+        bisect_upper = bisect_right if inclusive else bisect_left
 
         if start == end:
             # If these are equal, the values between minimum and
             # maximum are either absent or all in one list.
             sublist = self._lists[start]
             substart = bisect_left(sublist, minimum)
-            subend = bisect_right(sublist, maximum)
+            subend = bisect_upper(sublist, maximum)
             return iter(sublist[substart:subend])
 
         # Otherwise, we have *startlist* containing the smallest
@@ -806,9 +828,12 @@ class SortedList(MutableSequence):
         # And we have an *endlist* containing the largest element
         # smaller or equal to the maximum. We return all elements up
         # to and including that element.
-        endlist = self._lists[end]
-        subend = bisect_right(endlist, maximum)
-        endslice = endlist[:subend]
+        if end == len(self._lists):
+            endslice = []
+        else:
+            endlist = self._lists[end]
+            subend = bisect_upper(endlist, maximum)
+            endslice = endlist[:subend]
 
         return chain(startslice, complete_lists, endslice)
 
