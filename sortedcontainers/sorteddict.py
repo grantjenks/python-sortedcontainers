@@ -135,6 +135,7 @@ class SortedDict(dict):
         self._setdefault = _dict.setdefault
         self._setitem = _dict.__setitem__
         self._update = _dict.update
+        self._getitem = _dict.__getitem__
 
         # Cache function pointers to SortedList methods.
 
@@ -187,6 +188,25 @@ class SortedDict(dict):
         if key not in self:
             self._list_add(key)
         self._setitem(key, value)
+
+    def __getitem__(self, key):
+        """
+        Retrieve the value associated with *key*. If *key* is a slice,
+        iterates the values associated with all keys withing the range
+        represented by that slice.
+
+        Note that the size of the slice step will be ignored, but a
+        negative step will result in reversed iteration.
+        """
+
+        # Slices are a bit special.
+        if isinstance(key, slice):
+            keys = self.range(key.start, key.stop)
+            if key.step and key.step < 0:
+                keys = reversed(list(keys))
+            return (self._getitem(k) for k in keys)
+
+        return self._getitem(key)
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""

@@ -788,7 +788,7 @@ class SortedList(MutableSequence):
         """
 
         # Makes no sense not to include a none-existing upper bound.
-        if not maximum: inclusive = True
+        if not maximum: exclusive = False
 
         # No bounds means iterating everything.
         if not minimum and not maximum:
@@ -803,7 +803,7 @@ class SortedList(MutableSequence):
         end = bisect_right(_maxes, maximum)
 
         # Preparing both inclusive and exclusive upper bounds.
-        bisect_upper = bisect_right if inclusive else bisect_left
+        bisect_upper = bisect_left if exclusive else bisect_right
 
         if start == end:
             # If these are equal, the values between minimum and
