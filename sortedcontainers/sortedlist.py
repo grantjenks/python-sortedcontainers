@@ -1347,8 +1347,8 @@ class SortedList(MutableSequence):
 
                 for pos in range(self._offset):
                     child = (pos << 1) + 1
-                    if self._index[pos] == 0:
-                        assert child >= len(self._index)
+                    if child >= len(self._index):
+                        assert self._index[pos] == 0
                     elif child + 1 == len(self._index):
                         assert self._index[pos] == self._index[child]
                     else:

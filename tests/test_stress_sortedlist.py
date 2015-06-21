@@ -321,7 +321,7 @@ def stress_lt(slt):
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedList((random.random() for rpt in range(1000)))
+    slt = SortedList((random.random() for rpt in range(1000)), load=97)
 
     for rpt in range(repeat):
         action = random.choice(actions)
