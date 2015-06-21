@@ -168,15 +168,17 @@ def stress_reversed(slt):
 
 @actor(1)
 def stress_islice(slt):
-    start = random.randrange(len(slt))
+    if len(slt) < 10: return
+    start = random.randrange(len(slt) - 5)
     stop = random.randrange(start, len(slt))
     itr = slt.islice(start, stop)
     assert all(slt[pos] == next(itr) for pos in range(start, stop))
 
 @actor(1)
 def stress_irange(slt):
+    if len(slt) < 10: return
     slt[:] = sorted(set(slt))
-    start = random.randrange(len(slt))
+    start = random.randrange(len(slt) - 5)
     stop = random.randrange(start, len(slt))
     itr = slt.irange(slt[start], slt[stop], inclusive=(True, False))
     assert all(slt[pos] == next(itr) for pos in range(start, stop))
@@ -321,13 +323,25 @@ def stress_lt(slt):
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedList((random.random() for rpt in range(1000)), load=97)
+    slt = SortedList((random.random() for rpt in range(1000)), load=23)
 
     for rpt in range(repeat):
         action = random.choice(actions)
         action(slt)
 
         slt._check()
+
+        fourth = int(len(slt) / 4)
+        count = 0 if fourth == 0 else random.randrange(-fourth, fourth)
+
+        while count > 0:
+            slt.add(random.random())
+            count -= 1
+
+        while count < 0:
+            pos = random.randrange(len(slt))
+            del slt[pos]
+            count += 1
 
         while len(slt) > 2000:
             # Shorten the sortedlist. This maintains the "jaggedness"
@@ -338,6 +352,8 @@ def test_stress(repeat=1000):
             slt._len = sum(len(sublist) for sublist in slt._lists)
             slt._index = []
             slt._check()
+
+        slt._check()
 
     slt._check()
 
