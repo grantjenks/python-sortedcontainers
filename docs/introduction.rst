@@ -123,6 +123,20 @@ SortedList also works efficiently with other sequence data types. :ref:`Addition
     >>> l == range(10)
     True
 
+SortedList adds two more functions to the list api, :ref:`islice
+<SortedList.islice>` and :ref:`irange <SortedList.irange>`. Each returns an
+iterator and slices the SortedList; `islice` according to traditional Python
+slicing rules, `start` to `stop`, inclusive and exclusive respectively; and
+`irange` from the `minimum` to `maximum`, both inclusive by default. Each
+method also accepts a `reverse` argument so that items are yielded from the
+iterator in reverse.
+
+    >>> l[:] = range(10)
+    >>> tuple(l.islice(3, 6, reverse=True))
+    (5, 4, 3)
+    >>> tuple(l.irange(2, 7, inclusive=(True, True)))
+    (2, 3, 4, 5, 6, 7)
+
 For more details, refer to the :doc:`SortedList API documentation <sortedlist>`.
 
 SortedListWithKey

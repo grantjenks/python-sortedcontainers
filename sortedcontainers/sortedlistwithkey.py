@@ -917,6 +917,9 @@ class SortedListWithKey(MutableSequence):
 
         Both `minimum` and `maximum` default to `None` which is automatically
         inclusive of the start and end of the list, respectively.
+
+        When `reverse` is `True` the values are yielded from the iterator in
+        reverse order; `reverse` defaults to `False`.
         """
         minimum = self._key(minimum) if minimum is not None else None
         maximum = self._key(maximum) if maximum is not None else None
@@ -937,6 +940,9 @@ class SortedListWithKey(MutableSequence):
 
         Both `min_key` and `max_key` default to `None` which is automatically
         inclusive of the start and end of the list, respectively.
+
+        When `reverse` is `True` the values are yielded from the iterator in
+        reverse order; `reverse` defaults to `False`.
         """
         _maxes = self._maxes
 

@@ -233,3 +233,35 @@ SortedList
       Very efficiently convert the :class:`SortedList` to a class:`list`.
 
       :rtype: :class:`list`
+
+   .. _SortedList.islice:
+   .. method:: L.islice(start=None, stop=None, reverse=False)
+
+      Returns an iterator that slices `self` from `start` to `stop` index,
+      inclusive and exclusive respectively.
+
+      When `reverse` is `True`, values are yielded from the iterator in
+      reverse order.
+
+      Both `start` and `stop` default to `None` which is automatically
+      inclusive of the beginning and end.
+
+      :rtype: iterator
+
+   .. _SortedList.irange:
+   .. method:: L.irange(minimum=None, maximum=None, inclusive=(True, True), reverse=False)
+
+      Create an iterator of values between `minimum` and `maximum`.
+
+      `inclusive` is a pair of booleans that indicates whether the minimum
+      and maximum ought to be included in the range, respectively. The
+      default is (True, True) such that the range is inclusive of both
+      minimum and maximum.
+
+      Both `minimum` and `maximum` default to `None` which is automatically
+      inclusive of the start and end of the list, respectively.
+
+      When `reverse` is `True` the values are yielded from the iterator in
+      reverse order; `reverse` defaults to `False`.
+
+      :rtype: iterator
