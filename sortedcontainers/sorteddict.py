@@ -222,6 +222,9 @@ class SortedDict(dict):
         """Return an iterable over the items (``(key, value)`` pairs)."""
         return iter((key, self[key]) for key in self._list)
 
+    def irange_items(self, *args, **kwargs):
+        return iter((key, self[key]) for key in self.irange(*args, **kwargs))
+
     if hexversion < 0x03000000:
         def keys(self):
             """Return a SortedSet of the dictionary's keys."""
