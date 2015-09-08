@@ -124,6 +124,7 @@ introduction, implementation, performance, and development.
    performance-workload
    implementation
    development
+   djangocon-2015-lightning-talk
 
 API Documentation
 -----------------
