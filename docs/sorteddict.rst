@@ -165,6 +165,7 @@ SortedDict
 
    .. _SortedDict.popitem:
    .. method:: d.popitem(last=True)
+
       Remove and return a ``(key, value)`` pair from the dictionary. If
       `last=True` (default) then remove the *greatest* key from the
       diciontary. Else, remove the *least* key from the dictionary.
