@@ -628,49 +628,42 @@ def test_op_add():
 
 def test_eq():
     this = SortedList(range(10), load=4)
-    that = SortedList(range(20), load=4)
-    assert not (this == that)
-    that.clear()
-    that.update(range(10))
-    assert this == that
+    assert this == list(range(10))
+    assert this == tuple(range(10))
+    assert not (this == list(range(9)))
+
+def test_ne():
+    this = SortedList(range(10), load=4)
+    assert this != list(range(9))
+    assert this != tuple(range(11))
+    assert this != [0, 1, 2, 3, 3, 5, 6, 7, 8, 9]
+    assert this != (val for val in range(10))
 
 def test_lt():
-    this = SortedList(range(10), load=4)
-    that = SortedList(range(10, 20), load=5)
-    assert this < that
-    assert not (that < this)
-    that = SortedList(range(1, 20), load=6)
-    assert this < that
-    that = SortedList(range(1, 10), load=4)
-    assert not (this < that)
+    this = SortedList(range(10, 15), load=4)
+    assert this < [10, 11, 13, 13, 14]
+    assert this < [10, 11, 12, 13, 14, 15]
+    assert this < [11]
 
-def test_lte():
-    this = SortedList(range(10), load=4)
-    that = SortedList(range(10), load=5)
-    assert this <= that
-    assert that <= this
-    del this[-1]
-    assert this <= that
-    assert not (that <= this)
+def test_le():
+    this = SortedList(range(10, 15), load=4)
+    assert this <= [10, 11, 12, 13, 14]
+    assert this <= [10, 11, 12, 13, 14, 15]
+    assert this <= [10, 11, 13, 13, 14]
+    assert this <= [11]
 
 def test_gt():
-    this = SortedList(range(10), load=4)
-    that = SortedList(range(10, 20), load=5)
-    assert that > this
-    assert not (this > that)
-    that = SortedList(range(1, 20), load=6)
-    assert that > this
-    that = SortedList(range(1, 10), load=4)
-    assert not (that > this)
+    this = SortedList(range(10, 15), load=4)
+    assert this > [10, 11, 11, 13, 14]
+    assert this > [10, 11, 12, 13]
+    assert this > [9]
 
-def test_gte():
-    this = SortedList(range(10), load=4)
-    that = SortedList(range(10), load=5)
-    assert this >= that
-    assert that >= this
-    del this[-1]
-    assert that >= this
-    assert not (this >= that)
+def test_ge():
+    this = SortedList(range(10, 15), load=4)
+    assert this >= [10, 11, 12, 13, 14]
+    assert this >= [10, 11, 12, 13]
+    assert this >= [10, 11, 11, 13, 14]
+    assert this >= [9]
 
 def test_repr():
     this = SortedList(range(10), load=4)
