@@ -671,7 +671,9 @@ def test_repr():
 
 def test_repr_recursion():
     this = SortedList([[1], [2], [3], [4]])
-    this.append(this)
+    this._maxes[-1] = this
+    this._lists[-1].append(this)
+    this._len += 1
     assert repr(this) == 'SortedList([[1], [2], [3], [4], ...], load=1000)'
 
 def test_repr_subclass():
