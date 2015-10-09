@@ -69,12 +69,11 @@ SortedDict
 
       :rtype: value
 
-   .. method:: L == L2, L != L2
+   .. method:: D == D2, D != D2
 
-      Test two dictionaries for equality (or inequality).
-      Dictionaries compare equal if and only if they have the same
-      length, if all of the keys of *L* may be found in *L2*, and all
-      of the corresponding values compare equal.
+      Test two dictionaries for equality (or inequality). Mappings compare
+      equal if and only if they have the same length, if all of the keys of *D*
+      may be found in *D2*, and all of the corresponding values compare equal.
 
       :rtype: :class:`bool`
 
