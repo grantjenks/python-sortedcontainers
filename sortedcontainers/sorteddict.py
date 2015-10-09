@@ -385,26 +385,6 @@ class SortedDict(dict):
     def __reduce__(self):
         return (self.__class__, (self._key, self._load, list(self.iteritems())))
 
-    def __eq__(self, that):
-        """Return `True` if and only if Mapping is equal to `that`."""
-        if not isinstance(that, Mapping):
-            return NotImplemented
-
-        if self._len != len(that):
-            return False
-
-        return all(key in self and self[key] == that[key] for key in that)
-
-    def __ne__(self, that):
-        """Return `True` if and only if Mapping is not equal to `that`."""
-        if not isinstance(that, Mapping):
-            return NotImplemented
-
-        if self._len != len(that):
-            return True
-
-        return any(key not in self or self[key] != that[key] for key in that)
-
     @recursive_repr
     def __repr__(self):
         temp = '{0}({1}, {2}, {{{3}}})'
