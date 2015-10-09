@@ -1274,7 +1274,7 @@ class SortedList(MutableSequence):
             return seq_op(self_len, len_that)
 
         comparer.__name__ = '__{0}__'.format(seq_op.__name__)
-        doc_str = 'Return `True` if and only if sequence is {0} `that`.'
+        doc_str = 'Return `True` if and only if Sequence is {0} `that`.'
         comparer.__doc__ = doc_str.format(doc)
 
         return comparer
