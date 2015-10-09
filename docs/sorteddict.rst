@@ -81,14 +81,20 @@ SortedDict
    .. _SortedDict.__iter__:
    .. method:: iter(d)
 
-      Create an iterator over the sorted keys of the dictionary.
+      Return an iterator over the sorted keys of the dictionary.
+
+      Iterating the Mapping while adding or deleting keys may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 
    .. _SortedDict.__reversed__:
    .. method:: reversed(d)
 
-      Create a reversed iterator over the sorted keys of the dictionary.
+      Return a reversed iterator over the sorted keys of the dictionary.
+
+      Iterating the Mapping while adding or deleting keys may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 

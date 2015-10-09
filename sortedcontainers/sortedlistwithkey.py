@@ -826,11 +826,21 @@ class SortedListWithKey(MutableSequence):
                 _maxes[pos] = key
 
     def __iter__(self):
-        """Create an iterator over the list."""
+        """
+        Return an iterator over the Sequence.
+
+        Iterating the Sequence while adding or deleting values may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return chain.from_iterable(self._lists)
 
     def __reversed__(self):
-        """Create an iterator to traverse the list in reverse."""
+        """
+        Return an iterator to traverse the Sequence in reverse.
+
+        Iterating the Sequence while adding or deleting values may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return chain.from_iterable(map(reversed, reversed(self._lists)))
 
     def islice(self, start=None, stop=None, reverse=False):

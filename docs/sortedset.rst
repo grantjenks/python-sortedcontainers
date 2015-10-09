@@ -80,7 +80,11 @@ SortedSet
    .. _SortedSet.__iter__:
    .. method:: iter(S)
 
-      Create an iterator over the set.
+      Return an iterator over the Set. Elements are iterated in their sorted
+      order.
+
+      Iterating the Set while adding or deleting values may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 
@@ -92,7 +96,11 @@ SortedSet
 
    .. method:: reversed(S)
 
-      Create an iterator to traverse the set in reverse.
+      Return an iterator over the Set. Elements are iterated in their reverse
+      sorted order.
+
+      Iterating the Set while adding or deleting values may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 

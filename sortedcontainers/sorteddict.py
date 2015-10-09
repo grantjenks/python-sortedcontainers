@@ -175,12 +175,20 @@ class SortedDict(dict):
         self._list_remove(key)
 
     def __iter__(self):
-        """Create an iterator over the sorted keys of the dictionary."""
+        """
+        Return an iterator over the sorted keys of the dictionary.
+
+        Iterating the Mapping while adding or deleting keys may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return iter(self._list)
 
     def __reversed__(self):
         """
-        Create a reversed iterator over the sorted keys of the dictionary.
+        Return a reversed iterator over the sorted keys of the dictionary.
+
+        Iterating the Mapping while adding or deleting keys may raise a
+        `RuntimeError` or fail to iterate over all entries.
         """
         return reversed(self._list)
 
@@ -219,7 +227,12 @@ class SortedDict(dict):
             return ItemsView(self)
 
     def iteritems(self):
-        """Return an iterable over the items (``(key, value)`` pairs)."""
+        """
+        Return an iterator over the items (``(key, value)`` pairs).
+
+        Iterating the Mapping while adding or deleting keys may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return iter((key, self[key]) for key in self._list)
 
     if hexversion < 0x03000000:
@@ -236,7 +249,12 @@ class SortedDict(dict):
             return KeysView(self)
 
     def iterkeys(self):
-        """Return an iterable over the keys of the dictionary."""
+        """
+        Return an iterator over the sorted keys of the Mapping.
+
+        Iterating the Mapping while adding or deleting keys may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return iter(self._list)
 
     if hexversion < 0x03000000:
@@ -253,7 +271,12 @@ class SortedDict(dict):
             return ValuesView(self)
 
     def itervalues(self):
-        """Return an iterable over the values of the dictionary."""
+        """
+        Return an iterator over the values of the Mapping.
+
+        Iterating the Mapping while adding or deleting keys may raise a
+        `RuntimeError` or fail to iterate over all entries.
+        """
         return iter(self[key] for key in self._list)
 
     def pop(self, key, default=_NotGiven):
@@ -416,7 +439,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         over in their sorted order.
 
         Iterating views while adding or deleting entries in the dictionary may
-        raise a RuntimeError or fail to iterate over all entries.
+        raise a `RuntimeError` or fail to iterate over all entries.
         """
         return iter(self._list)
     def __getitem__(self, index):
@@ -632,7 +655,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         over in their sorted order.
 
         Iterating views while adding or deleting entries in the dictionary may
-        raise a RuntimeError or fail to iterate over all entries.
+        raise a `RuntimeError` or fail to iterate over all entries.
         """
         _dict = self._dict
         return iter((key, _dict[key]) for key in self._list)

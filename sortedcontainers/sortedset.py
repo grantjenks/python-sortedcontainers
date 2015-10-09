@@ -123,15 +123,21 @@ class SortedSet(MutableSet, Sequence):
 
     def __iter__(self):
         """
-        Return an iterator over the SortedSet. Elements are iterated over
-        in their sorted order.
+        Return an iterator over the Set. Elements are iterated in their sorted
+        order.
+
+        Iterating the Set while adding or deleting values may raise a
+        `RuntimeError` or fail to iterate over all entries.
         """
         return iter(self._list)
 
     def __reversed__(self):
         """
-        Return an iterator over the SortedSet. Elements are iterated over
-        in their reversed sorted order.
+        Return an iterator over the Set. Elements are iterated in their reverse
+        sorted order.
+
+        Iterating the Set while adding or deleting values may raise a
+        `RuntimeError` or fail to iterate over all entries.
         """
         return reversed(self._list)
 

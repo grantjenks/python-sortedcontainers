@@ -76,7 +76,10 @@ SortedListWithKey
    .. _SortedListWithKey.__iter__:
    .. method:: iter(L)
 
-      Create an iterator over the list.
+      Return an iterator over the Sequence.
+
+      Iterating the Sequence while adding or deleting values may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 
@@ -118,7 +121,10 @@ SortedListWithKey
 
    .. method:: reversed(L)
 
-      Create an iterator to traverse the list in reverse.
+      Return an iterator to traverse the Sequence in reverse.
+
+      Iterating the Sequence while adding or deleting values may raise a
+      `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
 
