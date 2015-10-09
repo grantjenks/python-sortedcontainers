@@ -9,6 +9,7 @@ from .sortedlist import recursive_repr
 from bisect import bisect_left, bisect_right, insort
 from itertools import chain, repeat, starmap
 from collections import MutableSequence
+import operator as op
 from operator import iadd, add
 from functools import wraps
 from math import log
@@ -1377,35 +1378,38 @@ class SortedListWithKey(MutableSequence):
         self.update(values)
         return self
 
-    def __eq__(self, that):
-        """Compare two Sequences for equality."""
-        return ((self._len == len(that))
-                and all(lhs == rhs for lhs, rhs in zip(self, that)))
+    def _make_cmp(seq_op, doc):
+        def comparer(self, that):
+            if not isinstance(that, Sequence):
+                return NotImplemented
 
-    def __ne__(self, that):
-        """Compare two Sequences for inequality."""
-        return ((self._len != len(that))
-                or any(lhs != rhs for lhs, rhs in zip(self, that)))
+            self_len = self._len
+            len_that = len(that)
 
-    def __lt__(self, that):
-        """Compare two Sequences for less than."""
-        return ((self._len <= len(that))
-                and all(lhs < rhs for lhs, rhs in zip(self, that)))
+            if self_len != len_that:
+                if seq_op is op.eq:
+                    return False
+                if seq_op is op.ne:
+                    return True
 
-    def __le__(self, that):
-        """Compare two Sequences for less than equal."""
-        return ((self._len <= len(that))
-                and all(lhs <= rhs for lhs, rhs in zip(self, that)))
+            for alpha, beta in zip(self, that):
+                if alpha != beta:
+                    return seq_op(alpha, beta)
 
-    def __gt__(self, that):
-        """Compare two Sequences for greater than."""
-        return ((self._len >= len(that))
-                and all(lhs > rhs for lhs, rhs in zip(self, that)))
+            return seq_op(self_len, len_that)
 
-    def __ge__(self, that):
-        """Compare two Sequences for greater than equal."""
-        return ((self._len >= len(that))
-                and all(lhs >= rhs for lhs, rhs in zip(self, that)))
+        comparer.__name__ = '__{0}__'.format(seq_op.__name__)
+        doc_str = 'Return `True` if and only if Sequence is {0} `that`.'
+        comparer.__doc__ = doc_str.format(doc)
+
+        return comparer
+
+    __eq__ = _make_cmp(op.eq, 'equal to')
+    __ne__ = _make_cmp(op.ne, 'not equal to')
+    __lt__ = _make_cmp(op.lt, 'less than')
+    __gt__ = _make_cmp(op.gt, 'greater than')
+    __le__ = _make_cmp(op.le, 'less than or equal to')
+    __ge__ = _make_cmp(op.ge, 'greater than or equal to')
 
     @recursive_repr
     def __repr__(self):
