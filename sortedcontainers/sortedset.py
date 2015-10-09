@@ -103,19 +103,20 @@ class SortedSet(MutableSet, Sequence):
             elif isinstance(that, Set):
                 return set_op(self._set, that)
             else:
-                raise TypeError('can only compare to a Set')
+                return NotImplemented
 
         comparer.__name__ = '__{0}__'.format(set_op.__name__)
-        comparer.__doc__ = 'Return True if and only if ' + doc
+        doc_str = 'Return True if and only if Set is {0} `that`.'
+        comparer.__doc__ = doc_str.format(doc)
 
         return comparer
 
-    __eq__ = _make_cmp(op.eq, 'self and *that* are equal sets.')
-    __ne__ = _make_cmp(op.ne, 'self and *that* are inequal sets.')
-    __lt__ = _make_cmp(op.lt, 'self is a proper subset of *that*.')
-    __gt__ = _make_cmp(op.gt, 'self is a proper superset of *that*.')
-    __le__ = _make_cmp(op.le, 'self is a subset of *that*.')
-    __ge__ = _make_cmp(op.ge, 'self is a superset of *that*.')
+    __eq__ = _make_cmp(op.eq, 'equal to')
+    __ne__ = _make_cmp(op.ne, 'not equal to')
+    __lt__ = _make_cmp(op.lt, 'a proper subset of')
+    __gt__ = _make_cmp(op.gt, 'a proper superset of')
+    __le__ = _make_cmp(op.le, 'a subset of')
+    __ge__ = _make_cmp(op.ge, 'a superset of')
 
     def __len__(self):
         """Return the number of elements in the set."""
