@@ -287,7 +287,7 @@ class SortedSet(MutableSet, Sequence):
                 _add(value)
         return self
 
-    __ior__ = union
+    __ior__ = update
 
     def __reduce__(self):
         return (self.__class__, ((), self._key, self._load, self._set))
