@@ -8,7 +8,7 @@ from sys import hexversion
 from .sortedlist import recursive_repr
 from bisect import bisect_left, bisect_right, insort
 from itertools import chain, repeat, starmap
-from collections import MutableSequence
+from collections import MutableSequence, Sequence
 import operator as op
 from operator import iadd, add
 from functools import wraps
