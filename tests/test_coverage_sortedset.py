@@ -68,11 +68,6 @@ def test_eq():
     beta.add(101)
     assert not (alpha == beta)
 
-@raises(TypeError)
-def test_eq_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha == list(range(100))
-
 def test_ne():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(99), load=17)
@@ -80,11 +75,7 @@ def test_ne():
     beta.add(100)
     assert alpha != beta
     assert alpha != beta._set
-
-@raises(TypeError)
-def test_ne_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha != list(range(1, 101))
+    assert alpha != list(range(101))
 
 def test_lt_gt():
     temp = SortedSet(range(100), load=7)
@@ -96,16 +87,6 @@ def test_lt_gt():
     assert not (that > temp)
     assert temp > that._set
 
-@raises(TypeError)
-def test_lt_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha < list(range(1000))
-
-@raises(TypeError)
-def test_gt_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha > list(range(10))
-
 def test_le_ge():
     alpha = SortedSet(range(100), load=7)
     beta = SortedSet(range(101), load=17)
@@ -115,16 +96,6 @@ def test_le_ge():
     assert beta >= alpha
     assert not (alpha >= beta)
     assert beta >= alpha._set
-
-@raises(TypeError)
-def test_le_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha <= list(range(1000))
-
-@raises(TypeError)
-def test_ge_error():
-    alpha = SortedSet(range(100), load=7)
-    assert alpha >= list(range(10))
 
 def test_iter():
     temp = SortedSet(range(100), load=7)

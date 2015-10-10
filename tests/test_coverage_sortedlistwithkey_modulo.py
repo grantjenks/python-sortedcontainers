@@ -715,49 +715,52 @@ def test_op_add():
 
 def test_eq():
     this = SortedListWithKey(range(10), load=4, key=modulo)
-    that = SortedListWithKey(range(20), load=4, key=modulo)
-    assert not (this == that)
-    that.clear()
-    that.update(range(10))
-    assert this == that
+    assert this == list(range(10))
+    assert this == tuple(range(10))
+    assert not (this == list(range(9)))
+
+def test_ne():
+    this = SortedListWithKey(range(10, 20), load=4, key=modulo)
+    assert this != list(range(11, 21))
+    assert this != tuple(range(10, 21))
+    assert this != [0, 1, 2, 3, 3, 5, 6, 7, 8, 9]
+    assert this != (val for val in range(10))
+    assert this != set()
 
 def test_lt():
-    this = SortedListWithKey(range(10), load=4, key=modulo)
-    that = SortedListWithKey(range(10, 20), load=5, key=modulo)
-    assert this < that
-    assert not (that < this)
-    that = SortedListWithKey(range(1, 10), load=4, key=modulo)
-    assert not (this < that)
+    this = SortedListWithKey(range(10, 15), load=4, key=modulo)
+    assert this < [10, 11, 13, 13, 14]
+    assert this < [10, 11, 12, 13, 14, 15]
+    assert this < [11]
 
-def test_lte():
-    this = SortedListWithKey(range(10), load=4, key=modulo)
-    that = SortedListWithKey(range(10), load=5, key=modulo)
-    assert this <= that
-    assert that <= this
-    del this[-1]
-    assert this <= that
-    assert not (that <= this)
+def test_le():
+    this = SortedListWithKey(range(10, 15), load=4, key=modulo)
+    assert this <= [10, 11, 12, 13, 14]
+    assert this <= [10, 11, 12, 13, 14, 15]
+    assert this <= [10, 11, 13, 13, 14]
+    assert this <= [11]
 
 def test_gt():
-    this = SortedListWithKey(range(10), load=4, key=modulo)
-    that = SortedListWithKey(range(10, 20), load=5, key=modulo)
-    assert that > this
-    assert not (this > that)
-    that = SortedListWithKey(range(1, 10), load=4, key=modulo)
-    assert not (that > this)
+    this = SortedListWithKey(range(10, 15), load=4, key=modulo)
+    assert this > [10, 11, 11, 13, 14]
+    assert this > [10, 11, 12, 13]
+    assert this > [9]
 
-def test_gte():
-    this = SortedListWithKey(range(10), load=4, key=modulo)
-    that = SortedListWithKey(range(10), load=5, key=modulo)
-    assert this >= that
-    assert that >= this
-    del this[-1]
-    assert that >= this
-    assert not (this >= that)
+def test_ge():
+    this = SortedListWithKey(range(10, 15), load=4, key=modulo)
+    assert this >= [10, 11, 12, 13, 14]
+    assert this >= [10, 11, 12, 13]
+    assert this >= [10, 11, 11, 13, 14]
+    assert this >= [9]
 
 def test_repr():
     this = SortedListWithKey(range(10), load=4, key=modulo)
     assert repr(this).startswith('SortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
+
+def test_repr_recursion():
+    this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
+    this._lists[-1].append(this)
+    assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
 
 def test_repr_subclass():
     class CustomSortedListWithKey(SortedListWithKey):

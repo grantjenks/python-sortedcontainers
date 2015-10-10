@@ -638,6 +638,7 @@ def test_ne():
     assert this != tuple(range(11))
     assert this != [0, 1, 2, 3, 3, 5, 6, 7, 8, 9]
     assert this != (val for val in range(10))
+    assert this != set()
 
 def test_lt():
     this = SortedList(range(10, 15), load=4)
@@ -671,9 +672,7 @@ def test_repr():
 
 def test_repr_recursion():
     this = SortedList([[1], [2], [3], [4]])
-    this._maxes[-1] = this
     this._lists[-1].append(this)
-    this._len += 1
     assert repr(this) == 'SortedList([[1], [2], [3], [4], ...], load=1000)'
 
 def test_repr_subclass():

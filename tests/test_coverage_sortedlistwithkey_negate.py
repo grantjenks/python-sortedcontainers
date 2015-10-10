@@ -690,11 +690,6 @@ def test_repr():
     this = SortedListWithKey(range(10), load=4, key=negate)
     assert repr(this).startswith('SortedListWithKey([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
 
-def test_repr_recursion():
-    this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
-    this.append(this)
-    assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
-
 def test_pickle():
     import pickle
     alpha = SortedListWithKey(range(10000), key=negate, load=500)
