@@ -538,7 +538,7 @@ class ValuesView(AbstractValuesView, Sequence):
         return len(self._dict)
     def __contains__(self, value):
         """
-        Return True if and only if *value* is on the underlying dictionary's
+        Return True if and only if *value* is in the underlying Mapping's
         values.
         """
         return value in self._view
@@ -591,7 +591,7 @@ class ValuesView(AbstractValuesView, Sequence):
     else:
         def count(self, value):
             """Return the number of occurrences of *value* in self."""
-            return sum(1 for val in _dict.values() if val == value)
+            return sum(1 for val in self._dict.values() if val == value)
     def __lt__(self, that):
         raise TypeError
     def __gt__(self, that):
