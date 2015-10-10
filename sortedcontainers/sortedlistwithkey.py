@@ -59,6 +59,8 @@ class SortedListWithKey(MutableSequence):
         del self._keys[:]
         del self._index[:]
 
+    __clear = clear
+
     def add(self, val):
         """Add the element *val* to the list."""
         _maxes, _lists, _keys = self._maxes, self._lists, self._keys
@@ -127,7 +129,7 @@ class SortedListWithKey(MutableSequence):
             if len(values) * 4 >= self._len:
                 values.extend(chain.from_iterable(_lists))
                 values.sort(key=self._key)
-                self.clear()
+                self.__clear()
             else:
                 _add = self.add
                 for val in values:
@@ -608,8 +610,8 @@ class SortedListWithKey(MutableSequence):
                 values = self[:start]
                 if stop < self._len:
                     values += self[stop:]
-                self.clear()
-                self.update(values)
+                self.__clear()
+                self.__update(values)
                 return
 
             indices = range(start, stop, step)
@@ -638,7 +640,7 @@ class SortedListWithKey(MutableSequence):
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
-                    return self.as_list()
+                    return reduce(iadd, self._lists, [])
 
                 start_pos, start_idx = self._pos(start)
 
@@ -936,7 +938,7 @@ class SortedListWithKey(MutableSequence):
         """
         minimum = self._key(minimum) if minimum is not None else None
         maximum = self._key(maximum) if maximum is not None else None
-        return self.irange_key(
+        return self.__irange_key(
             min_key=minimum, max_key=maximum,
             inclusive=inclusive, reverse=reverse,
         )
@@ -1012,6 +1014,8 @@ class SortedListWithKey(MutableSequence):
 
         return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
 
+    __irange_key = irange_key
+
     def __len__(self):
         """Return the number of elements in the list."""
         return self._len
@@ -1022,14 +1026,14 @@ class SortedListWithKey(MutableSequence):
         appropriate index to insert *val*. If *val* is already present, the
         insertion point will be before (to the left of) any existing entries.
         """
-        return self.bisect_key_left(self._key(val))
+        return self.__bisect_key_left(self._key(val))
 
     def bisect_right(self, val):
         """
         Same as *bisect_left*, but if *val* is already present, the insertion
         point will be after (to the right of) any existing entries.
         """
-        return self.bisect_key_right(self._key(val))
+        return self.__bisect_key_right(self._key(val))
 
     bisect = bisect_right
 
@@ -1054,6 +1058,8 @@ class SortedListWithKey(MutableSequence):
 
         return self._loc(pos, idx)
 
+    __bisect_key_left = bisect_key_left
+
     def bisect_key_right(self, key):
         """
         Same as *bisect_key_left*, but if *key* is already present, the insertion
@@ -1074,6 +1080,7 @@ class SortedListWithKey(MutableSequence):
         return self._loc(pos, idx)
 
     bisect_key = bisect_key_right
+    __bisect_key_right = bisect_key_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
@@ -1350,7 +1357,7 @@ class SortedListWithKey(MutableSequence):
         *that*. Elements in *that* do not need to be properly ordered with
         respect to *self*.
         """
-        values = self.as_list()
+        values = reduce(iadd, self._lists, [])
         values.extend(that)
         return self.__class__(values, key=self._key, load=self._load)
 
@@ -1359,7 +1366,7 @@ class SortedListWithKey(MutableSequence):
         Update *self* to include all values in *that*. Elements in *that* do not
         need to be properly ordered with respect to *self*.
         """
-        self.update(that)
+        self.__update(that)
         return self
 
     def __mul__(self, that):
@@ -1367,7 +1374,7 @@ class SortedListWithKey(MutableSequence):
         Return a new sorted list containing *that* shallow copies of each item
         in SortedListWithKey.
         """
-        values = self.as_list() * that
+        values = reduce(iadd, self._lists, []) * that
         return self.__class__(values, key=self._key, load=self._load)
 
     def __imul__(self, that):
@@ -1375,9 +1382,9 @@ class SortedListWithKey(MutableSequence):
         Increase the length of the list by appending *that* shallow copies of
         each item.
         """
-        values = self.as_list() * that
-        self.clear()
-        self.update(values)
+        values = reduce(iadd, self._lists, []) * that
+        self.__clear()
+        self.__update(values)
         return self
 
     def _make_cmp(seq_op, doc):

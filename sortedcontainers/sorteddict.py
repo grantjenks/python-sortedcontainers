@@ -200,7 +200,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return self.__class__(self._key, self._load, self.iteritems())
+        return self.__class__(self._key, self._load, self.__iteritems())
 
     __copy__ = copy
 
@@ -216,7 +216,7 @@ class SortedDict(dict):
             """
             Return a list of the dictionary's items (``(key, value)`` pairs).
             """
-            return list(self.iteritems())
+            return list(self.__iteritems())
     else:
         def items(self):
             """
@@ -234,6 +234,8 @@ class SortedDict(dict):
         `RuntimeError` or fail to iterate over all entries.
         """
         return iter((key, self[key]) for key in self._list)
+
+    __iteritems = iteritems
 
     if hexversion < 0x03000000:
         def keys(self):
@@ -260,7 +262,7 @@ class SortedDict(dict):
     if hexversion < 0x03000000:
         def values(self):
             """Return a list of the dictionary's values."""
-            return list(self.itervalues())
+            return list(self.__itervalues())
     else:
         def values(self):
             """
@@ -278,6 +280,8 @@ class SortedDict(dict):
         `RuntimeError` or fail to iterate over all entries.
         """
         return iter(self[key] for key in self._list)
+
+    __itervalues = itervalues
 
     def pop(self, key, default=_NotGiven):
         """
@@ -385,7 +389,7 @@ class SortedDict(dict):
         return ItemsView(self)
 
     def __reduce__(self):
-        return (self.__class__, (self._key, self._load, list(self.iteritems())))
+        return (self.__class__, (self._key, self._load, list(self.__iteritems())))
 
     @recursive_repr
     def __repr__(self):

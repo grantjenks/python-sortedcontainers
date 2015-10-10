@@ -82,6 +82,8 @@ class SortedList(MutableSequence):
         del self._lists[:]
         del self._index[:]
 
+    __clear = clear
+
     def add(self, val):
         """Add the element *val* to the list."""
         _maxes, _lists = self._maxes, self._lists
@@ -137,7 +139,7 @@ class SortedList(MutableSequence):
             if len(values) * 4 >= self._len:
                 values.extend(chain.from_iterable(_lists))
                 values.sort()
-                self.clear()
+                self.__clear()
             else:
                 _add = self.add
                 for val in values:
@@ -561,8 +563,8 @@ class SortedList(MutableSequence):
                 values = self[:start]
                 if stop < self._len:
                     values += self[stop:]
-                self.clear()
-                self.update(values)
+                self.__clear()
+                self.__update(values)
                 return
 
             indices = range(start, stop, step)
@@ -591,7 +593,7 @@ class SortedList(MutableSequence):
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
-                    return self.as_list()
+                    return reduce(iadd, self._lists, [])
 
                 start_pos, start_idx = self._pos(start)
 
@@ -978,6 +980,7 @@ class SortedList(MutableSequence):
         return self._loc(pos, idx)
 
     bisect = bisect_right
+    __bisect_right = bisect_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
@@ -1208,7 +1211,7 @@ class SortedList(MutableSequence):
             if left <= stop:
                 return left
         else:
-            right = self.bisect_right(val) - 1
+            right = self.__bisect_right(val) - 1
 
             if start <= right:
                 return start
@@ -1225,7 +1228,7 @@ class SortedList(MutableSequence):
         *that*. Elements in *that* do not need to be properly ordered with
         respect to *self*.
         """
-        values = self.as_list()
+        values = reduce(iadd, self._lists, [])
         values.extend(that)
         return self.__class__(values, load=self._load)
 
@@ -1234,7 +1237,7 @@ class SortedList(MutableSequence):
         Update *self* to include all values in *that*. Elements in *that* do not
         need to be properly ordered with respect to *self*.
         """
-        self.update(that)
+        self.__update(that)
         return self
 
     def __mul__(self, that):
@@ -1242,7 +1245,7 @@ class SortedList(MutableSequence):
         Return a new sorted list containing *that* shallow copies of each item
         in SortedList.
         """
-        values = self.as_list() * that
+        values = reduce(iadd, self._lists, []) * that
         return self.__class__(values, load=self._load)
 
     def __imul__(self, that):
@@ -1250,9 +1253,9 @@ class SortedList(MutableSequence):
         Increase the length of the list by appending *that* shallow copies of
         each item.
         """
-        values = self.as_list() * that
-        self.clear()
-        self.update(values)
+        values = reduce(iadd, self._lists, []) * that
+        self.__clear()
+        self.__update(values)
         return self
 
     def _make_cmp(seq_op, doc):
