@@ -557,15 +557,15 @@ class SortedList(MutableSequence):
         if isinstance(idx, slice):
             start, stop, step = self._slice(idx)
 
-            if ((step == 1) and (start < stop)
-                    and ((stop - start) * 8 >= self._len)):
-
-                values = self[:start]
-                if stop < self._len:
-                    values += self[stop:]
-                self.__clear()
-                self.__update(values)
-                return
+            if step == 1 and start < stop:
+                if start == 0 and stop == self._len:
+                    return self.__clear()
+                elif self._len <= 8 * (stop - start):
+                    values = self[:start]
+                    if stop < self._len:
+                        values += self[stop:]
+                    self.__clear()
+                    return self.__update(values)
 
             indices = range(start, stop, step)
 
