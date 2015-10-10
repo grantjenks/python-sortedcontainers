@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey
+from sortedcontainers import SortedList, SortedListWithKey
 from nose.tools import raises
 
 if hexversion < 0x03000000:
@@ -31,6 +31,10 @@ def test_init():
     assert slt._len == 0
     assert slt._maxes == []
     assert slt._lists == []
+
+    assert isinstance(slt, SortedList)
+    assert isinstance(slt, SortedListWithKey)
+
     slt._check()
 
 def test_key():

@@ -2,8 +2,7 @@
 #
 # Sorted set implementation.
 
-from .sortedlist import SortedList, recursive_repr
-from .sortedlistwithkey import SortedListWithKey
+from .sortedlist import SortedList, recursive_repr, SortedListWithKey
 from collections import Set, MutableSet, Sequence
 from itertools import chain
 import operator as op

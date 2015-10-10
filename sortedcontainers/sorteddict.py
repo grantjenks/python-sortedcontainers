@@ -3,8 +3,7 @@
 # Sorted dict implementation.
 
 from .sortedset import SortedSet
-from .sortedlist import SortedList, recursive_repr
-from .sortedlistwithkey import SortedListWithKey
+from .sortedlist import SortedList, recursive_repr, SortedListWithKey
 from collections import Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
