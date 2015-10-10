@@ -791,19 +791,22 @@ class SortedListWithKey(MutableSequence):
 
                     raise
             else:
-                # Test ordering using indexing. If the value given
-                # doesn't support getitem, convert it to a list.
+                if start == 0 and stop == self._len:
+                    self.__clear()
+                    return self.__update(value)
 
-                if not hasattr(value, '__getitem__'):
-                    value = list(value)
+                # Test ordering using indexing. If the given value
+                # isn't a Sequence, convert it to a tuple.
+
+                if not isinstance(value, Sequence):
+                    value = tuple(value)
 
                 # Check that the given values are ordered properly.
 
-                keys = list(map(self._key, value))
-                ordered = all(keys[pos - 1] <= keys[pos]
-                              for pos in range(1, len(keys)))
+                keys = tuple(map(self._key, value))
+                iterator = range(1, len(keys))
 
-                if not ordered:
+                if not all(keys[pos - 1] <= keys[pos] for pos in iterator):
                     raise ValueError('given sequence not in sort order')
 
                 # Check ordering in context of sorted list.
