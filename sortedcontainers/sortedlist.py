@@ -73,7 +73,7 @@ class SortedList(MutableSequence):
         self._offset = 0
 
         if iterable is not None:
-            self.update(iterable)
+            self.__update(iterable)
 
     def clear(self):
         """Remove all the elements from the list."""
@@ -150,6 +150,8 @@ class SortedList(MutableSequence):
         _maxes.extend(sublist[-1] for sublist in _lists)
         self._len = len(values)
         del _index[:]
+
+    __update = update
 
     def __contains__(self, val):
         """Return True if and only if *val* is an element in the list."""

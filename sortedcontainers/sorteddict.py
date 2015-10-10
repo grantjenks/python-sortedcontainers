@@ -159,7 +159,7 @@ class SortedDict(dict):
 
         self.iloc = _IlocWrapper(self)
 
-        self.update(*args, **kwargs)
+        self.__update(*args, **kwargs)
 
     def clear(self):
         """Remove all elements from the dictionary."""
@@ -351,6 +351,8 @@ class SortedDict(dict):
         else:
             for key in pairs:
                 self[key] = pairs[key]
+
+    __update = update
 
     @not26
     def viewkeys(self):
