@@ -123,7 +123,7 @@ class SortedList(MutableSequence):
             _lists.insert(pos + 1, half)
             del _index[:]
         else:
-            if len(_index) > 0:
+            if _index:
                 child = self._offset + pos
                 while child > 0:
                     _index[child] += 1
@@ -237,7 +237,7 @@ class SortedList(MutableSequence):
 
             _maxes[pos] = lists_pos[-1]
 
-            if len(_index) > 0:
+            if _index:
                 child = self._offset + pos
                 while child > 0:
                     _index[child] -= 1
@@ -625,6 +625,22 @@ class SortedList(MutableSequence):
             indices = range(start, stop, step)
             return list(self[index] for index in indices)
         else:
+            if self._len:
+                if idx == 0:
+                    return _lists[0][0]
+                elif idx == -1:
+                    return _lists[-1][-1]
+            else:
+                raise IndexError('list index out of range')
+
+            if 0 <= idx < len(_lists[0]):
+                return _lists[0][idx]
+
+            len_last = len(_lists[-1])
+
+            if -len_last < idx < 0:
+                return _lists[-1][len_last + idx]
+
             pos, idx = self._pos(idx)
             return _lists[pos][idx]
 
@@ -1155,11 +1171,39 @@ class SortedList(MutableSequence):
         list is empty or index is out of range.  Negative indices are supported,
         as for slice indices.
         """
-        if (idx < 0 and -idx > self._len) or (idx >= self._len):
+        if not self._len:
             raise IndexError('pop index out of range')
 
+        _lists = self._lists
+
+        if idx == 0:
+            val = _lists[0][0]
+            self._delete(0, 0)
+            return val
+
+        if idx == -1:
+            pos = len(_lists) - 1
+            loc = len(_lists[pos]) - 1
+            val = _lists[pos][loc]
+            self._delete(pos, loc)
+            return val
+
+        if 0 <= idx < len(_lists[0]):
+            val = _lists[0][idx]
+            self._delete(0, idx)
+            return val
+
+        len_last = len(_lists[-1])
+
+        if -len_last < idx < 0:
+            pos = len(_lists) - 1
+            loc = len_last + idx
+            val = _lists[pos][loc]
+            self._delete(pos, loc)
+            return val
+
         pos, idx = self._pos(idx)
-        val = self._lists[pos][idx]
+        val = _lists[pos][idx]
         self._delete(pos, idx)
 
         return val
