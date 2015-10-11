@@ -66,7 +66,7 @@ class SortedSet(MutableSet, Sequence):
             self.irange_key = _list.irange_key
 
         if iterable is not None:
-            self.__update(iterable)
+            self._update(iterable)
 
     def __contains__(self, value):
         """Return True if and only if *value* is an element in the set."""
@@ -287,7 +287,7 @@ class SortedSet(MutableSet, Sequence):
         return self
 
     __ior__ = update
-    __update = update
+    _update = update
 
     def __reduce__(self):
         return (self.__class__, ((), self._key, self._load, self._set))
