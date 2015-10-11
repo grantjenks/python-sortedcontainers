@@ -73,7 +73,7 @@ class SortedList(MutableSequence):
         self._offset = 0
 
         if iterable is not None:
-            self.__update(iterable)
+            self._update(iterable)
 
     def __new__(cls, iterable=None, key=None, load=1000):
         if key is None:
@@ -91,7 +91,7 @@ class SortedList(MutableSequence):
         del self._lists[:]
         del self._index[:]
 
-    __clear = clear
+    _clear = clear
 
     def add(self, val):
         """Add the element *val* to the list."""
@@ -148,7 +148,7 @@ class SortedList(MutableSequence):
             if len(values) * 4 >= self._len:
                 values.extend(chain.from_iterable(_lists))
                 values.sort()
-                self.__clear()
+                self._clear()
             else:
                 _add = self.add
                 for val in values:
@@ -162,7 +162,7 @@ class SortedList(MutableSequence):
         self._len = len(values)
         del _index[:]
 
-    __update = update
+    _update = update
 
     def __contains__(self, val):
         """Return True if and only if *val* is an element in the list."""
@@ -568,13 +568,13 @@ class SortedList(MutableSequence):
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
-                    return self.__clear()
+                    return self._clear()
                 elif self._len <= 8 * (stop - start):
-                    values = self[:start]
+                    values = self._getitem(slice(None, start))
                     if stop < self._len:
-                        values += self[stop:]
-                    self.__clear()
-                    return self.__update(values)
+                        values += self._getitem(slice(stop, None))
+                    self._clear()
+                    return self._update(values)
 
             indices = range(start, stop, step)
 
@@ -592,6 +592,8 @@ class SortedList(MutableSequence):
         else:
             pos, idx = self._pos(idx)
             self._delete(pos, idx)
+
+    _delitem = __delitem__
 
     def __getitem__(self, idx):
         """Return the element at *idx*. Supports slicing."""
@@ -623,7 +625,7 @@ class SortedList(MutableSequence):
                 return result
 
             if step == -1 and start > stop:
-                result = self[(stop + 1):(start + 1)]
+                result = self._getitem(slice(stop + 1, start + 1))
                 result.reverse()
                 return result
 
@@ -632,7 +634,7 @@ class SortedList(MutableSequence):
             # be the desired behavior.
 
             indices = range(start, stop, step)
-            return list(self[index] for index in indices)
+            return list(self._getitem(index) for index in indices)
         else:
             if self._len:
                 if idx == 0:
@@ -652,6 +654,8 @@ class SortedList(MutableSequence):
 
             pos, idx = self._pos(idx)
             return _lists[pos][idx]
+
+    _getitem = __getitem__
 
     def _check_order(self, idx, val):
         _lists, _len = self._lists, self._len
@@ -751,8 +755,8 @@ class SortedList(MutableSequence):
                     raise
             else:
                 if start == 0 and stop == self._len:
-                    self.__clear()
-                    return self.__update(value)
+                    self._clear()
+                    return self._update(value)
 
                 # Test ordering using indexing. If the given value
                 # isn't a Sequence, convert it to a tuple.
@@ -773,7 +777,7 @@ class SortedList(MutableSequence):
                     # Nothing to check on the lhs.
                     pass
                 else:
-                    if self[start - 1] > value[0]:
+                    if self._getitem(start - 1) > value[0]:
                         msg = '{0} not in sort order at index {1}'.format(repr(value[0]), start)
                         raise ValueError(msg)
 
@@ -783,13 +787,13 @@ class SortedList(MutableSequence):
                 else:
                     # "stop" is exclusive so we don't need
                     # to add one for the index.
-                    if self[stop] < value[-1]:
+                    if self._getitem(stop) < value[-1]:
                         msg = '{0} not in sort order at index {1}'.format(repr(value[-1]), stop)
                         raise ValueError(msg)
 
                 # Delete the existing values.
 
-                del self[index]
+                self._delitem(index)
 
                 # Insert the new values.
 
@@ -1008,7 +1012,7 @@ class SortedList(MutableSequence):
         return self._loc(pos, idx)
 
     bisect = bisect_right
-    __bisect_right = bisect_right
+    _bisect_right = bisect_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
@@ -1267,7 +1271,7 @@ class SortedList(MutableSequence):
             if left <= stop:
                 return left
         else:
-            right = self.__bisect_right(val) - 1
+            right = self._bisect_right(val) - 1
 
             if start <= right:
                 return start
@@ -1293,7 +1297,7 @@ class SortedList(MutableSequence):
         Update *self* to include all values in *that*. Elements in *that* do not
         need to be properly ordered with respect to *self*.
         """
-        self.__update(that)
+        self._update(that)
         return self
 
     def __mul__(self, that):
@@ -1310,8 +1314,8 @@ class SortedList(MutableSequence):
         each item.
         """
         values = reduce(iadd, self._lists, []) * that
-        self.__clear()
-        self.__update(values)
+        self._clear()
+        self._update(values)
         return self
 
     def _make_cmp(seq_op, doc):
@@ -1349,7 +1353,7 @@ class SortedList(MutableSequence):
 
     @recursive_repr
     def __repr__(self):
-        """Return string representation of SortedList."""
+        """Return string representation of sequence."""
         temp = '{0}({1}, load={2})'
         return temp.format(
             self.__class__.__name__,
@@ -1448,27 +1452,6 @@ class SortedList(MutableSequence):
 
             raise
 
-# -*- coding: utf-8 -*-
-#
-# Sorted list implementation.
-
-from sys import hexversion
-
-from .sortedlist import recursive_repr
-from bisect import bisect_left, bisect_right, insort
-from itertools import chain, repeat, starmap
-from collections import MutableSequence, Sequence
-import operator as op
-from operator import iadd, add
-from functools import wraps
-from math import log
-
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    from itertools import imap as map
-else:
-    from functools import reduce
-
 def identity(value):
     return value
 
@@ -1498,7 +1481,7 @@ class SortedListWithKey(SortedList):
         self._offset = 0
 
         if iterable is not None:
-            self.__update(iterable)
+            self._update(iterable)
 
     def __new__(cls, iterable=None, key=identity, load=1000):
         return object.__new__(cls)
@@ -1511,7 +1494,7 @@ class SortedListWithKey(SortedList):
         del self._keys[:]
         del self._index[:]
 
-    __clear = clear
+    _clear = clear
 
     def add(self, val):
         """Add the element *val* to the list."""
@@ -1581,7 +1564,7 @@ class SortedListWithKey(SortedList):
             if len(values) * 4 >= self._len:
                 values.extend(chain.from_iterable(_lists))
                 values.sort(key=self._key)
-                self.__clear()
+                self._clear()
             else:
                 _add = self.add
                 for val in values:
@@ -1596,7 +1579,7 @@ class SortedListWithKey(SortedList):
         self._len = len(values)
         del _index[:]
 
-    __update = update
+    _update = update
 
     def __contains__(self, val):
         """Return True if and only if *val* is an element in the list."""
@@ -1768,381 +1751,6 @@ class SortedListWithKey(SortedList):
             del _maxes[pos]
             del _index[:]
 
-    def _loc(self, pos, idx):
-        """Convert an index pair (alpha, beta) into a single index that corresponds to
-        the position of the value in the sorted list.
-
-        Most queries require the index be built. Details of the index are
-        described in self._build_index.
-
-        Indexing requires traversing the tree from a leaf node to the root. The
-        parent of each node is easily computable at (pos - 1) // 2.
-
-        Left-child nodes are always at odd indices and right-child nodes are
-        always at even indices.
-
-        When traversing up from a right-child node, increment the total by the
-        left-child node.
-
-        The final index is the sum from traversal and the index in the sublist.
-
-        For example, using the index from self._build_index:
-
-        _index = 14 5 9 3 2 4 5
-        _offset = 3
-
-        Tree:
-
-                 14
-              5      9
-            3   2  4   5
-
-        Converting index pair (2, 3) into a single index involves iterating like
-        so:
-
-        1. Starting at the leaf node: offset + alpha = 3 + 2 = 5. We identify
-           the node as a left-child node. At such nodes, we simply traverse to
-           the parent.
-
-        2. At node 9, position 2, we recognize the node as a right-child node
-           and accumulate the left-child in our total. Total is now 5 and we
-           traverse to the parent at position 0.
-
-        3. Iteration ends at the root.
-
-        Computing the index is the sum of the total and beta: 5 + 3 = 8.
-        """
-        if not pos:
-            return idx
-
-        _index = self._index
-
-        if not len(_index):
-            self._build_index()
-
-        total = 0
-
-        # Increment pos to point in the index to len(self._lists[pos]).
-
-        pos += self._offset
-
-        # Iterate until reaching the root of the index tree at pos = 0.
-
-        while pos:
-
-            # Right-child nodes are at odd indices. At such indices
-            # account the total below the left child node.
-
-            if not (pos & 1):
-                total += _index[pos - 1]
-
-            # Advance pos to the parent node.
-
-            pos = (pos - 1) >> 1
-
-        return total + idx
-
-    def _pos(self, idx):
-        """Convert an index into a pair (alpha, beta) that can be used to access
-        the corresponding _lists[alpha][beta] position.
-
-        Most queries require the index be built. Details of the index are
-        described in self._build_index.
-
-        Indexing requires traversing the tree to a leaf node. Each node has
-        two children which are easily computable. Given an index, pos, the
-        left-child is at pos * 2 + 1 and the right-child is at pos * 2 + 2.
-
-        When the index is less than the left-child, traversal moves to the
-        left sub-tree. Otherwise, the index is decremented by the left-child
-        and traversal moves to the right sub-tree.
-
-        At a child node, the indexing pair is computed from the relative
-        position of the child node as compared with the offset and the remaining
-        index.
-
-        For example, using the index from self._build_index:
-
-        _index = 14 5 9 3 2 4 5
-        _offset = 3
-
-        Tree:
-
-                 14
-              5      9
-            3   2  4   5
-
-        Indexing position 8 involves iterating like so:
-
-        1. Starting at the root, position 0, 8 is compared with the left-child
-           node (5) which it is greater than. When greater the index is
-           decremented and the position is updated to the right child node.
-
-        2. At node 9 with index 3, we again compare the index to the left-child
-           node with value 4. Because the index is the less than the left-child
-           node, we simply traverse to the left.
-
-        3. At node 4 with index 3, we recognize that we are at a leaf node and
-           stop iterating.
-
-        4. To compute the sublist index, we subtract the offset from the index
-           of the leaf node: 5 - 3 = 2. To compute the index in the sublist, we
-           simply use the index remaining from iteration. In this case, 3.
-
-        The final index pair from our example is (2, 3) which corresponds to
-        index 8 in the sorted list.
-        """
-        if idx < 0:
-            last_len = len(self._lists[-1])
-            if (-idx) <= last_len:
-                return len(self._lists) - 1, last_len + idx
-            idx += self._len
-            if idx < 0:
-                raise IndexError('list index out of range')
-        elif idx >= self._len:
-            raise IndexError('list index out of range')
-
-        if idx < len(self._lists[0]):
-            return 0, idx
-
-        _index = self._index
-
-        if not _index:
-            self._build_index()
-
-        pos = 0
-        child = 1
-        len_index = len(_index)
-
-        while child < len_index:
-            index_child = _index[child]
-
-            if idx < index_child:
-                pos = child
-            else:
-                idx -= index_child
-                pos = child + 1
-
-            child = (pos << 1) + 1
-
-        return (pos - self._offset, idx)
-
-    def _build_index(self):
-        """Build an index for indexing the sorted list.
-
-        Indexes are represented as binary trees in a dense array notation
-        similar to a binary heap.
-
-        For example, given a _lists representation storing integers:
-
-        [0]: 1 2 3
-        [1]: 4 5
-        [2]: 6 7 8 9
-        [3]: 10 11 12 13 14
-
-        The first transformation maps the sub-lists by their length. The
-        first row of the index is the length of the sub-lists.
-
-        [0]: 3 2 4 5
-
-        Each row after that is the sum of consecutive pairs of the previous row:
-
-        [1]: 5 9
-        [2]: 14
-
-        Finally, the index is built by concatenating these lists together:
-
-        _index = 14 5 9 3 2 4 5
-
-        An offset storing the start of the first row is also stored:
-
-        _offset = 3
-
-        When built, the index can be used for efficient indexing into the list.
-        See the comment and notes on self._pos for details.
-        """
-        row0 = list(map(len, self._lists))
-
-        if len(row0) == 1:
-            self._index[:] = row0
-            self._offset = 0
-            return
-
-        head = iter(row0)
-        tail = iter(head)
-        row1 = list(starmap(add, zip(head, tail)))
-
-        if len(row0) & 1:
-            row1.append(row0[-1])
-
-        if len(row1) == 1:
-            self._index[:] = row1 + row0
-            self._offset = 1
-            return
-
-        size = 2 ** (int(log(len(row1) - 1, 2)) + 1)
-        row1.extend(repeat(0, size - len(row1)))
-        tree = [row0, row1]
-
-        while len(tree[-1]) > 1:
-            head = iter(tree[-1])
-            tail = iter(head)
-            row = list(starmap(add, zip(head, tail)))
-            tree.append(row)
-
-        reduce(iadd, reversed(tree), self._index)
-        self._offset = size * 2 - 1
-
-    def _slice(self, slc):
-        start, stop, step = slc.start, slc.stop, slc.step
-
-        if step == 0:
-            raise ValueError('slice step cannot be zero')
-
-        # Set defaults for missing values.
-
-        if step is None:
-            step = 1
-
-        if step > 0:
-            if start is None:
-                start = 0
-
-            if stop is None:
-                stop = len(self)
-            elif stop < 0:
-                stop += len(self)
-        else:
-            if start is None:
-                start = len(self) - 1
-
-            if stop is None:
-                stop = -1
-            elif stop < 0:
-                stop += len(self)
-
-        if start < 0:
-            start += len(self)
-
-        # Fix indices that are too big or too small.
-        # Slice notation is surprisingly permissive
-        # where normal indexing would raise IndexError.
-
-        if step > 0:
-            if start < 0:
-                start = 0
-            elif start > len(self):
-                start = len(self)
-
-            if stop < 0:
-                stop = 0
-            elif stop > len(self):
-                stop = len(self)
-        else:
-            if start < 0:
-                start = -1
-            elif start >= len(self):
-                start = len(self) - 1
-
-            if stop < 0:
-                stop = -1
-            elif stop > len(self):
-                stop = len(self)
-
-        return start, stop, step
-
-    def __delitem__(self, idx):
-        """Remove the element at *idx*. Supports slicing."""
-        if isinstance(idx, slice):
-            start, stop, step = self._slice(idx)
-
-            if step == 1 and start < stop:
-                if start == 0 and stop == self._len:
-                    return self.__clear()
-                elif self._len <= 8 * (stop - start):
-                    values = self[:start]
-                    if stop < self._len:
-                        values += self[stop:]
-                    self.__clear()
-                    return self.__update(values)
-
-            indices = range(start, stop, step)
-
-            # Delete items from greatest index to least so
-            # that the indices remain valid throughout iteration.
-
-            if step > 0:
-                indices = reversed(indices)
-
-            _pos, _delete = self._pos, self._delete
-
-            for index in indices:
-                pos, idx = _pos(index)
-                _delete(pos, idx)
-        else:
-            pos, idx = self._pos(idx)
-            self._delete(pos, idx)
-
-    def __getitem__(self, idx):
-        """Return the element at *idx*. Supports slicing."""
-        _lists = self._lists
-
-        if isinstance(idx, slice):
-            start, stop, step = self._slice(idx)
-
-            if step == 1 and start < stop:
-                if start == 0 and stop == self._len:
-                    return reduce(iadd, self._lists, [])
-
-                start_pos, start_idx = self._pos(start)
-
-                if stop == self._len:
-                    stop_pos = len(_lists) - 1
-                    stop_idx = len(_lists[stop_pos])
-                else:
-                    stop_pos, stop_idx = self._pos(stop)
-
-                if start_pos == stop_pos:
-                    return _lists[start_pos][start_idx:stop_idx]
-
-                prefix = _lists[start_pos][start_idx:]
-                middle = _lists[(start_pos + 1):stop_pos]
-                result = reduce(iadd, middle, prefix)
-                result += _lists[stop_pos][:stop_idx]
-
-                return result
-
-            if step == -1 and start > stop:
-                result = self[(stop + 1):(start + 1)]
-                result.reverse()
-                return result
-
-            # Return a list because a negative step could
-            # reverse the order of the items and this could
-            # be the desired behavior.
-
-            indices = range(start, stop, step)
-            return list(self[index] for index in indices)
-        else:
-            if self._len:
-                if idx == 0:
-                    return _lists[0][0]
-                elif idx == -1:
-                    return _lists[-1][-1]
-            else:
-                raise IndexError('list index out of range')
-
-            if 0 <= idx < len(_lists[0]):
-                return _lists[0][idx]
-
-            len_last = len(_lists[-1])
-
-            if -len_last < idx < 0:
-                return _lists[-1][len_last + idx]
-
-            pos, idx = self._pos(idx)
-            return _lists[pos][idx]
-
     def _check_order(self, idx, key, val):
         _keys, _len = self._keys, self._len
 
@@ -2244,8 +1852,8 @@ class SortedListWithKey(SortedList):
                     raise
             else:
                 if start == 0 and stop == self._len:
-                    self.__clear()
-                    return self.__update(value)
+                    self._clear()
+                    return self._update(value)
 
                 # Test ordering using indexing. If the given value
                 # isn't a Sequence, convert it to a tuple.
@@ -2285,7 +1893,7 @@ class SortedListWithKey(SortedList):
 
                 # Delete the existing values.
 
-                del self[index]
+                self._delitem(index)
 
                 # Insert the new values.
 
@@ -2300,96 +1908,6 @@ class SortedListWithKey(SortedList):
             _lists[pos][loc] = value
             if len(_lists[pos]) == (loc + 1):
                 _maxes[pos] = key
-
-    def __iter__(self):
-        """
-        Return an iterator over the Sequence.
-
-        Iterating the Sequence while adding or deleting values may raise a
-        `RuntimeError` or fail to iterate over all entries.
-        """
-        return chain.from_iterable(self._lists)
-
-    def __reversed__(self):
-        """
-        Return an iterator to traverse the Sequence in reverse.
-
-        Iterating the Sequence while adding or deleting values may raise a
-        `RuntimeError` or fail to iterate over all entries.
-        """
-        return chain.from_iterable(map(reversed, reversed(self._lists)))
-
-    def islice(self, start=None, stop=None, reverse=False):
-        """
-        Returns an iterator that slices `self` from `start` to `stop` index,
-        inclusive and exclusive respectively.
-
-        When `reverse` is `True`, values are yielded from the iterator in
-        reverse order.
-
-        Both `start` and `stop` default to `None` which is automatically
-        inclusive of the beginning and end.
-        """
-        _len = self._len
-
-        if not _len:
-            return iter(())
-
-        start, stop, step = self._slice(slice(start, stop))
-
-        if start >= stop:
-            return iter(())
-
-        _pos = self._pos
-
-        min_pos, min_idx = _pos(start)
-
-        if stop == _len:
-            max_pos = len(self._lists) - 1
-            max_idx = len(self._lists[-1])
-        else:
-            max_pos, max_idx = _pos(stop)
-
-        return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
-
-    def _islice(self, min_pos, min_idx, max_pos, max_idx, reverse):
-        """
-        Returns an iterator that slices `self` using two index pairs,
-        `(min_pos, min_idx)` and `(max_pos, max_idx)`; the first inclusive
-        and the latter exclusive. See `_pos` for details on how an index
-        is converted to an index pair.
-
-        When `reverse` is `True`, values are yielded from the iterator in
-        reverse order.
-        """
-        _lists = self._lists
-
-        if min_pos > max_pos:
-            return iter(())
-        elif min_pos == max_pos and not reverse:
-            return iter(_lists[min_pos][min_idx:max_idx])
-        elif min_pos == max_pos and reverse:
-            return reversed(_lists[min_pos][min_idx:max_idx])
-        elif min_pos + 1 == max_pos and not reverse:
-            return chain(_lists[min_pos][min_idx:], _lists[max_pos][:max_idx])
-        elif min_pos + 1 == max_pos and reverse:
-            return chain(
-                reversed(_lists[max_pos][:max_idx]),
-                reversed(_lists[min_pos][min_idx:]),
-            )
-        elif not reverse:
-            return chain(
-                _lists[min_pos][min_idx:],
-                chain.from_iterable(_lists[(min_pos + 1):max_pos]),
-                _lists[max_pos][:max_idx],
-            )
-        else:
-            temp = map(reversed, reversed(_lists[(min_pos + 1):max_pos]))
-            return chain(
-                reversed(_lists[max_pos][:max_idx]),
-                chain.from_iterable(temp),
-                reversed(_lists[min_pos][min_idx:]),
-            )
 
     def irange(self, minimum=None, maximum=None, inclusive=(True, True),
                reverse=False):
@@ -2409,7 +1927,7 @@ class SortedListWithKey(SortedList):
         """
         minimum = self._key(minimum) if minimum is not None else None
         maximum = self._key(maximum) if maximum is not None else None
-        return self.__irange_key(
+        return self._irange_key(
             min_key=minimum, max_key=maximum,
             inclusive=inclusive, reverse=reverse,
         )
@@ -2485,11 +2003,7 @@ class SortedListWithKey(SortedList):
 
         return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
 
-    __irange_key = irange_key
-
-    def __len__(self):
-        """Return the number of elements in the list."""
-        return self._len
+    _irange_key = irange_key
 
     def bisect_left(self, val):
         """
@@ -2497,14 +2011,14 @@ class SortedListWithKey(SortedList):
         appropriate index to insert *val*. If *val* is already present, the
         insertion point will be before (to the left of) any existing entries.
         """
-        return self.__bisect_key_left(self._key(val))
+        return self._bisect_key_left(self._key(val))
 
     def bisect_right(self, val):
         """
         Same as *bisect_left*, but if *val* is already present, the insertion
         point will be after (to the right of) any existing entries.
         """
-        return self.__bisect_key_right(self._key(val))
+        return self._bisect_key_right(self._key(val))
 
     bisect = bisect_right
 
@@ -2529,7 +2043,7 @@ class SortedListWithKey(SortedList):
 
         return self._loc(pos, idx)
 
-    __bisect_key_left = bisect_key_left
+    _bisect_key_left = bisect_key_left
 
     def bisect_key_right(self, key):
         """
@@ -2551,7 +2065,7 @@ class SortedListWithKey(SortedList):
         return self._loc(pos, idx)
 
     bisect_key = bisect_key_right
-    __bisect_key_right = bisect_key_right
+    _bisect_key_right = bisect_key_right
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
@@ -2740,49 +2254,6 @@ class SortedListWithKey(SortedList):
             msg = '{0} not in sort order at index {1}'.format(repr(val), idx)
             raise ValueError(msg)
 
-    def pop(self, idx=-1):
-        """
-        Remove and return item at *idx* (default last).  Raises IndexError if
-        list is empty or index is out of range.  Negative indices are supported,
-        as for slice indices.
-        """
-        if not self._len:
-            raise IndexError('pop index out of range')
-
-        _lists = self._lists
-
-        if idx == 0:
-            val = _lists[0][0]
-            self._delete(0, 0)
-            return val
-
-        if idx == -1:
-            pos = len(_lists) - 1
-            loc = len(_lists[pos]) - 1
-            val = _lists[pos][loc]
-            self._delete(pos, loc)
-            return val
-
-        if 0 <= idx < len(_lists[0]):
-            val = _lists[0][idx]
-            self._delete(0, idx)
-            return val
-
-        len_last = len(_lists[-1])
-
-        if -len_last < idx < 0:
-            pos = len(_lists) - 1
-            loc = len_last + idx
-            val = _lists[pos][loc]
-            self._delete(pos, loc)
-            return val
-
-        pos, idx = self._pos(idx)
-        val = _lists[pos][idx]
-        self._delete(pos, idx)
-
-        return val
-
     def index(self, val, start=None, stop=None):
         """
         Return the smallest *k* such that L[k] == val and i <= k < j`.  Raises
@@ -2846,10 +2317,6 @@ class SortedListWithKey(SortedList):
 
         raise ValueError('{0} is not in list'.format(repr(val)))
 
-    def as_list(self):
-        """Very efficiently convert the SortedListWithKey to a list."""
-        return reduce(iadd, self._lists, [])
-
     def __add__(self, that):
         """
         Return a new sorted list containing all the elements in *self* and
@@ -2859,14 +2326,6 @@ class SortedListWithKey(SortedList):
         values = reduce(iadd, self._lists, [])
         values.extend(that)
         return self.__class__(values, key=self._key, load=self._load)
-
-    def __iadd__(self, that):
-        """
-        Update *self* to include all values in *that*. Elements in *that* do not
-        need to be properly ordered with respect to *self*.
-        """
-        self.__update(that)
-        return self
 
     def __mul__(self, that):
         """
@@ -2882,46 +2341,13 @@ class SortedListWithKey(SortedList):
         each item.
         """
         values = reduce(iadd, self._lists, []) * that
-        self.__clear()
-        self.__update(values)
+        self._clear()
+        self._update(values)
         return self
-
-    def _make_cmp(seq_op, doc):
-        def comparer(self, that):
-            if not isinstance(that, Sequence):
-                return NotImplemented
-
-            self_len = self._len
-            len_that = len(that)
-
-            if self_len != len_that:
-                if seq_op is op.eq:
-                    return False
-                if seq_op is op.ne:
-                    return True
-
-            for alpha, beta in zip(self, that):
-                if alpha != beta:
-                    return seq_op(alpha, beta)
-
-            return seq_op(self_len, len_that)
-
-        comparer.__name__ = '__{0}__'.format(seq_op.__name__)
-        doc_str = 'Return `True` if and only if Sequence is {0} `that`.'
-        comparer.__doc__ = doc_str.format(doc)
-
-        return comparer
-
-    __eq__ = _make_cmp(op.eq, 'equal to')
-    __ne__ = _make_cmp(op.ne, 'not equal to')
-    __lt__ = _make_cmp(op.lt, 'less than')
-    __gt__ = _make_cmp(op.gt, 'greater than')
-    __le__ = _make_cmp(op.le, 'less than or equal to')
-    __ge__ = _make_cmp(op.ge, 'greater than or equal to')
 
     @recursive_repr
     def __repr__(self):
-        """Return string representation of SortedListWithKey."""
+        """Return string representation of sequence."""
         temp = '{0}({1}, key={2}, load={3})'
         return temp.format(
             self.__class__.__name__,
