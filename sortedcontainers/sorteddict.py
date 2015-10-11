@@ -133,7 +133,7 @@ class SortedDict(dict):
         self._pop = _dict.pop
         self._setdefault = _dict.setdefault
         self._setitem = _dict.__setitem__
-        self._update = _dict.update
+        self._dict_update = _dict.update
 
         # Cache function pointers to SortedList methods.
 
@@ -158,7 +158,7 @@ class SortedDict(dict):
 
         self.iloc = _IlocWrapper(self)
 
-        self.__update(*args, **kwargs)
+        self._update(*args, **kwargs)
 
     def clear(self):
         """Remove all elements from the dictionary."""
@@ -199,7 +199,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return self.__class__(self._key, self._load, self.__iteritems())
+        return self.__class__(self._key, self._load, self._iteritems())
 
     __copy__ = copy
 
@@ -215,7 +215,7 @@ class SortedDict(dict):
             """
             Return a list of the dictionary's items (``(key, value)`` pairs).
             """
-            return list(self.__iteritems())
+            return list(self._iteritems())
     else:
         def items(self):
             """
@@ -234,7 +234,7 @@ class SortedDict(dict):
         """
         return iter((key, self[key]) for key in self._list)
 
-    __iteritems = iteritems
+    _iteritems = iteritems
 
     if hexversion < 0x03000000:
         def keys(self):
@@ -261,7 +261,7 @@ class SortedDict(dict):
     if hexversion < 0x03000000:
         def values(self):
             """Return a list of the dictionary's values."""
-            return list(self.__itervalues())
+            return list(self._itervalues())
     else:
         def values(self):
             """
@@ -280,7 +280,7 @@ class SortedDict(dict):
         """
         return iter(self[key] for key in self._list)
 
-    __itervalues = itervalues
+    _itervalues = itervalues
 
     def pop(self, key, default=_NotGiven):
         """
@@ -338,7 +338,7 @@ class SortedDict(dict):
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
         if not len(self):
-            self._update(*args, **kwargs)
+            self._dict_update(*args, **kwargs)
             self._list_update(self._iter())
             return
 
@@ -348,14 +348,14 @@ class SortedDict(dict):
             pairs = dict(*args, **kwargs)
 
         if (10 * len(pairs)) > len(self):
-            self._update(pairs)
+            self._dict_update(pairs)
             self._list_clear()
             self._list_update(self._iter())
         else:
             for key in pairs:
                 self[key] = pairs[key]
 
-    __update = update
+    _update = update
 
     @not26
     def viewkeys(self):
@@ -388,7 +388,7 @@ class SortedDict(dict):
         return ItemsView(self)
 
     def __reduce__(self):
-        return (self.__class__, (self._key, self._load, list(self.__iteritems())))
+        return (self.__class__, (self._key, self._load, list(self._iteritems())))
 
     @recursive_repr
     def __repr__(self):
