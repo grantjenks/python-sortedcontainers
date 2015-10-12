@@ -304,6 +304,7 @@ SortedListWithKey
 
       :rtype: iterator
 
+   .. _SortedListWithKey.irange_key:
    .. method:: L.irange_key(min_key=None, max_key=None, inclusive=(True, True), reverse=False)
 
       Create an iterator of values between `min_key` and `max_key`.

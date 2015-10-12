@@ -316,4 +316,7 @@ SortedSet
       When `reverse` is `True` the values are yielded from the iterator in
       reverse order; `reverse` defaults to `False`.
 
+      When initialized with a key-function, an `irange_key` method is also
+      provided with :ref:`similar semantics<SortedListWithKey.irange_key>`.
+
       :rtype: iterator
