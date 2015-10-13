@@ -119,6 +119,13 @@ SortedList
 
 Graphs comparing :doc:`SortedList<sortedlist>` performance.
 
+__init__
+........
+
+Initializing with a list of random numbers.
+
+.. image:: _static/SortedList-init.png
+
 add
 ...
 
@@ -201,6 +208,13 @@ SortedDict
 
 Graphs comparing :doc:`SortedDict<sorteddict>` performance.
 
+__init__
+........
+
+Initializing with a list of pairs of random numbers.
+
+.. image:: _static/SortedDict-init.png
+
 __contains__
 ............
 
@@ -247,6 +261,13 @@ SortedSet
 ---------
 
 Graphs comparing :doc:`SortedSet<sortedset>` performance.
+
+__init__
+........
+
+Initializing with a list of random numbers.
+
+.. image:: _static/SortedSet-init.png
 
 add
 ...
