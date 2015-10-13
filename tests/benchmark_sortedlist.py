@@ -90,6 +90,10 @@ def intervals(func, size):
     for val in lists[size][::10]:
         func(val)
 
+@register_test
+def init(func, size):
+    func(lists[size])
+
 # Setups.
 
 def do_nothing(obj, size):
@@ -151,10 +155,6 @@ except ImportError:
     warnings.warn('No module named sortedcollection', ImportWarning)
 
 # Implementation configuration.
-
-def limit(test, kind, value):
-    if kind in impls[test]:
-        impls[test][kind]['limit'] = value
 
 for name in tests:
     impls[name] = OrderedDict()
@@ -433,6 +433,16 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 limit('intervals', 'sortedcollection', 100000)
+
+for name, kind in kinds.items():
+    impls['init'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': '__init__',
+        'limit': 1000000
+    }
+limit('init', 'blist.sortedlist', 100000)
+limit('init', 'blist.sortedlist(key=identity)', 100000)
 
 if __name__ == '__main__':
     main('SortedList')

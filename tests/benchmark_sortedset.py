@@ -164,6 +164,10 @@ def pop(func, size):
     for rpt in range(int(size / 100)):
         func()
 
+@register_test
+def init(func, size):
+    func(lists[size])
+
 # Setups.
 
 def do_nothing(obj, size):
@@ -208,13 +212,7 @@ except ImportError:
 
 # Implementation configuration.
 
-def limit(test, kind, value):
-    if kind in impls[test]:
-        impls[test][kind]['limit'] = value
-
-def remove(test, kind):
-    if kind in impls[test]:
-        del impls[test][kind]
+from .benchmark import remove
 
 for name in tests:
     impls[name] = OrderedDict()
@@ -627,6 +625,18 @@ for name, kind in kinds.items():
         'func': 'pop',
         'limit': 1000000
     }
+
+for name, kind in kinds.items():
+    impls['init'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': 'update',
+        'limit': 1000000
+    }
+
+remove('init', 'SkipListSet')
+
+limit('init', 'blist.sortedset', 100000)
 
 if __name__ == '__main__':
     main('SortedSet')

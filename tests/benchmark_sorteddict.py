@@ -36,6 +36,10 @@ def delitem(func, size):
 def iter(func, size):
     assert all(idx == val for idx, val in enumerate(func()))
 
+@register_test
+def init(func, size):
+    func((val, -val) for val in lists[size])
+
 # Setups.
 
 def do_nothing(obj, size):
@@ -146,6 +150,20 @@ for name, kind in kinds.items():
         'func': '__iter__',
         'limit': 1000000
     }
+
+for name, kind in kinds.items():
+    impls['init'][name] = {
+        'setup': do_nothing,
+        'ctor': kind,
+        'func': 'update',
+        'limit': 1000000
+    }
+
+remove('init', 'rbtree')
+remove('init', 'treap')
+
+limit('init', 'blist.sorteddict', 100000)
+limit('init', 'SkipListDict', 100000)
 
 if __name__ == '__main__':
     main('SortedDict')

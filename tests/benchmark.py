@@ -58,6 +58,14 @@ def register_test(func):
     tests[getattr(func, name_attr)] = func
     return func
 
+def limit(test, kind, value):
+    if kind in impls[test]:
+        impls[test][kind]['limit'] = value
+
+def remove(test, kind):
+    if kind in impls[test]:
+        del impls[test][kind]
+
 tests = OrderedDict()
 kinds = OrderedDict()
 impls = OrderedDict()
