@@ -68,6 +68,12 @@ sortedcollection
 Several competing implementations were omitted because they were not easily
 installable or failed to build.
 
+ruamel.ordereddict.sorteddict
+  C-implementation that only supports Python 2. Performance was measured in
+  correspondence with the module author. Performance was generally very good
+  except for `__delitem__`. At scale, deleting entries became exceedingly slow.
+  `ruamel.ordereddict on PyPI <https://pypi.python.org/pypi/ruamel.ordereddict/>`_
+
 rbtree from NewCenturyComputers
   Pure-Python tree-based implementation. Not sure when this was last updated.
   Unlikely to be fast.
