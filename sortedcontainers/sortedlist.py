@@ -503,68 +503,10 @@ class SortedList(MutableSequence):
         reduce(iadd, reversed(tree), self._index)
         self._offset = size * 2 - 1
 
-    def _slice(self, slc):
-        start, stop, step = slc.start, slc.stop, slc.step
-
-        if step == 0:
-            raise ValueError('slice step cannot be zero')
-
-        # Set defaults for missing values.
-
-        if step is None:
-            step = 1
-
-        if step > 0:
-            if start is None:
-                start = 0
-
-            if stop is None:
-                stop = len(self)
-            elif stop < 0:
-                stop += len(self)
-        else:
-            if start is None:
-                start = len(self) - 1
-
-            if stop is None:
-                stop = -1
-            elif stop < 0:
-                stop += len(self)
-
-        if start < 0:
-            start += len(self)
-
-        # Fix indices that are too big or too small.
-        # Slice notation is surprisingly permissive
-        # where normal indexing would raise IndexError.
-
-        if step > 0:
-            if start < 0:
-                start = 0
-            elif start > len(self):
-                start = len(self)
-
-            if stop < 0:
-                stop = 0
-            elif stop > len(self):
-                stop = len(self)
-        else:
-            if start < 0:
-                start = -1
-            elif start >= len(self):
-                start = len(self) - 1
-
-            if stop < 0:
-                stop = -1
-            elif stop > len(self):
-                stop = len(self)
-
-        return start, stop, step
-
     def __delitem__(self, idx):
         """Remove the element at *idx*. Supports slicing."""
         if isinstance(idx, slice):
-            start, stop, step = self._slice(idx)
+            start, stop, step = idx.indices(self._len)
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
@@ -600,7 +542,7 @@ class SortedList(MutableSequence):
         _lists = self._lists
 
         if isinstance(idx, slice):
-            start, stop, step = self._slice(idx)
+            start, stop, step = idx.indices(self._len)
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
@@ -708,7 +650,7 @@ class SortedList(MutableSequence):
         _check_order = self._check_order
 
         if isinstance(index, slice):
-            start, stop, step = self._slice(index)
+            start, stop, step = index.indices(self._len)
             indices = range(start, stop, step)
 
             if step != 1:
@@ -841,7 +783,7 @@ class SortedList(MutableSequence):
         if not _len:
             return iter(())
 
-        start, stop, step = self._slice(slice(start, stop))
+        start, stop, step = slice(start, stop).indices(self._len)
 
         if start >= stop:
             return iter(())
@@ -1802,7 +1744,7 @@ class SortedListWithKey(SortedList):
         _check_order = self._check_order
 
         if isinstance(index, slice):
-            start, stop, step = self._slice(index)
+            start, stop, step = index.indices(self._len)
             indices = range(start, stop, step)
 
             if step != 1:
