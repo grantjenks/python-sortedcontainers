@@ -100,7 +100,7 @@ Quickstart
 Installing SortedContainers is simple with
 `pip <http://www.pip-installer.org/>`_::
 
-    > pip install sortedcontainers
+    $ pip install sortedcontainers
 
 You can access documentation in the interpreter with Python's built-in help
 function:
