@@ -158,6 +158,19 @@ The key function extracts a comparison key for ordering items in the list. In
 our example above we apply the negation operator. Doing so would maintain a list
 of integers in reverse.
 
+You can also construct a SortedListWithKey using the SortedList type by passing
+a key-function to the constructor.
+
+    >>> from sortedcontainers import SortedList
+    >>> from operator import neg
+    >>> values = SortedList(range(4), key=neg)
+    >>> repr(values)
+    SortedListWithKey([3, 2, 1, 0], key=<built-in function neg>, load=1000)
+    >>> type(values)
+    <class 'sortedcontainers.sortedlist.SortedListWithKey'>
+    >>> isinstance(values, SortedList)
+    True
+
 For more details, refer to the :doc:`SortedListWithKey API documentation <sortedlistwithkey>`.
 
 SortedDict
@@ -217,6 +230,20 @@ extremely useful. Indexing also supports slice notation.
     ['c', 'd', 'e']
     >>> d.index('c')
     2
+
+SortedDict's contructor supports two additional positional arguments. These
+must occur before any sequences, mappings or keyword arguments used to
+initialize the SortedDict. The first positional argument is an optional
+callable `key` used to extract a comparison key from the SortedDict's keys. The
+second positional argument is an optional integer representing the load-factor.
+
+For example, to contruct a mapping with integer keys in descending order and a
+load-factor of 100:
+
+    >>> from operator import neg
+    >>> d = SortedDict(neg, 100, enumerate(range(4)))
+    >>> d
+    SortedDict(<built-in function neg>, 100, {3: 3, 2: 2, 1: 1, 0: 0})
 
 For more details, refer to the :doc:`SortedDict API documentation <sorteddict>`.
 
