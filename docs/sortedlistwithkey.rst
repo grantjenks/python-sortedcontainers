@@ -1,7 +1,7 @@
 SortedListWithKey
 =================
 
-.. class:: SortedListWithKey(iterable=None, load=1000, key=lambda val: val)
+.. class:: SortedListWithKey(iterable=None, key=identity, load=1000)
 
    A :class:`SortedListWithKey` provides most of the same methods as a
    :class:`list`, but keeps the items in sorted order.  To add an element to the
@@ -14,6 +14,10 @@ SortedListWithKey
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedListWithKey`.
 
+   An optional *key* argument defines a callable that, like the `key`
+   argument to Python's `sorted` function, extracts a comparison key from
+   each element. The default is the identity function.
+
    An optional *load* specifies the load-factor of the list. The default load
    factor of '1000' works well for lists from tens to tens of millions of
    elements.  Good practice is to use a value that is the square or cube root of
@@ -21,10 +25,6 @@ SortedListWithKey
    your usage.  It's best to leave the load factor at the default until you
    start benchmarking. See :doc:`implementation details <implementation>` for
    more information.
-
-   An optional *key* argument defines a callable that, like the `key`
-   argument to Python's `sorted` function, extracts a comparison key from
-   each element. The default is the identity function.
 
    :class:`SortedListWithKey` implements the MutableSequence Abstract Base Class type.
 

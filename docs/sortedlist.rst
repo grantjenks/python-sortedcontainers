@@ -1,7 +1,7 @@
 SortedList
 ==========
 
-.. class:: SortedList(iterable=None, load=1000)
+.. class:: SortedList(iterable=None, key=None, load=1000)
 
    A :class:`SortedList` provides most of the same methods as a :class:`list`,
    but keeps the items in sorted order.  To add an element to the SortedList,
@@ -12,6 +12,9 @@ SortedList
 
    An optional *iterable* provides an initial series of items to
    populate the :class:`SortedList`.
+
+   An optional *key* argument will return an instance of subtype
+   :class:`SortedListWithKey`.
 
    An optional *load* specifies the load-factor of the list. The default load
    factor of '1000' works well for lists from tens to tens of millions of
