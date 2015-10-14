@@ -76,6 +76,23 @@ class SortedList(MutableSequence):
             self._update(iterable)
 
     def __new__(cls, iterable=None, key=None, load=1000):
+        """
+        SortedList provides most of the same methods as a list but keeps the
+        items in sorted order.
+
+        An optional *iterable* provides an initial series of items to populate
+        the SortedList.
+
+        An optional *key* argument will return an instance of subtype
+        SortedListWithKey.
+
+        An optional *load* specifies the load-factor of the list. The default
+        load factor of '1000' works well for lists from tens to tens of millions
+        of elements.  Good practice is to use a value that is the cube root of
+        the list size.  With billions of elements, the best load factor depends
+        on your usage.  It's best to leave the load factor at the default until
+        you start benchmarking.
+        """
         if key is None:
             return object.__new__(cls)
         else:
@@ -1410,6 +1427,10 @@ class SortedListWithKey(SortedList):
 
         An optional *iterable* provides an initial series of items to populate
         the SortedListWithKey.
+
+        An optional *key* argument defines a callable that, like the `key`
+        argument to Python's `sorted` function, extracts a comparison key from
+        each element. The default is the identity function.
 
         An optional *load* specifies the load-factor of the list. The default
         load factor of '1000' works well for lists from tens to tens of millions
