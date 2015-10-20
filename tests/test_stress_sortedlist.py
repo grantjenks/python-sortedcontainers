@@ -176,8 +176,8 @@ def stress_islice(slt):
 
 @actor(1)
 def stress_irange(slt):
-    if len(slt) < 10: return
     slt[:] = sorted(set(slt))
+    if len(slt) < 10: return
     start = random.randrange(len(slt) - 5)
     stop = random.randrange(start, len(slt))
     itr = slt.irange(slt[start], slt[stop], inclusive=(True, False))
