@@ -7,15 +7,14 @@ and benchmarked on CPython 2.7, specifically build:
 
 ::
 
-    Python 2.7.8 (default, Jul 13 2014, 17:11:32) 
-    [GCC 4.2.1 Compatible Apple LLVM 5.1 (clang-503.0.40)] on darwin
+    Python 2.7.10 (default, Oct 15 2015, 09:48:56)
+    [GCC 4.2.1 Compatible Apple LLVM 7.0.0 (clang-700.0.72)] on darwin
 
 Not all runtimes are created equal. The graphs below compare sortedcontainers
-running on the CPython 2.7, CPython 3.4 and PyPy 2.2 runtimes. In general
-CPython 3.4 is about half the speed of CPython 2.7. The PyPy 2.2 runtime
-displays much more variability due to its JIT-ed nature. Once the just-in-time
-compiler optimizes the code, performance is often several to tens of times
-faster.
+running on the CPython 2.7, CPython 3.4 and PyPy 2.6 runtimes. The PyPy 2.6
+runtime displays much more variability due to its JIT-ed nature. Once the
+just-in-time compiler optimizes the code, performance is often several to tens
+of times faster.
 
 Performance of competing implementations are benchmarked against the CPython 2.7
 runtime. An :doc:`implementation performance comparison<performance>` is also
