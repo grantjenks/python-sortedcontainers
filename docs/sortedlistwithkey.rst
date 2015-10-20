@@ -268,12 +268,6 @@ SortedListWithKey
       Insert the element *value* into the list at *index*. Raises a
       :exc:`ValueError` if the *value* at *index* would violate the sort order.
 
-   .. method:: L.as_list()
-
-      Very efficiently convert the :class:`SortedListWithKey` to a class:`list`.
-
-      :rtype: :class:`list`
-
    .. method:: L.islice(start=None, stop=None, reverse=False)
 
       Returns an iterator that slices `self` from `start` to `stop` index,
