@@ -1237,10 +1237,6 @@ class SortedList(MutableSequence):
 
         raise ValueError('{0} is not in list'.format(repr(val)))
 
-    def as_list(self):
-        """Very efficiently convert the SortedList to a list."""
-        return reduce(iadd, self._lists, [])
-
     def __add__(self, that):
         """
         Return a new sorted list containing all the elements in *self* and
