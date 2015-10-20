@@ -37,6 +37,27 @@ def test_init():
 
     slt._check()
 
+def test_new():
+    slt = SortedList(key=modulo)
+    slt._check()
+
+    assert isinstance(slt, SortedList)
+    assert isinstance(slt, SortedListWithKey)
+    assert type(slt) == SortedListWithKey
+
+    slt = SortedListWithKey(key=modulo)
+    slt._check()
+
+    assert isinstance(slt, SortedList)
+    assert isinstance(slt, SortedListWithKey)
+    assert type(slt) == SortedListWithKey
+
+@raises(TypeError)
+def test_new_error():
+    class SortedListPlus(SortedList):
+        pass
+    SortedListPlus(key=modulo)
+
 def test_key():
     slt = SortedListWithKey(range(10000), key=lambda val: val % 10)
     slt._check()
@@ -261,10 +282,16 @@ def test_getitem_indexerror3():
 
 def test_delitem():
     random.seed(0)
+
     slt = SortedListWithKey(range(100), load=17, key=modulo)
     while len(slt) > 0:
         del slt[random.randrange(len(slt))]
         slt._check()
+
+    slt = SortedListWithKey(range(100), load=17, key=modulo)
+    del slt[:]
+    assert len(slt) == 0
+    slt._check()
 
 def test_delitem_slice():
     slt = SortedListWithKey(range(100), load=17, key=modulo)

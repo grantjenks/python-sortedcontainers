@@ -225,11 +225,17 @@ def test_getitem_indexerror3():
 
 def test_delitem():
     random.seed(0)
+
     slt = SortedList(range(100), load=17)
     while len(slt) > 0:
         pos = random.randrange(len(slt))
         del slt[pos]
         slt._check()
+
+    slt = SortedList(range(100), load=17)
+    del slt[:]
+    assert len(slt) == 0
+    slt._check()
 
 def test_delitem_slice():
     slt = SortedList(range(100), load=17)
@@ -547,6 +553,11 @@ def test_pop_indexerror1():
 def test_pop_indexerror2():
     slt = SortedList(range(10), load=4)
     slt.pop(10)
+
+@raises(IndexError)
+def test_pop_indexerror3():
+    slt = SortedList()
+    slt.pop()
 
 def test_index():
     slt = SortedList(range(100), load=17)
