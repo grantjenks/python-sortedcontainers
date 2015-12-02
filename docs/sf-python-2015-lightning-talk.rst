@@ -5,7 +5,7 @@ Good evening! I'm Grant Jenks. Let's talk about a missing battery.
 
 [Slide 2]
 
-My journey started here. From collections import SortedDict. Oops. That's an ImportError. Wait, what?
+My journey started here. From collections import sorted dictionary. Oops. That's an import error. Import sorted list. Import error. Import sorted set. Import error.
 
 [Slide 3]
 
@@ -23,7 +23,7 @@ But the chorus and the refrain from core developers is: "Look to the PyPI." Ok, 
 
 Here's what that's like. It's like walking into my daughter's room after she's dumped all her toys on the floor. Seriously. PyPI has got to work better than using Google with the site operator.
 
-Python, I love you because there's one right way to do things. Just give me sorted types.
+I love Python because there's one right way to do things. Just give me sorted types.
 
 [Slide 7]
 
@@ -33,17 +33,17 @@ Okay. Fine. But just tell me the right answer. Give me a standard-lib-plus-plus 
 
 [Slide 8]
 
-I couldn't find the right answer so I built it. This is it. SortedContainers. The right answer is pure-Python. It's Python 2 and Python 3 compatible. It's fast. It's fully-featured. And it's extensively tested with 100% coverage and hours of stress.
+I couldn't find the right answer so I built it. Here it is. Sorted Containers. The right answer is pure-Python. It's Python 2 and Python 3 compatible. It's fast. It's fully-featured. And it's extensively tested with 100% coverage and hours of stress.
 
 [Slide 9]
 
-Performance is a feature. That means graphs. Lot's of them. Here's the performance of creating a sorted list from random numbers. I benchmark SortedContainers against every worthy competitor I can find.
+Performance is a feature. That means graphs. Lot's of them. Here's the performance of creating a sorted list from random numbers. I benchmark Sorted Containers against every worthy competitor I can find.
 
 Here we see it's five to ten times faster than sortedcollection which is in fact a little recipe Raymond wrote and linked from the Python docs.
 
 [Slide 10]
 
-Sorted dictionaries have the most competition. And the performance of SortedContainers is great. And it's not just initializing that's fast. Every common method is benchmarked for you.
+Sorted dictionaries have the most competition. And the performance of Sorted Containers is great. And it's not just initializing that's fast. Every common method is benchmarked for you.
 
 [Slide 11]
 
@@ -59,7 +59,7 @@ In addition to the typical sequence, mapping, and set apis, there's a number of 
 
 For example, sorted lists include bisect methods and there's an islice method that implements slice indexing but returns an iterator.
 
-Sorted dicts also support integer indexing. You can lookup the index of a key or bisect keys in a mapping. There's even an iloc attribute that functions similarly to Pandas' DataFrames. Also included is an irange method that iterates key ranges.
+Sorted dictionaries also support integer indexing. You can lookup the index of a key or bisect keys in a mapping. There's even an iloc attribute that functions similarly to Pandas' DataFrames. Also included is an irange method that iterates ranges of keys.
 
 Likewise, sorted sets fully support positional indexing and lookup.
 
@@ -69,16 +69,16 @@ If you're curious how it works, there's a page with implementation details. The 
 
 [Slide 15]
 
-I think SortedContainers is great. But listen to what other smart people say about it:
+I think Sorted Containers is great. But listen to what other smart people say about it:
 
-Alex Martelli: Good stuff! ... I like the simple, effective implementation idea of splitting the sorted containers into smaller “fragments” to avoid the O(N) insertion costs.
+Alex Martelli says: Good stuff! ... I like the simple, effective implementation idea of splitting the sorted containers into smaller “fragments” to avoid the O(N) insertion costs.
 
-Jeff Knupp: That last part, “fast as C-extensions,” was difficult to believe. I would need some sort of performance comparison to be convinced this is true. The author includes this in the docs. It is.
+Jeff Knupp writes: That last part, “fast as C-extensions,” was difficult to believe. I would need some sort of performance comparison to be convinced this is true. The author includes this in the docs. It is.
 
-Kevin Samuel: I’m quite amazed, not just by the code quality (it’s incredibly readable and has more comment than code, wow), but the actual amount of work you put at stuff that is not code: documentation, benchmarking, implementation explanations. Even the git log is clean and the unit tests run out of the box on Python 2 and 3.
+Kevin Samuel says: I’m quite amazed, not just by the code quality (it’s incredibly readable and has more comment than code, wow), but the actual amount of work you put at stuff that is not code: documentation, benchmarking, implementation explanations. Even the git log is clean and the unit tests run out of the box on Python 2 and 3.
 
 [Slide 16]
 
-The next time you write a priority queue, or work with time-series data, or setup an in-memory Sqlite database or send Redis a ZADD command, think of SortedContainers.
+So, the next time you write a priority queue, or work with time-series data, or setup an in-memory Sqlite database or send Redis a ZADD command, think of Sorted Containers.
 
 In Python, we can do better. Happy Holidays.
