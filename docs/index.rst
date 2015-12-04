@@ -124,7 +124,6 @@ introduction, implementation, performance, and development.
    performance-workload
    implementation
    development
-   djangocon-2015-lightning-talk
 
 API Documentation
 -----------------
@@ -139,6 +138,15 @@ part of the documentation is for you.
    sortedlistwithkey
    sorteddict
    sortedset
+
+Talks
+-----
+
+.. toctree::
+   :maxdepth: 1
+
+   sf-python-2015-lightning-talk
+   djangocon-2015-lightning-talk
 
 Useful Links
 ------------
@@ -173,7 +181,7 @@ The MIT, BSD, ISC, and Apache2 licenses are great alternatives to the GPL
 that allow your open-source software to be used freely in proprietary,
 closed-source software.
 
-SortedContainers is released under terms of `Apache2 License`_.
+SortedContainers is released under terms of the `Apache2 License`_.
 
 .. _`GPL Licensed`: http://www.opensource.org/licenses/gpl-license.php
 .. _`Apache2 License`: http://opensource.org/licenses/Apache-2.0
@@ -182,4 +190,4 @@ SortedContainers is released under terms of `Apache2 License`_.
 SortedContainers License
 ------------------------
 
-    .. include:: ../LICENSE
+.. include:: ../LICENSE
