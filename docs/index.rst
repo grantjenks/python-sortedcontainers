@@ -1,20 +1,20 @@
 SortedContainers
 ================
 
-SortedContainers is an :ref:`Apache2 Licensed <apache2>` containers library,
-written in pure-Python, and fast as C-extensions.
+SortedContainers is an :ref:`Apache2 Licensed <apache2>` sorted collections
+library, written in pure-Python, and fast as C-extensions.
 
-Python's standard library is great until you need a sorted container type. Many
-will attest that you can get really far without one, but the moment you **really
-need** a sorted list, dict, or set, you're faced with a dozen different
-implementations, most using C-extensions without great documentation and
-benchmarking.
+Python's standard library is great until you need a sorted collections
+type. Many will attest that you can get really far without one, but the moment
+you **really need** a sorted list, dict, or set, you're faced with a dozen
+different implementations, most using C-extensions without great documentation
+and benchmarking.
 
-Things shouldn't be this way. Not in Python.
+In Python, we can do better. And we can do it in pure-Python!
 
 ::
 
-    >>> sl = sortedcontainers.SortedList(xrange(10000000))
+    >>> sl = sortedcontainers.SortedList(range(int(1e7)))
     >>> 1234567 in sl
     True
     >>> sl[7654321]
@@ -26,18 +26,17 @@ Things shouldn't be this way. Not in Python.
     >>> len(sl)
     30000003
 
-**Note:** don't try this at home without at least a gigabyte of memory. In
-Python an integer requires at least 12 bytes. SortedList will add about 4
-bytes per object stored in the container. That's pretty hard to beat as it's
-the cost of a pointer to each object. It's also 66% less overhead than a
-typical binary tree implementation (e.g. red-black tree, avl tree, aa tree,
-splay tree, treap, etc.) for which every node must also store two pointers to
-children nodes.
+**Note:** don't try this without at least a half gigabyte of memory. In Python
+an integer requires about 24 bytes. SortedList will add about 8 bytes per
+object stored in the container. That's pretty hard to beat as it's the cost of
+a pointer to each object. It's also 66% less overhead than a typical binary
+tree implementation (e.g. red-black tree, avl tree, aa tree, splay tree, treap,
+etc.) for which every node must also store two pointers to children nodes.
 
-SortedContainers takes all of the work out of Python sorted types - making your
-deployment and use of Python easy. There's no need to install a C compiler or
-pre-build and distribute custom extensions. Performance is a feature and testing
-has 100% coverage with unit tests and hours of stress.
+SortedContainers takes all of the work out of Python sorted collections -
+making your deployment and use of Python easy. There's no need to install a C
+compiler or pre-build and distribute custom extensions. Performance is a
+feature and testing has 100% coverage with unit tests and hours of stress.
 
 Testimonials
 ------------
@@ -151,15 +150,15 @@ Talks
 Useful Links
 ------------
 
-- `SortedContainers Module @ GrantJenks.com`_
-- `SortedContainers @ PyPI`_
-- `SortedContainers @ Github`_
-- `Issue Tracker`_
+- `SortedContainers Documentation`_
+- `SortedContainers at PyPI`_
+- `SortedContainers at Github`_
+- `SortedContainers Issue Tracker`_
 
-.. _`SortedContainers Module @ GrantJenks.com`: http://www.grantjenks.com/docs/sortedcontainers/
-.. _`SortedContainers @ PyPI`: https://pypi.python.org/pypi/sortedcontainers
-.. _`SortedContainers @ Github`: https://github.com/grantjenks/sorted_containers
-.. _`Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
+.. _`SortedContainers Documentation`: http://www.grantjenks.com/docs/sortedcontainers/
+.. _`SortedContainers at PyPI`: https://pypi.python.org/pypi/sortedcontainers
+.. _`SortedContainers at Github`: https://github.com/grantjenks/sorted_containers
+.. _`SortedContainers Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
 
 Indices and Utilities
 ---------------------
