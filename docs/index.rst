@@ -165,7 +165,6 @@ Indices and Utilities
 ---------------------
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 .. _`apache2`:
