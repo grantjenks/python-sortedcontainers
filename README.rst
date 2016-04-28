@@ -15,7 +15,7 @@ benchmarking.
 
 Things shouldn't be this way. Not in Python.
 
-::
+.. code-block:: python
 
     >>> sl = sortedcontainers.SortedList(xrange(10000000))
     >>> 1234567 in sl
@@ -108,7 +108,7 @@ Installing SortedContainers is simple with
 You can access documentation in the interpreter with Python's built-in help
 function:
 
-::
+..code-block:: python
 
     >>> from sortedcontainers import SortedList, SortedSet, SortedDict
     >>> help(SortedList)
