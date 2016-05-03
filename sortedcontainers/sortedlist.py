@@ -141,8 +141,9 @@ class SortedList(MutableSequence):
         """Splits sublists that are more than double the load level.
 
         Updates the index when the sublist length is less than double the load
-        level. This requires incrementing the nodes in a traversal from the leaf
-        node to the root. For an example traversal see self._loc.
+        level. This requires incrementing the nodes in a traversal from the
+        leaf node to the root. For an example traversal see self._loc.
+
         """
         _lists = self._lists
         _index = self._index
@@ -150,18 +151,20 @@ class SortedList(MutableSequence):
         if len(_lists[pos]) > self._twice:
             _maxes = self._maxes
             _load = self._load
-            _lists_pos = _lists[pos]
 
+            _lists_pos = _lists[pos]
             half = _lists_pos[_load:]
             del _lists_pos[_load:]
             _maxes[pos] = _lists_pos[-1]
-            _maxes.insert(pos + 1, half[-1])
+
             _lists.insert(pos + 1, half)
+            _maxes.insert(pos + 1, half[-1])
+
             del _index[:]
         else:
             if _index:
                 child = self._offset + pos
-                while child > 0:
+                while child:
                     _index[child] += 1
                     child = (child - 1) >> 1
                 _index[0] += 1
@@ -1520,12 +1523,12 @@ class SortedListWithKey(SortedList):
         self._len += 1
 
     def _expand(self, pos):
-        """
-        Splits sublists that are more than double the load level.
+        """Splits sublists that are more than double the load level.
 
         Updates the index when the sublist length is less than double the load
-        level. This requires incrementing the nodes in a traversal from the leaf
-        node to the root. For an example traversal see self._loc.
+        level. This requires incrementing the nodes in a traversal from the
+        leaf node to the root. For an example traversal see self._loc.
+
         """
         _lists = self._lists
         _keys = self._keys
@@ -1535,21 +1538,23 @@ class SortedListWithKey(SortedList):
             _maxes = self._maxes
             _load = self._load
 
-            half = _keys[pos][_load:]
-            half_list = _lists[pos][_load:]
-            del _lists[pos][_load:]
-            del _keys[pos][_load:]
-            _maxes[pos] = _keys[pos][-1]
+            _lists_pos = _lists[pos]
+            _keys_pos = _keys[pos]
+            half = _lists_pos[_load:]
+            half_keys = _keys_pos[_load:]
+            del _lists_pos[_load:]
+            del _keys_pos[_load:]
+            _maxes[pos] = _keys_pos[-1]
 
-            _lists.insert(pos + 1, half_list)
-            _keys.insert(pos + 1, half)
-            _maxes.insert(pos + 1, half[-1])
+            _lists.insert(pos + 1, half)
+            _keys.insert(pos + 1, half_keys)
+            _maxes.insert(pos + 1, half_keys[-1])
 
             del _index[:]
         else:
             if _index:
                 child = self._offset + pos
-                while child > 0:
+                while child:
                     _index[child] += 1
                     child = (child - 1) >> 1
                 _index[0] += 1
