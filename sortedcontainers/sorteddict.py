@@ -43,9 +43,9 @@ class _IlocWrapper:
         Remove the ``sdict[sdict.iloc[index]]`` from *sdict*. Supports negative
         indices and slice notation. Raises IndexError on invalid *index*.
         """
-        _temp = self._dict
-        _list = _temp._list
-        _delitem = _temp._delitem
+        _dict = self._dict
+        _list = _dict._list
+        _delitem = _dict._delitem
 
         if isinstance(index, slice):
             keys = _list[index]
@@ -405,7 +405,7 @@ class SortedDict(dict):
     def _check(self):
         self._list._check()
         assert len(self) == len(self._list)
-        assert all(val in self for val in self._list)
+        assert all(key in self for key in self._list)
 
 class KeysView(AbstractKeysView, Set, Sequence):
     """
