@@ -133,6 +133,7 @@ introduction, implementation, performance, and development.
 - `Runtime Performance Comparison`_
 - `Simulated Workload Performance Comparison`_
 - `Implementation Details`_
+- `Performance at Scale`_
 - `Developing and Contributing`_
 
 .. _`Introduction`: http://www.grantjenks.com/docs/sortedcontainers/introduction.html
@@ -141,6 +142,7 @@ introduction, implementation, performance, and development.
 .. _`Runtime Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-runtime.html
 .. _`Simulated Workload Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-workload.html
 .. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
+.. _`Performance at Scale`: http://www.grantjenks.com/docs/sortedcontainers/performance-scale.html
 .. _`Developing and Contributing`: http://www.grantjenks.com/docs/sortedcontainers/development.html
 
 API Documentation

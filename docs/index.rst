@@ -122,6 +122,7 @@ introduction, implementation, performance, and development.
    performance-runtime
    performance-workload
    implementation
+   performance-scale
    development
 
 API Documentation
