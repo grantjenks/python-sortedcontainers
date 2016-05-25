@@ -34,19 +34,19 @@
 
     rm tests/results_runtime_sortedlist.txt
     echo ". env27/bin/activate && python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py27 >> tests/results_runtime_sortedlist.txt" | bash
-    echo ". env35/bin/activate && python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py34 >> tests/results_runtime_sortedlist.txt" | bash
+    echo ". env35/bin/activate && python -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _Py35 >> tests/results_runtime_sortedlist.txt" | bash
     echo ". env27/bin/activate && pypy -m tests.benchmark_sortedlist --bare --kind SortedList --suffix _PyPy >> tests/results_runtime_sortedlist.txt" | bash
     python -m tests.benchmark_plot tests/results_runtime_sortedlist.txt SortedList --suffix _runtime --save
 
     rm tests/results_runtime_sorteddict.txt
     echo ". env27/bin/activate && python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py27 >> tests/results_runtime_sorteddict.txt" | bash
-    echo ". env35/bin/activate && python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py34 >> tests/results_runtime_sorteddict.txt" | bash
+    echo ". env35/bin/activate && python -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _Py35 >> tests/results_runtime_sorteddict.txt" | bash
     echo ". env27/bin/activate && pypy -m tests.benchmark_sorteddict --bare --kind SortedDict --suffix _PyPy >> tests/results_runtime_sorteddict.txt" | bash
     python -m tests.benchmark_plot tests/results_runtime_sorteddict.txt SortedDict --suffix _runtime --save
 
     rm tests/results_runtime_sortedset.txt
     echo ". env27/bin/activate && python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py27 >> tests/results_runtime_sortedset.txt" | bash
-    echo ". env35/bin/activate && python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py34 >> tests/results_runtime_sortedset.txt" | bash
+    echo ". env35/bin/activate && python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _Py35 >> tests/results_runtime_sortedset.txt" | bash
     echo ". env27/bin/activate && pypy -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _PyPy >> tests/results_runtime_sortedset.txt" | bash
     python -m tests.benchmark_plot tests/results_runtime_sortedset.txt SortedSet --suffix _runtime --save
 
