@@ -40,22 +40,22 @@ SortedContainers is actively developed on GitHub, where the code is
 
 You can either clone the public repository::
 
-    > git clone git://github.com/grantjenks/sorted_containers.git
+    $ git clone git://github.com/grantjenks/sorted_containers.git
 
 Download the `tarball <https://github.com/grantjenks/sorted_containers/tarball/master>`_::
 
-    > curl -OL https://github.com/grantjenks/sorted_containers/tarball/master
+    $ curl -OL https://github.com/grantjenks/sorted_containers/tarball/master
 
 Or, download the `zipball <https://github.com/grantjenks/sorted_containers/zipball/master>`_::
 
-    > curl -OL https://github.com/grantjenks/sorted_containers/zipball/master
+    $ curl -OL https://github.com/grantjenks/sorted_containers/zipball/master
 
 Development Dependencies
 ------------------------
 
 Install development dependencies with `pip <http://www.pip-installer.org/>`_::
 
-    > pip install -r requirements.txt
+    $ pip install -r requirements.txt
 
 This includes everything for building/running tests, benchmarks and
 documentation.
@@ -70,14 +70,14 @@ Testing uses `tox <https://pypi.python.org/pypi/tox>`_. If you don't want to
 install all the development requirements, then, after downloading, you can
 simply run::
 
-    > python setup.py test
+    $ python setup.py test
 
 The test argument to setup.py will download a minimal testing infrastructure and
 run the tests.
 
 ::
 
-    > tox
+    $ tox
     GLOB sdist-make: /repos/sorted_containers/setup.py
     py26 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
     py26 runtests: PYTHONHASHSEED='1205144536'
@@ -85,7 +85,7 @@ run the tests.
     ...
     ----------------------------------------------------------------------
     Ran 150 tests in 7.080s
-    
+
     OK
     py27 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
     py27 runtests: PYTHONHASHSEED='1205144536'
@@ -93,7 +93,7 @@ run the tests.
     ...
     ----------------------------------------------------------------------
     Ran 150 tests in 6.670s
-    
+
     OK
     py32 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
     py32 runtests: PYTHONHASHSEED='1205144536'
@@ -101,7 +101,7 @@ run the tests.
     ...
     ----------------------------------------------------------------------
     Ran 150 tests in 10.254s
-    
+
     OK
     py33 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
     py33 runtests: PYTHONHASHSEED='1205144536'
@@ -109,7 +109,7 @@ run the tests.
     ...
     ----------------------------------------------------------------------
     Ran 150 tests in 10.485s
-    
+
     OK
     py34 inst-nodeps: /repos/sorted_containers/.tox/dist/sortedcontainers-0.8.0.zip
     py34 runtests: PYTHONHASHSEED='1205144536'
@@ -117,7 +117,7 @@ run the tests.
     ...
     ----------------------------------------------------------------------
     Ran 150 tests in 11.350s
-    
+
     OK
     ___________________ summary _______________________
       py26: commands succeeded
@@ -131,7 +131,7 @@ Coverage testing uses `nose <https://nose.readthedocs.org>`_:
 
 ::
 
-    > nosetests --with-coverage
+    $ nosetests --with-coverage
     ...................................................
     Name                          Stmts   Miss  Cover   Missing
     -----------------------------------------------------------
@@ -143,7 +143,7 @@ Coverage testing uses `nose <https://nose.readthedocs.org>`_:
     TOTAL                           839     21    97%
     ----------------------------------------------------------------------
     Ran 146 tests in 15.447s
-    
+
     OK
 
 It's normal not to see 100% coverage. Some code is specific to the Python runtime.
@@ -155,7 +155,7 @@ seed value. For example, to run stress on the SortedList data type:
 
 ::
 
-    > python -m tests.test_stress_sortedlist 1000 0
+    $ python -m tests.test_stress_sortedlist 1000 0
     Python sys.version_info(major=2, minor=7, micro=0, releaselevel='final', serial=0)
     Setting iterations to 1000
     Setting seed to 0
@@ -171,19 +171,38 @@ Running Benchmarks
 
 Running and plotting benchmarks is a two step process. Each is a Python script
 in the tests directory. To run the benchmarks for SortedList, plot the results,
-and save the resulting graphs, run::
+and save the resulting graphs, run:
 
-    python -m tests.benchmark_sortedlist --bare > tests/results_sortedlist.txt
-    python -m tests.benchmark_plot tests/results_sortedlist.txt SortedList --save
+::
 
-Each script has a handful of useful arguments. Use --help for a display of
-these. Consult the source for details. The file tests/benchmark_plot.py contains
-notes about benchmarking different Python runtimes against each other.
+    $ python -m tests.benchmark_sortedlist --bare > tests/results_sortedlist.txt
+    $ python -m tests.benchmark_plot tests/results_sortedlist.txt SortedList --save
+
+Each script has a handful of useful arguments. Use ``--help`` to display
+those. Consult the source for details. The file ``tests/benchmark_plot.py``
+contains notes about benchmarking different Python runtimes against each other.
+
+If you simply want to run the benchmarks to observe the performance on your
+local machine, then run:
+
+::
+
+    $ curl -OL https://github.com/grantjenks/sorted_containers/zipball/master
+    $ unzip master
+    $ cd grantjenks-sorted_containers-[GITHASH]/
+    $ export PYTHONPATH=`pwd`
+    $ python -m tests.benchmark_sortedlist
+    $ python -m tests.benchmark_sorteddict
+    $ python -m tests.benchmark_sortedset
+
+The benchmarks will warn if some packages are not importable. This limits the
+possible comparisons. In most cases, you can install missing packages from
+PyPI.
 
 Tested Runtimes
 ---------------
 
-SortedContainers currently supports the following versions of Python:
+SortedContainers actively tests against the following versions of Python:
 
 * CPython 2.6
 * CPython 2.7
@@ -191,8 +210,8 @@ SortedContainers currently supports the following versions of Python:
 * CPython 3.3
 * CPython 3.4
 * CPython 3.5
-* PyPy2 2.6
-* PyPy3 2.4
+* PyPy v5.1
+* PyPy3 v2.4
 
 Life will feel much saner if you use `virtualenv <http://www.virtualenv.org/>`_
 to manage each of the runtimes.
