@@ -10,7 +10,7 @@ start=$(date +"%s")
 
 rm output.txt
 
-for runtime in 27 34; do (
+for runtime in 27 35; do (
     for name in sortedlist sorteddict sortedset; do (
         for j in $(seq 1 $LOOP); do (
             for i in $(seq 1 $PARALLEL); do (
