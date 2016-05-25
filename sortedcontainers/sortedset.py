@@ -86,13 +86,14 @@ class SortedSet(MutableSet, Sequence):
 
         Supports slice notation and negative indexes.
         """
+        _set = self._set
         _list = self._list
         if isinstance(index, slice):
             values = _list[index]
-            self._set.difference_update(values)
+            _set.difference_update(values)
         else:
             value = _list[index]
-            self._set.remove(value)
+            _set.remove(value)
         del _list[index]
 
     def _make_cmp(set_op, doc):
@@ -143,8 +144,9 @@ class SortedSet(MutableSet, Sequence):
 
     def add(self, value):
         """Add the element *value* to the set."""
-        if value not in self._set:
-            self._set.add(value)
+        _set = self._set
+        if value not in _set:
+            _set.add(value)
             self._list.add(value)
 
     def clear(self):
@@ -167,8 +169,9 @@ class SortedSet(MutableSet, Sequence):
         Remove the first occurrence of *value*.  If *value* is not a member,
         does nothing.
         """
-        if value in self._set:
-            self._set.remove(value)
+        _set = self._set
+        if value in _set:
+            _set.remove(value)
             self._list.discard(value)
 
     def pop(self, index=-1):
@@ -206,11 +209,13 @@ class SortedSet(MutableSet, Sequence):
         Update the set, removing elements found in keeping only elements
         found in any of the *iterables*.
         """
+        _set = self._set
         values = set(chain(*iterables))
-        if (4 * len(values)) > len(self):
-            self._set.difference_update(values)
-            self._list.clear()
-            self._list.update(self._set)
+        if (4 * len(values)) > len(_set):
+            _list = self._list
+            _set.difference_update(values)
+            _list.clear()
+            _list.update(_set)
         else:
             _discard = self.discard
             for value in values:
@@ -234,9 +239,11 @@ class SortedSet(MutableSet, Sequence):
         """
         Update the set, keeping only elements found in it and all *iterables*.
         """
-        self._set.intersection_update(*iterables)
-        self._list.clear()
-        self._list.update(self._set)
+        _set = self._set
+        _list = self._list
+        _set.intersection_update(*iterables)
+        _list.clear()
+        _list.update(_set)
         return self
 
     __iand__ = intersection_update
@@ -257,9 +264,11 @@ class SortedSet(MutableSet, Sequence):
         Update the set, keeping only elements found in either *self* or *that*,
         but not in both.
         """
-        self._set.symmetric_difference_update(that)
-        self._list.clear()
-        self._list.update(self._set)
+        _set = self._set
+        _list = self._list
+        _set.symmetric_difference_update(that)
+        _list.clear()
+        _list.update(_set)
         return self
 
     __ixor__ = symmetric_difference_update
@@ -275,11 +284,13 @@ class SortedSet(MutableSet, Sequence):
 
     def update(self, *iterables):
         """Update the set, adding elements from all *iterables*."""
+        _set = self._set
         values = set(chain(*iterables))
-        if (4 * len(values)) > len(self):
-            self._set.update(values)
-            self._list.clear()
-            self._list.update(self._set)
+        if (4 * len(values)) > len(_set):
+            _list = self._list
+            _set.update(values)
+            _list.clear()
+            _list.update(_set)
         else:
             _add = self.add
             for value in values:
