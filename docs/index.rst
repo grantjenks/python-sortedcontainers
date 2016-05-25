@@ -1,7 +1,7 @@
 SortedContainers
 ================
 
-SortedContainers is an :ref:`Apache2 Licensed <apache2>` sorted collections
+`SortedContainers`_ is an :ref:`Apache2 Licensed <apache2>` sorted collections
 library, written in pure-Python, and fast as C-extensions.
 
 Python's standard library is great until you need a sorted collections
@@ -33,7 +33,7 @@ a pointer to each object. It's also 66% less overhead than a typical binary
 tree implementation (e.g. red-black tree, avl tree, aa tree, splay tree, treap,
 etc.) for which every node must also store two pointers to children nodes.
 
-SortedContainers takes all of the work out of Python sorted collections -
+`SortedContainers`_ takes all of the work out of Python sorted collections -
 making your deployment and use of Python easy. There's no need to install a C
 compiler or pre-build and distribute custom extensions. Performance is a
 feature and testing has 100% coverage with unit tests and hours of stress.
@@ -96,7 +96,7 @@ Features
 Quickstart
 ----------
 
-Installing SortedContainers is simple with
+Installing `SortedContainers`_ is simple with
 `pip <http://www.pip-installer.org/>`_::
 
     $ pip install sortedcontainers
@@ -180,7 +180,7 @@ The MIT, BSD, ISC, and Apache2 licenses are great alternatives to the GPL
 that allow your open-source software to be used freely in proprietary,
 closed-source software.
 
-SortedContainers is released under terms of the `Apache2 License`_.
+`SortedContainers`_ is released under terms of the `Apache2 License`_.
 
 .. _`GPL Licensed`: http://www.opensource.org/licenses/gpl-license.php
 .. _`Apache2 License`: http://opensource.org/licenses/Apache-2.0
@@ -190,3 +190,5 @@ SortedContainers License
 ------------------------
 
 .. include:: ../LICENSE
+
+.. _`SortedContainers`: http://www.grantjenks.com/docs/sortedcontainers/

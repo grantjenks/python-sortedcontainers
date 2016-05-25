@@ -102,7 +102,7 @@ Features
 Quickstart
 ----------
 
-Installing SortedContainers is simple with
+Installing `SortedContainers`_ is simple with
 `pip <http://www.pip-installer.org/>`_::
 
     $ pip install sortedcontainers
@@ -201,7 +201,7 @@ Useful Links
 SortedContainers License
 ------------------------
 
-Copyright 2014-2015 Grant Jenks
+Copyright 2014-2016 Grant Jenks
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
