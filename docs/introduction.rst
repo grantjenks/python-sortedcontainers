@@ -1,16 +1,18 @@
-Introduction
-============
+SortedContainers Introduction
+=============================
 
 Installation
 ------------
 
-This part of the documentation covers the installation of SortedContainers.
-The first step to using any software package is getting it properly installed.
+This part of the documentation covers the installation of
+:doc:`SortedContainers<index>`.  The first step to using any software package
+is getting it properly installed.
 
 Distribute & Pip
 ................
 
-Installing SortedContainers is simple with `pip <http://www.pip-installer.org/>`_::
+Installing :doc:`SortedContainers<index>` is simple with `pip
+<http://www.pip-installer.org/>`_::
 
     $ pip install sortedcontainers
 
@@ -23,8 +25,8 @@ But, you really `shouldn't do that <http://www.pip-installer.org/en/latest/other
 Get the Code
 ............
 
-SortedContainers is actively developed on GitHub, where the code is
-`always available <https://github.com/grantjenks/sorted_containers>`_.
+:doc:`SortedContainers<index>` is actively developed on GitHub, where the code
+is `always available <https://github.com/grantjenks/sorted_containers>`_.
 
 You can either clone the public repository::
 
@@ -43,7 +45,7 @@ or install it into your site-packages easily::
 
     $ python setup.py install
 
-SortedContainers is also available in Debian distributions as
+:doc:`SortedContainers<index>` is also available in Debian distributions as
 `python-sortedcontainers` and `python3-sortedcontainers`.
 
 SortedList
@@ -145,11 +147,12 @@ For more details, refer to the :doc:`SortedList API documentation <sortedlist>`.
 SortedListWithKey
 -----------------
 
-The SortedContainers project also maintains a specialized SortedList-like type
-that accepts a key-parameter as found with Python's built-in *sorted* function.
-A SortedListWithKey provides the same functionality as a SortedList but
-maintains the order of contained values based on the applied key-function. This
-simplifies the pattern of boxing/un-boxing which would otherwise be required.
+The :doc:`SortedContainers<index>` project also maintains a specialized
+SortedList-like type that accepts a key-parameter as found with Python's
+built-in *sorted* function.  A SortedListWithKey provides the same
+functionality as a SortedList but maintains the order of contained values based
+on the applied key-function. This simplifies the pattern of boxing/un-boxing
+which would otherwise be required.
 
     >>> from sortedcontainers import SortedListWithKey
     >>> l = SortedListWithKey(key=lambda val: -val)
@@ -171,7 +174,8 @@ a key-function to the constructor.
     >>> isinstance(values, SortedList)
     True
 
-For more details, refer to the :doc:`SortedListWithKey API documentation <sortedlistwithkey>`.
+For more details, refer to the :doc:`SortedListWithKey API documentation
+<sortedlistwithkey>`.
 
 SortedDict
 ----------
