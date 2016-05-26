@@ -8,8 +8,9 @@
 .coverage
 
 # setup sdist, test and upload directories
+/.tox/
+/build/
 /dist/
 /sortedcontainers.egg-info/
-/.tox/
 
 .DS_Store
