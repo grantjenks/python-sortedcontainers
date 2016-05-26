@@ -1,17 +1,18 @@
-# -*- coding: utf-8 -*-
-#
-# Sorted list implementation.
+"""Sorted list implementation.
+
+"""
+# pylint: disable=redefined-builtin, ungrouped-imports
 
 from __future__ import print_function
-from sys import hexversion
 
 from bisect import bisect_left, bisect_right, insort
-from itertools import chain, repeat, starmap
 from collections import Sequence, MutableSequence
+from functools import wraps
+from itertools import chain, repeat, starmap
+from math import log as log_e
 import operator as op
 from operator import iadd, add
-from functools import wraps
-from math import log
+from sys import hexversion
 
 if hexversion < 0x03000000:
     from itertools import izip as zip
@@ -25,7 +26,7 @@ else:
     try:
         from _thread import get_ident
     except ImportError:
-        from _dummy_thread import get_ident
+        from _dummy_thread import get_ident # pylint: disable=import-error
 
 def recursive_repr(func):
     """Decorator to prevent infinite repr recursion."""
@@ -33,6 +34,7 @@ def recursive_repr(func):
 
     @wraps(func)
     def wrapper(self):
+        "Return ellipsis on recursive re-entry to function."
         key = id(self), get_ident()
 
         if key in repr_running:
@@ -379,7 +381,7 @@ class SortedList(MutableSequence):
             # Right-child nodes are at odd indices. At such indices
             # account the total below the left child node.
 
-            if not (pos & 1):
+            if not pos & 1:
                 total += _index[pos - 1]
 
             # Advance pos to the parent node.
@@ -529,7 +531,7 @@ class SortedList(MutableSequence):
             self._offset = 1
             return
 
-        size = 2 ** (int(log(len(row1) - 1, 2)) + 1)
+        size = 2 ** (int(log_e(len(row1) - 1, 2)) + 1)
         row1.extend(repeat(0, size - len(row1)))
         tree = [row0, row1]
 
@@ -746,7 +748,7 @@ class SortedList(MutableSequence):
                 # isn't a Sequence, convert it to a tuple.
 
                 if not isinstance(value, Sequence):
-                    value = tuple(value)
+                    value = tuple(value) # pylint: disable=redefined-variable-type
 
                 # Check that the given values are ordered properly.
 
@@ -825,7 +827,7 @@ class SortedList(MutableSequence):
         if not _len:
             return iter(())
 
-        start, stop, step = slice(start, stop).indices(self._len)
+        start, stop, _ = slice(start, stop).indices(self._len)
 
         if start >= stop:
             return iter(())
@@ -1220,6 +1222,7 @@ class SortedList(MutableSequence):
         list. *start* defaults to the beginning. Negative indices are supported,
         as for slice indices.
         """
+        # pylint: disable=arguments-differ
         _len = self._len
 
         if not _len:
@@ -1304,8 +1307,11 @@ class SortedList(MutableSequence):
         self._update(values)
         return self
 
-    def _make_cmp(seq_op, doc):
+    def _make_cmp(self, seq_op, doc):
+        "Make comparator method."
         def comparer(self, that):
+            "Compare method for sorted list and sequence."
+            # pylint: disable=protected-access
             if not isinstance(that, Sequence):
                 return NotImplemented
 
@@ -1330,12 +1336,12 @@ class SortedList(MutableSequence):
 
         return comparer
 
-    __eq__ = _make_cmp(op.eq, 'equal to')
-    __ne__ = _make_cmp(op.ne, 'not equal to')
-    __lt__ = _make_cmp(op.lt, 'less than')
-    __gt__ = _make_cmp(op.gt, 'greater than')
-    __le__ = _make_cmp(op.le, 'less than or equal to')
-    __ge__ = _make_cmp(op.ge, 'greater than or equal to')
+    __eq__ = _make_cmp(None, op.eq, 'equal to')
+    __ne__ = _make_cmp(None, op.ne, 'not equal to')
+    __lt__ = _make_cmp(None, op.lt, 'less than')
+    __gt__ = _make_cmp(None, op.gt, 'greater than')
+    __le__ = _make_cmp(None, op.le, 'less than or equal to')
+    __ge__ = _make_cmp(None, op.ge, 'greater than or equal to')
 
     @recursive_repr
     def __repr__(self):
@@ -1404,6 +1410,7 @@ class SortedList(MutableSequence):
                 assert self._len == self._index[0]
 
                 def test_offset_pos(pos):
+                    "Test positional indexing offset."
                     from_index = self._index[self._offset + pos]
                     return from_index == len(self._lists[pos])
 
@@ -1439,6 +1446,7 @@ class SortedList(MutableSequence):
             raise
 
 def identity(value):
+    "Identity function."
     return value
 
 class SortedListWithKey(SortedList):
@@ -1448,9 +1456,8 @@ class SortedListWithKey(SortedList):
     """
 
     def __init__(self, iterable=None, key=identity, load=1000):
-        """
-        SortedListWithKey provides most of the same methods as a list but
-        keeps the items in sorted order.
+        """SortedListWithKey provides most of the same methods as list but keeps the
+        items in sorted order.
 
         An optional *iterable* provides an initial series of items to populate
         the SortedListWithKey.
@@ -1465,7 +1472,9 @@ class SortedListWithKey(SortedList):
         the list size.  With billions of elements, the best load factor depends
         on your usage.  It's best to leave the load factor at the default until
         you start benchmarking.
+
         """
+        # pylint: disable=super-init-not-called
         self._len = 0
         self._lists = []
         self._keys = []
@@ -1758,6 +1767,7 @@ class SortedListWithKey(SortedList):
             del _index[:]
 
     def _check_order(self, idx, key, val):
+        # pylint: disable=arguments-differ
         _len = self._len
         _keys = self._keys
 
@@ -1869,7 +1879,7 @@ class SortedListWithKey(SortedList):
                 # isn't a Sequence, convert it to a tuple.
 
                 if not isinstance(value, Sequence):
-                    value = tuple(value)
+                    value = tuple(value) # pylint: disable=redefined-variable-type
 
                 # Check that the given values are ordered properly.
 
@@ -2435,6 +2445,7 @@ class SortedListWithKey(SortedList):
                 assert self._len == self._index[0]
 
                 def test_offset_pos(pos):
+                    "Test positional indexing offset."
                     from_index = self._index[self._offset + pos]
                     return from_index == len(self._lists[pos])
 
