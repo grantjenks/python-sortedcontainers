@@ -73,7 +73,8 @@ Elements may also be inserted into a SortedList using :ref:`append
 <SortedList.append>`, :ref:`__setitem__ <SortedList.__setitem__>`, :ref:`insert
 <SortedList.insert>`, or :ref:`extend <SortedList.extend>`. These functions
 follow the programmer's directive to insert the element(s) at a specific
-location. Inserting an element out of order in this way will cause a ValueError.
+location. Inserting an element out of order in this way will cause a
+ValueError.
 
     >>> l[:] = [0, 1, 2, 3, 4]
     >>> l.append(5)
@@ -98,9 +99,9 @@ identically to their list counterpart.
     >>> len(l)
     5
 
-Because the SortedList maintains its elements in sorted order, several functions
-can be computed efficiently using binary-search. Those functions are :ref:`index
-<SortedList.index>`, :ref:`count <SortedList.count>`, :ref:`bisect
+Because the SortedList maintains its elements in sorted order, several
+functions can be computed efficiently using binary-search. Those functions are
+:ref:`index <SortedList.index>`, :ref:`count <SortedList.count>`, :ref:`bisect
 <SortedList.bisect>`, :ref:`bisect_left <SortedList.bisect>`, and
 :ref:`bisect_right <SortedList.bisect>`.
 
@@ -113,9 +114,10 @@ can be computed efficiently using binary-search. Those functions are :ref:`index
     >>> l.bisect(123456.7)
     123457
 
-SortedList also works efficiently with other sequence data types. :ref:`Addition
-<SortedList.__add__>`, :ref:`multiplication <SortedList.__mul__>`, and
-:ref:`comparison <SortedList.__eq__>` works with any iterable.
+SortedList also works efficiently with other sequence data
+types. :ref:`Addition <SortedList.__add__>`, :ref:`multiplication
+<SortedList.__mul__>`, and :ref:`comparison <SortedList.__eq__>` works with any
+iterable.
 
     >>> l[:] = range(10)
     >>> l += range(10)
@@ -142,7 +144,8 @@ iterator in reverse.
     >>> tuple(l.irange(2, 7, inclusive=(True, True)))
     (2, 3, 4, 5, 6, 7)
 
-For more details, refer to the :doc:`SortedList API documentation <sortedlist>`.
+For more details, refer to the :doc:`SortedList API documentation
+<sortedlist>`.
 
 SortedListWithKey
 -----------------
@@ -158,8 +161,8 @@ which would otherwise be required.
     >>> l = SortedListWithKey(key=lambda val: -val)
 
 The key function extracts a comparison key for ordering items in the list. In
-our example above we apply the negation operator. Doing so would maintain a list
-of integers in reverse.
+our example above we apply the negation operator. Doing so would maintain a
+list of integers in reverse.
 
 You can also construct a SortedListWithKey using the SortedList type by passing
 a key-function to the constructor.
@@ -221,9 +224,9 @@ only iteration.) View operations like :ref:`and <KeysView.and>`,
 
 In addition to the normal dictionary operations, SortedDict supports fast
 :ref:`indexing with iloc<SortedDict.iloc>` and :ref:`key index
-lookup<SortedDict.index>`. Using indexing, you can quickly lookup the nth key in
-iteration. These utilities are not common in other implementations but can be
-extremely useful. Indexing also supports slice notation.
+lookup<SortedDict.index>`. Using indexing, you can quickly lookup the nth key
+in iteration. These utilities are not common in other implementations but can
+be extremely useful. Indexing also supports slice notation.
 
     >>> d = SortedDict(b=2, d=4, c=3, e=5, a=1)
     >>> d.iloc[0]
@@ -249,7 +252,8 @@ load-factor of 100:
     >>> d
     SortedDict(<built-in function neg>, 100, {3: 3, 2: 2, 1: 1, 0: 0})
 
-For more details, refer to the :doc:`SortedDict API documentation <sorteddict>`.
+For more details, refer to the :doc:`SortedDict API documentation
+<sorteddict>`.
 
 SortedSet
 ---------

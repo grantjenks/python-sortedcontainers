@@ -22,13 +22,13 @@ binary-search. The last maintains a tree of pair-wise sums of the lengths of
 the lists.
 
 Lists are kept balanced using the _load factor. If an internal list's length
-exceeds double the load then it is split in two. Likewise at half the load it is
-combined with its neighbor. By default this factor is 1000 which seems to work
-well for lengths up to ten million. Lengths above that are recommended a load
-factor that is the square root of the average length (although you will probably
-exhaust the memory of your machine before that point). Experimentation is also
-recommended. A :doc:`load factor performance comparison<performance-load>` is
-also provided.
+exceeds double the load then it is split in two. Likewise at half the load it
+is combined with its neighbor. By default this factor is 1000 which seems to
+work well for lengths up to ten million. Lengths above that are recommended a
+load factor that is the square root of the average length (although you will
+probably exhaust the memory of your machine before that point). Experimentation
+is also recommended. A :doc:`load factor performance
+comparison<performance-load>` is also provided.
 
 Finding an element is a two step process. First the _maxes list is bisected
 which yields the index of a short sorted list. Then that list is bisected for
@@ -78,34 +78,34 @@ finally::
     [23, 17, 6, 8, 9, 6, 0, 3, 5, 4, 5, 6]
 
 With this list, we can efficiently compute the index of an item in a sublist
-and, vice-versa, find an item given an index. Details of the algorithms to do so
-are contained in the docstring for SortedList._loc and
+and, vice-versa, find an item given an index. Details of the algorithms to do
+so are contained in the docstring for SortedList._loc and
 SortedList._pos. Maintaining the position index in this way has several
 advantages:
 
 * It's easy to traverse to children/parent. The children of a position in the
   _index are at (pos * 2) + 1 and (pos * 2) + 2. The parent is at (pos - 1)
-  // 2. We can even identify left/right-children easily. Each left-child is at an
-  odd index and each right-child is at an even index.
+  // 2. We can even identify left/right-children easily. Each left-child is at
+  an odd index and each right-child is at an even index.
 
 * It's not built unless needed. If no indexing occurs, the memory and time
   accounting for position is skipped.
 
-* It's fast to build. Calculating sums pair-wise and concatenating lists can all
-  be done within C-routines in the Python interpreter.
+* It's fast to build. Calculating sums pair-wise and concatenating lists can
+  all be done within C-routines in the Python interpreter.
 
 * It's space efficient. The whole index is no more than twice the size of the
   length of the _lists and contains only integers.
 
 * It's easy to update. Adding or removing an item involves incrementing or
-  decrementing only log(len(_index)) items in the index. The only caveat to this
-  is when a new sublist is created/deleted. In those scenarios the entire index
-  is deleted and not rebuilt until needed.
+  decrementing only log(len(_index)) items in the index. The only caveat to
+  this is when a new sublist is created/deleted. In those scenarios the entire
+  index is deleted and not rebuilt until needed.
 
 The construction and maintainence of the index is unusual compared to other
 designs described in research. Whether the design is novel, I (Grant Jenks) do
-not know. I based the dense-tree structure on the efficiency of the heapq module
-in Python.
+not know. I based the dense-tree structure on the efficiency of the heapq
+module in Python.
 
 Each sorted container has a function named _check for verifying
 consistency. This function details the data-type invariants.

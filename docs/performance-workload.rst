@@ -2,10 +2,10 @@ Simulated Workload Performance Comparison
 =========================================
 
 While the :doc:`competitive performance comparison<performance>` is useful for
-identifying strengths and weaknesses in the API, it doesn't reflect the variable
-nature of real-life workloads. In August 2014, a survey of use cases for sorted
-list data types was made through repeated searches of Github. The analysis
-identified several common use patterns.
+identifying strengths and weaknesses in the API, it doesn't reflect the
+variable nature of real-life workloads. In August 2014, a survey of use cases
+for sorted list data types was made through repeated searches of Github. The
+analysis identified several common use patterns.
 
 These benchmarks attempt to mimic the usage patterns observed in other
 projects. Those patterns are summarized in the following names:
@@ -49,10 +49,10 @@ set of operations with associated frequencies. For example, the priority queue
 simulates `add` and `pop` each 40% of the time.
 
 Though these workloads strive to be realistic, they are still quite
-synthetic. No attempt is made to exercise memory allocation or cache maintenance
-while sorted list operations are performed. The frequency of each operation is
-also estimated because no projects had performance benchmarks that were easily
-evaluated.
+synthetic. No attempt is made to exercise memory allocation or cache
+maintenance while sorted list operations are performed. The frequency of each
+operation is also estimated because no projects had performance benchmarks that
+were easily evaluated.
 
 SortedList
 ----------
@@ -62,7 +62,8 @@ Graphs comparing :doc:`SortedList<sortedlist>` performance.
 Priority Queue
 ..............
 
-Simulates a *Priority Queue* workload as described above. The mix of operations and their frequencies:
+Simulates a *Priority Queue* workload as described above. The mix of operations
+and their frequencies:
 
 * 40% :ref:`add<SortedList.add>`
 * 40% :ref:`pop<SortedList.pop>`
@@ -79,7 +80,8 @@ Simulates a *Priority Queue* workload as described above. The mix of operations 
 Multiset
 ........
 
-Simulates a *Multiset* workload as described above. The mix of operations and their frequencies:
+Simulates a *Multiset* workload as described above. The mix of operations and
+their frequencies:
 
 * 75% :ref:`contains<SortedList.__contains__>`
 * 10% :ref:`add<SortedList.add>`
@@ -95,7 +97,8 @@ Simulates a *Multiset* workload as described above. The mix of operations and th
 Ranking
 .......
 
-Simulates a *Ranking* workload as described above. The mix of operations and their frequencies:
+Simulates a *Ranking* workload as described above. The mix of operations and
+their frequencies:
 
 * 40% :ref:`getitem<SortedList.__getitem__>`
 * 40% :ref:`index<SortedList.index>`
@@ -111,7 +114,8 @@ Simulates a *Ranking* workload as described above. The mix of operations and the
 Neighbor
 ........
 
-Simulates a *Neighbor* workload as described above. The mix of operations and their frequencies:
+Simulates a *Neighbor* workload as described above. The mix of operations and
+their frequencies:
 
 * 75% :ref:`bisect<SortedList.bisect>`
 * 10% :ref:`add<SortedList.add>`
@@ -127,7 +131,8 @@ Simulates a *Neighbor* workload as described above. The mix of operations and th
 Intervals
 .........
 
-Simulates an *Intervals* workload as described above. The mix of operations and their frequencies:
+Simulates an *Intervals* workload as described above. The mix of operations and
+their frequencies:
 
 * 30% :ref:`bisect<SortedList.bisect>`
 * 20% :ref:`getitem<SortedList.__getitem__>`
@@ -147,8 +152,8 @@ Other Performance Comparisons
 
 SortedContainers uses a segmented-list data structure similar to a B-tree
 limited to two levels of nodes. As part of the implementation, a load factor is
-used to determine how many values should be stored in each node. This can have a
-significant impact on performance and a :doc:`load factor performance
+used to determine how many values should be stored in each node. This can have
+a significant impact on performance and a :doc:`load factor performance
 comparison<performance-load>` is also provided.
 
 Because sortedcontainers is pure-Python, its performance also depends directly

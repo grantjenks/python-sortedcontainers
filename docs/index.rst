@@ -52,8 +52,8 @@ Good stuff! ... I like the :doc:`simple, effective implementation
 **Jeff Knupp**, `Review of SortedContainers`_
 
 That last part, "fast as C-extensions," was difficult to believe. I would need
-some sort of :doc:`performance comparison <performance>` to be convinced this is
-true. The author includes this in the docs. It is.
+some sort of :doc:`performance comparison <performance>` to be convinced this
+is true. The author includes this in the docs. It is.
 
 .. _`JeffKnupp.com`: http://jeffknupp.com/
 .. _`Review of SortedContainers`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
@@ -128,8 +128,8 @@ introduction, implementation, performance, and development.
 API Documentation
 -----------------
 
-If you are looking for information on a specific function, class or method, this
-part of the documentation is for you.
+If you are looking for information on a specific function, class or method,
+this part of the documentation is for you.
 
 .. toctree::
    :maxdepth: 1

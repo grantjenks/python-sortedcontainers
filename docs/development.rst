@@ -72,8 +72,8 @@ simply run::
 
     $ python setup.py test
 
-The test argument to setup.py will download a minimal testing infrastructure and
-run the tests.
+The test argument to setup.py will download a minimal testing infrastructure
+and run the tests.
 
 ::
 
@@ -146,7 +146,8 @@ Coverage testing uses `nose <https://nose.readthedocs.org>`_:
 
     OK
 
-It's normal not to see 100% coverage. Some code is specific to the Python runtime.
+It's normal not to see 100% coverage. Some code is specific to the Python
+runtime.
 
 Stress testing is also based on nose but can be run independently as a
 module. Stress tests are kept in the tests directory and prefixed with
@@ -163,8 +164,8 @@ seed value. For example, to run stress on the SortedList data type:
 
 If stress exits normally then it worked successfully. Some stress is run by tox
 and nose but the iteration count is limited at 1,000. More rigorous testing
-requires increasing the iteration count to millions. At that level, it's best to
-just let it run overnight. Stress testing will stop at the first failure.
+requires increasing the iteration count to millions. At that level, it's best
+to just let it run overnight. Stress testing will stop at the first failure.
 
 Running Benchmarks
 ------------------

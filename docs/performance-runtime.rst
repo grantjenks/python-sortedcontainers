@@ -2,8 +2,8 @@ Runtime Performance Comparison
 ==============================
 
 Because sortedcontainers is implemented in pure-Python, its performance depends
-directly on the Python runtime. SortedContainers was primarily developed, tested
-and benchmarked on CPython 2.7, specifically build:
+directly on the Python runtime. SortedContainers was primarily developed,
+tested and benchmarked on CPython 2.7, specifically build:
 
 ::
 
@@ -16,20 +16,20 @@ runtime displays much more variability due to its JIT-ed nature. Once the
 just-in-time compiler optimizes the code, performance is often several to tens
 of times faster.
 
-Performance of competing implementations are benchmarked against the CPython 2.7
-runtime. An :doc:`implementation performance comparison<performance>` is also
-included with data from popular sorted container packages.
+Performance of competing implementations are benchmarked against the CPython
+2.7 runtime. An :doc:`implementation performance comparison<performance>` is
+also included with data from popular sorted container packages.
 
 SortedContainers uses a segmented-list data structure similar to a B-tree
 limited to two levels of nodes. As part of the implementation, a load factor is
-used to determine how many values should be stored in each node. This can have a
-significant impact on performance and a :doc:`load factor performance
+used to determine how many values should be stored in each node. This can have
+a significant impact on performance and a :doc:`load factor performance
 comparison<performance-load>` is also provided.
 
 Though these benchmarks exercise only one API repeatedly, an effort has also
 been made to simulate real-world workloads. The :doc:`simulated workload
-performance comparison<performance-workload>` contains examples with comparisons
-to other implementations, load factors, and runtimes.
+performance comparison<performance-workload>` contains examples with
+comparisons to other implementations, load factors, and runtimes.
 
 SortedList
 ----------
@@ -53,7 +53,8 @@ Randomly adding values using :ref:`SortedList.add<SortedList.add>`.
 contains
 ........
 
-Randomly testing membership using :ref:`SortedList.__contains__<SortedList.__contains__>`.
+Randomly testing membership using
+:ref:`SortedList.__contains__<SortedList.__contains__>`.
 
 .. image:: _static/SortedList_runtime-contains.png
 
@@ -67,14 +68,16 @@ Counting objects at random using :ref:`SortedList.count<SortedList.count>`.
 __delitem__
 ...........
 
-Deleting objects at random using :ref:`SortedList.__delitem__<SortedList.__delitem__>`.
+Deleting objects at random using
+:ref:`SortedList.__delitem__<SortedList.__delitem__>`.
 
 .. image:: _static/SortedList_runtime-delitem.png
 
 __getitem__
 ...........
 
-Retrieving ojbects by index using :ref:`SortedList.__getitem__<SortedList.__getitem__>`.
+Retrieving ojbects by index using
+:ref:`SortedList.__getitem__<SortedList.__getitem__>`.
 
 .. image:: _static/SortedList_runtime-getitem.png
 
@@ -109,14 +112,16 @@ Remove an object at random using :ref:`SortedList.remove<SortedList.remove>`.
 update_large
 ............
 
-Updating a SortedList with a large iterable using :ref:`SortedList.update<SortedList.update>`.
+Updating a SortedList with a large iterable using
+:ref:`SortedList.update<SortedList.update>`.
 
 .. image:: _static/SortedList_runtime-update_large.png
 
 update_small
 ............
 
-Updating a SortedList with a small iterable using :ref:`SortedList.update<SortedList.update>`.
+Updating a SortedList with a small iterable using
+:ref:`SortedList.update<SortedList.update>`.
 
 .. image:: _static/SortedList_runtime-update_small.png
 
@@ -135,42 +140,48 @@ Initializing with a list of pairs of random numbers.
 __contains__
 ............
 
-Given a key at random, test whether the key is in the dictionary using :ref:`SortedDict.__contains__<SortedDict.__contains__>`.
+Given a key at random, test whether the key is in the dictionary using
+:ref:`SortedDict.__contains__<SortedDict.__contains__>`.
 
 .. image:: _static/SortedDict_runtime-contains.png
 
 __getitem__
 ...........
 
-Given a key at random, retrieve the value using :ref:`SortedDict.__getitem__<SortedDict.__getitem__>`.
+Given a key at random, retrieve the value using
+:ref:`SortedDict.__getitem__<SortedDict.__getitem__>`.
 
 .. image:: _static/SortedDict_runtime-getitem.png
 
 __setitem__
 ...........
 
-Given a key at random, set the value using :ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
+Given a key at random, set the value using
+:ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
 
 .. image:: _static/SortedDict_runtime-setitem.png
 
 __delitem__
 ...........
 
-Given a key at random, delete the value using :ref:`SortedDict.__delitem__<SortedDict.__delitem__>`.
+Given a key at random, delete the value using
+:ref:`SortedDict.__delitem__<SortedDict.__delitem__>`.
 
 .. image:: _static/SortedDict_runtime-delitem.png
 
 iter
 ....
 
-Iterate the keys of a SortedDict using :ref:`SortedDict.__iter__<SortedDict.__iter__>`.
+Iterate the keys of a SortedDict using
+:ref:`SortedDict.__iter__<SortedDict.__iter__>`.
 
 .. image:: _static/SortedDict_runtime-iter.png
 
 setitem_existing
 ................
 
-Given an existing key at random, set the value using :ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
+Given an existing key at random, set the value using
+:ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
 
 .. image:: _static/SortedDict_runtime-setitem_existing.png
 
@@ -196,7 +207,8 @@ Randomly add values using :ref:`SortedSet.add<SortedSet.add>`.
 contains
 ........
 
-Randomly test membership using :ref:`SortedSet.__contains__<SortedSet.__contains__>`.
+Randomly test membership using
+:ref:`SortedSet.__contains__<SortedSet.__contains__>`.
 
 .. image:: _static/SortedSet_runtime-contains.png
 
@@ -231,28 +243,32 @@ Set difference using :ref:`SortedSet.difference<SortedSet.difference>`.
 difference_update_large
 .......................
 
-Set difference using :ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using
+:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
 
 .. image:: _static/SortedSet_runtime-difference_update_large.png
 
 difference_update_medium
 ........................
 
-Set difference using :ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using
+:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
 
 .. image:: _static/SortedSet_runtime-difference_update_medium.png
 
 difference_update_small
 .......................
 
-Set difference using :ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using
+:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
 
 .. image:: _static/SortedSet_runtime-difference_update_small.png
 
 difference_update_tiny
 ......................
 
-Set difference using :ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using
+:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
 
 .. image:: _static/SortedSet_runtime-difference_update_tiny.png
 
@@ -287,28 +303,32 @@ Set intersection using :ref:`SortedSet.intersection<SortedSet.intersection>`.
 intersection_update_large
 .........................
 
-Set intersection using :ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using
+:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
 
 .. image:: _static/SortedSet_runtime-intersection_update_large.png
 
 intersection_update_medium
 ..........................
 
-Set intersection using :ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using
+:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
 
 .. image:: _static/SortedSet_runtime-intersection_update_medium.png
 
 intersection_update_small
 .........................
 
-Set intersection using :ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using
+:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
 
 .. image:: _static/SortedSet_runtime-intersection_update_small.png
 
 intersection_update_tiny
 ........................
 
-Set intersection using :ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using
+:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
 
 .. image:: _static/SortedSet_runtime-intersection_update_tiny.png
 
@@ -392,55 +412,63 @@ Set update using :ref:`SortedSet.update<SortedSet.update>`.
 symmetric_difference_large
 ..........................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_large.png
 
 symmetric_difference_medium
 ...........................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_medium.png
 
 symmetric_difference_small
 ..........................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_small.png
 
 symmetric_difference_tiny
 .........................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_tiny.png
 
 symm_diff_update_large
 ......................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_update_large.png
 
 symm_diff_update_medium
 .......................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_update_medium.png
 
 symm_diff_update_small
 ......................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_update_small.png
 
 symm_diff_update_tiny
 .....................
 
-Set symmetric-difference using :ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using
+:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
 
 .. image:: _static/SortedSet_runtime-symmetric_difference_update_tiny.png

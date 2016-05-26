@@ -488,9 +488,9 @@ elements. A highly optimized implementation will require at least 24 gigabytes
 of memory. The binary tree will likely traverse thirty levels, each of which is
 a data-dependent lookup. Some lookups will have good locality but most will
 not. Each lookup could be hundreds to thousands of times slower than sequential
-accesses. These slow lookups are why :doc:`SortedContainers<index>` can afford to shift a
-thousand sequential elements in memory and have most additions take less time
-than binary tree competitors.
+accesses. These slow lookups are why :doc:`SortedContainers<index>` can afford
+to shift a thousand sequential elements in memory and have most additions take
+less time than binary tree competitors.
 
 Due to the memory cache hierarchy, :doc:`SortedContainers<index>` scales
 extremely well. Each element in a SortedList has little overhead which
