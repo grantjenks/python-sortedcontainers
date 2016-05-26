@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
-import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-
 import sortedcontainers
+import sys
+
 
 class Tox(TestCommand):
     def finalize_options(self):
@@ -16,11 +14,9 @@ class Tox(TestCommand):
         errno = tox.cmdline(self.test_args)
         sys.exit(errno)
 
-with open('README.rst') as fptr:
-    readme = fptr.read()
 
-with open('LICENSE') as fptr:
-    license = fptr.read()
+with open('README.rst') as reader:
+    readme = fptr.read()
 
 setup(
     name=sortedcontainers.__title__,
@@ -30,15 +26,16 @@ setup(
     author='Grant Jenks',
     author_email='contact@grantjenks.com',
     url='http://www.grantjenks.com/docs/sortedcontainers/',
-    license=license,
+    license='Apache 2.0',
     packages=find_packages(exclude=('tests', 'docs')),
     tests_require=['tox'],
     cmdclass={'test': Tox},
+    install_requires=[],
     classifiers=(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'Natural Language :: English',
         'License :: OSI Approved :: Apache Software License',
+        'Natural Language :: English',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
