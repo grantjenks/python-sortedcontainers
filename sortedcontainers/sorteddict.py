@@ -6,7 +6,6 @@ from collections import Set, Sequence
 from collections import KeysView as AbstractKeysView
 from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
-from functools import wraps
 from sys import hexversion
 
 from .sortedlist import SortedList, recursive_repr, SortedListWithKey
@@ -14,18 +13,6 @@ from .sortedset import SortedSet
 
 NONE = object()
 
-def not26(func):
-    "Function decorator for methods not implemented in Python 2.6."
-
-    @wraps(func)
-    def errfunc(*args, **kwargs):
-        # pylint: disable=unused-argument, missing-docstring
-        raise NotImplementedError
-
-    if hexversion < 0x02070000:
-        return errfunc
-    else:
-        return func
 
 class _IlocWrapper(object):
     "Positional indexing support for sorted dictionary objects."
@@ -59,6 +46,7 @@ class _IlocWrapper(object):
             key = _list[index]
             del _list[index]
             _delitem(key)
+
 
 class SortedDict(dict):
     """SortedDict provides the same methods as a dict.  Additionally, SortedDict
@@ -361,35 +349,18 @@ class SortedDict(dict):
 
     _update = update
 
-    @not26
-    def viewkeys(self):
-        """
-        In Python 2.7 and later, return a new `KeysView` of the dictionary's
-        keys.
+    if hexversion >= 0x02070000:
+        def viewkeys(self):
+            "Return ``KeysView`` of dictionary keys."
+            return KeysView(self)
 
-        In Python 2.6, raise a NotImplementedError.
-        """
-        return KeysView(self)
+        def viewvalues(self):
+            "Return ``ValuesView`` of dictionary values."
+            return ValuesView(self)
 
-    @not26
-    def viewvalues(self):
-        """
-        In Python 2.7 and later, return a new `ValuesView` of the dictionary's
-        values.
-
-        In Python 2.6, raise a NotImplementedError.
-        """
-        return ValuesView(self)
-
-    @not26
-    def viewitems(self):
-        """
-        In Python 2.7 and later, return a new `ItemsView` of the dictionary's
-        items.
-
-        In Python 2.6, raise a NotImplementedError.
-        """
-        return ItemsView(self)
+        def viewitems(self):
+            "Return ``ItemsView`` of dictionary (key, value) item pairs."
+            return ItemsView(self)
 
     def __reduce__(self):
         return (self.__class__, (self._key, self._load, list(self._iteritems())))
@@ -411,6 +382,7 @@ class SortedDict(dict):
         self._list._check()
         assert len(self) == len(self._list)
         assert all(key in self for key in self._list)
+
 
 class KeysView(AbstractKeysView, Set, Sequence):
     """
@@ -520,6 +492,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
     def __repr__(self):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
+
 class ValuesView(AbstractValuesView, Sequence):
     """
     A ValuesView object is a dynamic view of the dictionary's values, which
@@ -625,6 +598,7 @@ class ValuesView(AbstractValuesView, Sequence):
     @recursive_repr
     def __repr__(self):
         return 'SortedDict_values({0})'.format(repr(list(self)))
+
 
 class ItemsView(AbstractItemsView, Set, Sequence):
     """
