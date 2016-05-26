@@ -1,5 +1,5 @@
-SortedContainers
-================
+Python SortedContainers
+=======================
 
 .. image:: https://api.travis-ci.org/grantjenks/sorted_containers.svg
     :target: http://www.grantjenks.com/docs/sortedcontainers/
@@ -58,11 +58,10 @@ the sorted containers into smaller "fragments" to avoid the O(N) insertion costs
 **Jeff Knupp**, `Review of SortedContainers`_
 
 That last part, "fast as C-extensions," was difficult to believe. I would need
-some sort of `performance comparison`_ to be convinced this is true. The author
+some sort of `Performance Comparison`_ to be convinced this is true. The author
 includes this in the docs. It is.
 
 .. _`Review of SortedContainers`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
-.. _`performance comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
 
 **Kevin Samuel**, `Formations Python`_
 
