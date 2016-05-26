@@ -16,7 +16,7 @@ class Tox(TestCommand):
 
 
 with open('README.rst') as reader:
-    readme = fptr.read()
+    readme = reader.read()
 
 setup(
     name=sortedcontainers.__title__,
