@@ -1,6 +1,13 @@
 SortedSet
 =========
 
+:doc:`SortedContainers<index>` is an Apache2 licensed Python sorted collections
+library, written in pure-Python, and fast as C-extensions. SortedSet API
+documentation is detailed below. The :doc:`introduction<introduction>` is the
+best way to get started.
+
+.. currentmodule:: sortedcontainers
+
 .. class:: SortedSet(iterable=None, load=1000, _set=None):
 
    A :class:`SortedSet` provides the same methods as a :class:`set`.

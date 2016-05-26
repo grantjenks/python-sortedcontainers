@@ -1,6 +1,13 @@
 SortedList
 ==========
 
+:doc:`SortedContainers<index>` is an Apache2 licensed Python sorted collections
+library, written in pure-Python, and fast as C-extensions. SortedList API
+documentation is detailed below. The :doc:`introduction<introduction>` is the
+best way to get started.
+
+.. currentmodule:: sortedcontainers
+
 .. class:: SortedList(iterable=None, key=None, load=1000)
 
    A :class:`SortedList` provides most of the same methods as a :class:`list`,

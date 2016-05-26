@@ -1,6 +1,13 @@
 SortedListWithKey
 =================
 
+:doc:`SortedContainers<index>` is an Apache2 licensed Python sorted collections
+library, written in pure-Python, and fast as C-extensions. SortedListWithKey
+API documentation is detailed below. The :doc:`introduction<introduction>` is
+the best way to get started.
+
+.. currentmodule:: sortedcontainers
+
 .. class:: SortedListWithKey(iterable=None, key=identity, load=1000)
 
    A :class:`SortedListWithKey` provides most of the same methods as a

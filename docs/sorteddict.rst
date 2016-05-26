@@ -1,6 +1,11 @@
 SortedDict
 ==========
 
+:doc:`SortedContainers<index>` is an Apache2 licensed Python sorted collections
+library, written in pure-Python, and fast as C-extensions. SortedDict API
+documentation is detailed below. The :doc:`introduction<introduction>` is the
+best way to get started.
+
 .. currentmodule:: sortedcontainers
 
 .. class:: SortedDict(*args, **kwargs)
