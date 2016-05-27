@@ -177,13 +177,26 @@ best way to get started.
    .. method:: d.popitem(last=True)
 
       Remove and return a ``(key, value)`` pair from the dictionary. If
-      `last=True` (default) then remove the *greatest* key from the
-      diciontary. Else, remove the *least* key from the dictionary.
+      ``last=True`` (default) then remove the *greatest* key from the
+      dictionary. Else, remove the *least* key from the dictionary.
 
       If the dictionary is empty, calling :meth:`popitem` raises a
       :exc:`KeyError`.
 
-      :rtype: ``(key, value)`` tuple
+      :rtype: (key, value) tuple
+
+   .. method:: d.peekitem(index=-1)
+
+      Return ``(key, value)`` item pair at index.
+
+      Unlike :ref:`popitem<SortedDict.popitem>`, the sorted dictionary is not
+      modified. Index defaults to -1, the *last/greatest* key in the
+      dictionary. Specify ``index=0`` to lookup the *first/least* key in the
+      dictionary.
+
+      If index is out of range, raise :exc:`IndexError`.
+
+      :rtype: (key, value) tuple
 
    .. method:: d.setdefault(key, default=None)
 

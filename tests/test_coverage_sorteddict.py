@@ -252,6 +252,19 @@ def test_popitem3():
     temp = SortedDict(mapping)
     assert temp.popitem(last=False) == ('a', 0)
 
+def test_peekitem():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    assert temp.peekitem() == ('z', 25)
+    assert temp.peekitem(0) == ('a', 0)
+    assert temp.peekitem(index=4) == ('e', 4)
+
+@raises(IndexError)
+def test_peekitem2():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping)
+    temp.peekitem(index=100)
+
 def test_setdefault():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)

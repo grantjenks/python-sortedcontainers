@@ -306,6 +306,19 @@ class SortedDict(dict):
 
         return (key, value)
 
+    def peekitem(self, index=-1):
+        """Return (key, value) item pair at index.
+
+        Unlike ``popitem``, the sorted dictionary is not modified. Index
+        defaults to -1, the last/greatest key in the dictionary. Specify
+        ``index=0`` to lookup the first/least key in the dictiony.
+
+        If index is out of range, raise IndexError.
+
+        """
+        key = self._list[index]
+        return key, self[key]
+
     def setdefault(self, key, default=None):
         """
         If *key* is in the dictionary, return its value.  If not, insert *key*
