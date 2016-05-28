@@ -1,8 +1,8 @@
 SortedContainers
 ================
 
-`SortedContainers`_ is an :ref:`Apache2 Licensed <apache2>` sorted collections
-library, written in pure-Python, and fast as C-extensions.
+`SortedContainers`_ is an Apache2 licensed sorted collections library, written
+in pure-Python, and fast as C-extensions.
 
 Python's standard library is great until you need a sorted collections
 type. Many will attest that you can get really far without one, but the moment
@@ -26,14 +26,15 @@ In Python, we can do better. And we can do it in pure-Python!
     >>> len(sl)
     30000003
 
-**Note:** don't try this without at least a half gigabyte of memory. In Python
-an integer requires about 24 bytes. SortedList will add about 8 bytes per
-object stored in the container. That's pretty hard to beat as it's the cost of
-a pointer to each object. It's also 66% less overhead than a typical binary
-tree implementation (e.g. red-black tree, avl tree, aa tree, splay tree, treap,
-etc.) for which every node must also store two pointers to children nodes.
+*Note:* The snippet above requires at least a half gigabyte of memory. In
+64-bit versions of CPython an integer requires about 24 bytes. SortedList will
+add about 8 bytes per object stored in the container. That's pretty hard to
+beat as it's the cost of a pointer to each object. It's also 66% less overhead
+than a typical binary tree implementation (e.g. red-black tree, avl tree, aa
+tree, splay tree, treap, etc.) for which every node must also store two
+pointers to children nodes.
 
-`SortedContainers`_ takes all of the work out of Python sorted collections -
+`SortedContainers`_ takes all of the work out of Python sorted collections --
 making your deployment and use of Python easy. There's no need to install a C
 compiler or pre-build and distribute custom extensions. Performance is a
 feature and testing has 100% coverage with unit tests and hours of stress.

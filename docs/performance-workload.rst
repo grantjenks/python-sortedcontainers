@@ -24,10 +24,10 @@ projects. Those patterns are summarized in the following names:
   multiset in Python, some projects required the ability to efficiently lookup
   the greatest or least item in the set.
 
-* *Ranking* - This usage pattern corresponded to those projects that repeatedly
-  looked up the index of items in the sorted list. Sometimes this occurred as
-  part of prioritizing elements and reporting their rank. Imagine trying to
-  identify a value's position in a work queue.
+* *Ranking* - Represents those projects that repeatedly looked up the index of
+  items in the sorted list. Sometimes this occurred as part of prioritizing
+  elements and reporting their rank. Imagine trying to identify an element's
+  position in a work queue.
 
 * *Neighbor* - This pattern was observed in several implementations of
   machine-learning algorithms (e.g. K-nearest-neighbor search). An iterative
@@ -50,7 +50,7 @@ simulates `add` and `pop` each 40% of the time.
 
 Though these workloads strive to be realistic, they are still quite
 synthetic. No attempt is made to exercise memory allocation or cache
-maintenance while sorted list operations are performed. The frequency of each
+interference while sorted list operations are performed. The frequency of each
 operation is also estimated because no projects had performance benchmarks that
 were easily evaluated.
 

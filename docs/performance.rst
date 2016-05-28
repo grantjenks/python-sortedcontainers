@@ -4,26 +4,27 @@ Performance Comparison
 Measuring performance is a difficult task. All the benchmarks on this page are
 synthetic in the sense that they test one function repeatedly. Measurements in
 live systems are much harder to produce reliably. So take the following data
-with a grain of salt. That being said, a stated feature of the
-:doc:`sortedcontainers Module<index>` is performance so it would be negligent
-not to produce this page with comparisons.
+with a grain of salt. That being said, a stated feature of
+:doc:`SortedContainers<index>` is performance so we would be remiss not to
+produce this page with comparisons.
 
 The source for all benchmarks can be found under the "tests" directory in the
-files prefixed "benchmark." Measurements are made from the min, max, and
-average of 5 repetitions. In the graphs below, the line follows the average and
-at each point, the min/max displays the bounds. Note that the axes are log-log
-so properly reading two different lines would describe one metric as "X times"
+files prefixed "benchmark." Measurements are made from the min, max, and mean
+of 5 repetitions. In the graphs below, the line follows the mean and at each
+point, the min/max displays the bounds. Note that the axes are log-log so
+properly reading two different lines would describe one metric as "X times"
 faster rather than "X seconds" faster. In all graphs, lower is
 better. Measurements are made by powers of ten: 100 through 1,000,000.
 
-Measurements up to 100,000,000 elements have been successfully tested but are
-impractical for publishing. Only a couple implementations (including
-sortedcontainers) are capable of handling so many elements. The major limiting
-factor at that size is memory. Consider the simple case of storing Python's
-integers in a SortedList. Each integer object requires ~36 bytes so a hundred
-million elements will require about four gigabytes of memory. If the
-implemenation adds significant overhead then most systems will run out of
-memory. For all datasets which may be kept in memory, sortedcontainers is an
+Measurements up to 10,000,000,000 elements have been successfully tested and
+benchmarks. Read :doc:`Performance at Scale<performance-scale>` for
+details. Only a couple implementations (including SortedContainers) are capable
+of handling so many elements. The major limiting factor at that size is
+memory. Consider the simple case of storing CPython's integers in a
+SortedList. Each integer object requires ~24 bytes so one hundred million
+elements will require about three gigabytes of memory. If the implemenation
+adds significant overhead then most systems will run out of memory. For all
+datasets which may be kept in memory, :doc:`SortedContainers<index>` is an
 excellent choice.
 
 A good effort has been made to find competing implementations. Six in total
@@ -55,7 +56,7 @@ banyan
   `banyan on PyPI <https://pypi.python.org/pypi/Banyan>`_
 
 skiplistcollections
-  Pure-Python implementation based on skip-lists providing a limited-API
+  Pure-Python implementation based on skip-lists providing a limited API
   for dict and set types.
   `skiplistcollections on PyPI <https://pypi.python.org/pypi/skiplistcollections>`_
 
@@ -71,7 +72,8 @@ installable or failed to build.
 ruamel.ordereddict.sorteddict
   C-implementation that only supports Python 2. Performance was measured in
   correspondence with the module author. Performance was generally very good
-  except for `__delitem__`. At scale, deleting entries became exceedingly slow.
+  except for ``__delitem__``. At scale, deleting entries became exceedingly
+  slow.
   `ruamel.ordereddict on PyPI <https://pypi.python.org/pypi/ruamel.ordereddict/>`_
 
 rbtree from NewCenturyComputers
@@ -80,32 +82,32 @@ rbtree from NewCenturyComputers
   `rbtree from NewCenturyComputers <http://newcenturycomputers.net/projects/rbtree.html>`_
 
 python-avl-tree from Github user pgrafov
-  Pure-Python tree-based implementation. Last updated 3 years ago. Unlikely
+  Pure-Python tree-based implementation. Last updated in 2010. Unlikely
   to be fast.
   `python-avl-tree from Github user pgrafov <https://github.com/pgrafov/python-avl-tree>`_
 
 pyavl
   C-implementation for AVL tree-based dict and set containers. Claims to be
-  fast. Last updated in 2012. Lacking documentation and failed to build on
-  Windows.
+  fast. Lacking documentation and failed to build.
   `pyavl on PyPI <https://pypi.python.org/pypi/pyavl>`_
 
-The most similar module to sortedcontainers is skiplistcollections given that
-each is implemented in Python. But as is displayed below, sortedcontainers is
-several times faster and provides a richer API. Often the pure-Python
-implementation in sortedcontainers is faster even than the C-implementation
-counterparts. Where it lacks, performance is generally on the same magnitude.
+The most similar module to :doc:`SortedContainers<index>` is
+skiplistcollections given that each is implemented in Python. But as is
+displayed below, :doc:`SortedContainers<index>` is several times faster and
+provides a richer API. Often the pure-Python implementation in SortedContainers
+is faster even than the C-implementation counterparts. Where it lacks,
+performance is generally on the same magnitude.
 
-Because sortedcontainers is implemented in pure-Python, its performance depends
-directly on the Python runtime. A :doc:`runtime performance
+Because :doc:`SortedContainers<index>` is implemented in pure-Python, its
+performance depends directly on the Python runtime. A :doc:`runtime performance
 comparison<performance-runtime>` is also included with data from popular
 runtimes.
 
-SortedContainers uses a segmented-list data structure similar to a B-tree
-limited to two levels of nodes. As part of the implementation, a load factor is
-used to determine how many values should be stored in each node. This can have
-a significant impact on performance and a :doc:`load factor performance
-comparison<performance-load>` is also provided.
+:doc:`SortedContainers<index>` uses a segmented-list data structure similar to
+a B-tree limited to two levels of nodes. As part of the implementation, a load
+factor is used to determine how many values should be stored in each node. This
+can have a significant impact on performance and a :doc:`load factor
+performance comparison<performance-load>` is also provided.
 
 Though these benchmarks exercise only one API repeatedly, an effort has also
 been made to simulate real-world workloads. The :doc:`simulated workload

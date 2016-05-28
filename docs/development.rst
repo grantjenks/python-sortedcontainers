@@ -20,17 +20,9 @@ Development Lead
 Requests for Contributions
 --------------------------
 
-1. Testing / benchmarking with Cython.
-
-2. Better compatibility with blist.
-
-  * Add 'key' option.
-
-3. Better compatibility with rbtree.
-
-  * Pop first item vs. last item.
-
-4. Find a way to allow objects of different types in dict and set types.
+#. Terabytes of memory for benchmarks of 100,000,000,000 elements.
+#. Find a way for SortedSet to inherit directly from ``set``.
+#. Testing / benchmarking with Cython.
 
 Get the Code
 ------------
@@ -197,8 +189,7 @@ local machine, then run:
     $ python -m tests.benchmark_sortedset
 
 The benchmarks will warn if some packages are not importable. This limits the
-possible comparisons. In most cases, you can install missing packages from
-PyPI.
+possible comparisons. In all cases, you can install missing packages from PyPI.
 
 Tested Runtimes
 ---------------

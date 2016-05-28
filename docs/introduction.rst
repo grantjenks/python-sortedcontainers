@@ -20,7 +20,7 @@ or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
 
     $ easy_install sortedcontainers
 
-But, you really `shouldn't do that <http://www.pip-installer.org/en/latest/other-tools.html#pip-compared-to-easy-install>`_.
+But you should prefer pip when available.
 
 Get the Code
 ............
@@ -52,7 +52,7 @@ SortedList
 ----------
 
 A SortedList is a finite sequence in which an order is imposed on the elements
-according to their ordered relation to each other. As with Python's built-in
+according to their sorted relation to each other. As with Python's built-in
 list data type, SortedList supports duplicate elements and fast random-access
 indexing. A SortedList may never contain its elements out of order.
 
@@ -116,8 +116,8 @@ functions can be computed efficiently using binary-search. Those functions are
 
 SortedList also works efficiently with other sequence data
 types. :ref:`Addition <SortedList.__add__>`, :ref:`multiplication
-<SortedList.__mul__>`, and :ref:`comparison <SortedList.__eq__>` works with any
-iterable.
+<SortedList.__mul__>`, and :ref:`comparison <SortedList.__eq__>` works as with
+other sequences.
 
     >>> l[:] = range(10)
     >>> l += range(10)
@@ -130,9 +130,9 @@ iterable.
     >>> l == range(10)
     True
 
-SortedList adds two more functions to the list api, :ref:`islice
+SortedList adds two more functions to the list API: :ref:`islice
 <SortedList.islice>` and :ref:`irange <SortedList.irange>`. Each returns an
-iterator and slices the SortedList; `islice` according to traditional Python
+iterator and slices the SortedList: `islice` according to traditional Python
 slicing rules, `start` to `stop`, inclusive and exclusive respectively; and
 `irange` from the `minimum` to `maximum`, both inclusive by default. Each
 method also accepts a `reverse` argument so that items are yielded from the
@@ -185,9 +185,9 @@ SortedDict
 
 A SortedDict is a container of key-value pairs in which an order is imposed on
 the keys according to their ordered relation to each other. As with Python's
-built-in dict data type, SortedDict supports fast insertion, deletion, and
-lookup by key. Iterating a SortedDict yields the keys in sorted order. The api
-strives to be as similar to the built-in dict type as possible.
+built-in ``dict`` data type, SortedDict supports fast insertion, deletion, and
+lookup by key. Iterating a SortedDict yields the keys in sorted order. The API
+strives to be as similar to the built-in ``dict`` type as possible.
 
     >>> from sortedcontainers import SortedDict
     >>> d = SortedDict()
@@ -259,9 +259,9 @@ SortedSet
 ---------
 
 A :doc:`SortedSet<sortedset>` is a collection of distinct objects in which an
-order is imposed on the members according to their ordered relation to each
-other. The API is similar to the :doc:`SortedList<sortedlist>` and built-in set
-containers. Iterating a SortedSet yields the items in sorted order.
+order is imposed on the members according to their sorted relation to each
+other. The API is similar to the :doc:`SortedList<sortedlist>` and built-in
+``set`` type. Iterating a SortedSet yields the items in sorted order.
 
     >>> from sortedcontainers import SortedSet
     >>> s = SortedSet([3, 1, 0, 2])
@@ -272,7 +272,8 @@ Like the built-in set container type, SortedSet supports
 :ref:`difference<SortedSet.difference>`,
 :ref:`intersection<SortedSet.intersection>`,
 :ref:`symmetric_difference<SortedSet.symmetric_difference>`, and
-:ref:`union<SortedSet.union>` operations along with their _update counterparts.
+:ref:`union<SortedSet.union>` operations along with their ``*_update``
+counterparts.
 
     >>> s.clear()
     >>> s.add(-1)
@@ -287,7 +288,7 @@ Like the built-in set container type, SortedSet supports
     True
 
 Adding and removing elements works the same as with the SortedList container
-although position-specifying updates are not permitted.Unlike the built-in set
+although positional updates are not permitted. Unlike the built-in ``set``
 type, SortedSet has full indexing support for
 :ref:`set[index]<SortedSet.__getitem__>` and :ref:`del
 set[index]<SortedSet.__delitem__>` operations.
