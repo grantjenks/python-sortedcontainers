@@ -272,10 +272,24 @@ thousand.
 
 .. raw:: html
 
-   <video width="100%" controls>
-     <source src="_static/sublist-lengths-add.mp4" type="video/mp4">
-     Your browser does not support the video tag.
-   </video>
+   <style>
+   .video-wrapper {
+       position: relative;
+       padding-bottom: 56.25%; /* 16:9 */
+       padding-top: 25px;
+       height: 0;
+   }
+   .video-wrapper iframe {
+       position: absolute;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+   }
+   </style>
+   <div class="video-wrapper">
+     <iframe src="https://www.youtube.com/embed/5RR89BVoiSI?rel=0&showinfo=0&fs=0&controls=1" frameborder="0" allowfullscreen=""></iframe>
+   </div>
 
 The histogram of sublist lengths is in blue while a normal curve fitted to the
 histogram is plotted in green. The size of the sorted list grows to millions of
@@ -291,10 +305,9 @@ random deleted from the sorted list. The load is again one thousand.
 
 .. raw:: html
 
-   <video width="100%" controls>
-     <source src="_static/sublist-lengths-delitem.mp4" type="video/mp4">
-     Your browser does not support the video tag.
-   </video>
+   <div class="video-wrapper">
+     <iframe src="https://www.youtube.com/embed/jh4EWHm1_RM?rel=0&showinfo=0&fs=0&controls=1" frameborder="0" allowfullscreen=""></iframe>
+   </div>
 
 The sorted list was initialized with a million values. Notice all sublists
 begin with the same length represented by a spike in the histogram. As elements
