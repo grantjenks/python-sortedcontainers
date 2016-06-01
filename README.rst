@@ -163,9 +163,11 @@ part of the documentation is for you.
 Talks
 -----
 
+- `Python Sorted Collections | PyCon 2016 Talk`_
 - `SF Python Holiday Party 2015 Lightning Talk`_
 - `DjangoCon 2015 Lightning Talk`_
 
+.. _`Python Sorted Collections | PyCon 2016 Talk`: http://www.grantjenks.com/docs/sortedcontainers/pycon-2016-talk.html
 .. _`SF Python Holiday Party 2015 Lightning Talk`: http://www.grantjenks.com/docs/sortedcontainers/sf-python-2015-lightning-talk.html
 .. _`DjangoCon 2015 Lightning Talk`: http://www.grantjenks.com/docs/sortedcontainers/djangocon-2015-lightning-talk.html
 
