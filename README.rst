@@ -109,7 +109,7 @@ Installing `SortedContainers`_ is simple with
 You can access documentation in the interpreter with Python's built-in help
 function:
 
-..code-block:: python
+.. code-block:: python
 
     >>> from sortedcontainers import SortedList, SortedSet, SortedDict
     >>> help(SortedList)
