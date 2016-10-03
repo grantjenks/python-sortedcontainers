@@ -143,7 +143,7 @@ Maintaining the position index in this way has several advantages:
   to this is when a new sublist is created/deleted. In those scenarios the
   entire index is deleted and not rebuilt until needed.
 
-The construction and maintainence of the positional index is unusual compared
+The construction and maintenance of the positional index is unusual compared
 to other traditional designs. Whether the design is novel, I (Grant Jenks) do
 not know. Until shown otherwise, I would like to refer to it as the "Jenks"
 index.
