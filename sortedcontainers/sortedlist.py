@@ -100,6 +100,7 @@ class SortedList(MutableSequence):
         on your usage.  It's best to leave the load factor at the default until
         you start benchmarking.
         """
+        # pylint: disable=unused-argument
         if key is None:
             return object.__new__(cls)
         else:
