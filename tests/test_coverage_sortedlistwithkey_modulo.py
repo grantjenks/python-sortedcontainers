@@ -38,14 +38,16 @@ def test_init():
     slt._check()
 
 def test_new():
-    slt = SortedList(key=modulo)
+    slt = SortedList(iter(range(1000)), key=modulo)
+    assert slt == sorted(range(1000), key=modulo)
     slt._check()
 
     assert isinstance(slt, SortedList)
     assert isinstance(slt, SortedListWithKey)
     assert type(slt) == SortedListWithKey
 
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedListWithKey(iter(range(1000)), key=modulo)
+    assert slt == sorted(range(1000), key=modulo)
     slt._check()
 
     assert isinstance(slt, SortedList)

@@ -104,7 +104,7 @@ class SortedList(MutableSequence):
             return object.__new__(cls)
         else:
             if cls is SortedList:
-                return SortedListWithKey(iterable=iterable, key=key, load=load)
+                return object.__new__(SortedListWithKey)
             else:
                 raise TypeError('inherit SortedListWithKey for key argument')
 
