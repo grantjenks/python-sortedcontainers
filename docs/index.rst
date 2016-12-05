@@ -125,6 +125,7 @@ introduction, implementation, performance, and development.
    implementation
    performance-scale
    development
+   history
 
 API Documentation
 -----------------

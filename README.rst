@@ -134,6 +134,7 @@ introduction, implementation, performance, and development.
 - `Implementation Details`_
 - `Performance at Scale`_
 - `Developing and Contributing`_
+- `Release History`_
 
 .. _`Introduction`: http://www.grantjenks.com/docs/sortedcontainers/introduction.html
 .. _`Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
@@ -143,6 +144,7 @@ introduction, implementation, performance, and development.
 .. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 .. _`Performance at Scale`: http://www.grantjenks.com/docs/sortedcontainers/performance-scale.html
 .. _`Developing and Contributing`: http://www.grantjenks.com/docs/sortedcontainers/development.html
+.. _`Release History`: http://www.grantjenks.com/docs/sortedcontainers/history.html
 
 API Documentation
 .................
