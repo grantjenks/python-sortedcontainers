@@ -366,7 +366,7 @@ class SortedList(MutableSequence):
 
         _index = self._index
 
-        if not len(_index):
+        if not _index:
             self._build_index()
 
         total = 0
@@ -1072,6 +1072,9 @@ class SortedList(MutableSequence):
 
         if not isinstance(values, list):
             values = list(values)
+
+        if not values:
+            return
 
         if any(values[pos - 1] > values[pos]
                for pos in range(1, len(values))):

@@ -468,7 +468,13 @@ def test_append_valueerror():
 def test_extend():
     slt = SortedList(load=17)
 
+    slt.extend([])
+    slt._check()
+
     slt.extend(range(100))
+    slt._check()
+
+    slt.extend([])
     slt._check()
 
     slt.extend(list(range(100, 200)))
