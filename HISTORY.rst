@@ -1,20 +1,28 @@
 Sorted Containers Release History
 =================================
 
+1.5.6 (2016-12-09)
+------------------
+
+**Bugfixes**
+
+* Changed ``SortedList.__setitem__`` to support slices that alias itself.
+
+
 1.5.5 (2016-12-05)
 ------------------
 
 **Bugfixes**
 
-* Changed SortedList.extend to support empty iterables.
+* Changed ``SortedList.extend`` to support empty iterables.
 
 1.5.4 (2016-10-16)
 ------------------
 
 **Bugfixes**
 
-* Changed SortedList.__new__ to call SortedListWithKey.__init once instead of
-  twice.
+* Changed ``SortedList.__new__`` to call ``SortedListWithKey.__init__`` once
+  instead of twice.
 
 1.5.3 (2016-06-01)
 ------------------
@@ -28,7 +36,7 @@ Sorted Containers Release History
 
 **API Changes**
 
-* Added SortedDict.peekitem method.
+* Added ``SortedDict.peekitem`` method.
 
 1.5.1 (2016-05-26)
 ------------------

@@ -274,6 +274,11 @@ def test_setitem_slice():
     assert slt == list(range(10, 90))
     slt._check()
 
+def test_setitem_slice_aliasing():
+    slt = SortedList([0])
+    slt[1:1] = slt
+    assert slt == [0, 0]
+
 @raises(ValueError)
 def test_setitem_slice_bad():
     slt = SortedList(range(100), load=17)

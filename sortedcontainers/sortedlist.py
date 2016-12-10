@@ -681,13 +681,13 @@ class SortedList(MutableSequence):
                 raise ValueError(msg)
 
     def __setitem__(self, index, value):
-        """
-        Replace the item at position *index* with *value*.
+        """Replace item at position *index* with *value*.
 
-        Supports slice notation. Raises a :exc:`ValueError` if the sort order
+        Supports slice notation. Raises :exc:`ValueError` if the sort order
         would be violated. When used with a slice and iterable, the
-        :exc:`ValueError` is raised before the list is mutated if the sort order
-        would be violated by the operation.
+        :exc:`ValueError` is raised before the list is mutated if the sort
+        order would be violated by the operation.
+
         """
         _lists = self._lists
         _maxes = self._maxes
@@ -695,20 +695,21 @@ class SortedList(MutableSequence):
         _pos = self._pos
 
         if isinstance(index, slice):
-            start, stop, step = index.indices(self._len)
+            _len = self._len
+            start, stop, step = index.indices(_len)
             indices = range(start, stop, step)
 
+            # Copy value to avoid aliasing issues with self and cases where an
+            # iterator is given.
+
+            values = tuple(value)
+
             if step != 1:
-                if not hasattr(value, '__len__'):
-                    value = list(value)
-
-                indices = list(indices)
-
-                if len(value) != len(indices):
+                if len(values) != len(indices):
                     raise ValueError(
-                        'attempt to assign sequence of size {0}'
-                        ' to extended slice of size {1}'
-                        .format(len(value), len(indices)))
+                        'attempt to assign sequence of size %s'
+                        ' to extended slice of size %s'
+                        % (len(values), len(indices)))
 
                 # Keep a log of values that are set so that we can
                 # roll back changes if ordering is violated.
@@ -716,7 +717,7 @@ class SortedList(MutableSequence):
                 log = []
                 _append = log.append
 
-                for idx, val in zip(indices, value):
+                for idx, val in zip(indices, values):
                     pos, loc = _pos(idx)
                     _append((idx, _lists[pos][loc], val))
                     _lists[pos][loc] = val
@@ -726,14 +727,14 @@ class SortedList(MutableSequence):
                 try:
                     # Validate ordering of new values.
 
-                    for idx, oldval, newval in log:
+                    for idx, _, newval in log:
                         _check_order(idx, newval)
 
                 except ValueError:
 
                     # Roll back changes from log.
 
-                    for idx, oldval, newval in log:
+                    for idx, oldval, _ in log:
                         pos, loc = _pos(idx)
                         _lists[pos][loc] = oldval
                         if len(_lists[pos]) == (loc + 1):
@@ -741,42 +742,33 @@ class SortedList(MutableSequence):
 
                     raise
             else:
-                if start == 0 and stop == self._len:
+                if start == 0 and stop == _len:
                     self._clear()
-                    return self._update(value)
+                    return self._update(values)
 
-                # Test ordering using indexing. If the given value
-                # isn't a Sequence, convert it to a tuple.
+                if values:
 
-                if not isinstance(value, Sequence):
-                    value = tuple(value) # pylint: disable=redefined-variable-type
+                    # Check that given values are ordered properly.
 
-                # Check that the given values are ordered properly.
+                    alphas = iter(values)
+                    betas = iter(values)
+                    next(betas)
+                    pairs = zip(alphas, betas)
 
-                iterator = range(1, len(value))
+                    if not all(alpha <= beta for alpha, beta in pairs):
+                        raise ValueError('given values not in sort order')
 
-                if not all(value[pos - 1] <= value[pos] for pos in iterator):
-                    raise ValueError('given sequence not in sort order')
+                    # Check ordering in context of sorted list.
 
-                # Check ordering in context of sorted list.
+                    if start and self._getitem(start - 1) > values[0]:
+                        message = '%s not in sort order at index %s' % (
+                            repr(values[0]), start)
+                        raise ValueError(message)
 
-                if not start or not len(value):
-                    # Nothing to check on the lhs.
-                    pass
-                else:
-                    if self._getitem(start - 1) > value[0]:
-                        msg = '{0} not in sort order at index {1}'.format(repr(value[0]), start)
-                        raise ValueError(msg)
-
-                if stop == len(self) or not len(value):
-                    # Nothing to check on the rhs.
-                    pass
-                else:
-                    # "stop" is exclusive so we don't need
-                    # to add one for the index.
-                    if self._getitem(stop) < value[-1]:
-                        msg = '{0} not in sort order at index {1}'.format(repr(value[-1]), stop)
-                        raise ValueError(msg)
+                    if stop != _len and self._getitem(stop) < values[-1]:
+                        message = '%s not in sort order at index %s' % (
+                            repr(values[-1]), stop)
+                        raise ValueError(message)
 
                 # Delete the existing values.
 
@@ -785,7 +777,7 @@ class SortedList(MutableSequence):
                 # Insert the new values.
 
                 _insert = self.insert
-                for idx, val in enumerate(value):
+                for idx, val in enumerate(values):
                     _insert(start + idx, val)
         else:
             pos, loc = _pos(index)
