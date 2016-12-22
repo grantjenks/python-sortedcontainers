@@ -1,6 +1,14 @@
 Sorted Containers Release History
 =================================
 
+1.5.7 (2016-12-22)
+------------------
+
+**Bugfixes**
+
+* Changed ``SortedList.__setitem__`` to support slices with stop less than
+  start and step equal one.
+
 1.5.6 (2016-12-09)
 ------------------
 

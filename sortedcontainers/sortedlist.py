@@ -746,6 +746,12 @@ class SortedList(MutableSequence):
                     self._clear()
                     return self._update(values)
 
+                if stop < start:
+                    # When calculating indices, stop may be less than start.
+                    # For example: ...[5:3:1] results in slice(5, 3, 1) which
+                    # is a valid but not useful stop index.
+                    stop = start
+
                 if values:
 
                     # Check that given values are ordered properly.
