@@ -24,7 +24,8 @@ def test_init():
     sdict = SortedDict()
     sdict._check()
 
-    sdict = SortedDict(load=17)
+    sdict = SortedDict()
+    sdict._reset(17)
     sdict._check()
 
     sdict = SortedDict((val, -val) for val in range(10000))

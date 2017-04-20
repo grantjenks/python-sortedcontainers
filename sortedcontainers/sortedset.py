@@ -16,7 +16,7 @@ class SortedSet(MutableSet, Sequence):
 
     Unlike a `set`, a `SortedSet` requires items be hashable and comparable.
     """
-    def __init__(self, iterable=None, key=None, load=1000, _set=None):
+    def __init__(self, iterable=None, key=None, _set=None):
         """
         A `SortedSet` provides the same methods as a `set`.  Additionally, a
         `SortedSet` maintains its items in sorted order, allowing the
@@ -29,17 +29,9 @@ class SortedSet(MutableSet, Sequence):
         argument to Python's `sorted` function, extracts a comparison key from
         each set item. If no function is specified, the default compares the
         set items directly.
-
-        An optional *load* specifies the load-factor of the set. The default
-        load factor of '1000' works well for sets from tens to tens of millions
-        of elements.  Good practice is to use a value that is the cube root of
-        the set size.  With billions of elements, the best load factor depends
-        on your usage.  It's best to leave the load factor at the default until
-        you start benchmarking.
         """
         # pylint: disable=redefined-variable-type
         self._key = key
-        self._load = load
 
         self._set = set() if _set is None else _set
 
@@ -49,9 +41,9 @@ class SortedSet(MutableSet, Sequence):
         self.issuperset = _set.issuperset
 
         if key is None:
-            self._list = SortedList(self._set, load=load)
+            self._list = SortedList(self._set)
         else:
-            self._list = SortedListWithKey(self._set, key=key, load=load)
+            self._list = SortedListWithKey(self._set, key=key)
 
         _list = self._list
         self.bisect_left = _list.bisect_left
@@ -60,6 +52,7 @@ class SortedSet(MutableSet, Sequence):
         self.index = _list.index
         self.irange = _list.irange
         self.islice = _list.islice
+        self._reset = _list._reset
 
         if key is not None:
             self.bisect_key_left = _list.bisect_key_left
@@ -161,7 +154,7 @@ class SortedSet(MutableSet, Sequence):
 
     def copy(self):
         """Create a shallow copy of the sorted set."""
-        return self.__class__(key=self._key, load=self._load, _set=set(self._set))
+        return self.__class__(key=self._key, _set=set(self._set))
 
     __copy__ = copy
 
@@ -204,7 +197,7 @@ class SortedSet(MutableSet, Sequence):
         *iterables*.
         """
         diff = self._set.difference(*iterables)
-        new_set = self.__class__(key=self._key, load=self._load, _set=diff)
+        new_set = self.__class__(key=self._key, _set=diff)
         return new_set
 
     __sub__ = difference
@@ -235,7 +228,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements common to the set and all *iterables*.
         """
         comb = self._set.intersection(*iterables)
-        new_set = self.__class__(key=self._key, load=self._load, _set=comb)
+        new_set = self.__class__(key=self._key, _set=comb)
         return new_set
 
     __and__ = intersection
@@ -259,7 +252,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements in either *self* or *that* but not both.
         """
         diff = self._set.symmetric_difference(that)
-        new_set = self.__class__(key=self._key, load=self._load, _set=diff)
+        new_set = self.__class__(key=self._key, _set=diff)
         return new_set
 
     __xor__ = symmetric_difference
@@ -283,7 +276,7 @@ class SortedSet(MutableSet, Sequence):
         """
         Return a new SortedSet with elements from the set and all *iterables*.
         """
-        return self.__class__(chain(iter(self), *iterables), key=self._key, load=self._load)
+        return self.__class__(chain(iter(self), *iterables), key=self._key)
 
     __or__ = union
     __ror__ = __or__
@@ -307,16 +300,15 @@ class SortedSet(MutableSet, Sequence):
     _update = update
 
     def __reduce__(self):
-        return (self.__class__, ((), self._key, self._load, self._set))
+        return (self.__class__, ((), self._key, self._set))
 
     @recursive_repr
     def __repr__(self):
-        temp = '{0}({1}, key={2}, load={3})'
+        temp = '{0}({1}, key={2})'
         return temp.format(
             self.__class__.__name__,
             repr(list(self)),
             repr(self._key),
-            repr(self._load)
         )
 
     def _check(self):

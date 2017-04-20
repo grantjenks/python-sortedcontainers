@@ -67,14 +67,6 @@ class SortedDict(dict):
         dict keys directly. The `key` argument must be provided as a positional
         argument and must come before all other arguments.
 
-        An optional *load* argument defines the load factor of the internal list
-        used to maintain sort order. If present, this argument must come before
-        an iterable. The default load factor of '1000' works well for lists from
-        tens to tens of millions of elements.  Good practice is to use a value
-        that is the cube root of the list size.  With billions of elements, the
-        best load factor depends on your usage.  It's best to leave the load
-        factor at the default until you start benchmarking.
-
         An optional *iterable* argument provides an initial series of items to
         populate the SortedDict.  Each item in the series must itself contain
         two items.  The first is used as a key in the new dictionary, and the
@@ -104,16 +96,10 @@ class SortedDict(dict):
         else:
             self._key = None
 
-        if len(args) > 0 and isinstance(args[0], int):
-            self._load = args[0]
-            args = args[1:]
-        else:
-            self._load = 1000
-
         if self._key is None:
-            self._list = SortedList(load=self._load)
+            self._list = SortedList()
         else:
-            self._list = SortedListWithKey(key=self._key, load=self._load)
+            self._list = SortedListWithKey(key=self._key)
 
         # Cache function pointers to dict methods.
 
@@ -141,6 +127,7 @@ class SortedDict(dict):
         self._list_update = _list.update
         self.irange = _list.irange
         self.islice = _list.islice
+        self._reset = _list._reset
 
         if self._key is not None:
             self.bisect_key_left = _list.bisect_key_left
@@ -191,7 +178,7 @@ class SortedDict(dict):
 
     def copy(self):
         """Return a shallow copy of the sorted dictionary."""
-        return self.__class__(self._key, self._load, self._iteritems())
+        return self.__class__(self._key, self._iteritems())
 
     __copy__ = copy
 
@@ -231,7 +218,7 @@ class SortedDict(dict):
     if hexversion < 0x03000000:
         def keys(self):
             """Return a SortedSet of the dictionary's keys."""
-            return SortedSet(self._list, key=self._key, load=self._load)
+            return SortedSet(self._list, key=self._key)
     else:
         def keys(self):
             """
@@ -376,18 +363,17 @@ class SortedDict(dict):
             return ItemsView(self)
 
     def __reduce__(self):
-        return (self.__class__, (self._key, self._load, list(self._iteritems())))
+        return (self.__class__, (self._key, list(self._iteritems())))
 
     @recursive_repr
     def __repr__(self):
-        temp = '{0}({1}, {2}, {{{3}}})'
+        temp = '{0}({1}, {{{2}}})'
         items = ', '.join('{0}: {1}'.format(repr(key), repr(self[key]))
                           for key in self._list)
         return temp.format(
             self.__class__.__name__,
             repr(self._key),
-            repr(self._load),
-            items
+            items,
         )
 
     def _check(self):

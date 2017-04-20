@@ -28,6 +28,8 @@ else:
     except ImportError:
         from _dummy_thread import get_ident # pylint: disable=import-error
 
+LOAD = 1000
+
 def recursive_repr(func):
     """Decorator to prevent infinite repr recursion."""
     repr_running = set()
@@ -55,34 +57,27 @@ class SortedList(MutableSequence):
     in sorted order.
     """
 
-    def __init__(self, iterable=None, load=1000):
+    def __init__(self, iterable=None):
         """
         SortedList provides most of the same methods as a list but keeps the
         items in sorted order.
 
         An optional *iterable* provides an initial series of items to populate
         the SortedList.
-
-        An optional *load* specifies the load-factor of the list. The default
-        load factor of '1000' works well for lists from tens to tens of millions
-        of elements.  Good practice is to use a value that is the cube root of
-        the list size.  With billions of elements, the best load factor depends
-        on your usage.  It's best to leave the load factor at the default until
-        you start benchmarking.
         """
         self._len = 0
         self._lists = []
         self._maxes = []
         self._index = []
-        self._load = load
-        self._twice = load * 2
-        self._half = load >> 1
+        self._load = LOAD
+        self._half = LOAD >> 1
+        self._dual = LOAD << 1
         self._offset = 0
 
         if iterable is not None:
             self._update(iterable)
 
-    def __new__(cls, iterable=None, key=None, load=1000):
+    def __new__(cls, iterable=None, key=None):
         """
         SortedList provides most of the same methods as a list but keeps the
         items in sorted order.
@@ -92,13 +87,6 @@ class SortedList(MutableSequence):
 
         An optional *key* argument will return an instance of subtype
         SortedListWithKey.
-
-        An optional *load* specifies the load-factor of the list. The default
-        load factor of '1000' works well for lists from tens to tens of millions
-        of elements.  Good practice is to use a value that is the cube root of
-        the list size.  With billions of elements, the best load factor depends
-        on your usage.  It's best to leave the load factor at the default until
-        you start benchmarking.
         """
         # pylint: disable=unused-argument
         if key is None:
@@ -108,6 +96,24 @@ class SortedList(MutableSequence):
                 return object.__new__(SortedListWithKey)
             else:
                 raise TypeError('inherit SortedListWithKey for key argument')
+
+    def _reset(self, load):
+        """
+        Reset sorted list load.
+
+        The *load* specifies the load-factor of the list. The default load
+        factor of '1000' works well for lists from tens to tens of millions of
+        elements.  Good practice is to use a value that is the cube root of the
+        list size.  With billions of elements, the best load factor depends on
+        your usage.  It's best to leave the load factor at the default until
+        you start benchmarking.
+        """
+        values = reduce(iadd, self._lists, [])
+        self._clear()
+        self._load = load
+        self._half = load >> 1
+        self._dual = load << 1
+        self._update(values)
 
     def clear(self):
         """Remove all the elements from the list."""
@@ -151,7 +157,7 @@ class SortedList(MutableSequence):
         _lists = self._lists
         _index = self._index
 
-        if len(_lists[pos]) > self._twice:
+        if len(_lists[pos]) > self._dual:
             _maxes = self._maxes
             _load = self._load
 
@@ -1030,7 +1036,7 @@ class SortedList(MutableSequence):
 
     def copy(self):
         """Return a shallow copy of the sorted list."""
-        return self.__class__(self, load=self._load)
+        return self.__class__(self)
 
     __copy__ = copy
 
@@ -1281,7 +1287,7 @@ class SortedList(MutableSequence):
         """
         values = reduce(iadd, self._lists, [])
         values.extend(that)
-        return self.__class__(values, load=self._load)
+        return self.__class__(values)
 
     def __iadd__(self, that):
         """
@@ -1297,7 +1303,7 @@ class SortedList(MutableSequence):
         in SortedList.
         """
         values = reduce(iadd, self._lists, []) * that
-        return self.__class__(values, load=self._load)
+        return self.__class__(values)
 
     def __imul__(self, that):
         """
@@ -1348,11 +1354,10 @@ class SortedList(MutableSequence):
     @recursive_repr
     def __repr__(self):
         """Return string representation of sequence."""
-        temp = '{0}({1}, load={2})'
+        temp = '{0}({1})'
         return temp.format(
             self.__class__.__name__,
             repr(list(self)),
-            repr(self._load)
         )
 
     def _check(self):
@@ -1361,7 +1366,7 @@ class SortedList(MutableSequence):
 
             assert self._load >= 4
             assert self._half == (self._load >> 1)
-            assert self._twice == (self._load * 2)
+            assert self._dual == (self._load << 1)
 
             # Check empty sorted list case.
 
@@ -1391,9 +1396,9 @@ class SortedList(MutableSequence):
             assert all(self._maxes[pos] == self._lists[pos][-1]
                        for pos in range(len(self._maxes)))
 
-            # Check load level is less than _twice.
+            # Check load level is less than _dual.
 
-            assert all(len(sublist) <= self._twice for sublist in self._lists)
+            assert all(len(sublist) <= self._dual for sublist in self._lists)
 
             # Check load level is greater than _half for all
             # but the last sublist.
@@ -1436,7 +1441,7 @@ class SortedList(MutableSequence):
             traceback.print_exc(file=sys.stdout)
 
             print('len', self._len)
-            print('load', self._load, self._half, self._twice)
+            print('load', self._load, self._half, self._dual)
             print('offset', self._offset)
             print('len_index', len(self._index))
             print('index', self._index)
@@ -1457,7 +1462,7 @@ class SortedListWithKey(SortedList):
     the items in sorted order.
     """
 
-    def __init__(self, iterable=None, key=identity, load=1000):
+    def __init__(self, iterable=None, key=identity):
         """SortedListWithKey provides most of the same methods as list but keeps the
         items in sorted order.
 
@@ -1467,14 +1472,6 @@ class SortedListWithKey(SortedList):
         An optional *key* argument defines a callable that, like the `key`
         argument to Python's `sorted` function, extracts a comparison key from
         each element. The default is the identity function.
-
-        An optional *load* specifies the load-factor of the list. The default
-        load factor of '1000' works well for lists from tens to tens of millions
-        of elements.  Good practice is to use a value that is the cube root of
-        the list size.  With billions of elements, the best load factor depends
-        on your usage.  It's best to leave the load factor at the default until
-        you start benchmarking.
-
         """
         # pylint: disable=super-init-not-called
         self._len = 0
@@ -1483,15 +1480,15 @@ class SortedListWithKey(SortedList):
         self._maxes = []
         self._index = []
         self._key = key
-        self._load = load
-        self._twice = load * 2
-        self._half = load >> 1
+        self._load = LOAD
+        self._half = LOAD >> 1
+        self._dual = LOAD << 1
         self._offset = 0
 
         if iterable is not None:
             self._update(iterable)
 
-    def __new__(cls, iterable=None, key=identity, load=1000):
+    def __new__(cls, iterable=None, key=identity):
         return object.__new__(cls)
 
     def clear(self):
@@ -1545,7 +1542,7 @@ class SortedListWithKey(SortedList):
         _keys = self._keys
         _index = self._index
 
-        if len(_keys[pos]) > self._twice:
+        if len(_keys[pos]) > self._dual:
             _maxes = self._maxes
             _load = self._load
 
@@ -2124,7 +2121,7 @@ class SortedListWithKey(SortedList):
 
     def copy(self):
         """Return a shallow copy of the sorted list."""
-        return self.__class__(self, key=self._key, load=self._load)
+        return self.__class__(self, key=self._key)
 
     __copy__ = copy
 
@@ -2350,7 +2347,7 @@ class SortedListWithKey(SortedList):
         """
         values = reduce(iadd, self._lists, [])
         values.extend(that)
-        return self.__class__(values, key=self._key, load=self._load)
+        return self.__class__(values, key=self._key)
 
     def __mul__(self, that):
         """
@@ -2358,7 +2355,7 @@ class SortedListWithKey(SortedList):
         in SortedListWithKey.
         """
         values = reduce(iadd, self._lists, []) * that
-        return self.__class__(values, key=self._key, load=self._load)
+        return self.__class__(values, key=self._key)
 
     def __imul__(self, that):
         """
@@ -2373,12 +2370,11 @@ class SortedListWithKey(SortedList):
     @recursive_repr
     def __repr__(self):
         """Return string representation of sequence."""
-        temp = '{0}({1}, key={2}, load={3})'
+        temp = '{0}({1}, key={2})'
         return temp.format(
             self.__class__.__name__,
             repr(list(self)),
             repr(self._key),
-            repr(self._load)
         )
 
     def _check(self):
@@ -2387,7 +2383,7 @@ class SortedListWithKey(SortedList):
 
             assert self._load >= 4
             assert self._half == (self._load >> 1)
-            assert self._twice == (self._load * 2)
+            assert self._dual == (self._load << 1)
 
             # Check empty sorted list case.
 
@@ -2426,9 +2422,9 @@ class SortedListWithKey(SortedList):
             assert all(self._maxes[pos] == self._keys[pos][-1]
                        for pos in range(len(self._maxes)))
 
-            # Check load level is less than _twice.
+            # Check load level is less than _dual.
 
-            assert all(len(sublist) <= self._twice for sublist in self._lists)
+            assert all(len(sublist) <= self._dual for sublist in self._lists)
 
             # Check load level is greater than _half for all
             # but the last sublist.
@@ -2471,7 +2467,7 @@ class SortedListWithKey(SortedList):
             traceback.print_exc(file=sys.stdout)
 
             print('len', self._len)
-            print('load', self._load, self._half, self._twice)
+            print('load', self._load, self._half, self._dual)
             print('offset', self._offset)
             print('len_index', len(self._index))
             print('index', self._index)

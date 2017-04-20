@@ -97,7 +97,8 @@ def test_iter():
     assert all(lhs == rhs for lhs, rhs in zip(temp, string.ascii_lowercase))
 
 def test_iter_key():
-    temp = SortedDict(negate, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(negate, ((val, val) for val in range(100)))
+    temp._reset(7)
     assert all(lhs == rhs for lhs, rhs in zip(temp, reversed(range(100))))
 
 def test_reversed():
@@ -107,13 +108,15 @@ def test_reversed():
                zip(reversed(temp), reversed(string.ascii_lowercase)))
 
 def test_reversed_key():
-    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(modulo, ((val, val) for val in range(100)))
+    temp._reset(7)
     values = sorted(range(100), key=modulo)
     assert all(lhs == rhs for lhs, rhs in zip(reversed(temp), reversed(values)))
 
 def test_islice():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(7, mapping)
+    temp = SortedDict(mapping)
+    temp._reset(7)
 
     for start in range(30):
         for stop in range(30):
@@ -121,14 +124,16 @@ def test_islice():
 
 def test_irange():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(7, mapping)
+    temp = SortedDict(mapping)
+    temp._reset(7)
     for start in range(26):
         for stop in range(start + 1, 26):
             result = list(string.ascii_lowercase[start:stop])
             assert list(temp.irange(result[0], result[-1])) == result
 
 def test_irange_key():
-    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(modulo, ((val, val) for val in range(100)))
+    temp._reset(7)
     values = sorted(range(100), key=modulo)
 
     for start in range(10):
@@ -289,18 +294,18 @@ def test_update2():
 
 def test_repr():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
-    assert repr(temp) == "SortedDict(None, 1000, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "SortedDict(None, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 def test_repr_recursion():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
     temp['bob'] = temp
-    assert repr(temp) == "SortedDict(None, 1000, {'alice': 3, 'bob': ..., 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "SortedDict(None, {'alice': 3, 'bob': ..., 'carol': 2, 'dave': 4})"
 
 def test_repr_subclass():
     class CustomSortedDict(SortedDict):
         pass
     temp = CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
-    assert repr(temp) == "CustomSortedDict(None, 1000, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
+    assert repr(temp) == "CustomSortedDict(None, {'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -320,7 +325,8 @@ def test_index():
     assert temp.index('f', 3, -3) == 5
 
 def test_index_key():
-    temp = SortedDict(negate, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(negate, ((val, val) for val in range(100)))
+    temp._reset(7)
     assert all(temp.index(val) == (99 - val) for val in range(100))
 
 def test_bisect():
@@ -331,13 +337,15 @@ def test_bisect():
     assert temp.bisect('f') == 6
 
 def test_bisect_key():
-    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(modulo, ((val, val) for val in range(100)))
+    temp._reset(7)
     assert all(temp.bisect(val) == ((val % 10) + 1) * 10 for val in range(100))
     assert all(temp.bisect_right(val) == ((val % 10) + 1) * 10 for val in range(100))
     assert all(temp.bisect_left(val) == (val % 10) * 10 for val in range(100))
 
 def test_bisect_key2():
-    temp = SortedDict(modulo, 7, ((val, val) for val in range(100)))
+    temp = SortedDict(modulo, ((val, val) for val in range(100)))
+    temp._reset(7)
     assert all(temp.bisect_key(val) == ((val % 10) + 1) * 10 for val in range(10))
     assert all(temp.bisect_key_right(val) == ((val % 10) + 1) * 10 for val in range(10))
     assert all(temp.bisect_key_left(val) == (val % 10) * 10 for val in range(10))
@@ -546,11 +554,11 @@ def test_itemsview():
 
 def test_pickle():
     import pickle
-    alpha = SortedDict(negate, 500, zip(range(10000), range(10000)))
+    alpha = SortedDict(negate, zip(range(10000), range(10000)))
+    alpha._reset(500)
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
     assert alpha._key == beta._key
-    assert alpha._load == beta._load
 
 if __name__ == '__main__':
     import nose
