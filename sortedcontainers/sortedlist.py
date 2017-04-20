@@ -1806,13 +1806,13 @@ class SortedListWithKey(SortedList):
                 raise ValueError(msg)
 
     def __setitem__(self, index, value):
-        """
-        Replace the item at position *index* with *value*.
+        """Replace the item at position *index* with *value*.
 
         Supports slice notation. Raises a :exc:`ValueError` if the sort order
         would be violated. When used with a slice and iterable, the
-        :exc:`ValueError` is raised before the list is mutated if the sort order
-        would be violated by the operation.
+        :exc:`ValueError` is raised before the list is mutated if the sort
+        order would be violated by the operation.
+
         """
         _lists = self._lists
         _keys = self._keys
@@ -1821,20 +1821,21 @@ class SortedListWithKey(SortedList):
         _pos = self._pos
 
         if isinstance(index, slice):
-            start, stop, step = index.indices(self._len)
+            _len = self._len
+            start, stop, step = index.indices(_len)
             indices = range(start, stop, step)
 
+            # Copy value to avoid aliasing issues with self and cases where an
+            # iterator is given.
+
+            values = tuple(value)
+
             if step != 1:
-                if not hasattr(value, '__len__'):
-                    value = list(value)
-
-                indices = list(indices)
-
-                if len(value) != len(indices):
+                if len(values) != len(indices):
                     raise ValueError(
-                        'attempt to assign sequence of size {0}'
-                        ' to extended slice of size {1}'
-                        .format(len(value), len(indices)))
+                        'attempt to assign sequence of size %s'
+                        ' to extended slice of size %s'
+                        % (len(values), len(indices)))
 
                 # Keep a log of values that are set so that we can
                 # roll back changes if ordering is violated.
@@ -1842,7 +1843,7 @@ class SortedListWithKey(SortedList):
                 log = []
                 _append = log.append
 
-                for idx, val in zip(indices, value):
+                for idx, val in zip(indices, values):
                     pos, loc = _pos(idx)
                     key = self._key(val)
                     _append((idx, _keys[pos][loc], key, _lists[pos][loc], val))
@@ -1872,43 +1873,42 @@ class SortedListWithKey(SortedList):
             else:
                 if start == 0 and stop == self._len:
                     self._clear()
-                    return self._update(value)
+                    return self._update(values)
 
-                # Test ordering using indexing. If the given value
-                # isn't a Sequence, convert it to a tuple.
+                if stop < start:
+                    # When calculating indices, stop may be less than start.
+                    # For example: ...[5:3:1] results in slice(5, 3, 1) which
+                    # is a valid but not useful stop index.
+                    stop = start
 
-                if not isinstance(value, Sequence):
-                    value = tuple(value) # pylint: disable=redefined-variable-type
+                if values:
 
-                # Check that the given values are ordered properly.
+                    # Check that given values are ordered properly.
 
-                keys = tuple(map(self._key, value))
-                iterator = range(1, len(keys))
+                    keys = tuple(map(self._key, values))
+                    alphas = iter(keys)
+                    betas = iter(keys)
+                    next(betas)
+                    pairs = zip(alphas, betas)
 
-                if not all(keys[pos - 1] <= keys[pos] for pos in iterator):
-                    raise ValueError('given sequence not in sort order')
+                    if not all(alpha <= beta for alpha, beta in pairs):
+                        raise ValueError('given values not in sort order')
 
-                # Check ordering in context of sorted list.
+                    # Check ordering in context of sorted list.
 
-                if not start or not len(value):
-                    # Nothing to check on the lhs.
-                    pass
-                else:
-                    pos, loc = _pos(start - 1)
-                    if _keys[pos][loc] > keys[0]:
-                        msg = '{0} not in sort order at index {1}'.format(repr(value[0]), start)
-                        raise ValueError(msg)
+                    if start:
+                        pos, loc = _pos(start - 1)
+                        if _keys[pos][loc] > keys[0]:
+                            msg = '%r not in sort order at index %s' % (
+                                values[0], start)
+                            raise ValueError(msg)
 
-                if stop == len(self) or not len(value):
-                    # Nothing to check on the rhs.
-                    pass
-                else:
-                    # "stop" is exclusive so we don't need
-                    # to add one for the index.
-                    pos, loc = _pos(stop)
-                    if _keys[pos][loc] < keys[-1]:
-                        msg = '{0} not in sort order at index {1}'.format(repr(value[-1]), stop)
-                        raise ValueError(msg)
+                    if stop != _len:
+                        pos, loc = _pos(stop)
+                        if _keys[pos][loc] < keys[-1]:
+                            msg = '%r not in sort order at index %s' % (
+                                values[-1], stop)
+                            raise ValueError(msg)
 
                 # Delete the existing values.
 
@@ -1917,7 +1917,7 @@ class SortedListWithKey(SortedList):
                 # Insert the new values.
 
                 _insert = self.insert
-                for idx, val in enumerate(value):
+                for idx, val in enumerate(values):
                     _insert(start + idx, val)
         else:
             pos, loc = _pos(index)
