@@ -367,14 +367,12 @@ class SortedDict(dict):
 
     @recursive_repr
     def __repr__(self):
-        temp = '{0}({1}, {{{2}}})'
-        items = ', '.join('{0}: {1}'.format(repr(key), repr(self[key]))
-                          for key in self._list)
-        return temp.format(
-            self.__class__.__name__,
-            repr(self._key),
-            items,
-        )
+        _key = self._key
+        name = type(self).__name__
+        key = '' if _key is None else '{0!r}, '.format(_key)
+        func = '{0!r}: {1!r}'.format
+        items = ', '.join(func(key, self[key]) for key in self._list)
+        return '{0}({1}{{{2}}})'.format(name, key, items)
 
     def _check(self):
         # pylint: disable=protected-access
@@ -489,7 +487,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
             return self._view.isdisjoint(that)
     @recursive_repr
     def __repr__(self):
-        return 'SortedDict_keys({0})'.format(repr(list(self)))
+        return 'SortedDict_keys({0!r})'.format(list(self))
 
 
 class ValuesView(AbstractValuesView, Sequence):
@@ -569,7 +567,7 @@ class ValuesView(AbstractValuesView, Sequence):
         for idx, val in enumerate(self):
             if value == val:
                 return idx
-        raise ValueError('{0} is not in dict'.format(repr(value)))
+        raise ValueError('{0!r} is not in dict'.format(value))
     if hexversion < 0x03000000:
         def count(self, value):
             """Return the number of occurrences of *value* in self."""
@@ -596,7 +594,7 @@ class ValuesView(AbstractValuesView, Sequence):
         raise TypeError
     @recursive_repr
     def __repr__(self):
-        return 'SortedDict_values({0})'.format(repr(list(self)))
+        return 'SortedDict_values({0!r})'.format(list(self))
 
 
 class ItemsView(AbstractItemsView, Set, Sequence):
@@ -679,7 +677,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         if value == self._dict[temp]:
             return pos
         else:
-            raise ValueError('{0} is not in dict'.format(repr(key)))
+            raise ValueError('{0!r} is not in dict'.format(key))
     def count(self, item):
         """Return the number of occurrences of *item* in the set."""
         key, value = item
@@ -728,4 +726,4 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             return self._view.isdisjoint(that)
     @recursive_repr
     def __repr__(self):
-        return 'SortedDict_items({0})'.format(repr(list(self)))
+        return 'SortedDict_items({0!r})'.format(list(self))

@@ -304,12 +304,10 @@ class SortedSet(MutableSet, Sequence):
 
     @recursive_repr
     def __repr__(self):
-        temp = '{0}({1}, key={2})'
-        return temp.format(
-            self.__class__.__name__,
-            repr(list(self)),
-            repr(self._key),
-        )
+        _key = self._key
+        key = '' if _key is None else ', key={0!r}'.format(_key)
+        name = type(self).__name__
+        return '{0}({1!r}{2})'.format(name, list(self), key)
 
     def _check(self):
         # pylint: disable=protected-access

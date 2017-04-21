@@ -444,10 +444,16 @@ def test_ior():
     temp |= range(90, 100)
     assert all(temp[val] == val for val in range(100))
 
+class Identity(object):
+    def __call__(self, value):
+        return value
+    def __repr__(self):
+        return 'identity'
+
 def test_repr():
-    temp = SortedSet(range(0, 10))
+    temp = SortedSet(range(0, 10), key=Identity())
     temp._reset(7)
-    assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=None)'
+    assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=identity)'
 
 def test_repr_recursion():
     class HashableSortedSet(SortedSet):
@@ -456,7 +462,7 @@ def test_repr_recursion():
 
     temp = HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2])])
     temp.add(temp)
-    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1], key=None), HashableSortedSet([1, 2], key=None), ...], key=None)'
+    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2]), ...])'
 
 def test_pickle():
     import pickle
