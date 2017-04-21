@@ -16,7 +16,7 @@ class SortedSet(MutableSet, Sequence):
 
     Unlike a `set`, a `SortedSet` requires items be hashable and comparable.
     """
-    def __init__(self, iterable=None, key=None, _set=None):
+    def __init__(self, iterable=None, key=None):
         """
         A `SortedSet` provides the same methods as a `set`.  Additionally, a
         `SortedSet` maintains its items in sorted order, allowing the
@@ -33,7 +33,8 @@ class SortedSet(MutableSet, Sequence):
         # pylint: disable=redefined-variable-type
         self._key = key
 
-        self._set = set() if _set is None else _set
+        if not hasattr(self, '_set'):
+            self._set = set()
 
         _set = self._set
         self.isdisjoint = _set.isdisjoint
@@ -62,6 +63,14 @@ class SortedSet(MutableSet, Sequence):
 
         if iterable is not None:
             self._update(iterable)
+
+    @classmethod
+    def _fromset(cls, values, key=None):
+        """Initialize sorted set from existing set."""
+        sorted_set = object.__new__(cls)
+        sorted_set._set = values
+        sorted_set.__init__(key=key)
+        return sorted_set
 
     def __contains__(self, value):
         """Return True if and only if *value* is an element in the set."""
@@ -154,7 +163,7 @@ class SortedSet(MutableSet, Sequence):
 
     def copy(self):
         """Create a shallow copy of the sorted set."""
-        return self.__class__(key=self._key, _set=set(self._set))
+        return self._fromset(set(self._set), key=self._key)
 
     __copy__ = copy
 
@@ -197,8 +206,7 @@ class SortedSet(MutableSet, Sequence):
         *iterables*.
         """
         diff = self._set.difference(*iterables)
-        new_set = self.__class__(key=self._key, _set=diff)
-        return new_set
+        return self._fromset(diff, key=self._key)
 
     __sub__ = difference
     __rsub__ = __sub__
@@ -228,8 +236,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements common to the set and all *iterables*.
         """
         comb = self._set.intersection(*iterables)
-        new_set = self.__class__(key=self._key, _set=comb)
-        return new_set
+        return self._fromset(comb, key=self._key)
 
     __and__ = intersection
     __rand__ = __and__
@@ -252,8 +259,7 @@ class SortedSet(MutableSet, Sequence):
         Return a new set with elements in either *self* or *that* but not both.
         """
         diff = self._set.symmetric_difference(that)
-        new_set = self.__class__(key=self._key, _set=diff)
-        return new_set
+        return self._fromset(diff, key=self._key)
 
     __xor__ = symmetric_difference
     __rxor__ = __xor__
@@ -300,7 +306,7 @@ class SortedSet(MutableSet, Sequence):
     _update = update
 
     def __reduce__(self):
-        return (self.__class__, ((), self._key, self._set))
+        return (type(self), (self._set, self._key))
 
     @recursive_repr
     def __repr__(self):
