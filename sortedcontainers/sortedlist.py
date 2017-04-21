@@ -97,6 +97,11 @@ class SortedList(MutableSequence):
             else:
                 raise TypeError('inherit SortedListWithKey for key argument')
 
+    @property
+    def key(self):
+        """Key function used to extract comparison key for sorting."""
+        return None
+
     def _reset(self, load):
         """
         Reset sorted list load.
@@ -1486,6 +1491,11 @@ class SortedListWithKey(SortedList):
 
     def __new__(cls, iterable=None, key=identity):
         return object.__new__(cls)
+
+    @property
+    def key(self):
+        """Key function used to extract comparison key for sorting."""
+        return self._key
 
     def clear(self):
         """Remove all the elements from the list."""

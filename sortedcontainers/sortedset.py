@@ -64,6 +64,11 @@ class SortedSet(MutableSet, Sequence):
         if iterable is not None:
             self._update(iterable)
 
+    @property
+    def key(self):
+        """Key function used to extract comparison key for sorting."""
+        return self._key
+
     @classmethod
     def _fromset(cls, values, key=None):
         """Initialize sorted set from existing set."""

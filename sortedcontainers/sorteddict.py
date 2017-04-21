@@ -139,6 +139,11 @@ class SortedDict(dict):
 
         self._update(*args, **kwargs)
 
+    @property
+    def key(self):
+        """Key function used to extract comparison key for sorting."""
+        return self._key
+
     def clear(self):
         """Remove all elements from the dictionary."""
         self._clear()
