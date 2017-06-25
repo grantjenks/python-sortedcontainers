@@ -8,7 +8,7 @@ import operator as op
 
 from .sortedlist import SortedList, recursive_repr, SortedListWithKey
 
-class SortedSet(MutableSet, Sequence):
+class SortedSet(MutableSet, Sequence):  # pylint: disable=too-many-ancestors
     """
     A `SortedSet` provides the same methods as a `set`.  Additionally, a
     `SortedSet` maintains its items in sorted order, allowing the `SortedSet` to
@@ -37,7 +37,6 @@ class SortedSet(MutableSet, Sequence):
         on your usage.  It's best to leave the load factor at the default until
         you start benchmarking.
         """
-        # pylint: disable=redefined-variable-type
         self._key = key
         self._load = load
 
@@ -107,8 +106,7 @@ class SortedSet(MutableSet, Sequence):
                 return set_op(self._set, that._set)
             elif isinstance(that, Set):
                 return set_op(self._set, that)
-            else:
-                return NotImplemented
+            return NotImplemented
 
         comparer.__name__ = '__{0}__'.format(set_op.__name__)
         doc_str = 'Return True if and only if Set is {0} `that`.'

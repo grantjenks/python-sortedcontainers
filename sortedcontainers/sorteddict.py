@@ -97,14 +97,14 @@ class SortedDict(dict):
         identifiers; the others work with any valid keys.
 
         """
-        # pylint: disable=super-init-not-called, redefined-variable-type
-        if len(args) > 0 and (args[0] is None or callable(args[0])):
+        # pylint: disable=super-init-not-called
+        if args and (args[0] is None or callable(args[0])):
             self._key = args[0]
             args = args[1:]
         else:
             self._key = None
 
-        if len(args) > 0 and isinstance(args[0], int):
+        if args and isinstance(args[0], int):
             self._load = args[0]
             args = args[1:]
         else:
@@ -298,7 +298,7 @@ class SortedDict(dict):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        if not len(self):
+        if not self:
             raise KeyError('popitem(): dictionary is empty')
 
         key = self._list_pop(-1 if last else 0)
@@ -327,10 +327,9 @@ class SortedDict(dict):
         """
         if key in self:
             return self[key]
-        else:
-            self._setitem(key, default)
-            self._list_add(key)
-            return default
+        self._setitem(key, default)
+        self._list_add(key)
+        return default
 
     def update(self, *args, **kwargs):
         """
@@ -342,12 +341,12 @@ class SortedDict(dict):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        if not len(self):
+        if not self:
             self._dict_update(*args, **kwargs)
             self._list_update(self._iter())
             return
 
-        if len(kwargs) == 0 and len(args) == 1 and isinstance(args[0], dict):
+        if not kwargs and len(args) == 1 and isinstance(args[0], dict):
             pairs = args[0]
         else:
             pairs = dict(*args, **kwargs)
@@ -397,7 +396,7 @@ class SortedDict(dict):
         assert all(key in self for key in self._list)
 
 
-class KeysView(AbstractKeysView, Set, Sequence):
+class KeysView(AbstractKeysView, Set, Sequence):    # pylint: disable=too-many-ancestors
     """
     A KeysView object is a dynamic view of the dictionary's keys, which
     means that when the dictionary's keys change, the view reflects
@@ -494,11 +493,11 @@ class KeysView(AbstractKeysView, Set, Sequence):
         """Return a SortedSet of the symmetric difference of self and *that*."""
         return SortedSet(self._view ^ that)
     if hexversion < 0x03000000:
-        def isdisjoint(self, that):
+        def isdisjoint(self, that):     # pylint: disable=arguments-differ
             """Return True if and only if *that* is disjoint with self."""
             return not any(key in self._list for key in that)
     else:
-        def isdisjoint(self, that):
+        def isdisjoint(self, that):     # pylint: disable=arguments-differ
             """Return True if and only if *that* is disjoint with self."""
             return self._view.isdisjoint(that)
     @recursive_repr
@@ -506,7 +505,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
         return 'SortedDict_keys({0})'.format(repr(list(self)))
 
 
-class ValuesView(AbstractValuesView, Sequence):
+class ValuesView(AbstractValuesView, Sequence):  # pylint: disable=too-many-ancestors
     """
     A ValuesView object is a dynamic view of the dictionary's values, which
     means that when the dictionary's values change, the view reflects those
@@ -562,8 +561,7 @@ class ValuesView(AbstractValuesView, Sequence):
         _dict, _list = self._dict, self._list
         if isinstance(index, slice):
             return [_dict[key] for key in _list[index]]
-        else:
-            return _dict[_list[index]]
+        return _dict[_list[index]]
     def __reversed__(self):
         """
         Return a reverse iterator over the values in the dictionary.  Values are
@@ -574,7 +572,7 @@ class ValuesView(AbstractValuesView, Sequence):
         """
         _dict = self._dict
         return iter(_dict[key] for key in reversed(self._list))
-    def index(self, value):
+    def index(self, value):     # pylint: disable=arguments-differ
         """
         Return index of *value* in self.
 
@@ -613,7 +611,7 @@ class ValuesView(AbstractValuesView, Sequence):
         return 'SortedDict_values({0})'.format(repr(list(self)))
 
 
-class ItemsView(AbstractItemsView, Set, Sequence):
+class ItemsView(AbstractItemsView, Set, Sequence):  # pylint: disable=too-many-ancestors
     """
     An ItemsView object is a dynamic view of the dictionary's ``(key,
     value)`` pairs, which means that when the dictionary changes, the
@@ -667,9 +665,8 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         _dict, _list = self._dict, self._list
         if isinstance(index, slice):
             return [(key, _dict[key]) for key in _list[index]]
-        else:
-            key = _list[index]
-            return (key, _dict[key])
+        key = _list[index]
+        return (key, _dict[key])
     def __reversed__(self):
         """
         Return a reversed iterable over the items in the dictionary. Items are
@@ -694,7 +691,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             return pos
         else:
             raise ValueError('{0} is not in dict'.format(repr(key)))
-    def count(self, item):
+    def count(self, item):     # pylint: disable=arguments-differ
         """Return the number of occurrences of *item* in the set."""
         key, value = item
         return 1 if key in self._dict and self._dict[key] == value else 0
@@ -729,7 +726,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         """Return a SortedSet of the symmetric difference of self and *that*."""
         return SortedSet(self._view ^ that)
     if hexversion < 0x03000000:
-        def isdisjoint(self, that):
+        def isdisjoint(self, that):     # pylint: disable=arguments-differ
             """Return True if and only if *that* is disjoint with self."""
             _dict = self._dict
             for key, value in that:
@@ -737,7 +734,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
                     return False
             return True
     else:
-        def isdisjoint(self, that):
+        def isdisjoint(self, that):     # pylint: disable=arguments-differ
             """Return True if and only if *that* is disjoint with self."""
             return self._view.isdisjoint(that)
     @recursive_repr
