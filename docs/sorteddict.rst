@@ -232,7 +232,9 @@ best way to get started.
 
    .. method:: d.has_key(key)
 
-      Return True iff *key* is in the dictionary.
+      In Python 2, Return True iff *key* is in the dictionary.
+      
+      In Python 3, this function does not exist.
 
       :rtype: :class:`bool`
 
