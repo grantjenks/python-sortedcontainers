@@ -115,7 +115,7 @@ best way to get started.
 
    .. method:: d.clear()
 
-      Remove all elements from the dictionary.
+      Remove all elements from the sorted dictionary.
 
    .. method:: d.copy()
 
@@ -225,10 +225,6 @@ best way to get started.
       the :class:`ValuesView` is indexable (e.g., ``d.values()[5]``).
 
       :rtype: :class:`list` or :class:`ValuesView`
-
-   .. method:: d.clear()
-
-      Remove all the elements from the sorted dictionary.
 
    .. method:: d.has_key(key)
 
