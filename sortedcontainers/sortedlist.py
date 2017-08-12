@@ -15,8 +15,8 @@ from operator import iadd, add
 from sys import hexversion
 
 if hexversion < 0x03000000:
-    from itertools import izip as zip
-    from itertools import imap as map
+    from itertools import izip as zip  # pylint: disable=no-name-in-module
+    from itertools import imap as map  # pylint: disable=no-name-in-module
     try:
         from thread import get_ident
     except ImportError:
@@ -56,7 +56,7 @@ class SortedList(MutableSequence):
     SortedList provides most of the same methods as a list but keeps the items
     in sorted order.
     """
-
+    # pylint: disable=too-many-ancestors
     def __init__(self, iterable=None):
         """
         SortedList provides most of the same methods as a list but keeps the
@@ -254,6 +254,7 @@ class SortedList(MutableSequence):
 
         Raises ValueError if *val* is not present.
         """
+        # pylint: disable=arguments-differ
         _maxes = self._maxes
 
         if not _maxes:
@@ -885,13 +886,13 @@ class SortedList(MutableSequence):
                 chain.from_iterable(_lists[(min_pos + 1):max_pos]),
                 _lists[max_pos][:max_idx],
             )
-        else:
-            temp = map(reversed, reversed(_lists[(min_pos + 1):max_pos]))
-            return chain(
-                reversed(_lists[max_pos][:max_idx]),
-                chain.from_iterable(temp),
-                reversed(_lists[min_pos][min_idx:]),
-            )
+
+        temp = map(reversed, reversed(_lists[(min_pos + 1):max_pos]))
+        return chain(
+            reversed(_lists[max_pos][:max_idx]),
+            chain.from_iterable(temp),
+            reversed(_lists[min_pos][min_idx:]),
+        )
 
     def irange(self, minimum=None, maximum=None, inclusive=(True, True),
                reverse=False):
@@ -1012,6 +1013,7 @@ class SortedList(MutableSequence):
 
     def count(self, val):
         """Return the number of occurrences of *val* in the list."""
+        # pylint: disable=arguments-differ
         _maxes = self._maxes
 
         if not _maxes:
@@ -1050,6 +1052,7 @@ class SortedList(MutableSequence):
         Append the element *val* to the list. Raises a ValueError if the *val*
         would violate the sort order.
         """
+        # pylint: disable=arguments-differ
         _lists = self._lists
         _maxes = self._maxes
 
@@ -1128,6 +1131,7 @@ class SortedList(MutableSequence):
         Insert the element *val* into the list at *idx*. Raises a ValueError if
         the *val* at *idx* would violate the sort order.
         """
+        # pylint: disable=arguments-differ
         _len = self._len
         _lists = self._lists
         _maxes = self._maxes
@@ -1191,6 +1195,7 @@ class SortedList(MutableSequence):
         list is empty or index is out of range.  Negative indices are supported,
         as for slice indices.
         """
+        # pylint: disable=arguments-differ
         if not self._len:
             raise IndexError('pop index out of range')
 
@@ -1375,7 +1380,7 @@ class SortedList(MutableSequence):
                 assert self._lists == []
                 return
 
-            assert len(self._maxes) > 0 and len(self._lists) > 0
+            assert self._maxes and self._lists
 
             # Check all sublists are sorted.
 
@@ -1413,7 +1418,7 @@ class SortedList(MutableSequence):
 
             # Check index.
 
-            if len(self._index):
+            if self._index:
                 assert len(self._index) == self._offset + len(self._lists)
                 assert self._len == self._index[0]
 
@@ -1462,7 +1467,7 @@ class SortedListWithKey(SortedList):
     SortedListWithKey provides most of the same methods as a list but keeps
     the items in sorted order.
     """
-
+    # pylint: disable=too-many-ancestors
     def __init__(self, iterable=None, key=identity):
         """SortedListWithKey provides most of the same methods as list but keeps the
         items in sorted order.
@@ -1820,6 +1825,7 @@ class SortedListWithKey(SortedList):
         order would be violated by the operation.
 
         """
+        # pylint: disable=too-many-locals
         _lists = self._lists
         _keys = self._keys
         _maxes = self._maxes
@@ -2136,6 +2142,7 @@ class SortedListWithKey(SortedList):
         Append the element *val* to the list. Raises a ValueError if the *val*
         would violate the sort order.
         """
+        # pylint: disable=arguments-differ
         _lists = self._lists
         _keys = self._keys
         _maxes = self._maxes
@@ -2396,7 +2403,7 @@ class SortedListWithKey(SortedList):
                 assert self._lists == []
                 return
 
-            assert len(self._maxes) > 0 and len(self._keys) > 0 and len(self._lists) > 0
+            assert self._maxes and self._keys and self._lists
 
             # Check all sublists are sorted.
 
@@ -2442,7 +2449,7 @@ class SortedListWithKey(SortedList):
 
             # Check index.
 
-            if len(self._index):
+            if self._index:
                 assert len(self._index) == self._offset + len(self._lists)
                 assert self._len == self._index[0]
 
