@@ -294,7 +294,6 @@ def test_update2():
 
 def test_repr():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
-    print repr(temp)
     assert repr(temp) == "SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
 class Identity(object):
