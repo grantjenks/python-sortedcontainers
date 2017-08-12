@@ -89,8 +89,8 @@ class SortedDict(dict):
         identifiers; the others work with any valid keys.
 
         """
-        # pylint: disable=super-init-not-called, redefined-variable-type
-        if len(args) > 0 and (args[0] is None or callable(args[0])):
+        # pylint: disable=super-init-not-called
+        if args and (args[0] is None or callable(args[0])):
             self._key = args[0]
             args = args[1:]
         else:
@@ -127,7 +127,7 @@ class SortedDict(dict):
         self._list_update = _list.update
         self.irange = _list.irange
         self.islice = _list.islice
-        self._reset = _list._reset
+        self._reset = _list._reset  # pylint: disable=protected-access
 
         if self._key is not None:
             self.bisect_key_left = _list.bisect_key_left
@@ -290,7 +290,7 @@ class SortedDict(dict):
         If the dictionary is empty, calling `popitem` raises a
         KeyError`.
         """
-        if not len(self):
+        if not self:
             raise KeyError('popitem(): dictionary is empty')
 
         key = self._list_pop(-1 if last else 0)
@@ -319,10 +319,10 @@ class SortedDict(dict):
         """
         if key in self:
             return self[key]
-        else:
-            self._setitem(key, default)
-            self._list_add(key)
-            return default
+
+        self._setitem(key, default)
+        self._list_add(key)
+        return default
 
     def update(self, *args, **kwargs):
         """
@@ -334,12 +334,12 @@ class SortedDict(dict):
         keyword arguments are specified, the dictionary is then updated with
         those key/value pairs: ``d.update(red=1, blue=2)``.
         """
-        if not len(self):
+        if not self:
             self._dict_update(*args, **kwargs)
             self._list_update(self._iter())
             return
 
-        if len(kwargs) == 0 and len(args) == 1 and isinstance(args[0], dict):
+        if not kwargs and len(args) == 1 and isinstance(args[0], dict):
             pairs = args[0]
         else:
             pairs = dict(*args, **kwargs)
@@ -394,6 +394,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
 
     The KeysView class implements the Set and Sequence Abstract Base Classes.
     """
+    # pylint: disable=too-many-ancestors
     if hexversion < 0x03000000:
         def __init__(self, sorted_dict):
             """
@@ -485,10 +486,12 @@ class KeysView(AbstractKeysView, Set, Sequence):
     if hexversion < 0x03000000:
         def isdisjoint(self, that):
             """Return True if and only if *that* is disjoint with self."""
+            # pylint: disable=arguments-differ
             return not any(key in self._list for key in that)
     else:
         def isdisjoint(self, that):
             """Return True if and only if *that* is disjoint with self."""
+            # pylint: disable=arguments-differ
             return self._view.isdisjoint(that)
     @recursive_repr
     def __repr__(self):
@@ -503,6 +506,7 @@ class ValuesView(AbstractValuesView, Sequence):
 
     The ValuesView class implements the Sequence Abstract Base Class.
     """
+    # pylint: disable=too-many-ancestors
     if hexversion < 0x03000000:
         def __init__(self, sorted_dict):
             """
@@ -551,8 +555,7 @@ class ValuesView(AbstractValuesView, Sequence):
         _dict, _list = self._dict, self._list
         if isinstance(index, slice):
             return [_dict[key] for key in _list[index]]
-        else:
-            return _dict[_list[index]]
+        return _dict[_list[index]]
     def __reversed__(self):
         """
         Return a reverse iterator over the values in the dictionary.  Values are
@@ -569,6 +572,7 @@ class ValuesView(AbstractValuesView, Sequence):
 
         Raises ValueError if *value* is not found.
         """
+        # pylint: disable=arguments-differ
         for idx, val in enumerate(self):
             if value == val:
                 return idx
@@ -612,6 +616,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
     However, the set-like operations (``&``, ``|``, ``-``, ``^``) will only
     operate correctly if all of the dictionary's values are hashable.
     """
+    # pylint: disable=too-many-ancestors
     if hexversion < 0x03000000:
         def __init__(self, sorted_dict):
             """
@@ -656,9 +661,8 @@ class ItemsView(AbstractItemsView, Set, Sequence):
         _dict, _list = self._dict, self._list
         if isinstance(index, slice):
             return [(key, _dict[key]) for key in _list[index]]
-        else:
-            key = _list[index]
-            return (key, _dict[key])
+        key = _list[index]
+        return (key, _dict[key])
     def __reversed__(self):
         """
         Return a reversed iterable over the items in the dictionary. Items are
@@ -685,6 +689,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             raise ValueError('{0!r} is not in dict'.format(key))
     def count(self, item):
         """Return the number of occurrences of *item* in the set."""
+        # pylint: disable=arguments-differ
         key, value = item
         return 1 if key in self._dict and self._dict[key] == value else 0
     def __eq__(self, that):
@@ -720,6 +725,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
     if hexversion < 0x03000000:
         def isdisjoint(self, that):
             """Return True if and only if *that* is disjoint with self."""
+            # pylint: disable=arguments-differ
             _dict = self._dict
             for key, value in that:
                 if key in _dict and _dict[key] == value:
@@ -728,6 +734,7 @@ class ItemsView(AbstractItemsView, Set, Sequence):
     else:
         def isdisjoint(self, that):
             """Return True if and only if *that* is disjoint with self."""
+            # pylint: disable=arguments-differ
             return self._view.isdisjoint(that)
     @recursive_repr
     def __repr__(self):
