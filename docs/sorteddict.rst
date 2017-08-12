@@ -226,12 +226,6 @@ best way to get started.
 
       :rtype: :class:`list` or :class:`ValuesView`
 
-   .. method:: d.has_key(key)
-
-      Return True iff *key* is in the dictionary.
-
-      :rtype: :class:`bool`
-
    .. _SortedDict.index:
    .. method:: d.index(key, [start, [stop]])
 
