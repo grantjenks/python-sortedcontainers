@@ -16,6 +16,7 @@ class SortedSet(MutableSet, Sequence):
 
     Unlike a `set`, a `SortedSet` requires items be hashable and comparable.
     """
+    # pylint: disable=too-many-ancestors
     def __init__(self, iterable=None, key=None):
         """
         A `SortedSet` provides the same methods as a `set`.  Additionally, a
@@ -30,7 +31,6 @@ class SortedSet(MutableSet, Sequence):
         each set item. If no function is specified, the default compares the
         set items directly.
         """
-        # pylint: disable=redefined-variable-type
         self._key = key
 
         if not hasattr(self, '_set'):
@@ -53,7 +53,7 @@ class SortedSet(MutableSet, Sequence):
         self.index = _list.index
         self.irange = _list.irange
         self.islice = _list.islice
-        self._reset = _list._reset
+        self._reset = _list._reset  # pylint: disable=protected-access
 
         if key is not None:
             self.bisect_key_left = _list.bisect_key_left
@@ -73,7 +73,7 @@ class SortedSet(MutableSet, Sequence):
     def _fromset(cls, values, key=None):
         """Initialize sorted set from existing set."""
         sorted_set = object.__new__(cls)
-        sorted_set._set = values
+        sorted_set._set = values  # pylint: disable=protected-access
         sorted_set.__init__(key=key)
         return sorted_set
 
@@ -114,8 +114,7 @@ class SortedSet(MutableSet, Sequence):
                 return set_op(self._set, that._set)
             elif isinstance(that, Set):
                 return set_op(self._set, that)
-            else:
-                return NotImplemented
+            return NotImplemented
 
         comparer.__name__ = '__{0}__'.format(set_op.__name__)
         doc_str = 'Return True if and only if Set is {0} `that`.'
