@@ -267,7 +267,10 @@ class SortedList(MutableSequence):
 
         _lists = self._lists
         idx = bisect_left(_lists[pos], val)
-
+        while _lists[pos][idx] != val:
+            if _lists[pos][idx] > val:
+                break
+            idx += 1
         if _lists[pos][idx] == val:
             self._delete(pos, idx)
         else:
