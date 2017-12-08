@@ -1,6 +1,14 @@
 Sorted Containers Release History
 =================================
 
+1.5.8 (2017-12-08)
+------------------
+
+**Bugfixes**
+
+* Added ``SortedList.reverse`` to override ``MutableSequence.reverse`` and
+  raise ``NotImplementedError``.
+
 1.5.7 (2016-12-22)
 ------------------
 

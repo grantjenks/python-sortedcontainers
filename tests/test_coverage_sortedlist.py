@@ -356,6 +356,11 @@ def test_reversed():
     rev = reversed(slt)
     assert all(tup[0] == tup[1] for tup in zip(range(9999, -1, -1), rev))
 
+@raises(NotImplementedError)
+def test_reverse():
+    slt = SortedList(range(10000))
+    slt.reverse()
+
 def test_islice():
     sl = SortedList()
     sl._reset(7)

@@ -822,7 +822,23 @@ class SortedList(MutableSequence):
         """
         return chain.from_iterable(map(reversed, reversed(self._lists)))
 
+    def reverse(self):
+        """Raise NotImplementedError
+
+        SortedList maintains values in ascending sort order. Values may not be
+        reversed in-place.
+
+        Use ``reversed(sorted_list)`` for a reverse iterator over values in
+        descending sort order.
+
+        Implemented to override MutableSequence.reverse which provides an
+        erroneous default implementation.
+
+        """
+        raise NotImplementedError('.reverse() not defined')
+
     def islice(self, start=None, stop=None, reverse=False):
+
         """
         Returns an iterator that slices `self` from `start` to `stop` index,
         inclusive and exclusive respectively.
@@ -1467,7 +1483,7 @@ class SortedListWithKey(SortedList):
     SortedListWithKey provides most of the same methods as a list but keeps
     the items in sorted order.
     """
-    # pylint: disable=too-many-ancestors
+    # pylint: disable=too-many-ancestors,abstract-method
     def __init__(self, iterable=None, key=identity):
         """SortedListWithKey provides most of the same methods as list but keeps the
         items in sorted order.

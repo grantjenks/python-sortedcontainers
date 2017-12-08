@@ -357,6 +357,11 @@ def test_reversed():
     rev = reversed(slt)
     assert all(tup[0] == tup[1] for tup in zip(range(10000), rev))
 
+@raises(NotImplementedError)
+def test_reverse():
+    slt = SortedListWithKey(range(10000), key=negate)
+    slt.reverse()
+
 def test_islice():
     return
     slt = SortedListWithKey(key=negate)
