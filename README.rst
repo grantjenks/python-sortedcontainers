@@ -96,7 +96,7 @@ Features
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.iloc[-5:])
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
 - Developed on Python 2.7
-- Tested on CPython 2.6, 2.7, 3.2, 3.3, 3.4, 3.5 and PyPy 5.1+, PyPy3 2.4+
+- Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 and PyPy, PyPy3
 
 Quickstart
 ----------

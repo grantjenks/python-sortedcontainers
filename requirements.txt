@@ -68,6 +68,6 @@ tornado==4.0
 tox==2.3.1
 traitlets==4.3.2
 treap==1.38
-virtualenv==15.0.1
+virtualenv==15.1.0
 wcwidth==0.1.7
 wrapt==1.10.11

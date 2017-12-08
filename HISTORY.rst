@@ -1,6 +1,13 @@
 Sorted Containers Release History
 =================================
 
+1.5.9 (2017-12-08)
+------------------
+
+**Miscellaneous**
+
+* Dropped CPython 2.6 testing.
+
 1.5.8 (2017-12-08)
 ------------------
 
