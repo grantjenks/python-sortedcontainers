@@ -45,8 +45,8 @@ from .sorteddict import SortedDict
 __all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey']
 
 __title__ = 'sortedcontainers'
-__version__ = '1.5.8'
-__build__ = 0x010508
+__version__ = '1.5.9'
+__build__ = 0x010509
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2016 Grant Jenks'
