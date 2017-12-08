@@ -51,10 +51,9 @@ or install it into your site-packages easily::
 SortedList
 ----------
 
-A SortedList is a finite sequence in which an order is imposed on the elements
-according to their sorted relation to each other. As with Python's built-in
-list data type, SortedList supports duplicate elements and fast random-access
-indexing. A SortedList may never contain its elements out of order.
+SortedList is a sequence data type that always maintains its values in
+ascending sort order. As with Python's built-in list data type, SortedList
+supports duplicate elements and fast random-access indexing.
 
     >>> from sortedcontainers import SortedList
     >>> l = SortedList()
@@ -63,6 +62,8 @@ Elements may be added to a SortedList using either :ref:`add <SortedList.add>`
 or :ref:`update <SortedList.update>`. When doing so, the list remains sorted.
 
     >>> l.update([0, 4, 1, 3, 2])
+    >>> l
+    SortedList([0, 1, 2, 3, 4])
     >>> l.index(3)
     3
     >>> l.add(5)
@@ -88,7 +89,7 @@ ValueError.
 Removing elements from a SortedList is done with :ref:`discard
 <SortedList.discard>`, :ref:`remove <SortedList.remove>`, :ref:`__delitem__
 <SortedList.__delitem__>`, or :ref:`pop <SortedList.pop>`. These functions work
-identically to their list counterpart.
+identically to their list counterparts.
 
     >>> l[:] = range(10)
     >>> del l[-9:-3:3]
@@ -113,6 +114,19 @@ functions can be computed efficiently using binary-search. Those functions are
     1
     >>> l.bisect(123456.7)
     123457
+
+SortedList does not support in-place :ref:`reverse <SortedList.reverse>`
+because values are always maintained in ascending sort order. To reverse a
+SortedList you may either request a :ref:`reversed <SortedList.reversed>`
+iterator or use negative indexing.
+
+    >>> l[:] = range(5)
+    >>> l.reverse()
+    NotImplementedError: .reverse() not defined
+    >>> list(reversed(l))
+    [4, 3, 2, 1, 0]
+    >>> l[-3:]
+    [2, 3, 4]
 
 SortedList also works efficiently with other sequence data
 types. :ref:`Addition <SortedList.__add__>`, :ref:`multiplication

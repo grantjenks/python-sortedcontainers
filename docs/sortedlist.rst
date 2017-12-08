@@ -117,6 +117,7 @@ best way to get started.
       Update *L* to include all values in *k*. Elements in *k* do not
       need to be properly ordered with respect to *L*.
 
+   .. _SortedList.reversed:
    .. method:: reversed(L)
 
       Return an iterator to traverse the Sequence in reverse.
@@ -125,6 +126,20 @@ best way to get started.
       `RuntimeError` or fail to iterate over all entries.
 
       :rtype: iterator
+
+   .. _SortedList.reverse:
+   .. method:: L.reverse()
+
+      Raise NotImplementedError
+
+      SortedList maintains values in ascending sort order. Values may not be
+      reversed in-place.
+
+      Use ``reversed(sorted_list)`` for a reverse iterator over values in
+      descending sort order.
+
+      Implemented to override MutableSequence.reverse which provides an
+      erroneous default implementation.
 
    .. _SortedList.__setitem__:
    .. method:: L[i] = x

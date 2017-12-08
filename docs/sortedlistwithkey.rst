@@ -135,6 +135,19 @@ the best way to get started.
 
       :rtype: iterator
 
+   .. method:: L.reverse()
+
+      Raise NotImplementedError
+
+      SortedList maintains values in ascending sort order. Values may not be
+      reversed in-place.
+
+      Use ``reversed(sorted_list)`` for a reverse iterator over values in
+      descending sort order.
+
+      Implemented to override MutableSequence.reverse which provides an
+      erroneous default implementation.
+
    .. _SortedListWithKey.__setitem__:
    .. method:: L[i] = x
 
