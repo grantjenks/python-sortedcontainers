@@ -885,30 +885,53 @@ class SortedList(MutableSequence):
 
         if min_pos > max_pos:
             return iter(())
-        elif min_pos == max_pos and not reverse:
-            return iter(_lists[min_pos][min_idx:max_idx])
-        elif min_pos == max_pos and reverse:
-            return reversed(_lists[min_pos][min_idx:max_idx])
-        elif min_pos + 1 == max_pos and not reverse:
-            return chain(_lists[min_pos][min_idx:], _lists[max_pos][:max_idx])
-        elif min_pos + 1 == max_pos and reverse:
-            return chain(
-                reversed(_lists[max_pos][:max_idx]),
-                reversed(_lists[min_pos][min_idx:]),
-            )
-        elif not reverse:
-            return chain(
-                _lists[min_pos][min_idx:],
-                chain.from_iterable(_lists[(min_pos + 1):max_pos]),
-                _lists[max_pos][:max_idx],
-            )
 
-        temp = map(reversed, reversed(_lists[(min_pos + 1):max_pos]))
-        return chain(
-            reversed(_lists[max_pos][:max_idx]),
-            chain.from_iterable(temp),
-            reversed(_lists[min_pos][min_idx:]),
-        )
+        if min_pos == max_pos:
+            if reverse:
+                indices = reversed(range(min_idx, max_idx))
+                return map(_lists[min_pos].__getitem__, indices)
+            else:
+                indices = range(min_idx, max_idx)
+                return map(_lists[min_pos].__getitem__, indices)
+
+        next_pos = min_pos + 1
+
+        if next_pos == max_pos:
+            if reverse:
+                min_indices = range(min_idx, len(_lists[min_pos]))
+                max_indices = range(max_idx)
+                return chain(
+                    map(_lists[max_pos].__getitem__, reversed(max_indices)),
+                    map(_lists[min_pos].__getitem__, reversed(min_indices)),
+                )
+            else:
+                min_indices = range(min_idx, len(_lists[min_pos]))
+                max_indices = range(max_idx)
+                return chain(
+                    map(_lists[min_pos].__getitem__, min_indices),
+                    map(_lists[max_pos].__getitem__, max_indices),
+                )
+
+        if reverse:
+            min_indices = range(min_idx, len(_lists[min_pos]))
+            sublist_indices = range(next_pos, max_pos)
+            sublists = map(_lists.__getitem__, reversed(sublist_indices))
+            max_indices = range(max_idx)
+            return chain(
+                map(_lists[max_pos].__getitem__, reversed(max_indices)),
+                chain.from_iterable(map(reversed, sublists)),
+                map(_lists[min_pos].__getitem__, reversed(min_indices)),
+            )
+        else:
+            min_indices = range(min_idx, len(_lists[min_pos]))
+            sublist_indices = range(next_pos, max_pos)
+            sublists = map(_lists.__getitem__, sublist_indices)
+            max_indices = range(max_idx)
+            return chain(
+                map(_lists[min_pos].__getitem__, min_indices),
+                chain.from_iterable(sublists),
+                map(_lists[max_pos].__getitem__, max_indices),
+            )
 
     def irange(self, minimum=None, maximum=None, inclusive=(True, True),
                reverse=False):
