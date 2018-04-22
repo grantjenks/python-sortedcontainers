@@ -565,6 +565,14 @@ def test_itemsview():
     items = SortedDict(mapping[:2]).viewitems()
     assert repr(items) == "SortedDict_items([('a', 0), ('b', 1)])"
 
+@raises(ValueError)
+def test_items_view_index():
+    if hexversion < 0x02070000: return
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp = SortedDict(mapping[:13])
+    items = get_itemsview(temp)
+    items.index(('f', 100))
+
 def test_pickle():
     import pickle
     alpha = SortedDict(negate, zip(range(10000), range(10000)))
