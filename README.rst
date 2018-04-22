@@ -89,7 +89,7 @@ Features
 - 100% test coverage
 - Hours of stress testing
 - Performance matters (often faster than C implementations)
-- Compatible API (nearly identical to popular blist and rbtree modules)
+- Compatible API (nearly identical to older blist and bintrees modules)
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.iloc[-5:])
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
 - Developed on Python 2.7

@@ -30,10 +30,6 @@ excellent choice.
 A good effort has been made to find competing implementations. Six in total
 were found with various list, set, and dict implementations.
 
-rbtree
-  Provides a fast, C-implementation for dict and set data types.
-  `rbtree on PyPI <https://pypi.python.org/pypi/rbtree>`_
-
 blist
   Provides list, dict, and set containers based on the blist data-type.
   Implemented in Python and C.
@@ -68,6 +64,11 @@ sortedcollection
 
 Several competing implementations were omitted because they were not easily
 installable or failed to build.
+
+rbtree
+  C-implementation that only supports Python 2. Last updated in 2012. Provides
+  a fast, C-implementation for dict and set data types.  `rbtree on PyPI
+  <https://pypi.python.org/pypi/rbtree>`_
 
 ruamel.ordereddict.sorteddict
   C-implementation that only supports Python 2. Performance was measured in
