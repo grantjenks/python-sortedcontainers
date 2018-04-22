@@ -3,7 +3,7 @@
 import random, string
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
-from nose.tools import raises
+import pytest
 from sys import hexversion
 
 if hexversion < 0x03000000:
@@ -242,21 +242,21 @@ def test_pop():
     assert temp.pop('a') == 0
     assert temp.pop('a', -1) == -1
 
-@raises(KeyError)
 def test_pop2():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
-    temp.pop('A')
+    with pytest.raises(KeyError):
+        temp.pop('A')
 
 def test_popitem():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     assert temp.popitem() == ('z', 25)
 
-@raises(KeyError)
 def test_popitem2():
     temp = SortedDict()
-    temp.popitem()
+    with pytest.raises(KeyError):
+        temp.popitem()
 
 def test_popitem3():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -270,11 +270,11 @@ def test_peekitem():
     assert temp.peekitem(0) == ('a', 0)
     assert temp.peekitem(index=4) == ('e', 4)
 
-@raises(IndexError)
 def test_peekitem2():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
-    temp.peekitem(index=100)
+    with pytest.raises(IndexError):
+        temp.peekitem(index=100)
 
 def test_setdefault():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -433,17 +433,15 @@ def test_valuesview():
     values = get_valuesview(SortedDict(mapping[:2]))
     assert repr(values) == "SortedDict_values([0, 1])"
 
-@raises(ValueError)
 def test_values_view_index():
     if hexversion < 0x02070000: raise ValueError
 
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
     values = get_valuesview(temp)
+    with pytest.raises(ValueError):
+        values.index(13)
 
-    values.index(13)
-
-@raises(TypeError)
 def test_values_view_lt():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -451,9 +449,9 @@ def test_values_view_lt():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values < that_values
+    with pytest.raises(TypeError):
+        values < that_values
 
-@raises(TypeError)
 def test_values_view_gt():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -461,9 +459,9 @@ def test_values_view_gt():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values > that_values
+    with pytest.raises(TypeError):
+        values > that_values
 
-@raises(TypeError)
 def test_values_view_le():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -471,9 +469,9 @@ def test_values_view_le():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values <= that_values
+    with pytest.raises(TypeError):
+        values <= that_values
 
-@raises(TypeError)
 def test_values_view_ge():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -481,9 +479,9 @@ def test_values_view_ge():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values >= that_values
+    with pytest.raises(TypeError):
+        values >= that_values
 
-@raises(TypeError)
 def test_values_view_and():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -491,9 +489,9 @@ def test_values_view_and():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values & that_values
+    with pytest.raises(TypeError):
+        values & that_values
 
-@raises(TypeError)
 def test_values_view_or():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -501,9 +499,9 @@ def test_values_view_or():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values | that_values
+    with pytest.raises(TypeError):
+        values | that_values
 
-@raises(TypeError)
 def test_values_view_sub():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -511,9 +509,9 @@ def test_values_view_sub():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values - that_values
+    with pytest.raises(TypeError):
+        values - that_values
 
-@raises(TypeError)
 def test_values_view_xor():
     if hexversion < 0x02070000: raise TypeError
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -521,7 +519,8 @@ def test_values_view_xor():
     values = get_valuesview(temp)
     that = dict(mapping)
     that_values = get_valuesview(that)
-    values ^ that_values
+    with pytest.raises(TypeError):
+        values ^ that_values
 
 def test_itemsview():
     if hexversion < 0x02070000: return
@@ -565,13 +564,13 @@ def test_itemsview():
     items = SortedDict(mapping[:2]).viewitems()
     assert repr(items) == "SortedDict_items([('a', 0), ('b', 1)])"
 
-@raises(ValueError)
 def test_items_view_index():
     if hexversion < 0x02070000: return
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
     items = get_itemsview(temp)
-    items.index(('f', 100))
+    with pytest.raises(ValueError):
+        items.index(('f', 100))
 
 def test_pickle():
     import pickle
@@ -580,7 +579,3 @@ def test_pickle():
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
     assert alpha._key == beta._key
-
-if __name__ == '__main__':
-    import nose
-    nose.main()

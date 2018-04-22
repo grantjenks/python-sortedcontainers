@@ -30,28 +30,6 @@ from collections import defaultdict
 def tree():
     return defaultdict(tree)
 
-parser = argparse.ArgumentParser(description='Plotting')
-parser.add_argument('filename', help='path to file with benchmark data')
-parser.add_argument('name', help='type name')
-parser.add_argument('--test', action='append', help='filter tests by name')
-parser.add_argument('--kind', action='append', help='filter types by name')
-parser.add_argument('--suffix', default='', help='suffix for output')
-parser.add_argument('--show', action='store_true', help='show results')
-parser.add_argument('--save', action='store_true', help='save results')
-
-args = parser.parse_args()
-
-text = open(args.filename).read()
-
-lines = text.splitlines()
-lines = [line.split() for line in lines]
-for line in lines:
-    line[2] = int(line[2])
-    line[3:] = map(float, line[3:])
-data = tree()
-for line in lines:
-    data[line[0]][line[1]][line[2]] = line
-
 def order_kinds(kinds):
     for idx, kind in enumerate(kinds):
         if kind.startswith('Sorted'):
@@ -83,15 +61,37 @@ def kind_plot(test, kind):
     yvalues = [max(1e-6, data[test][kind][size][5]) for size in sizes]
     plt.errorbar(sizes, yvalues, yerr=yrange)
 
-tests = args.test or list(data)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Plotting')
+    parser.add_argument('filename', help='path to file with benchmark data')
+    parser.add_argument('name', help='type name')
+    parser.add_argument('--test', action='append', help='filter tests by name')
+    parser.add_argument('--kind', action='append', help='filter types by name')
+    parser.add_argument('--suffix', default='', help='suffix for output')
+    parser.add_argument('--show', action='store_true', help='show results')
+    parser.add_argument('--save', action='store_true', help='save results')
+    args = parser.parse_args()
 
-for test in tests:
-    test_plot(test)
+    text = open(args.filename).read()
 
-    if args.show:
-        plt.show()
+    lines = text.splitlines()
+    lines = [line.split() for line in lines]
+    for line in lines:
+        line[2] = int(line[2])
+        line[3:] = map(float, line[3:])
+    data = tree()
+    for line in lines:
+        data[line[0]][line[1]][line[2]] = line
 
-    if args.save:
-        plt.savefig('{0}{1}-{2}.png'.format(args.name, args.suffix, test))
+    tests = args.test or list(data)
 
-    plt.close()
+    for test in tests:
+        test_plot(test)
+
+        if args.show:
+            plt.show()
+
+        if args.save:
+            plt.savefig('{0}{1}-{2}.png'.format(args.name, args.suffix, test))
+
+        plt.close()

@@ -6,7 +6,6 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedSet
-from nose.tools import raises
 from functools import wraps
 import operator
 

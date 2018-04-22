@@ -8,7 +8,6 @@ import bisect
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedList
-from nose.tools import raises
 from functools import wraps
 
 if hexversion < 0x03000000:

@@ -6,7 +6,6 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
-from nose.tools import raises
 from functools import wraps
 
 if hexversion < 0x03000000:

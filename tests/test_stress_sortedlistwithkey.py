@@ -8,7 +8,6 @@ import bisect
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedListWithKey
-from nose.tools import raises
 from functools import wraps
 
 class SortedList(SortedListWithKey):
@@ -297,10 +296,10 @@ def stress_eq(slt):
     values = []
     assert not (values == slt)
 
-@actor(1) # Disabled!!!
+@actor(1)
 @not_empty
 def stress_lt(slt):
-    values = list(slt) # Doesn't work with nose!
+    values = list(slt)
     assert not (values < slt)
     values = SortedList(value - 1 for value in values)
     assert values < slt

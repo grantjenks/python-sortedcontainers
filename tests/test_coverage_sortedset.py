@@ -5,7 +5,7 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedSet
-from nose.tools import raises
+import pytest
 
 if hexversion < 0x03000000:
     range = xrange
@@ -476,7 +476,3 @@ def test_pickle():
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
     assert alpha._key == beta._key
-
-if __name__ == '__main__':
-    import nose
-    nose.main()

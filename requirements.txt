@@ -9,6 +9,7 @@ pyannote-banyan
 pylint
 pytest
 pytest-cov
+scipy
 skiplistcollections
 sphinx
 tox

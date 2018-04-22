@@ -15,7 +15,7 @@ In Python, we can do better. And we can do it in pure-Python!
 ::
 
     >>> from sortedcontainers import SortedList, SortedDict, SortedSet
-    >>> sl = SortedList(xrange(10000000))
+    >>> sl = SortedList(range(10000000))
     >>> 1234567 in sl
     True
     >>> sl[7654321]

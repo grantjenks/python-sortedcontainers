@@ -91,7 +91,7 @@ def init_sorted_list(sl, size):
         count = int(random.normalvariate(int(sl._load * 1.5), 100))
         count = min(count, sl._load * 2)
         count = max(count, sl._load)
-        sl._lists.append(list(xrange(total, total + count)))
+        sl._lists.append(list(range(total, total + count)))
         total += count
 
     sl._len = sum(len(sublist) for sublist in sl._lists)
@@ -107,31 +107,31 @@ def init_sorted_list(sl, size):
 
 def fill(obj, count, limit):
     "Repeatedly add random values to the SortedList."
-    for each in xrange(count):
+    for each in range(count):
         obj.add(random.randrange(limit))
 
 
 if __name__ == '__main__':
     low_splits = []
 
-    for each in xrange(REPEAT):
-        sl = SortedListWithSplits(xrange(LIMIT))
+    for each in range(REPEAT):
+        sl = SortedListWithSplits(range(LIMIT))
         fill(sl, LIMIT / RATIO, LIMIT)
         low_splits.append(sl.splits)
 
     uniform_splits = []
 
-    for each in xrange(REPEAT):
+    for each in range(REPEAT):
         sl = init_sorted_list(SortedListWithSplits(), LIMIT)
         fill(sl, LIMIT / RATIO, LIMIT)
         uniform_splits.append(sl.splits)
 
     rand_splits = []
 
-    for each in xrange(REPEAT):
+    for each in range(REPEAT):
         sl = SortedListWithSplits()
 
-        values = list(xrange(LIMIT))
+        values = list(range(LIMIT))
         random.shuffle(values)
         for value in values:
             sl.add(value)
