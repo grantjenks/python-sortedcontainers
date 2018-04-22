@@ -122,7 +122,7 @@ except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
 try:
-    from sortedcollection import SortedCollection
+    from .sortedcollection import SortedCollection
     from bisect import bisect_left
 
     SortedCollection.add = SortedCollection.insert
@@ -208,6 +208,7 @@ for name, kind in kinds.items():
         'func': '__delitem__',
         'limit': 1000000
     }
+del impls['delitem']['sortedcollection']
 
 for name, kind in kinds.items():
     impls['bisect'][name] = {
@@ -432,7 +433,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('intervals', 'sortedcollection', 100000)
+del impls['intervals']['sortedcollection']
 
 for name, kind in kinds.items():
     impls['init'][name] = {
