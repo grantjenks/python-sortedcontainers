@@ -1,9 +1,6 @@
 Python SortedContainers
 =======================
 
-.. image:: https://api.travis-ci.org/grantjenks/sorted_containers.svg
-    :target: http://www.grantjenks.com/docs/sortedcontainers/
-
 `SortedContainers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.
 
@@ -97,6 +94,12 @@ Features
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
 - Developed on Python 2.7
 - Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 and PyPy, PyPy3
+
+.. image:: https://api.travis-ci.org/grantjenks/sorted_containers.svg?branch=master
+   :target: http://www.grantjenks.com/docs/sortedcontainers/
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/grantjenks/sorted_containers?branch=master&svg=true
+   :target: http://www.grantjenks.com/docs/sortedcontainers/
 
 Quickstart
 ----------
