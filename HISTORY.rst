@@ -1,6 +1,13 @@
 Sorted Containers Release History
 =================================
 
+1.5.10 (2018-04-21)
+-------------------
+
+**Miscellaneous**
+
+* Improved performance of islice(...) methods.
+
 1.5.9 (2017-12-08)
 ------------------
 
