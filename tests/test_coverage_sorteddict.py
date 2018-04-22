@@ -434,7 +434,7 @@ def test_valuesview():
     assert repr(values) == "SortedDict_values([0, 1])"
 
 @raises(ValueError)
-def test_valuesview():
+def test_values_view_index():
     if hexversion < 0x02070000: raise ValueError
 
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
