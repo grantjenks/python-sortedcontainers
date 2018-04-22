@@ -16,6 +16,7 @@ def modulo(val):
 
 def test_init():
     slt = SortedListWithKey(key=modulo)
+    assert slt.key == modulo
     slt._check()
 
     slt = SortedListWithKey(key=modulo)

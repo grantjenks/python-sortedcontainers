@@ -35,6 +35,12 @@ def get_itemsview(dic):
 
 def test_init():
     temp = SortedDict()
+    assert temp.key is None
+    temp._check()
+
+def test_init_key():
+    temp = SortedDict(negate)
+    assert temp.key == negate
     temp._check()
 
 def test_init_args():
@@ -316,6 +322,7 @@ def test_repr_subclass():
 def test_iloc():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
+    assert len(temp.iloc) == 26
     assert temp.iloc[0] == 'a'
     assert temp.iloc[-1] == 'z'
     assert temp.iloc[-3:] == ['x', 'y', 'z']

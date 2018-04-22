@@ -14,6 +14,7 @@ if hexversion < 0x03000000:
 
 def test_init():
     slt = SortedList()
+    assert slt.key is None
     slt._check()
 
     slt = SortedList()

@@ -18,9 +18,14 @@ def modulo(value):
 
 def test_init():
     temp = SortedSet(range(100))
+    assert temp.key is None
     temp._reset(7)
     temp._check()
     assert all(val == temp[val] for val in temp)
+
+def test_init_key():
+    temp = SortedSet(range(100), key=negate)
+    assert temp.key == negate
 
 def test_contains():
     temp = SortedSet(range(100))
