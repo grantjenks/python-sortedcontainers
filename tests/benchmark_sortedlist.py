@@ -208,7 +208,7 @@ for name, kind in kinds.items():
         'func': '__delitem__',
         'limit': 1000000
     }
-remove('delitem', 'sortedcollection')
+del impls['delitem']['sortedcollection']
 
 for name, kind in kinds.items():
     impls['bisect'][name] = {
@@ -433,7 +433,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-remove('intervals', 'sortedcollection')
+del impls['intervals']['sortedcollection']
 
 for name, kind in kinds.items():
     impls['init'][name] = {
