@@ -299,6 +299,12 @@ def test_setitem_slice():
     slt[:10] = []
     assert slt == list(range(89, 9, -1))
 
+def test_setitem_empty_slice():
+    slt = SortedListWithKey(range(5), key=negate)
+    print(slt)
+    slt[1:0] = [3.5]
+    assert slt == [4, 3.5, 3, 2, 1, 0]
+
 @raises(ValueError)
 def test_setitem_slice_bad():
     slt = SortedListWithKey(range(100), key=negate)
