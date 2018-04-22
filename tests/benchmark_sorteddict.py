@@ -59,12 +59,6 @@ from sortedcontainers import SortedDict
 kinds['SortedDict'] = SortedDict
 
 try:
-    from rbtree import rbtree
-    kinds['rbtree'] = rbtree
-except ImportError:
-    warnings.warn('No module named rbtree', ImportWarning)
-
-try:
     from blist import sorteddict
     kinds['blist.sorteddict'] = sorteddict
 except ImportError:
@@ -159,7 +153,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-remove('init', 'rbtree')
 remove('init', 'treap')
 
 limit('init', 'blist.sorteddict', 100000)

@@ -187,12 +187,6 @@ from sortedcontainers import SortedSet
 kinds['SortedSet'] = SortedSet
 
 try:
-    from rbtree import rbset
-    kinds['rbset'] = rbset
-except ImportError:
-    warnings.warn('No module named rbtree', ImportWarning)
-
-try:
     from blist import sortedset
     kinds['blist.sortedset'] = sortedset
 except ImportError:
@@ -351,8 +345,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_small', 'rbset', 10000)
-
 for name, kind in kinds.items():
     impls['difference_medium'][name] = {
         'setup': fill_values,
@@ -361,7 +353,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_medium', 'rbset', 10000)
 limit('difference_medium', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -372,7 +363,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_large', 'rbset', 10000)
 limit('difference_large', 'blist.sortedset', 10000)
 
 remove('difference_tiny', 'SkipListSet')
@@ -439,7 +429,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_small', 'rbset', 10000)
 limit('intersection_small', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -450,7 +439,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_medium', 'rbset', 10000)
 limit('intersection_medium', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -461,7 +449,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_large', 'rbset', 10000)
 limit('intersection_large', 'blist.sortedset', 10000)
 
 remove('intersection_tiny', 'SkipListSet')
@@ -477,7 +464,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_tiny', 'rbset', 10000)
 limit('intersection_update_tiny', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -488,7 +474,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_small', 'rbset', 10000)
 limit('intersection_update_small', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -499,7 +484,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_medium', 'rbset', 10000)
 limit('intersection_update_medium', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -510,7 +494,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_large', 'rbset', 10000)
 limit('intersection_update_large', 'blist.sortedset', 10000)
 
 remove('intersection_update_tiny', 'SkipListSet')
@@ -536,7 +519,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_small', 'rbset', 10000)
 limit('symmetric_difference_small', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -547,7 +529,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_medium', 'rbset', 10000)
 limit('symmetric_difference_medium', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -558,7 +539,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_large', 'rbset', 10000)
 limit('symmetric_difference_large', 'blist.sortedset', 10000)
 
 remove('symmetric_difference_tiny', 'SkipListSet')
@@ -584,7 +564,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_small', 'rbset', 10000)
 limit('symmetric_difference_update_small', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -595,7 +574,6 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_medium', 'rbset', 10000)
 limit('symmetric_difference_update_medium', 'blist.sortedset', 10000)
 
 for name, kind in kinds.items():
@@ -606,13 +584,8 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_large', 'rbset', 10000)
 limit('symmetric_difference_update_large', 'blist.sortedset', 10000)
 
-remove('symmetric_difference_update_tiny', 'rbset')
-remove('symmetric_difference_update_small', 'rbset')
-remove('symmetric_difference_update_medium', 'rbset')
-remove('symmetric_difference_update_large', 'rbset')
 remove('symmetric_difference_update_tiny', 'SkipListSet')
 remove('symmetric_difference_update_small', 'SkipListSet')
 remove('symmetric_difference_update_medium', 'SkipListSet')
