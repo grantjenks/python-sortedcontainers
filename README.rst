@@ -200,7 +200,7 @@ Useful Links
 - `SortedContainers Issue Tracker`_
 
 .. _`SortedContainers Documentation`: http://www.grantjenks.com/docs/sortedcontainers/
-.. _`SortedContainers at PyPI`: https://pypi.python.org/pypi/sortedcontainers
+.. _`SortedContainers at PyPI`: https://pypi.org/project/sortedcontainers/
 .. _`SortedContainers at Github`: https://github.com/grantjenks/sorted_containers
 .. _`SortedContainers Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
 

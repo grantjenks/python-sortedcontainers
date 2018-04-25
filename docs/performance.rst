@@ -33,28 +33,28 @@ were found with various list, set, and dict implementations.
 blist
   Provides list, dict, and set containers based on the blist data-type.
   Implemented in Python and C. Last updated March, 2014. `blist on PyPI
-  <https://pypi.python.org/pypi/blist>`_
+  <https://pypi.org/project/blist/>`_
 
 bintrees
   Provides several tree-based implementations for dict and set containers.
   Fastest were AVL and Red-Black trees. Extends the conventional API to provide
   set operations for the dict type. Implemented in C. Last updated April, 2017.
-  `bintrees on PyPI <https://pypi.python.org/pypi/bintrees>`_
+  `bintrees on PyPI <https://pypi.org/project/bintrees/>`_
 
 banyan
   Provides a fast, C++-implementation for dict and set data types. Offers some
   features also found in sortedcontainers like accessing the n-th item in a set
   or dict. Last updated April, 2013. `banyan on PyPI
-  <https://pypi.python.org/pypi/Banyan>`_
+  <https://pypi.org/project/Banyan/>`_
 
 treap
   Uses Cython for improved performance and provides a dict container. Last
-  updated June, 2017. `treap on PyPI <https://pypi.python.org/pypi/treap>`_
+  updated June, 2017. `treap on PyPI <https://pypi.org/project/treap/>`_
 
 skiplistcollections
   Pure-Python implementation based on skip-lists providing a limited API for
   dict and set types. Last updated January, 2014.  `skiplistcollections on PyPI
-  <https://pypi.python.org/pypi/skiplistcollections>`_
+  <https://pypi.org/project/skiplistcollections/>`_
 
 sortedcollection
   Pure-Python implementation of sorted list based solely on a list.
@@ -69,14 +69,14 @@ installable or failed to build.
 rbtree
   C-implementation that only supports Python 2. Last updated
   March, 2012. Provides a fast, C-implementation for dict and set data types.
-  `rbtree on PyPI <https://pypi.python.org/pypi/rbtree>`_
+  `rbtree on PyPI <https://pypi.org/project/rbtree/>`_
 
 ruamel.ordereddict.sorteddict
   C-implementation that only supports Python 2. Performance was measured in
   correspondence with the module author. Performance was generally very good
   except for ``__delitem__``. At scale, deleting entries became exceedingly
   slow. Last updated July, 2017. `ruamel.ordereddict on PyPI
-  <https://pypi.python.org/pypi/ruamel.ordereddict/>`_
+  <https://pypi.org/project/ruamel.ordereddict/>`_
 
 rbtree from NewCenturyComputers
   Pure-Python tree-based implementation. Not sure when this was last updated.
@@ -91,7 +91,7 @@ python-avl-tree from Github user pgrafov
 pyavl
   C-implementation for AVL tree-based dict and set containers. Claims to be
   fast. Lacking documentation and failed to build. Last updated December, 2008.
-  `pyavl on PyPI <https://pypi.python.org/pypi/pyavl>`_
+  `pyavl on PyPI <https://pypi.org/project/pyavl/>`_
 
 The most similar module to :doc:`SortedContainers<index>` is
 skiplistcollections given that each is implemented in Python. But as is

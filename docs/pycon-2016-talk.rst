@@ -399,19 +399,19 @@ Thanks for letting me share.
 .. _`pandas.DataFrame indexes`: http://pandas.pydata.org/pandas-docs/stable/indexing.html
 .. _`Redis sorted sets`: http://redis.io/commands#sorted_set
 .. _`MutableSequence`: https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
-.. _`PyPI`: https://pypi.python.org/pypi
+.. _`PyPI`: https://pypi.org/
 .. _`Dan Stromberg`: http://stromberg.dnsalias.org/~dstromberg/datastructures/
 .. _`B-tree`: https://en.wikipedia.org/wiki/B-tree
 .. _`PyPy`: http://pypy.org/
 .. _`Github`: https://github.com/
 .. _`Blist`: http://stutzbachenterprises.com/blist/
 .. _`SortedCollection`: http://code.activestate.com/recipes/577197-sortedcollection/
-.. _`bintrees`: https://pypi.python.org/pypi/bintrees/
+.. _`bintrees`: https://pypi.org/project/bintrees/
 .. _`SortedContainers`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`Banyan`: https://pythonhosted.org/Banyan/
-.. _`skiplistcollections`: https://pypi.python.org/pypi/skiplistcollections/
+.. _`skiplistcollections`: https://pypi.org/project/skiplistcollections/
 .. _`Google`: https://www.google.com/
-.. _`rbtree`: https://pypi.python.org/pypi/rbtree/
+.. _`rbtree`: https://pypi.org/project/rbtree/
 .. _`Sorted Containers`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`sorted list`: http://www.grantjenks.com/docs/sortedcontainers/sortedlist.html
 .. _`sorted dictionary`: http://www.grantjenks.com/docs/sortedcontainers/sorteddict.html

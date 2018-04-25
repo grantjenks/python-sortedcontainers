@@ -12,15 +12,13 @@ Distribute & Pip
 ................
 
 Installing :doc:`SortedContainers<index>` is simple with `pip
-<http://www.pip-installer.org/>`_::
+<https://pypi.org/project/pip/>`_ using::
 
     $ pip install sortedcontainers
 
-or, with `easy_install <http://pypi.python.org/pypi/setuptools>`_::
+or, with `pipenv <https://pypi.org/project/pipenv/>`_ using::
 
-    $ easy_install sortedcontainers
-
-But you should prefer pip when available.
+    $ pipenv install sortedcontainers
 
 Get the Code
 ............

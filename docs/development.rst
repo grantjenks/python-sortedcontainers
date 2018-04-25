@@ -58,7 +58,7 @@ Note that installing the Banyan module on Windows requires `patching the source
 Testing
 -------
 
-Testing uses `tox <https://pypi.python.org/pypi/tox>`_. If you don't want to
+Testing uses `tox <https://pypi.org/project/tox/>`_. If you don't want to
 install all the development requirements, then, after downloading, you can
 simply run::
 
