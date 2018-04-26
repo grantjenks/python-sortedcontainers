@@ -3,8 +3,6 @@ Python Sorted Containers
 
 .. todo::
 
-   * Add gumroad sidebar
-   * Use README for index with hidden toc
    * Update .pylintrc
    * Review all files for Python 3 compatibility
    * Python 3 api changes: keys/values/items views/iter
@@ -22,6 +20,7 @@ Python Sorted Containers
      https://bitbucket.org/mojaves/pyskiplist/
      https://pypi.org/project/skipdict/
      https://github.com/tailhook/sortedsets
+   * Rename "SortedContainers" to "Sorted Containers"
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.
