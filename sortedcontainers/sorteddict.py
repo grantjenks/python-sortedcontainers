@@ -56,10 +56,10 @@ class SortedDict(dict):
 
     """
     def __init__(self, *args, **kwargs):
-        """SortedDict provides the same methods as a dict.  Additionally, SortedDict
-        efficiently maintains its keys in sorted order. Consequently, the keys
-        method will return the keys in sorted order, the popitem method will
-        remove the item with the highest key, etc.
+        """SortedDict provides the same methods as a dict.  Additionally,
+        SortedDict efficiently maintains its keys in sorted order.
+        Consequently, the keys method will return the keys in sorted order,
+        the popitem method will remove the item with the highest key, etc.
 
         An optional *key* argument defines a callable that, like the `key`
         argument to Python's `sorted` function, extracts a comparison key from

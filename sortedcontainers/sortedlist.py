@@ -1,7 +1,7 @@
 """Sorted list implementation.
 
 """
-# pylint: disable=redefined-builtin, ungrouped-imports
+# pylint: disable=redefined-builtin, too-many-lines, ungrouped-imports
 
 from __future__ import print_function
 
@@ -330,8 +330,8 @@ class SortedList(MutableSequence):
             del _index[:]
 
     def _loc(self, pos, idx):
-        """Convert an index pair (alpha, beta) into a single index that corresponds to
-        the position of the value in the sorted list.
+        """Convert an index pair (alpha, beta) into a single index that
+        corresponds to the position of the value in the sorted list.
 
         Most queries require the index be built. Details of the index are
         described in self._build_index.
@@ -372,6 +372,7 @@ class SortedList(MutableSequence):
         3. Iteration ends at the root.
 
         Computing the index is the sum of the total and beta: 5 + 3 = 8.
+
         """
         if not pos:
             return idx
@@ -890,9 +891,9 @@ class SortedList(MutableSequence):
             if reverse:
                 indices = reversed(range(min_idx, max_idx))
                 return map(_lists[min_pos].__getitem__, indices)
-            else:
-                indices = range(min_idx, max_idx)
-                return map(_lists[min_pos].__getitem__, indices)
+
+            indices = range(min_idx, max_idx)
+            return map(_lists[min_pos].__getitem__, indices)
 
         next_pos = min_pos + 1
 
@@ -904,13 +905,13 @@ class SortedList(MutableSequence):
                     map(_lists[max_pos].__getitem__, reversed(max_indices)),
                     map(_lists[min_pos].__getitem__, reversed(min_indices)),
                 )
-            else:
-                min_indices = range(min_idx, len(_lists[min_pos]))
-                max_indices = range(max_idx)
-                return chain(
-                    map(_lists[min_pos].__getitem__, min_indices),
-                    map(_lists[max_pos].__getitem__, max_indices),
-                )
+
+            min_indices = range(min_idx, len(_lists[min_pos]))
+            max_indices = range(max_idx)
+            return chain(
+                map(_lists[min_pos].__getitem__, min_indices),
+                map(_lists[max_pos].__getitem__, max_indices),
+            )
 
         if reverse:
             min_indices = range(min_idx, len(_lists[min_pos]))
@@ -922,16 +923,16 @@ class SortedList(MutableSequence):
                 chain.from_iterable(map(reversed, sublists)),
                 map(_lists[min_pos].__getitem__, reversed(min_indices)),
             )
-        else:
-            min_indices = range(min_idx, len(_lists[min_pos]))
-            sublist_indices = range(next_pos, max_pos)
-            sublists = map(_lists.__getitem__, sublist_indices)
-            max_indices = range(max_idx)
-            return chain(
-                map(_lists[min_pos].__getitem__, min_indices),
-                chain.from_iterable(sublists),
-                map(_lists[max_pos].__getitem__, max_indices),
-            )
+
+        min_indices = range(min_idx, len(_lists[min_pos]))
+        sublist_indices = range(next_pos, max_pos)
+        sublists = map(_lists.__getitem__, sublist_indices)
+        max_indices = range(max_idx)
+        return chain(
+            map(_lists[min_pos].__getitem__, min_indices),
+            chain.from_iterable(sublists),
+            map(_lists[max_pos].__getitem__, max_indices),
+        )
 
     def irange(self, minimum=None, maximum=None, inclusive=(True, True),
                reverse=False):
@@ -1135,7 +1136,8 @@ class SortedList(MutableSequence):
 
         if _maxes:
             if values[0] < _lists[-1][-1]:
-                msg = '{0!r} not in sort order at index {1}'.format(values[0], self._len)
+                args = values[0], self._len
+                msg = '{0!r} not in sort order at index {1}'.format(*args)
                 raise ValueError(msg)
 
             if len(_lists[-1]) < self._half:
@@ -1508,8 +1510,8 @@ class SortedListWithKey(SortedList):
     """
     # pylint: disable=too-many-ancestors,abstract-method
     def __init__(self, iterable=None, key=identity):
-        """SortedListWithKey provides most of the same methods as list but keeps the
-        items in sorted order.
+        """SortedListWithKey provides most of the same methods as list but
+        keeps the items in sorted order.
 
         An optional *iterable* provides an initial series of items to populate
         the SortedListWithKey.
@@ -2117,8 +2119,8 @@ class SortedListWithKey(SortedList):
 
     def bisect_key_right(self, key):
         """
-        Same as *bisect_key_left*, but if *key* is already present, the insertion
-        point will be after (to the right of) any existing entries.
+        Same as *bisect_key_left*, but if *key* is already present, the
+        insertion point will be after (to the right of) any existing entries.
         """
         _maxes = self._maxes
 
@@ -2229,7 +2231,8 @@ class SortedListWithKey(SortedList):
 
         if _maxes:
             if keys[0] < _keys[-1][-1]:
-                msg = '{0!r} not in sort order at index {1}'.format(values[0], self._len)
+                args = values[0], self._len
+                msg = '{0!r} not in sort order at index {1}'.format(*args)
                 raise ValueError(msg)
 
             if len(_keys[-1]) < self._half:
@@ -2464,8 +2467,10 @@ class SortedListWithKey(SortedList):
             assert all(len(val_list) == len(key_list)
                        for val_list, key_list in zip(self._lists, self._keys))
             assert all(self._key(val) == key for val, key in
-                       zip((_val for _val_list in self._lists for _val in _val_list),
-                           (_key for _key_list in self._keys for _key in _key_list)))
+                       zip((_val for _val_list in self._lists
+                            for _val in _val_list),
+                           (_key for _key_list in self._keys
+                            for _key in _key_list)))
 
             # Check _maxes is a map of _keys.
 

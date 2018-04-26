@@ -3,7 +3,6 @@ Python Sorted Containers
 
 .. todo::
 
-   * Update .pylintrc
    * Review all files for Python 3 compatibility
    * Python 3 api changes: keys/values/items views/iter
    * Update docs to use autodoc
