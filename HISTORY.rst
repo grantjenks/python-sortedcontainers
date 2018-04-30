@@ -6,7 +6,7 @@ Sorted Containers Release History
 
 **Miscellaneous**
 
-* Improved performance of islice(...) methods.
+* Improved performance of irange(...) and islice(...) methods.
 
 1.5.9 (2017-12-08)
 ------------------
