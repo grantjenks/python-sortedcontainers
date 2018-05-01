@@ -8,7 +8,7 @@ from collections import ValuesView as AbstractValuesView
 from collections import ItemsView as AbstractItemsView
 from sys import hexversion
 
-from .sortedlist import SortedList, recursive_repr, SortedListWithKey
+from .sortedlist import SortedList, recursive_repr
 from .sortedset import SortedSet
 
 NONE = object()
@@ -96,10 +96,7 @@ class SortedDict(dict):
         else:
             self._key = None
 
-        if self._key is None:
-            self._list = SortedList()
-        else:
-            self._list = SortedListWithKey(key=self._key)
+        self._list = SortedList(key=self._key)
 
         # Cache function pointers to dict methods.
 
@@ -370,7 +367,7 @@ class SortedDict(dict):
     def __reduce__(self):
         return (self.__class__, (self._key, list(self._iteritems())))
 
-    @recursive_repr
+    @recursive_repr()
     def __repr__(self):
         _key = self._key
         name = type(self).__name__
@@ -493,7 +490,7 @@ class KeysView(AbstractKeysView, Set, Sequence):
             """Return True if and only if *that* is disjoint with self."""
             # pylint: disable=arguments-differ
             return self._view.isdisjoint(that)
-    @recursive_repr
+    @recursive_repr()
     def __repr__(self):
         return 'SortedDict_keys({0!r})'.format(list(self))
 
@@ -601,7 +598,7 @@ class ValuesView(AbstractValuesView, Sequence):
         raise TypeError
     def __xor__(self, that):
         raise TypeError
-    @recursive_repr
+    @recursive_repr()
     def __repr__(self):
         return 'SortedDict_values({0!r})'.format(list(self))
 
@@ -736,6 +733,6 @@ class ItemsView(AbstractItemsView, Set, Sequence):
             """Return True if and only if *that* is disjoint with self."""
             # pylint: disable=arguments-differ
             return self._view.isdisjoint(that)
-    @recursive_repr
+    @recursive_repr()
     def __repr__(self):
         return 'SortedDict_items({0!r})'.format(list(self))

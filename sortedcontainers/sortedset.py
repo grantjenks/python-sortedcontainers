@@ -312,7 +312,7 @@ class SortedSet(MutableSet, Sequence):
     def __reduce__(self):
         return (type(self), (self._set, self._key))
 
-    @recursive_repr
+    @recursive_repr()
     def __repr__(self):
         _key = self._key
         key = '' if _key is None else ', key={0!r}'.format(_key)
