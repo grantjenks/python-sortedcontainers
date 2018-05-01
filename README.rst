@@ -5,10 +5,16 @@ Python Sorted Containers
 
    * Review all files for Python 3 compatibility
    * Python 3 api changes: keys/values/items views/iter
+   * Rename SortedListWithKey to SortedKeyList
+   * Make sure all dunder methods document the typical access syntax
    * Update docs to use autodoc
    * Update docs based on issues
+   * Add docs note on scale page that binary trees have the same sampling
+     limitation due to tree shape (except AVL)
+   * Also add docs note about projects that have been deprecated in favor of
+     sortedcontainers
+   * Also add docs note about last update and Python 3 support for alternatives
    * Add doctests to docs
-   * Update README/index to ref development on CPython 3.6
    * Rename github repo
    * Add sortedmap, using std::map in C++ standard library.
      https://pypi.org/project/sortedmap/
@@ -19,7 +25,9 @@ Python Sorted Containers
      https://bitbucket.org/mojaves/pyskiplist/
      https://pypi.org/project/skipdict/
      https://github.com/tailhook/sortedsets
+   * Change docs theme to gjtheme
    * Rename "SortedContainers" to "Sorted Containers"
+   * Tell Doug Hellmann about SortedContainers and relation to bisect module
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.
