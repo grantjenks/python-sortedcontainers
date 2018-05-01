@@ -27,8 +27,6 @@ def test_init():
     slt = SortedListWithKey(key=negate)
     slt._reset(10000)
     assert slt._load == 10000
-    assert slt._half == 5000
-    assert slt._dual == 20000
     slt._check()
 
     slt = SortedListWithKey(range(10000), key=negate)
@@ -267,91 +265,6 @@ def test_delitem_slice():
     del slt[10:40:-1]
     del slt[10:40:2]
     del slt[10:40:-2]
-
-def test_setitem():
-    random.seed(0)
-    slt = SortedListWithKey(range(0, 100, 10), key=negate)
-    slt._reset(4)
-
-    slt[-3] = 20
-    slt._check()
-
-    values = list(enumerate(range(95, 5, -10)))
-    random.shuffle(values)
-    for pos, val in values:
-        slt[pos] = val
-
-def test_setitem_slice():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    slt[:10] = iter(range(99, 89, -1))
-    assert slt == list(range(99, -1, -1))
-    slt[:10:2] = iter([99, 97, 95, 93, 91])
-    assert slt == list(range(99, -1, -1))
-    slt[-50:] = range(49, -51, -1)
-    assert slt == list(range(99, -51, -1))
-    slt[-100:] = range(49, -1, -1)
-    assert slt == list(range(99, -1, -1))
-    slt[:] = range(99, -1, -1)
-    assert slt == list(range(99, -1, -1))
-    slt[90:] = []
-    assert slt == list(range(99, 9, -1))
-    slt[:10] = []
-    assert slt == list(range(89, 9, -1))
-
-def test_setitem_empty_slice():
-    slt = SortedListWithKey(range(5), key=negate)
-    print(slt)
-    slt[1:0] = [3.5]
-    assert slt == [4, 3.5, 3, 2, 1, 0]
-
-def test_setitem_slice_bad():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[:10] = list(reversed(range(10)))
-
-def test_setitem_slice_bad1():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[10:20] = range(20, 30)
-
-def test_setitem_slice_bad2():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[20:30] = range(10, 20)
-
-def test_setitem_extended_slice():
-    slt = SortedListWithKey(range(1000, 0, -10), key=negate)
-    slt._reset(17)
-    lst = list(range(1000, 0, -10))
-    lst[10:90:10] = range(905, 105, -100)
-    slt[10:90:10] = range(905, 105, -100)
-    assert slt == lst
-
-def test_setitem_extended_slice_bad1():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[20:80:3] = list(range(10))
-
-def test_setitem_extended_slice_bad2():
-    slt = SortedListWithKey(range(100), key=negate)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[40:90:5] = list(range(10))
-
-def test_setitem_valueerror1():
-    slt = SortedListWithKey(range(10), key=negate)
-    with pytest.raises(ValueError):
-        slt[9] = 10
-
-def test_setitem_valueerror2():
-    slt = SortedListWithKey(range(10), key=negate)
-    with pytest.raises(ValueError):
-        slt[0] = 0
 
 def test_iter():
     slt = SortedListWithKey(range(10000), key=negate)

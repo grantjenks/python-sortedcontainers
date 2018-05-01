@@ -22,8 +22,6 @@ def test_init():
     slt = SortedListWithKey(key=modulo)
     slt._reset(10000)
     assert slt._load == 10000
-    assert slt._half == 5000
-    assert slt._dual == 20000
     slt._check()
 
     slt = SortedListWithKey(range(10000), key=modulo)
@@ -315,64 +313,6 @@ def test_delitem_slice():
     del slt[10:40:-1]
     del slt[10:40:2]
     del slt[10:40:-2]
-
-def test_setitem():
-    random.seed(0)
-    slt = SortedListWithKey(range(0, 100), key=modulo)
-    slt._reset(17)
-    slt[0] = 100
-    slt[99] = 99
-    slt[55] = 45
-
-def test_setitem_slice():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    slt[:10] = [90, 80, 70, 60, 50, 40, 30, 20, 10, 0]
-    slt[:10:2] = [0, 10, 20, 30, 40]
-    slt[:] = sorted(range(100), key=modulo)
-    slt[90:] = []
-    slt[:10] = []
-    assert len(slt) == 80
-
-def test_setitem_slice_bad():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[:10] = list(reversed(range(10)))
-
-def test_setitem_slice_bad1():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[10:20] = range(20, 30)
-
-def test_setitem_slice_bad2():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[20:30] = range(10, 20)
-
-def test_setitem_extended_slice_bad1():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[20:80:3] = list(range(10))
-
-def test_setitem_extended_slice_bad2():
-    slt = SortedListWithKey(range(100), key=modulo)
-    slt._reset(17)
-    with pytest.raises(ValueError):
-        slt[40:90:5] = list(range(10))
-
-def test_setitem_valueerror1():
-    slt = SortedListWithKey(range(10), key=modulo)
-    with pytest.raises(ValueError):
-        slt[9] = 10
-
-def test_setitem_valueerror2():
-    slt = SortedListWithKey(range(10), key=modulo)
-    with pytest.raises(ValueError):
-        slt[0] = 9
 
 def test_iter():
     slt = SortedListWithKey(range(10000), key=modulo)
