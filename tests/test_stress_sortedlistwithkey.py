@@ -131,27 +131,6 @@ def stress_getitem(slt):
 
 @actor(1)
 @not_empty
-def stress_setitem(slt):
-    pos = random.randrange(len(slt))
-    slt[pos] = slt[pos]
-
-@actor(1)
-@not_empty
-def stress_setitem2(slt):
-    pos = random.randrange(int(len(slt) / 100)) * 100
-    slt[pos] = slt[pos]
-
-@actor(1)
-@not_empty
-def stress_getset_slice(slt):
-    start, stop = sorted(random.randrange(len(slt)) for rpt in range(2))
-    step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
-    lst = slt[start:stop:step]
-    assert all(lst[pos - 1] <= lst[pos] for pos in range(1, len(lst)))
-    slt[start:stop:step] = lst
-
-@actor(1)
-@not_empty
 def stress_delitem_slice(slt):
     start, stop = sorted(random.randrange(len(slt)) for rpt in range(2))
     step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
