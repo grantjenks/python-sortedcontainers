@@ -13,6 +13,7 @@
 /build/
 /dist/
 /sortedcontainers.egg-info/
+/docs/_build/
 
 # macOS metadata
 .DS_Store
