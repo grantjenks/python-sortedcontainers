@@ -27,8 +27,6 @@ def test_init():
     sst = SortedSet()
     sst._reset(10000)
     assert sst._list._load == 10000
-    assert sst._list._half == 5000
-    assert sst._list._dual == 20000
     sst._check()
 
     sst = SortedSet(range(10000))
