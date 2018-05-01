@@ -113,8 +113,8 @@ def init_sorted_list(sl, size, moment=5, fraction=0.1):
     sl.clear()
 
     load = sl._load
-    half = sl._half
-    twice = sl._twice
+    half = sl._load >> 1
+    twice = sl._load << 1
     mu = load * (1.0 + moment / 10.0)
     sigma = load * fraction
     total = 0
