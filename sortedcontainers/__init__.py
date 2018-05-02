@@ -38,11 +38,17 @@ testing has 100% coverage with unit tests and hours of stress.
 """
 
 
-from .sortedlist import SortedList, SortedListWithKey
+from .sortedlist import SortedList, SortedKeyList, SortedListWithKey
 from .sortedset import SortedSet
 from .sorteddict import SortedDict
 
-__all__ = ['SortedList', 'SortedSet', 'SortedDict', 'SortedListWithKey']
+__all__ = [
+    'SortedList',
+    'SortedKeyList',
+    'SortedSet',
+    'SortedDict',
+    'SortedListWithKey',
+]
 
 __title__ = 'sortedcontainers'
 __version__ = '1.5.10'

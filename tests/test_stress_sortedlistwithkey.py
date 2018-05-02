@@ -184,47 +184,6 @@ def stress_count(slt):
     assert slt.count(val) == values.count(val)
 
 @actor(1)
-def stress_append(slt):
-    if random.randrange(100) < 10:
-        slt.clear()
-    if len(slt) == 0:
-        slt.append(random.random())
-    else:
-        slt.append(slt[-1])
-
-@actor(1)
-def stress_extend(slt):
-    if random.randrange(100) < 10:
-        slt.clear()
-    if len(slt) == 0:
-        slt.extend(float(val) / 1000 for val in range(1000))
-    else:
-        slt.extend(frange(slt[-1], 1, 0.001))
-
-@actor(1)
-@not_empty
-def stress_insert(slt):
-    slt.insert(0, slt[0])
-    slt.insert(-(len(slt) + 10), slt[0])
-
-    slt.insert(len(slt), slt[-1])
-    slt.insert(len(slt) + 10, slt[-1])
-
-    pos = random.randrange(len(slt))
-    slt.insert(pos, slt[pos])
-
-@actor(1)
-def stress_insert2(slt):
-    if random.randrange(100) < 10:
-        slt.clear()
-    if len(slt) == 0:
-        slt.insert(0, random.random())
-    else:
-        values = list(slt)[:250]
-        for val in values:
-            slt.insert(slt.index(val), val)
-
-@actor(1)
 @not_empty
 def stress_pop(slt):
     pos = random.randrange(len(slt)) + 1

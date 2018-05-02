@@ -206,7 +206,7 @@ def test_getitem():
     slt = SortedListWithKey(key=modulo)
     slt._reset(17)
 
-    slt.append(5)
+    slt.add(5)
     slt._build_index()
     slt._check()
     slt.clear()
@@ -534,92 +534,6 @@ def test_count():
     slt = SortedListWithKey(range(8), key=modulo)
     assert slt.count(9) == 0
 
-def test_append():
-    slt = SortedListWithKey(key=modulo)
-    slt._reset(4)
-
-    slt.append(0)
-
-    for val in range(1, 10):
-        slt.append(val)
-        slt._check()
-
-def test_append_valueerror():
-    slt = SortedListWithKey(range(100), key=modulo)
-    with pytest.raises(ValueError):
-        slt.append(5)
-
-def test_extend():
-    slt = SortedListWithKey(key=modulo)
-    slt._reset(4)
-
-    slt.extend(range(5))
-    slt._check()
-
-    slt.extend(range(6, 10))
-    slt._check()
-
-def test_extend_valueerror1():
-    slt = SortedListWithKey(key=modulo)
-    with pytest.raises(ValueError):
-        slt.extend([1, 2, 3, 5, 4, 6])
-
-def test_extend_valueerror2():
-    slt = SortedListWithKey(range(20), key=modulo)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.extend([17, 18, 19, 20, 21, 22, 23])
-
-def test_insert():
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    slt.insert(-100, 0)
-    slt._check()
-    slt.insert(-1, 9)
-    slt._check()
-    slt.insert(0, 10)
-    slt._check()
-
-    slt = SortedListWithKey(key=modulo)
-    slt._reset(4)
-    slt.insert(0, 5)
-    slt._check()
-
-    slt = SortedListWithKey(range(5, 15), key=modulo)
-    slt._reset(4)
-    for rpt in range(8):
-        slt.insert(0, 10)
-        slt._check()
-
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    slt.insert(8, 8)
-    slt._check()
-
-def test_insert_valueerror1():
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(10, 5)
-
-def test_insert_valueerror2():
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(0, 9)
-
-def test_insert_valueerror3():
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(5, 3)
-
-def test_insert_valueerror4():
-    slt = SortedListWithKey(range(10), key=modulo)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(5, 7)
-
 def test_pop():
     slt = SortedListWithKey(range(10), key=modulo)
     slt._reset(4)
@@ -802,12 +716,12 @@ def test_ge():
 def test_repr():
     this = SortedListWithKey(range(10), key=modulo)
     this._reset(4)
-    assert repr(this).startswith('SortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
+    assert repr(this).startswith('SortedKeyList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
 
 def test_repr_recursion():
     this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
     this._lists[-1].append(this)
-    assert repr(this).startswith('SortedListWithKey([[1], [2], [3], [4], ...], key=<function ')
+    assert repr(this).startswith('SortedKeyList([[1], [2], [3], [4], ...], key=<function ')
 
 def test_repr_subclass():
     class CustomSortedListWithKey(SortedListWithKey):

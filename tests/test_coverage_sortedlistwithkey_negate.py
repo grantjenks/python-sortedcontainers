@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey
+from sortedcontainers import SortedListWithKey, SortedKeyList
 from itertools import chain
 import pytest
 
@@ -14,6 +14,9 @@ if hexversion < 0x03000000:
 
 def negate(val):
     return -val
+
+def test_alias():
+    assert SortedKeyList is SortedListWithKey
 
 def test_identity():
     slt = SortedListWithKey(range(100))
@@ -161,7 +164,7 @@ def test_getitem():
     slt = SortedListWithKey(key=negate)
     slt._reset(17)
 
-    slt.append(5)
+    slt.add(5)
     assert slt[0] == 5
     slt.clear()
 
@@ -413,100 +416,6 @@ def test_count():
     for iii in range(100):
         assert slt.count(iii) == iii
 
-def test_append():
-    slt = SortedListWithKey(key=negate)
-    slt._reset(17)
-
-    slt.append(1000)
-
-    for val in range(999, -1, -1):
-        slt.append(val)
-        slt._check()
-
-def test_append_valueerror():
-    slt = SortedListWithKey(range(100), key=negate)
-    with pytest.raises(ValueError):
-        slt.append(5)
-
-def test_extend():
-    slt = SortedListWithKey(key=negate)
-    slt._reset(17)
-
-    slt.extend(range(300, 200, -1))
-    slt._check()
-
-    slt.extend(list(range(200, 100, -1)))
-    slt._check()
-
-    for val in range(100, 0, -1):
-        del slt._index[:]
-        slt._build_index()
-        slt.extend([val] * (101 - val))
-        slt._check()
-
-def test_extend_valueerror1():
-    slt = SortedListWithKey(key=negate)
-    with pytest.raises(ValueError):
-        slt.extend([1, 2, 3, 5, 4, 6])
-
-def test_extend_valueerror2():
-    slt = SortedListWithKey(range(20), key=negate)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.extend([5, 4, 3, 2, 1])
-
-def test_insert():
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    slt.insert(-1, 0)
-    slt._check()
-    slt.insert(-100, 9)
-    slt._check()
-    slt.insert(0, 10)
-    slt._check()
-    slt.insert(14, -1)
-    slt._check()
-
-    slt = SortedListWithKey(key=negate)
-    slt._reset(4)
-    slt.insert(0, 5)
-    slt._check()
-
-    slt = SortedListWithKey(range(5, 15), key=negate)
-    slt._reset(4)
-    for rpt in range(8):
-        slt.insert(0, 15)
-        slt._check()
-
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    slt.insert(8, 2)
-    slt._check()
-
-def test_insert_valueerror1():
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(10, 5)
-
-def test_insert_valueerror2():
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(0, 0)
-
-def test_insert_valueerror3():
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(5, 3)
-
-def test_insert_valueerror4():
-    slt = SortedListWithKey(range(10), key=negate)
-    slt._reset(4)
-    with pytest.raises(ValueError):
-        slt.insert(5, 7)
-
 def test_pop():
     slt = SortedListWithKey(range(10), key=negate)
     slt._reset(4)
@@ -679,7 +588,7 @@ def test_gte():
 def test_repr():
     this = SortedListWithKey(range(10), key=negate)
     this._reset(4)
-    assert repr(this).startswith('SortedListWithKey([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
+    assert repr(this).startswith('SortedKeyList([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], key=<function negate at ')
 
 def test_pickle():
     import pickle

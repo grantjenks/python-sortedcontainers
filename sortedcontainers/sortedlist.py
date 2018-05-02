@@ -10,7 +10,7 @@ Sorted list implementations:
 .. currentmodule:: sortedcontainers
 
 * :class:`SortedList`
-* :class:`SortedListWithKey`
+* :class:`SortedKeyList`
 
 """
 from __future__ import print_function
@@ -130,7 +130,6 @@ class SortedList(MutableSequence):
         :return: sorted list or sorted-key list instance
 
         """
-        # pylint: disable=unused-argument
         if key is None:
             return object.__new__(cls)
         else:
@@ -230,7 +229,8 @@ class SortedList(MutableSequence):
 
         Updates the index when the sublist length is less than double the load
         level. This requires incrementing the nodes in a traversal from the
-        leaf node to the root. For an example traversal see self._loc.
+        leaf node to the root. For an example traversal see
+        ``SortedList._loc``.
 
         """
         _load = self._load
@@ -334,6 +334,12 @@ class SortedList(MutableSequence):
 
         Runtime complexity: `O(log(n))` -- approximate.
 
+        >>> sl = SortedList([1, 2, 3, 4, 5])
+        >>> sl.discard(5)
+        >>> sl.discard(0)
+        >>> sl == [1, 2, 3, 4]
+        True
+
         :param value: `value` to discard from sorted list
 
         """
@@ -360,6 +366,15 @@ class SortedList(MutableSequence):
         If `value` is not a member, raise ValueError.
 
         Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> sl = SortedList([1, 2, 3, 4, 5])
+        >>> sl.remove(5)
+        >>> sl == [1, 2, 3, 4]
+        True
+        >>> sl.remove(0)
+        Traceback (most recent call last):
+          ...
+        ValueError: 0 not in list
 
         :param value: `value` to remove from sorted list
         :raises ValueError: if `value` is not in sorted list
@@ -391,7 +406,8 @@ class SortedList(MutableSequence):
 
         Updates the index when the sublist length is more than half the load
         level. This requires decrementing the nodes in a traversal from the
-        leaf node to the root. For an example traversal see self._loc.
+        leaf node to the root. For an example traversal see
+        ``SortedList._loc``.
 
         :param int pos: lists index
         :param int idx: sublist index
@@ -1075,10 +1091,12 @@ class SortedList(MutableSequence):
 
 
     def bisect_left(self, value):
-        """Return an appropriate index to insert `value` in the sorted list.
+        """Return an index to insert `value` in the sorted list.
 
         If the `value` is already present, the insertion point will be before
         (to the left of) any existing values.
+
+        Similar to the `bisect` module in the standard library.
 
         Runtime complexity: `O(log(n))` -- approximate.
 
@@ -1105,10 +1123,12 @@ class SortedList(MutableSequence):
 
 
     def bisect_right(self, value):
-        """Return an appropriate index to insert `value` in the sorted list.
+        """Return an index to insert `value` in the sorted list.
 
         Similar to `bisect_left`, but if `value` is already present, the
         insertion point with be after (to the right of) any existing values.
+
+        Similar to the `bisect` module in the standard library.
 
         Runtime complexity: `O(log(n))` -- approximate.
 
@@ -1296,6 +1316,14 @@ class SortedList(MutableSequence):
 
         Runtime complexity: `O(log(n))` -- approximate.
 
+        >>> sl = SortedList('abcde')
+        >>> sl.index('d')
+        3
+        >>> sl.index('z')
+        Traceback (most recent call last):
+          ...
+        ValueError: 'z' is not in list
+
         :param value: value in sorted list
         :param int start: start index (default None, start of sorted list)
         :param int stop: stop index (default None, end of sorted list)
@@ -1353,7 +1381,7 @@ class SortedList(MutableSequence):
 
 
     def __add__(self, other):
-        """Return new sorted list containing all values in both sorted lists.
+        """Return new sorted list containing all values in both sequences.
 
         ``sl.__add__(other)`` <==> ``sl + other``
 
@@ -1583,53 +1611,84 @@ def identity(value):
     return value
 
 
-class SortedListWithKey(SortedList):
-    """
-    SortedListWithKey provides most of the same methods as a list but keeps
-    the items in sorted order.
+class SortedKeyList(SortedList):
+    """Sorted-key list a subtype of sorted list.
+
+    The sorted-key list maintains values in comparison order based on the
+    result of a key function applied to every value.
+
+    All the same methods that are available in :class:`SortedList` are also
+    available in :class:`SortedKeyList`.
+
+    Additional methods provided:
+
+    * :attr:`SortedKeyList.key`
+    * :func:`SortedKeyList.bisect_key_left`
+    * :func:`SortedKeyList.bisect_key_right`
+    * :func:`SortedKeyList.irange_key`
 
     Some examples below use:
 
-        >>> from operator import neg
-        >>> neg(10)
-        -10
+    >>> from operator import neg
+    >>> neg
+    <built-in function neg>
+    >>> neg(1)
+    -1
 
     """
-    # pylint: disable=too-many-ancestors,abstract-method
     def __init__(self, iterable=None, key=identity):
-        """SortedListWithKey provides most of the same methods as list but
-        keeps the items in sorted order.
+        """Initialize sorted-key list instance.
 
-        An optional *iterable* provides an initial series of items to populate
-        the SortedListWithKey.
+        Optional `iterable` argument provides an initial iterable of values to
+        initialize the sorted-key list.
 
-        An optional *key* argument defines a callable that, like the `key`
+        Optional `key` argument defines a callable that, like the `key`
         argument to Python's `sorted` function, extracts a comparison key from
-        each element. The default is the identity function.
+        each value. The default is the identity function.
+
+        Runtime complexity: `O(n*log(n))`
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList(key=neg)
+        >>> skl
+        SortedKeyList([], key=<built-in function neg>)
+        >>> skl = SortedKeyList([3, 1, 2, 5, 4], key=neg)
+        >>> skl
+        SortedKeyList([5, 4, 3, 2, 1], key=<built-in function neg>)
+
+        :param iterable: initial values (optional)
+        :param key: function used to extract comparison key (optional)
+
         """
-        # pylint: disable=super-init-not-called
+        self._key = key
         self._len = 0
+        self._load = LOAD
         self._lists = []
         self._keys = []
         self._maxes = []
         self._index = []
-        self._key = key
-        self._load = LOAD
         self._offset = 0
 
         if iterable is not None:
             self._update(iterable)
 
+
     def __new__(cls, iterable=None, key=identity):
         return object.__new__(cls)
 
+
     @property
     def key(self):
-        """Key function used to extract comparison key for sorting."""
+        "Function used to extract comparison key from values."
         return self._key
 
+
     def clear(self):
-        """Remove all the elements from the list."""
+        """Remove all values from sorted-key list.
+
+        Runtime complexity: `O(n)`
+
+        """
         self._len = 0
         del self._lists[:]
         del self._keys[:]
@@ -1638,41 +1697,58 @@ class SortedListWithKey(SortedList):
 
     _clear = clear
 
-    def add(self, val):
-        """Add the element *val* to the list."""
+
+    def add(self, value):
+        """Add `value` to sorted-key list.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList(key=neg)
+        >>> skl.add(3)
+        >>> skl.add(1)
+        >>> skl.add(2)
+        >>> skl
+        SortedKeyList([3, 2, 1], key=<built-in function neg>)
+
+        :param value: value to add to sorted-key list
+
+        """
         _lists = self._lists
         _keys = self._keys
         _maxes = self._maxes
 
-        key = self._key(val)
+        key = self._key(value)
 
         if _maxes:
             pos = bisect_right(_maxes, key)
 
             if pos == len(_maxes):
                 pos -= 1
-                _lists[pos].append(val)
+                _lists[pos].append(value)
                 _keys[pos].append(key)
                 _maxes[pos] = key
             else:
                 idx = bisect_right(_keys[pos], key)
-                _lists[pos].insert(idx, val)
+                _lists[pos].insert(idx, value)
                 _keys[pos].insert(idx, key)
 
             self._expand(pos)
         else:
-            _lists.append([val])
+            _lists.append([value])
             _keys.append([key])
             _maxes.append(key)
 
         self._len += 1
 
+
     def _expand(self, pos):
-        """Splits sublists that are more than double the load level.
+        """Split sublists with length greater than double the load-factor.
 
         Updates the index when the sublist length is less than double the load
         level. This requires incrementing the nodes in a traversal from the
-        leaf node to the root. For an example traversal see self._loc.
+        leaf node to the root. For an example traversal see
+        ``SortedList._loc``.
 
         """
         _lists = self._lists
@@ -1704,8 +1780,21 @@ class SortedListWithKey(SortedList):
                     child = (child - 1) >> 1
                 _index[0] += 1
 
+
     def update(self, iterable):
-        """Update the list by adding all elements from *iterable*."""
+        """Update sorted-key list by adding all values from `iterable`.
+
+        Runtime complexity: `O(k*log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList(key=neg)
+        >>> skl.update([3, 1, 2])
+        >>> skl
+        SortedKeyList([3, 2, 1], key=<built-in function neg>)
+
+        :param iterable: iterable of values to add
+
+        """
         _lists = self._lists
         _keys = self._keys
         _maxes = self._maxes
@@ -1732,14 +1821,29 @@ class SortedListWithKey(SortedList):
 
     _update = update
 
-    def __contains__(self, val):
-        """Return True if and only if *val* is an element in the list."""
+
+    def __contains__(self, value):
+        """Return true if `value` is an element of the sorted-key list.
+
+        ``skl.__contains__(value)`` <==> ``value in skl``
+
+        Runtime complexity: `O(log(n))`
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([1, 2, 3, 4, 5], key=neg)
+        >>> 3 in skl
+        True
+
+        :param value: search for value in sorted-key list
+        :return: true if `value` in sorted-key list
+
+        """
         _maxes = self._maxes
 
         if not _maxes:
             return False
 
-        key = self._key(val)
+        key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
@@ -1756,7 +1860,7 @@ class SortedListWithKey(SortedList):
         while True:
             if _keys[pos][idx] != key:
                 return False
-            if _lists[pos][idx] == val:
+            if _lists[pos][idx] == value:
                 return True
             idx += 1
             if idx == len_sublist:
@@ -1766,18 +1870,30 @@ class SortedListWithKey(SortedList):
                 len_sublist = len(_keys[pos])
                 idx = 0
 
-    def discard(self, val):
-        """
-        Remove the first occurrence of *val*.
 
-        If *val* is not a member, does nothing.
+    def discard(self, value):
+        """Remove `value` from sorted-key list if it is a member.
+
+        If `value` is not a member, do nothing.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.discard(1)
+        >>> skl.discard(0)
+        >>> skl == [5, 4, 3, 2]
+        True
+
+        :param value: `value` to discard from sorted-key list
+
         """
         _maxes = self._maxes
 
         if not _maxes:
             return
 
-        key = self._key(val)
+        key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
@@ -1792,7 +1908,7 @@ class SortedListWithKey(SortedList):
         while True:
             if _keys[pos][idx] != key:
                 return
-            if _lists[pos][idx] == val:
+            if _lists[pos][idx] == value:
                 self._delete(pos, idx)
                 return
             idx += 1
@@ -1803,22 +1919,38 @@ class SortedListWithKey(SortedList):
                 len_sublist = len(_keys[pos])
                 idx = 0
 
-    def remove(self, val):
-        """
-        Remove first occurrence of *val*.
 
-        Raises ValueError if *val* is not present.
+    def remove(self, value):
+        """Remove `value` from sorted-key list; `value` must be a member.
+
+        If `value` is not a member, raise ValueError.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([1, 2, 3, 4, 5], key=neg)
+        >>> skl.remove(5)
+        >>> skl == [4, 3, 2, 1]
+        True
+        >>> skl.remove(0)
+        Traceback (most recent call last):
+          ...
+        ValueError: 0 not in list
+
+        :param value: `value` to remove from sorted-key list
+        :raises ValueError: if `value` is not in sorted-key list
+
         """
         _maxes = self._maxes
 
         if not _maxes:
-            raise ValueError('{0!r} not in list'.format(val))
+            raise ValueError('{0!r} not in list'.format(value))
 
-        key = self._key(val)
+        key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
-            raise ValueError('{0!r} not in list'.format(val))
+            raise ValueError('{0!r} not in list'.format(value))
 
         _lists = self._lists
         _keys = self._keys
@@ -1828,27 +1960,32 @@ class SortedListWithKey(SortedList):
 
         while True:
             if _keys[pos][idx] != key:
-                raise ValueError('{0!r} not in list'.format(val))
-            if _lists[pos][idx] == val:
+                raise ValueError('{0!r} not in list'.format(value))
+            if _lists[pos][idx] == value:
                 self._delete(pos, idx)
                 return
             idx += 1
             if idx == len_sublist:
                 pos += 1
                 if pos == len_keys:
-                    raise ValueError('{0!r} not in list'.format(val))
+                    raise ValueError('{0!r} not in list'.format(value))
                 len_sublist = len(_keys[pos])
                 idx = 0
 
+
     def _delete(self, pos, idx):
-        """
-        Delete the item at the given (pos, idx).
+        """Delete value at the given `(pos, idx)`.
 
         Combines lists that are less than half the load level.
 
         Updates the index when the sublist length is more than half the load
-        level. This requires decrementing the nodes in a traversal from the leaf
-        node to the root. For an example traversal see self._loc.
+        level. This requires decrementing the nodes in a traversal from the
+        leaf node to the root. For an example traversal see
+        ``SortedList._loc``.
+
+        :param int pos: lists index
+        :param int idx: sublist index
+
         """
         _lists = self._lists
         _keys = self._keys
@@ -1864,7 +2001,6 @@ class SortedListWithKey(SortedList):
         len_keys_pos = len(keys_pos)
 
         if len_keys_pos > (self._load >> 1):
-
             _maxes[pos] = keys_pos[-1]
 
             if _index:
@@ -1873,9 +2009,7 @@ class SortedListWithKey(SortedList):
                     _index[child] -= 1
                     child = (child - 1) >> 1
                 _index[0] -= 1
-
         elif len(_keys) > 1:
-
             if not pos:
                 pos += 1
 
@@ -1890,220 +2024,78 @@ class SortedListWithKey(SortedList):
             del _index[:]
 
             self._expand(prev)
-
         elif len_keys_pos:
-
             _maxes[pos] = keys_pos[-1]
-
         else:
-
             del _lists[pos]
             del _keys[pos]
             del _maxes[pos]
             del _index[:]
 
-    def _check_order(self, idx, key, val):
-        # pylint: disable=arguments-differ
-        _len = self._len
-        _keys = self._keys
-
-        pos, loc = self._pos(idx)
-
-        if idx < 0:
-            idx += _len
-
-        # Check that the inserted value is not less than the
-        # previous value.
-
-        if idx > 0:
-            idx_prev = loc - 1
-            pos_prev = pos
-
-            if idx_prev < 0:
-                pos_prev -= 1
-                idx_prev = len(_keys[pos_prev]) - 1
-
-            if _keys[pos_prev][idx_prev] > key:
-                msg = '{0!r} not in sort order at index {1}'.format(val, idx)
-                raise ValueError(msg)
-
-        # Check that the inserted value is not greater than
-        # the previous value.
-
-        if idx < (_len - 1):
-            idx_next = loc + 1
-            pos_next = pos
-
-            if idx_next == len(_keys[pos_next]):
-                pos_next += 1
-                idx_next = 0
-
-            if _keys[pos_next][idx_next] < key:
-                msg = '{0!r} not in sort order at index {1}'.format(val, idx)
-                raise ValueError(msg)
-
-    def __setitem__(self, index, value):
-        """Replace the item at position *index* with *value*.
-
-        Supports slice notation. Raises a :exc:`ValueError` if the sort order
-        would be violated. When used with a slice and iterable, the
-        :exc:`ValueError` is raised before the list is mutated if the sort
-        order would be violated by the operation.
-
-        """
-        # pylint: disable=too-many-locals
-        _lists = self._lists
-        _keys = self._keys
-        _maxes = self._maxes
-        _check_order = self._check_order
-        _pos = self._pos
-
-        if isinstance(index, slice):
-            _len = self._len
-            start, stop, step = index.indices(_len)
-            indices = range(start, stop, step)
-
-            # Copy value to avoid aliasing issues with self and cases where an
-            # iterator is given.
-
-            values = tuple(value)
-
-            if step != 1:
-                if len(values) != len(indices):
-                    raise ValueError(
-                        'attempt to assign sequence of size %s'
-                        ' to extended slice of size %s'
-                        % (len(values), len(indices)))
-
-                # Keep a log of values that are set so that we can
-                # roll back changes if ordering is violated.
-
-                log = []
-                _append = log.append
-
-                for idx, val in zip(indices, values):
-                    pos, loc = _pos(idx)
-                    key = self._key(val)
-                    _append((idx, _keys[pos][loc], key, _lists[pos][loc], val))
-                    _keys[pos][loc] = key
-                    _lists[pos][loc] = val
-                    if len(_keys[pos]) == (loc + 1):
-                        _maxes[pos] = key
-
-                try:
-                    # Validate ordering of new values.
-
-                    for idx, oldkey, newkey, oldval, newval in log:
-                        _check_order(idx, newkey, newval)
-
-                except ValueError:
-
-                    # Roll back changes from log.
-
-                    for idx, oldkey, newkey, oldval, newval in log:
-                        pos, loc = _pos(idx)
-                        _keys[pos][loc] = oldkey
-                        _lists[pos][loc] = oldval
-                        if len(_keys[pos]) == (loc + 1):
-                            _maxes[pos] = oldkey
-
-                    raise
-            else:
-                if start == 0 and stop == self._len:
-                    self._clear()
-                    return self._update(values)
-
-                if stop < start:
-                    # When calculating indices, stop may be less than start.
-                    # For example: ...[5:3:1] results in slice(5, 3, 1) which
-                    # is a valid but not useful stop index.
-                    stop = start
-
-                if values:
-
-                    # Check that given values are ordered properly.
-
-                    keys = tuple(map(self._key, values))
-                    alphas = iter(keys)
-                    betas = iter(keys)
-                    next(betas)
-                    pairs = zip(alphas, betas)
-
-                    if not all(alpha <= beta for alpha, beta in pairs):
-                        raise ValueError('given values not in sort order')
-
-                    # Check ordering in context of sorted list.
-
-                    if start:
-                        pos, loc = _pos(start - 1)
-                        if _keys[pos][loc] > keys[0]:
-                            msg = '{0!r} not in sort order at index {1}'.format(
-                                values[0], start)
-                            raise ValueError(msg)
-
-                    if stop != _len:
-                        pos, loc = _pos(stop)
-                        if _keys[pos][loc] < keys[-1]:
-                            msg = '{0!r} not in sort order at index {1}'.format(
-                                values[-1], stop)
-                            raise ValueError(msg)
-
-                # Delete the existing values.
-
-                self._delitem(index)
-
-                # Insert the new values.
-
-                _insert = self.insert
-                for idx, val in enumerate(values):
-                    _insert(start + idx, val)
-        else:
-            pos, loc = _pos(index)
-            key = self._key(value)
-            _check_order(index, key, value)
-            _lists[pos][loc] = value
-            _keys[pos][loc] = key
-            if len(_lists[pos]) == (loc + 1):
-                _maxes[pos] = key
 
     def irange(self, minimum=None, maximum=None, inclusive=(True, True),
                reverse=False):
-        """
-        Create an iterator of values between `minimum` and `maximum`.
-
-        `inclusive` is a pair of booleans that indicates whether the minimum
-        and maximum ought to be included in the range, respectively. The
-        default is (True, True) such that the range is inclusive of both
-        minimum and maximum.
+        """Create an iterator of values between `minimum` and `maximum`.
 
         Both `minimum` and `maximum` default to `None` which is automatically
-        inclusive of the start and end of the list, respectively.
+        inclusive of the beginning and end of the sorted-key list.
+
+        The argument `inclusive` is a pair of booleans that indicates whether
+        the minimum and maximum ought to be included in the range,
+        respectively. The default is ``(True, True)`` such that the range is
+        inclusive of both minimum and maximum.
 
         When `reverse` is `True` the values are yielded from the iterator in
         reverse order; `reverse` defaults to `False`.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([11, 12, 13, 14, 15], key=neg)
+        >>> it = skl.irange(14.5, 11.5)
+        >>> list(it)
+        [14, 13, 12]
+
+        :param minimum: minimum value to start iterating
+        :param maximum: maximum value to stop iterating
+        :param inclusive: pair of booleans
+        :param bool reverse: yield values in reverse order
+        :return: iterator
+
         """
-        minimum = self._key(minimum) if minimum is not None else None
-        maximum = self._key(maximum) if maximum is not None else None
+        min_key = self._key(minimum) if minimum is not None else None
+        max_key = self._key(maximum) if maximum is not None else None
         return self._irange_key(
-            min_key=minimum, max_key=maximum,
+            min_key=min_key, max_key=max_key,
             inclusive=inclusive, reverse=reverse,
         )
 
+
     def irange_key(self, min_key=None, max_key=None, inclusive=(True, True),
                    reverse=False):
-        """
-        Create an iterator of values between `min_key` and `max_key`.
-
-        `inclusive` is a pair of booleans that indicates whether the min_key
-        and max_key ought to be included in the range, respectively. The
-        default is (True, True) such that the range is inclusive of both
-        `min_key` and `max_key`.
+        """Create an iterator of values between `min_key` and `max_key`.
 
         Both `min_key` and `max_key` default to `None` which is automatically
-        inclusive of the start and end of the list, respectively.
+        inclusive of the beginning and end of the sorted-key list.
+
+        The argument `inclusive` is a pair of booleans that indicates whether
+        the minimum and maximum ought to be included in the range,
+        respectively. The default is ``(True, True)`` such that the range is
+        inclusive of both minimum and maximum.
 
         When `reverse` is `True` the values are yielded from the iterator in
         reverse order; `reverse` defaults to `False`.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([11, 12, 13, 14, 15], key=neg)
+        >>> it = skl.irange_key(-14, -12)
+        >>> list(it)
+        [14, 13, 12]
+
+        :param min_key: minimum key to start iterating
+        :param max_key: maximum key to stop iterating
+        :param inclusive: pair of booleans
+        :param bool reverse: yield values in reverse order
+        :return: iterator
+
         """
         _maxes = self._maxes
 
@@ -2162,29 +2154,71 @@ class SortedListWithKey(SortedList):
 
     _irange_key = irange_key
 
-    def bisect_left(self, val):
-        """
-        Similar to the *bisect* module in the standard library, this returns an
-        appropriate index to insert *val*. If *val* is already present, the
-        insertion point will be before (to the left of) any existing entries.
-        """
-        return self._bisect_key_left(self._key(val))
 
-    def bisect_right(self, val):
+    def bisect_left(self, value):
+        """Return an index to insert `value` in the sorted-key list.
+
+        If the `value` is already present, the insertion point will be before
+        (to the left of) any existing values.
+
+        Similar to the `bisect` module in the standard library.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.bisect_left(1)
+        4
+
+        :param value: insertion index of value in sorted-key list
+        :return: index
+
         """
-        Same as *bisect_left*, but if *val* is already present, the insertion
-        point will be after (to the right of) any existing entries.
+        return self._bisect_key_left(self._key(value))
+
+
+    def bisect_right(self, value):
+        """Return an index to insert `value` in the sorted-key list.
+
+        Similar to `bisect_left`, but if `value` is already present, the
+        insertion point with be after (to the right of) any existing values.
+
+        Similar to the `bisect` module in the standard library.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.bisect_right(1)
+        5
+
+        :param value: insertion index of value in sorted-key list
+        :return: index
+
         """
-        return self._bisect_key_right(self._key(val))
+        return self._bisect_key_right(self._key(value))
 
     bisect = bisect_right
 
+
     def bisect_key_left(self, key):
-        """
-        Similar to the *bisect* module in the standard library, this returns an
-        appropriate index to insert a value with a given *key*. If values with
-        *key* are already present, the insertion point will be before (to the
-        left of) any existing entries.
+        """Return an index to insert `key` in the sorted-key list.
+
+        If the `key` is already present, the insertion point will be before (to
+        the left of) any existing keys.
+
+        Similar to the `bisect` module in the standard library.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.bisect_key_left(-1)
+        4
+
+        :param key: insertion index of key in sorted-key list
+        :return: index
+
         """
         _maxes = self._maxes
 
@@ -2202,10 +2236,25 @@ class SortedListWithKey(SortedList):
 
     _bisect_key_left = bisect_key_left
 
+
     def bisect_key_right(self, key):
-        """
-        Same as *bisect_key_left*, but if *key* is already present, the
-        insertion point will be after (to the right of) any existing entries.
+        """Return an index to insert `key` in the sorted-key list.
+
+        Similar to `bisect_key_left`, but if `key` is already present, the
+        insertion point with be after (to the right of) any existing keys.
+
+        Similar to the `bisect` module in the standard library.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.bisect_key_right(-1)
+        5
+
+        :param key: insertion index of key in sorted-key list
+        :return: index
+
         """
         _maxes = self._maxes
 
@@ -2224,14 +2273,27 @@ class SortedListWithKey(SortedList):
     bisect_key = bisect_key_right
     _bisect_key_right = bisect_key_right
 
-    def count(self, val):
-        """Return the number of occurrences of *val* in the list."""
+
+    def count(self, value):
+        """Return number of occurrences of `value` in the sorted-key list.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([4, 4, 4, 4, 3, 3, 3, 2, 2, 1], key=neg)
+        >>> skl.count(2)
+        2
+
+        :param value: value to count in sorted-key list
+        :return: count
+
+        """
         _maxes = self._maxes
 
         if not _maxes:
             return 0
 
-        key = self._key(val)
+        key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
@@ -2247,7 +2309,7 @@ class SortedListWithKey(SortedList):
         while True:
             if _keys[pos][idx] != key:
                 return total
-            if _lists[pos][idx] == val:
+            if _lists[pos][idx] == value:
                 total += 1
             idx += 1
             if idx == len_sublist:
@@ -2257,177 +2319,53 @@ class SortedListWithKey(SortedList):
                 len_sublist = len(_keys[pos])
                 idx = 0
 
+
     def copy(self):
-        """Return a shallow copy of the sorted list."""
+        """Return a shallow copy of the sorted-key list.
+
+        Runtime complexity: `O(n)`
+
+        :return: new sorted-key list
+
+        """
         return self.__class__(self, key=self._key)
 
     __copy__ = copy
 
-    def append(self, val):
-        """
-        Append the element *val* to the list. Raises a ValueError if the *val*
-        would violate the sort order.
-        """
-        # pylint: disable=arguments-differ
-        _lists = self._lists
-        _keys = self._keys
-        _maxes = self._maxes
-        key = self._key(val)
 
-        if not _maxes:
-            _maxes.append(key)
-            _keys.append([key])
-            _lists.append([val])
-            self._len = 1
-            return
+    def index(self, value, start=None, stop=None):
+        """Return first index of value in sorted-key list.
 
-        pos = len(_keys) - 1
+        Raise ValueError if `value` is not present.
 
-        if key < _keys[pos][-1]:
-            msg = '{0!r} not in sort order at index {1}'.format(val, self._len)
-            raise ValueError(msg)
+        Index must be between `start` and `stop` for the `value` to be
+        considered present. The default value, None, for `start` and `stop`
+        indicate the beginning and end of the sorted-key list.
 
-        _lists[pos].append(val)
-        _keys[pos].append(key)
-        _maxes[pos] = key
-        self._len += 1
-        self._expand(pos)
+        Negative indices are supported.
 
-    def extend(self, values):
-        """
-        Extend the list by appending all elements from the *values*. Raises a
-        ValueError if the sort order would be violated.
-        """
-        _lists = self._lists
-        _keys = self._keys
-        _maxes = self._maxes
-        _load = self._load
+        Runtime complexity: `O(log(n))` -- approximate.
 
-        if not isinstance(values, list):
-            values = list(values)
+        >>> from operator import neg
+        >>> skl = SortedKeyList([5, 4, 3, 2, 1], key=neg)
+        >>> skl.index(2)
+        3
+        >>> skl.index(0)
+        Traceback (most recent call last):
+          ...
+        ValueError: 0 is not in list
 
-        keys = list(map(self._key, values))
+        :param value: value in sorted-key list
+        :param int start: start index (default None, start of sorted-key list)
+        :param int stop: stop index (default None, end of sorted-key list)
+        :return: index of value
+        :raises ValueError: if value is not present
 
-        if any(keys[pos - 1] > keys[pos]
-               for pos in range(1, len(keys))):
-            raise ValueError('given sequence not in sort order')
-
-        offset = 0
-
-        if _maxes:
-            if keys[0] < _keys[-1][-1]:
-                args = values[0], self._len
-                msg = '{0!r} not in sort order at index {1}'.format(*args)
-                raise ValueError(msg)
-
-            if len(_keys[-1]) < (self._load >> 1):
-                _lists[-1].extend(values[:_load])
-                _keys[-1].extend(keys[:_load])
-                _maxes[-1] = _keys[-1][-1]
-                offset = _load
-
-        len_keys = len(_keys)
-
-        for idx in range(offset, len(keys), _load):
-            _lists.append(values[idx:(idx + _load)])
-            _keys.append(keys[idx:(idx + _load)])
-            _maxes.append(_keys[-1][-1])
-
-        _index = self._index
-
-        if len_keys == len(_keys):
-            len_index = len(_index)
-            if len_index > 0:
-                len_values = len(values)
-                child = len_index - 1
-                while child:
-                    _index[child] += len_values
-                    child = (child - 1) >> 1
-                _index[0] += len_values
-        else:
-            del _index[:]
-
-        self._len += len(values)
-
-    def insert(self, idx, val):
-        """
-        Insert the element *val* into the list at *idx*. Raises a ValueError if
-        the *val* at *idx* would violate the sort order.
-        """
-        _len = self._len
-        _lists = self._lists
-        _keys = self._keys
-        _maxes = self._maxes
-
-        if idx < 0:
-            idx += _len
-        if idx < 0:
-            idx = 0
-        if idx > _len:
-            idx = _len
-
-        key = self._key(val)
-
-        if not _maxes:
-            self._len = 1
-            _lists.append([val])
-            _keys.append([key])
-            _maxes.append(key)
-            return
-
-        if not idx:
-            if key > _keys[0][0]:
-                msg = '{0!r} not in sort order at index {1}'.format(val, 0)
-                raise ValueError(msg)
-            else:
-                self._len += 1
-                _lists[0].insert(0, val)
-                _keys[0].insert(0, key)
-                self._expand(0)
-                return
-
-        if idx == _len:
-            pos = len(_keys) - 1
-            if _keys[pos][-1] > key:
-                msg = '{0!r} not in sort order at index {1}'.format(val, _len)
-                raise ValueError(msg)
-            else:
-                self._len += 1
-                _lists[pos].append(val)
-                _keys[pos].append(key)
-                _maxes[pos] = _keys[pos][-1]
-                self._expand(pos)
-                return
-
-        pos, idx = self._pos(idx)
-        idx_before = idx - 1
-        if idx_before < 0:
-            pos_before = pos - 1
-            idx_before = len(_keys[pos_before]) - 1
-        else:
-            pos_before = pos
-
-        before = _keys[pos_before][idx_before]
-        if before <= key <= _keys[pos][idx]:
-            self._len += 1
-            _lists[pos].insert(idx, val)
-            _keys[pos].insert(idx, key)
-            self._expand(pos)
-        else:
-            msg = '{0!r} not in sort order at index {1}'.format(val, idx)
-            raise ValueError(msg)
-
-    def index(self, val, start=None, stop=None):
-        """
-        Return the smallest *k* such that L[k] == val and i <= k < j`.  Raises
-        ValueError if *val* is not present.  *stop* defaults to the end of the
-        list. *start* defaults to the beginning. Negative indices are supported,
-        as for slice indices.
         """
         _len = self._len
 
         if not _len:
-            raise ValueError('{0!r} is not in list'.format(val))
+            raise ValueError('{0!r} is not in list'.format(value))
 
         if start is None:
             start = 0
@@ -2444,14 +2382,14 @@ class SortedListWithKey(SortedList):
             stop = _len
 
         if stop <= start:
-            raise ValueError('{0!r} is not in list'.format(val))
+            raise ValueError('{0!r} is not in list'.format(value))
 
         _maxes = self._maxes
-        key = self._key(val)
+        key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
-            raise ValueError('{0!r} is not in list'.format(val))
+            raise ValueError('{0!r} is not in list'.format(value))
 
         stop -= 1
         _lists = self._lists
@@ -2462,8 +2400,8 @@ class SortedListWithKey(SortedList):
 
         while True:
             if _keys[pos][idx] != key:
-                raise ValueError('{0!r} is not in list'.format(val))
-            if _lists[pos][idx] == val:
+                raise ValueError('{0!r} is not in list'.format(value))
+            if _lists[pos][idx] == value:
                 loc = self._loc(pos, idx)
                 if start <= loc <= stop:
                     return loc
@@ -2473,47 +2411,70 @@ class SortedListWithKey(SortedList):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_keys:
-                    raise ValueError('{0!r} is not in list'.format(val))
+                    raise ValueError('{0!r} is not in list'.format(value))
                 len_sublist = len(_keys[pos])
                 idx = 0
 
-        raise ValueError('{0!r} is not in list'.format(val))
+        raise ValueError('{0!r} is not in list'.format(value))
 
-    def __add__(self, that):
-        """
-        Return a new sorted list containing all the elements in *self* and
-        *that*. Elements in *that* do not need to be properly ordered with
-        respect to *self*.
+
+    def __add__(self, other):
+        """Return new sorted-key list containing all values in both sequences.
+
+        ``skl.__add__(other)`` <==> ``skl + other``
+
+        Values in `other` do not need to be in sorted-key order.
+
+        Runtime complexity: `O(n*log(n))`
+
+        >>> from operator import neg
+        >>> skl1 = SortedKeyList([5, 4, 3], key=neg)
+        >>> skl2 = SortedKeyList([2, 1, 0], key=neg)
+        >>> skl1 + skl2
+        SortedKeyList([5, 4, 3, 2, 1, 0], key=<built-in function neg>)
+
+        :param other: other iterable
+        :return: new sorted-key list
+
         """
         values = reduce(iadd, self._lists, [])
-        values.extend(that)
+        values.extend(other)
         return self.__class__(values, key=self._key)
 
-    def __mul__(self, that):
+    __radd__ = __add__
+
+
+    def __mul__(self, num):
+        """Return new sorted-key list with `num` shallow copies of values.
+
+        ``skl.__mul__(num)`` <==> ``skl * num``
+
+        Runtime complexity: `O(n*log(n))`
+
+        >>> from operator import neg
+        >>> skl = SortedKeyList([3, 2, 1], key=neg)
+        >>> skl * 2
+        SortedKeyList([3, 3, 2, 2, 1, 1], key=<built-in function neg>)
+
+        :param int num: count of shallow copies
+        :return: new sorted-key list
+
         """
-        Return a new sorted list containing *that* shallow copies of each item
-        in SortedListWithKey.
-        """
-        values = reduce(iadd, self._lists, []) * that
+        values = reduce(iadd, self._lists, []) * num
         return self.__class__(values, key=self._key)
 
-    def __imul__(self, that):
-        """
-        Increase the length of the list by appending *that* shallow copies of
-        each item.
-        """
-        values = reduce(iadd, self._lists, []) * that
-        self._clear()
-        self._update(values)
-        return self
 
     @recursive_repr()
     def __repr__(self):
-        """Return string representation of sequence."""
-        name = type(self).__name__
-        values = list(self)
-        _key = self._key
-        return '{0}({1!r}, key={2!r})'.format(name, values, _key)
+        """Return string representation of sorted-key list.
+
+        ``skl.__repr__()`` <==> ``repr(skl)``
+
+        :return: string representation
+
+        """
+        type_name = type(self).__name__
+        return '{0}({1!r}, key={2!r})'.format(type_name, list(self), self._key)
 
 
     def _check(self):
@@ -2538,7 +2499,7 @@ class SortedListWithKey(SortedList):
             for pos in range(1, len(self._keys)):
                 assert self._keys[pos - 1][-1] <= self._keys[pos][0]
 
-            # Check _keys matches _key() mapped to _lists.
+            # Check _keys matches _key mapped to _lists.
 
             for val_sublist, key_sublist in zip(self._lists, self._keys):
                 assert len(val_sublist) == len(key_sublist)
@@ -2599,3 +2560,6 @@ class SortedListWithKey(SortedList):
             print('len_lists', len(self._lists))
             print('lists', self._lists)
             raise
+
+
+SortedListWithKey = SortedKeyList

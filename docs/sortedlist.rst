@@ -45,12 +45,14 @@ SortedList
    .. automethod:: reverse
    .. automethod:: __setitem__
 
-SortedListWithKey
-.................
+SortedKeyList
+.............
 
-.. autoclass:: sortedcontainers.SortedListWithKey
+.. autoclass:: sortedcontainers.SortedKeyList
 
    .. autoattribute:: key
-   .. automethod:: irange_key
    .. automethod:: bisect_key_left
    .. automethod:: bisect_key_right
+   .. automethod:: irange_key
+
+.. autoclass:: sortedcontainers.SortedListWithKey

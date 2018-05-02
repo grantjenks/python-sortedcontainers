@@ -5,7 +5,7 @@ Python Sorted Containers
 
    * Review all files for Python 3 compatibility
    * Python 3 api changes: keys/values/items views/iter
-   * Rename SortedListWithKey to SortedKeyList
+     * Not-implemented methods
    * Make sure all dunder methods document the typical access syntax
    * Update docs to use autodoc
    * Update docs based on issues
