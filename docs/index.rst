@@ -13,7 +13,6 @@
    development
    history
    sortedlist
-   sortedlistwithkey
    sorteddict
    sortedset
    pycon-2016-talk

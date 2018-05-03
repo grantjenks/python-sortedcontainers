@@ -9,6 +9,7 @@ Python Sorted Containers
    * Make sure all dunder methods document the typical access syntax
    * Update docs to use autodoc
    * Update docs based on issues
+   * Update introduction re: SortedListWithKey
    * Add docs note on scale page that binary trees have the same sampling
      limitation due to tree shape (except AVL)
    * Also add docs note about projects that have been deprecated in favor of
@@ -185,15 +186,13 @@ API Documentation
 If you are looking for information on a specific function, class or method, this
 part of the documentation is for you.
 
-- `SortedList`_
-- `SortedListWithKey`_
-- `SortedDict`_
-- `SortedSet`_
+- `Sorted List`_
+- `Sorted Dict`_
+- `Sorted Set`_
 
-.. _`SortedList`: http://www.grantjenks.com/docs/sortedcontainers/sortedlist.html
-.. _`SortedListWithKey`: http://www.grantjenks.com/docs/sortedcontainers/sortedlistwithkey.html
-.. _`SortedDict`: http://www.grantjenks.com/docs/sortedcontainers/sorteddict.html
-.. _`SortedSet`: http://www.grantjenks.com/docs/sortedcontainers/sortedset.html
+.. _`Sorted List`: http://www.grantjenks.com/docs/sortedcontainers/sortedlist.html
+.. _`Sorted Dict`: http://www.grantjenks.com/docs/sortedcontainers/sorteddict.html
+.. _`Sorted Set`: http://www.grantjenks.com/docs/sortedcontainers/sortedset.html
 
 Talks
 -----
