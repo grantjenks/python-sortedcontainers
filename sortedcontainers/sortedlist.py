@@ -75,8 +75,6 @@ def recursive_repr(fillvalue='...'):
 # END Python 2/3 Shims
 ###############################################################################
 
-LOAD = 1000
-
 
 class SortedList(MutableSequence):
     """Sorted list is a sorted mutable sequence.
@@ -124,13 +122,16 @@ class SortedList(MutableSequence):
     * :func:`SortedList._check`
     * :func:`SortedList._reset`
 
-    Sorted lists are comparable to other sequences using lexicographical
-    ordering.
+    Sorted lists use lexicographical ordering semantics when compared to other
+    sequences.
 
     Some methods of mutable sequences are not supported and will raise
     not-implemented error.
 
     """
+    DEFAULT_LOAD_FACTOR = 1000
+
+
     def __init__(self, iterable=None, key=None):
         """Initialize sorted list instance.
 
@@ -151,7 +152,7 @@ class SortedList(MutableSequence):
         """
         assert key is None
         self._len = 0
-        self._load = LOAD
+        self._load = self.DEFAULT_LOAD_FACTOR
         self._lists = []
         self._maxes = []
         self._index = []
@@ -767,6 +768,7 @@ class SortedList(MutableSequence):
         SortedList(['d', 'e'])
 
         :param index: integer or slice for indexing
+        :raises IndexError: if index out of range
 
         """
         if isinstance(index, slice):
@@ -801,7 +803,7 @@ class SortedList(MutableSequence):
 
 
     def __getitem__(self, index):
-        """Lookup value at `index` from sorted list.
+        """Lookup value at `index` in sorted list.
 
         ``sl.__getitem__(index)`` <==> ``sl[index]``
 
@@ -819,6 +821,7 @@ class SortedList(MutableSequence):
 
         :param index: integer or slice for indexing
         :return: value
+        :raises IndexError: if index out of range
 
         """
         _lists = self._lists
@@ -1713,7 +1716,7 @@ class SortedKeyList(SortedList):
         """
         self._key = key
         self._len = 0
-        self._load = LOAD
+        self._load = self.DEFAULT_LOAD_FACTOR
         self._lists = []
         self._keys = []
         self._maxes = []
