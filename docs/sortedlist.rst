@@ -1,5 +1,6 @@
 .. automodule:: sortedcontainers.sortedlist
 
+
 SortedList
 ..........
 
@@ -44,6 +45,7 @@ SortedList
    .. automethod:: insert
    .. automethod:: reverse
    .. automethod:: __setitem__
+
 
 SortedKeyList
 .............
