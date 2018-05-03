@@ -40,14 +40,22 @@ testing has 100% coverage with unit tests and hours of stress.
 
 from .sortedlist import SortedList, SortedKeyList, SortedListWithKey
 from .sortedset import SortedSet
-from .sorteddict import SortedDict
+from .sorteddict import (
+    SortedDict,
+    SortedKeysView,
+    SortedItemsView,
+    SortedValuesView,
+)
 
 __all__ = [
     'SortedList',
     'SortedKeyList',
-    'SortedSet',
-    'SortedDict',
     'SortedListWithKey',
+    'SortedDict',
+    'SortedKeysView',
+    'SortedItemsView',
+    'SortedValuesView',
+    'SortedSet',
 ]
 
 __title__ = 'sortedcontainers'

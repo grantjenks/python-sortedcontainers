@@ -118,7 +118,7 @@ Features
 - Hours of stress testing
 - Performance matters (often faster than C implementations)
 - Compatible API (nearly identical to older blist and bintrees modules)
-- Feature-rich (e.g. get the five largest keys in a sorted dict: d.iloc[-5:])
+- Feature-rich (e.g. get the five largest keys in a sorted dict: d.keys()[-5:])
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
 - Developed on Python 3.6
 - Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 and PyPy, PyPy3

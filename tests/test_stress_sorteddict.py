@@ -29,7 +29,7 @@ def test_init():
 
     sdict = SortedDict((val, -val) for val in range(10000))
     sdict._check()
-    assert all(key == -val for key, val in sdict.iteritems())
+    assert all(key == -val for key, val in sdict.items())
 
     sdict.clear()
     sdict._check()
@@ -53,12 +53,12 @@ def stress_delitem(sdict):
 
 @actor
 def stress_getitem(sdict):
-    items = list(sdict.iteritems())
+    items = list(sdict.items())
     assert all(sdict[key] == value for key, value in items)
     
 @actor
 def stress_eq(sdict):
-    that = dict((key, value) for key, value in sdict.iteritems())
+    that = dict((key, value) for key, value in sdict.items())
     assert sdict == that
 
 @actor
@@ -101,7 +101,7 @@ def stress_items_keys_values(sdict):
 
 @actor
 def stress_iter_items_keys_values(sdict):
-    it = zip(sdict.iteritems(), sdict.iterkeys(), sdict.itervalues())
+    it = zip(sdict.items(), sdict.keys(), sdict.values())
     assert all(tup[0] == (tup[1], tup[2]) for tup in it)
 
 @actor

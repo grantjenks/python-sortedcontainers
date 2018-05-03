@@ -21,12 +21,6 @@ def get_keysview(dic):
     else:
         return dic.keys()
 
-def get_valuesview(dic):
-    if hexversion < 0x03000000:
-        return dic.viewvalues()
-    else:
-        return dic.values()
-
 def get_itemsview(dic):
     if hexversion < 0x03000000:
         return dic.viewitems()
@@ -211,30 +205,15 @@ def test_items():
     temp = SortedDict(mapping)
     assert list(temp.items()) == mapping
 
-def test_iteritems():
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert list(temp.iteritems()) == mapping
-
 def test_keys():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     assert list(temp.keys()) == [key for key, pos in mapping]
 
-def test_iterkeys():
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert list(temp.iterkeys()) == [key for key, pos in mapping]
-
 def test_values():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
     assert list(temp.values()) == [pos for key, pos in mapping]
-
-def test_itervalues():
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert list(temp.itervalues()) == [pos for key, pos in mapping]
 
 def test_pop():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -261,7 +240,7 @@ def test_popitem2():
 def test_popitem3():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
-    assert temp.popitem(last=False) == ('a', 0)
+    assert temp.popitem(index=0) == ('a', 0)
 
 def test_peekitem():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
@@ -319,18 +298,6 @@ def test_repr_subclass():
     temp = CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
     assert repr(temp) == "CustomSortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
-def test_iloc():
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert len(temp.iloc) == 26
-    assert temp.iloc[0] == 'a'
-    assert temp.iloc[-1] == 'z'
-    assert temp.iloc[-3:] == ['x', 'y', 'z']
-    del temp.iloc[0]
-    assert temp.iloc[0] == 'b'
-    del temp.iloc[-3:]
-    assert temp.iloc[-1] == 'w'
-
 def test_index():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)
@@ -364,11 +331,9 @@ def test_bisect_key2():
     assert all(temp.bisect_key_left(val) == (val % 10) * 10 for val in range(10))
 
 def test_keysview():
-    if hexversion < 0x02070000: return
-
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
-    keys = get_keysview(temp)
+    keys = temp.keys()
 
     assert len(keys) == 13
     assert 'a' in keys
@@ -397,20 +362,18 @@ def test_keysview():
     assert keys <= that_keys
     assert keys >= that_keys
 
-    assert list(keys & that_keys) == [val for val, pos in mapping]
-    assert list(keys | that_keys) == [val for val, pos in mapping]
-    assert list(keys - that_keys) == []
-    assert list(keys ^ that_keys) == []
+    assert sorted(keys & that_keys) == [val for val, pos in mapping]
+    assert sorted(keys | that_keys) == [val for val, pos in mapping]
+    assert sorted(keys - that_keys) == []
+    assert sorted(keys ^ that_keys) == []
 
-    keys = get_keysview(SortedDict(mapping[:2]))
-    assert repr(keys) == "SortedDict_keys(['a', 'b'])"
+    keys = SortedDict(mapping[:2]).keys()
+    assert repr(keys) == "SortedKeysView(SortedDict({'a': 0, 'b': 1}))"
 
 def test_valuesview():
-    if hexversion < 0x02070000: return
-
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
-    values = get_valuesview(temp)
+    values = temp.values()
 
     assert len(values) == 13
     assert 0 in values
@@ -427,106 +390,20 @@ def test_valuesview():
     assert 25 in values
     assert list(values) == [pos for val, pos in mapping]
 
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-
-    values = get_valuesview(SortedDict(mapping[:2]))
-    assert repr(values) == "SortedDict_values([0, 1])"
+    values = SortedDict(mapping[:2]).values()
+    assert repr(values) == "SortedValuesView(SortedDict({'a': 0, 'b': 1}))"
 
 def test_values_view_index():
-    if hexversion < 0x02070000: raise ValueError
-
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
-    values = get_valuesview(temp)
+    values = temp.values()
     with pytest.raises(ValueError):
-        values.index(13)
-
-def test_values_view_lt():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values < that_values
-
-def test_values_view_gt():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values > that_values
-
-def test_values_view_le():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values <= that_values
-
-def test_values_view_ge():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values >= that_values
-
-def test_values_view_and():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values & that_values
-
-def test_values_view_or():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values | that_values
-
-def test_values_view_sub():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values - that_values
-
-def test_values_view_xor():
-    if hexversion < 0x02070000: raise TypeError
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    values = get_valuesview(temp)
-    that = dict(mapping)
-    that_values = get_valuesview(that)
-    with pytest.raises(TypeError):
-        values ^ that_values
+        values.index(100)
 
 def test_itemsview():
-    if hexversion < 0x02070000: return
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
-    items = get_itemsview(temp)
+    items = temp.items()
 
     assert len(items) == 13
     assert ('a', 0) in items
@@ -546,7 +423,6 @@ def test_itemsview():
     assert list(items) == mapping
 
     that = dict(mapping)
-
     that_items = get_itemsview(that)
 
     assert items == that_items
@@ -556,19 +432,18 @@ def test_itemsview():
     assert items <= that_items
     assert items >= that_items
 
-    assert list(items & that_items) == mapping
-    assert list(items | that_items) == mapping
-    assert list(items - that_items) == []
-    assert list(items ^ that_items) == []
+    assert sorted(items & that_items) == mapping
+    assert sorted(items | that_items) == mapping
+    assert sorted(items - that_items) == []
+    assert sorted(items ^ that_items) == []
 
-    items = SortedDict(mapping[:2]).viewitems()
-    assert repr(items) == "SortedDict_items([('a', 0), ('b', 1)])"
+    items = SortedDict(mapping[:2]).items()
+    assert repr(items) == "SortedItemsView(SortedDict({'a': 0, 'b': 1}))"
 
 def test_items_view_index():
-    if hexversion < 0x02070000: return
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])
-    items = get_itemsview(temp)
+    items = temp.items()
     with pytest.raises(ValueError):
         items.index(('f', 100))
 
