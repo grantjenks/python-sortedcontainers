@@ -5,6 +5,7 @@ SortedList
 ..........
 
 .. autoclass:: sortedcontainers.SortedList
+   :show-inheritance:
 
    .. automethod:: __new__
    .. automethod:: __init__
@@ -51,6 +52,7 @@ SortedKeyList
 .............
 
 .. autoclass:: sortedcontainers.SortedKeyList
+   :show-inheritance:
 
    .. autoattribute:: key
    .. automethod:: bisect_key_left
