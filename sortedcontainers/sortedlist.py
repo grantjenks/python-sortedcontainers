@@ -81,6 +81,9 @@ class SortedList(MutableSequence):
 
     Sorted list values are maintained in sorted order.
 
+    Sorted list values must be comparable. The total ordering of values must
+    not change while they are stored in the sorted list.
+
     Methods for adding values:
 
     * :func:`SortedList.add`
@@ -135,7 +138,7 @@ class SortedList(MutableSequence):
     def __init__(self, iterable=None, key=None):
         """Initialize sorted list instance.
 
-        An optional `iterable` provides an initial iterable of values to
+        Optional `iterable` argument provides an initial iterable of values to
         initialize the sorted list.
 
         Runtime complexity: `O(n*log(n))`
@@ -165,8 +168,8 @@ class SortedList(MutableSequence):
     def __new__(cls, iterable=None, key=None):
         """Create new sorted list or sorted-key list instance.
 
-        An optional `key` function will return an instance of subtype
-        :class:`SortedListWithKey`.
+        Optional `key`-function argument will return an instance of subtype
+        :class:`SortedKeyList`.
 
         >>> sl = SortedList()
         >>> isinstance(sl, SortedList)
@@ -174,7 +177,7 @@ class SortedList(MutableSequence):
         >>> sl = SortedList(key=lambda x: -x)
         >>> isinstance(sl, SortedList)
         True
-        >>> isinstance(sl, SortedListWithKey)
+        >>> isinstance(sl, SortedKeyList)
         True
 
         :param iterable: initial values (optional)
@@ -186,9 +189,9 @@ class SortedList(MutableSequence):
             return object.__new__(cls)
         else:
             if cls is SortedList:
-                return object.__new__(SortedListWithKey)
+                return object.__new__(SortedKeyList)
             else:
-                raise TypeError('inherit SortedListWithKey for key argument')
+                raise TypeError('inherit SortedKeyList for key argument')
 
 
     @property
@@ -915,7 +918,7 @@ class SortedList(MutableSequence):
 
         ``sl.__reversed__()`` <==> ``reversed(sl)``
 
-        Iterating the Sequence while adding or deleting values may raise a
+        Iterating the sorted list while adding or deleting values may raise a
         :exc:`RuntimeError` or fail to iterate over all values.
 
         """
@@ -1524,7 +1527,7 @@ class SortedList(MutableSequence):
         return self
 
 
-    def _make_cmp(self, seq_op, symbol, doc):
+    def __make_cmp(seq_op, symbol, doc):
         "Make comparator method."
         def comparer(self, other):
             "Compare method for sorted list and sequence."
@@ -1564,12 +1567,13 @@ class SortedList(MutableSequence):
         return comparer
 
 
-    __eq__ = _make_cmp(None, eq, '==', 'equal to')
-    __ne__ = _make_cmp(None, ne, '!=', 'not equal to')
-    __lt__ = _make_cmp(None, lt, '<', 'less than')
-    __gt__ = _make_cmp(None, gt, '>', 'greater than')
-    __le__ = _make_cmp(None, le, '<=', 'less than or equal to')
-    __ge__ = _make_cmp(None, ge, '>=', 'greater than or equal to')
+    __eq__ = __make_cmp(eq, '==', 'equal to')
+    __ne__ = __make_cmp(ne, '!=', 'not equal to')
+    __lt__ = __make_cmp(lt, '<', 'less than')
+    __gt__ = __make_cmp(gt, '>', 'greater than')
+    __le__ = __make_cmp(le, '<=', 'less than or equal to')
+    __ge__ = __make_cmp(ge, '>=', 'greater than or equal to')
+    __make_cmp = staticmethod(__make_cmp)
 
 
     @recursive_repr()
