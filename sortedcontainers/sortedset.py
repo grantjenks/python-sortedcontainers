@@ -215,7 +215,7 @@ class SortedSet(MutableSet, Sequence):
         ['c', 'd', 'e']
 
         :param index: integer or slice for indexing
-        :return: value
+        :return: value or list of values
         :raises IndexError: if index out of range
 
         """
