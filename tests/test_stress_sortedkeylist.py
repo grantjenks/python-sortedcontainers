@@ -7,11 +7,8 @@ import copy
 import bisect
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedListWithKey
+from sortedcontainers import SortedKeyList
 from functools import wraps
-
-class SortedList(SortedListWithKey):
-    pass
 
 if hexversion < 0x03000000:
     from itertools import izip as zip
@@ -202,7 +199,7 @@ def stress_index(slt):
 @not_empty
 def stress_index2(slt):
     values = list(slt)[:3] * 200
-    slt = SortedList(values)
+    slt = SortedKeyList(values)
     for idx, val in enumerate(slt):
         assert slt.index(val, idx) == idx
 
@@ -239,14 +236,14 @@ def stress_eq(slt):
 def stress_lt(slt):
     values = list(slt)
     assert not (values < slt)
-    values = SortedList(value - 1 for value in values)
+    values = SortedKeyList(value - 1 for value in values)
     assert values < slt
     values = []
     assert values < slt
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedList((random.random() for rpt in range(1000)))
+    slt = SortedKeyList((random.random() for rpt in range(1000)))
 
     for rpt in range(repeat):
         action = random.choice(actions)

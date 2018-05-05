@@ -4,7 +4,7 @@ from sys import hexversion
 
 import random
 from .context import sortedcontainers
-from sortedcontainers import SortedList, SortedListWithKey
+from sortedcontainers import SortedList, SortedKeyList
 import pytest
 
 if hexversion < 0x03000000:
@@ -15,16 +15,16 @@ def modulo(val):
     return val % 10
 
 def test_init():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.key == modulo
     slt._check()
 
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(10000)
     assert slt._load == 10000
     slt._check()
 
-    slt = SortedListWithKey(range(10000), key=modulo)
+    slt = SortedKeyList(range(10000), key=modulo)
     assert all(tup[0] == tup[1] for tup in zip(slt, sorted(range(10000), key=modulo)))
 
     slt.clear()
@@ -33,7 +33,7 @@ def test_init():
     assert slt._lists == []
 
     assert isinstance(slt, SortedList)
-    assert isinstance(slt, SortedListWithKey)
+    assert isinstance(slt, SortedKeyList)
 
     slt._check()
 
@@ -43,16 +43,16 @@ def test_new():
     slt._check()
 
     assert isinstance(slt, SortedList)
-    assert isinstance(slt, SortedListWithKey)
-    assert type(slt) == SortedListWithKey
+    assert isinstance(slt, SortedKeyList)
+    assert type(slt) == SortedKeyList
 
-    slt = SortedListWithKey(iter(range(1000)), key=modulo)
+    slt = SortedKeyList(iter(range(1000)), key=modulo)
     assert slt == sorted(range(1000), key=modulo)
     slt._check()
 
     assert isinstance(slt, SortedList)
-    assert isinstance(slt, SortedListWithKey)
-    assert type(slt) == SortedListWithKey
+    assert isinstance(slt, SortedKeyList)
+    assert type(slt) == SortedKeyList
 
 def test_new_error():
     class SortedListPlus(SortedList):
@@ -61,7 +61,7 @@ def test_new_error():
         SortedListPlus(key=modulo)
 
 def test_key():
-    slt = SortedListWithKey(range(10000), key=lambda val: val % 10)
+    slt = SortedKeyList(range(10000), key=lambda val: val % 10)
     slt._check()
 
     values = sorted(range(10000), key=lambda val: (val % 10, val))
@@ -73,30 +73,30 @@ def test_key2():
         pass
     a = Incomparable()
     b = Incomparable()
-    slt = SortedListWithKey(key=lambda val: 1)
+    slt = SortedKeyList(key=lambda val: 1)
     slt.add(a)
     slt.add(b)
     assert slt == [a, b]
 
 def test_add():
     random.seed(0)
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     for val in range(1000):
         slt.add(val)
     slt._check()
 
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     for val in range(1000, 0, -1):
         slt.add(val)
     slt._check()
 
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     for val in range(1000):
         slt.add(random.random())
     slt._check()
 
 def test_update():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
 
     slt.update(range(1000))
     assert all(tup[0] == tup[1] for tup in zip(slt, sorted(range(1000), key=modulo)))
@@ -108,7 +108,7 @@ def test_update():
     slt._check()
 
 def test_contains():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(7)
 
     assert 0 not in slt
@@ -122,18 +122,18 @@ def test_contains():
 
     slt._check()
 
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(4)
     assert all(val not in slt for val in range(100, 200))
 
 def test_discard():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
 
     assert slt.discard(0) == None
     assert len(slt) == 0
     slt._check()
 
-    slt = SortedListWithKey([1, 2, 2, 2, 3, 3, 5], key=modulo)
+    slt = SortedKeyList([1, 2, 2, 2, 3, 3, 5], key=modulo)
     slt._reset(4)
 
     slt.discard(6)
@@ -150,13 +150,13 @@ def test_discard():
     assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
 
 def test_remove():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
 
     assert slt.discard(0) == None
     assert len(slt) == 0
     slt._check()
 
-    slt = SortedListWithKey([1, 2, 2, 2, 3, 3, 5], key=modulo)
+    slt = SortedKeyList([1, 2, 2, 2, 3, 3, 5], key=modulo)
     slt._reset(4)
 
     slt.remove(2)
@@ -165,33 +165,33 @@ def test_remove():
     assert all(tup[0] == tup[1] for tup in zip(slt, [1, 2, 2, 3, 3, 5]))
 
 def test_remove_valueerror1():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     with pytest.raises(ValueError):
         slt.remove(0)
 
 def test_remove_valueerror2():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(10)
     with pytest.raises(ValueError):
         slt.remove(100)
 
 def test_remove_valueerror3():
-    slt = SortedListWithKey([1, 2, 2, 2, 3, 3, 5], key=modulo)
+    slt = SortedKeyList([1, 2, 2, 2, 3, 3, 5], key=modulo)
     with pytest.raises(ValueError):
         slt.remove(4)
 
 def test_remove_valueerror4():
-    slt = SortedListWithKey([1, 1, 1, 2, 2, 2], key=modulo)
+    slt = SortedKeyList([1, 1, 1, 2, 2, 2], key=modulo)
     with pytest.raises(ValueError):
         slt.remove(13)
 
 def test_remove_valueerror5():
-    slt = SortedListWithKey([1, 1, 1, 2, 2, 2], key=modulo)
+    slt = SortedKeyList([1, 1, 1, 2, 2, 2], key=modulo)
     with pytest.raises(ValueError):
         slt.remove(12)
 
 def test_delete():
-    slt = SortedListWithKey(range(20), key=modulo)
+    slt = SortedKeyList(range(20), key=modulo)
     slt._reset(4)
     slt._check()
     for val in range(20):
@@ -203,7 +203,7 @@ def test_delete():
 
 def test_getitem():
     random.seed(0)
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(17)
 
     slt.add(5)
@@ -220,7 +220,7 @@ def test_getitem():
 
 def test_getitem_slice():
     random.seed(0)
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(17)
 
     lst = list()
@@ -259,7 +259,7 @@ def test_getitem_slice():
                for step in [-5, -1, 1, 5])
 
 def test_getitem_slice_big():
-    slt = SortedListWithKey(range(4), key=modulo)
+    slt = SortedKeyList(range(4), key=modulo)
     lst = sorted(range(4), key=modulo)
 
     itr = ((start, stop, step)
@@ -271,43 +271,43 @@ def test_getitem_slice_big():
         assert slt[start:stop:step] == lst[start:stop:step]
 
 def test_getitem_slicezero():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     with pytest.raises(ValueError):
         slt[::0]
 
 def test_getitem_indexerror1():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     with pytest.raises(IndexError):
         slt[5]
 
 def test_getitem_indexerror2():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     with pytest.raises(IndexError):
         slt[200]
 
 def test_getitem_indexerror3():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     with pytest.raises(IndexError):
         slt[-101]
 
 def test_delitem():
     random.seed(0)
 
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     while len(slt) > 0:
         del slt[random.randrange(len(slt))]
         slt._check()
 
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     del slt[:]
     assert len(slt) == 0
     slt._check()
 
 def test_delitem_slice():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     del slt[10:40:1]
     del slt[10:40:-1]
@@ -315,22 +315,22 @@ def test_delitem_slice():
     del slt[10:40:-2]
 
 def test_iter():
-    slt = SortedListWithKey(range(10000), key=modulo)
+    slt = SortedKeyList(range(10000), key=modulo)
     itr = iter(slt)
     assert all(tup[0] == tup[1] for tup in zip(sorted(range(10000), key=modulo), itr))
 
 def test_reversed():
-    slt = SortedListWithKey(range(10000), key=modulo)
+    slt = SortedKeyList(range(10000), key=modulo)
     rev = reversed(slt)
     assert all(tup[0] == tup[1] for tup in zip(reversed(sorted(range(10000), key=modulo)), rev))
 
 def test_reverse():
-    slt = SortedListWithKey(range(10000), key=modulo)
+    slt = SortedKeyList(range(10000), key=modulo)
     with pytest.raises(NotImplementedError):
         slt.reverse()
 
 def test_islice():
-    sl = SortedListWithKey(key=modulo)
+    sl = SortedKeyList(key=modulo)
     sl._reset(7)
 
     assert [] == list(sl.islice())
@@ -358,7 +358,7 @@ def test_irange():
     values = sorted(range(100), key=modulo)
 
     for load in range(5, 16):
-        slt = SortedListWithKey(range(100), key=modulo)
+        slt = SortedKeyList(range(100), key=modulo)
         slt._reset(load)
 
         for start in range(10):
@@ -396,7 +396,7 @@ def test_irange_key():
     values = sorted(range(100), key=modulo)
 
     for load in range(5, 16):
-        slt = SortedListWithKey(range(100), key=modulo)
+        slt = SortedKeyList(range(100), key=modulo)
         slt._reset(load)
 
         for start in range(10):
@@ -431,16 +431,16 @@ def test_irange_key():
             assert temp == values[:(end + 1) * 10]
 
 def test_len():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
 
     for val in range(10000):
         slt.add(val)
         assert len(slt) == (val + 1)
 
 def test_bisect_left():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect_left(0) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -448,9 +448,9 @@ def test_bisect_left():
     assert slt.bisect_left(0) == 0
 
 def test_bisect():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect(10) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -458,9 +458,9 @@ def test_bisect():
     assert slt.bisect(0) == 20
 
 def test_bisect_right():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect_right(10) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -468,9 +468,9 @@ def test_bisect_right():
     assert slt.bisect_right(0) == 20
 
 def test_bisect_key_left():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect_key_left(10) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -479,9 +479,9 @@ def test_bisect_key_left():
     assert slt.bisect_key_left(10) == 200
 
 def test_bisect_key_right():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect_key_right(0) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -490,9 +490,9 @@ def test_bisect_key_right():
     assert slt.bisect_key_right(10) == 200
 
 def test_bisect_key():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     assert slt.bisect_key(0) == 0
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(17)
     slt.update(range(100))
     slt._check()
@@ -501,7 +501,7 @@ def test_bisect_key():
     assert slt.bisect_key(10) == 200
 
 def test_copy():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(7)
     two = slt.copy()
     slt.add(100)
@@ -510,7 +510,7 @@ def test_copy():
 
 def test_copy_copy():
     import copy
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(7)
     two = copy.copy(slt)
     slt.add(100)
@@ -518,7 +518,7 @@ def test_copy_copy():
     assert len(two) == 100
 
 def test_count():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(7)
 
     assert slt.count(0) == 0
@@ -531,11 +531,11 @@ def test_count():
     for iii in range(100):
         assert slt.count(iii) == iii
 
-    slt = SortedListWithKey(range(8), key=modulo)
+    slt = SortedKeyList(range(8), key=modulo)
     assert slt.count(9) == 0
 
 def test_pop():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     slt._check()
     assert slt.pop() == 9
@@ -548,19 +548,19 @@ def test_pop():
     slt._check()
 
 def test_pop_indexerror1():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     with pytest.raises(IndexError):
         slt.pop(-11)
 
 def test_pop_indexerror2():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     with pytest.raises(IndexError):
         slt.pop(10)
 
 def test_index():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(7)
 
     for pos, val in enumerate(sorted(range(100), key=modulo)):
@@ -568,7 +568,7 @@ def test_index():
 
     assert slt.index(9, 0, 1000) == 90
 
-    slt = SortedListWithKey((0 for rpt in range(100)), key=modulo)
+    slt = SortedKeyList((0 for rpt in range(100)), key=modulo)
     slt._reset(7)
 
     for start in range(100):
@@ -581,66 +581,66 @@ def test_index():
     assert slt.index(0, -1000) == 0
 
 def test_index_valueerror1():
-    slt = SortedListWithKey([0] * 10, key=modulo)
+    slt = SortedKeyList([0] * 10, key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(0, 10)
 
 def test_index_valueerror2():
-    slt = SortedListWithKey([0] * 10, key=modulo)
+    slt = SortedKeyList([0] * 10, key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(0, 0, -10)
 
 def test_index_valueerror3():
-    slt = SortedListWithKey([0] * 10, key=modulo)
+    slt = SortedKeyList([0] * 10, key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(0, 7, 3)
 
 def test_index_valueerror4():
-    slt = SortedListWithKey([0] * 10, key=modulo)
+    slt = SortedKeyList([0] * 10, key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(1)
 
 def test_index_valueerror5():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     with pytest.raises(ValueError):
         slt.index(1)
 
 def test_index_valueerror6():
-    slt = SortedListWithKey(range(100), key=modulo)
+    slt = SortedKeyList(range(100), key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(91, 0, 15)
 
 def test_index_valueerror7():
-    slt = SortedListWithKey([0] * 10 + [1] * 10 + [2] * 10, key=modulo)
+    slt = SortedKeyList([0] * 10 + [1] * 10 + [2] * 10, key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(1, 0, 10)
 
 def test_index_valueerror8():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(4, 5)
 
 def test_index_valueerror9():
-    slt = SortedListWithKey(key=modulo)
+    slt = SortedKeyList(key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(5)
 
 def test_index_valueerror10():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     with pytest.raises(ValueError):
         slt.index(19)
 
 def test_mul():
-    this = SortedListWithKey(range(10), key=modulo)
+    this = SortedKeyList(range(10), key=modulo)
     this._reset(4)
     that = this * 5
     this._check()
@@ -650,32 +650,32 @@ def test_mul():
     assert this != that
 
 def test_imul():
-    this = SortedListWithKey(range(10), key=modulo)
+    this = SortedKeyList(range(10), key=modulo)
     this._reset(4)
     this *= 5
     this._check()
     assert this == sorted(list(range(10)) * 5, key=modulo)
 
 def test_op_add():
-    this = SortedListWithKey(range(10), key=modulo)
+    this = SortedKeyList(range(10), key=modulo)
     this._reset(4)
     assert (this + this + this) == (this * 3)
 
-    that = SortedListWithKey(range(10), key=modulo)
+    that = SortedKeyList(range(10), key=modulo)
     that._reset(4)
     that += that
     that += that
     assert that == (this * 4)
 
 def test_eq():
-    this = SortedListWithKey(range(10), key=modulo)
+    this = SortedKeyList(range(10), key=modulo)
     this._reset(4)
     assert this == list(range(10))
     assert this == tuple(range(10))
     assert not (this == list(range(9)))
 
 def test_ne():
-    this = SortedListWithKey(range(10, 20), key=modulo)
+    this = SortedKeyList(range(10, 20), key=modulo)
     this._reset(4)
     assert this != list(range(11, 21))
     assert this != tuple(range(10, 21))
@@ -684,14 +684,14 @@ def test_ne():
     assert this != set()
 
 def test_lt():
-    this = SortedListWithKey(range(10, 15), key=modulo)
+    this = SortedKeyList(range(10, 15), key=modulo)
     this._reset(4)
     assert this < [10, 11, 13, 13, 14]
     assert this < [10, 11, 12, 13, 14, 15]
     assert this < [11]
 
 def test_le():
-    this = SortedListWithKey(range(10, 15), key=modulo)
+    this = SortedKeyList(range(10, 15), key=modulo)
     this._reset(4)
     assert this <= [10, 11, 12, 13, 14]
     assert this <= [10, 11, 12, 13, 14, 15]
@@ -699,14 +699,14 @@ def test_le():
     assert this <= [11]
 
 def test_gt():
-    this = SortedListWithKey(range(10, 15), key=modulo)
+    this = SortedKeyList(range(10, 15), key=modulo)
     this._reset(4)
     assert this > [10, 11, 11, 13, 14]
     assert this > [10, 11, 12, 13]
     assert this > [9]
 
 def test_ge():
-    this = SortedListWithKey(range(10, 15), key=modulo)
+    this = SortedKeyList(range(10, 15), key=modulo)
     this._reset(4)
     assert this >= [10, 11, 12, 13, 14]
     assert this >= [10, 11, 12, 13]
@@ -714,24 +714,24 @@ def test_ge():
     assert this >= [9]
 
 def test_repr():
-    this = SortedListWithKey(range(10), key=modulo)
+    this = SortedKeyList(range(10), key=modulo)
     this._reset(4)
     assert repr(this).startswith('SortedKeyList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
 
 def test_repr_recursion():
-    this = SortedListWithKey([[1], [2], [3], [4]], key=lambda val: val)
+    this = SortedKeyList([[1], [2], [3], [4]], key=lambda val: val)
     this._lists[-1].append(this)
     assert repr(this).startswith('SortedKeyList([[1], [2], [3], [4], ...], key=<function ')
 
 def test_repr_subclass():
-    class CustomSortedListWithKey(SortedListWithKey):
+    class CustomSortedKeyList(SortedKeyList):
         pass
-    this = CustomSortedListWithKey(range(10), key=modulo)
+    this = CustomSortedKeyList(range(10), key=modulo)
     this._reset(4)
-    assert repr(this).startswith('CustomSortedListWithKey([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
+    assert repr(this).startswith('CustomSortedKeyList([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=<function modulo at ')
 
 def test_check():
-    slt = SortedListWithKey(range(10), key=modulo)
+    slt = SortedKeyList(range(10), key=modulo)
     slt._reset(4)
     slt._len = 5
     with pytest.raises(AssertionError):

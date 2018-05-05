@@ -108,8 +108,8 @@ from .context import sortedcontainers
 from sortedcontainers import SortedList
 kinds['SortedList'] = SortedList
 
-from sortedcontainers import SortedListWithKey
-kinds['SortedListWithKey'] = SortedListWithKey
+from sortedcontainers import SortedKeyList
+kinds['SortedKeyList'] = SortedKeyList
 
 try:
     from blist import sortedlist
