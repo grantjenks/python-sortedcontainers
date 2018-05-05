@@ -28,6 +28,9 @@ class SortedDict(dict):
     is simple: sorted dict inherits from dict to store items and maintains a
     sorted list of keys.
 
+    Sorted dict keys must be hashable and comparable. The hash and total
+    ordering of keys must not change while they are stored in the sorted dict.
+
     Mutable mapping methods:
 
     * :func:`SortedDict.__getitem__` (inherited from dict)
@@ -151,7 +154,6 @@ class SortedDict(dict):
         self._list_add = _list.add
         self._list_clear = _list.clear
         self._list_iter = _list.__iter__
-        self._list_getitem = _list.__getitem__
         self._list_reversed = _list.__reversed__
         self._list_pop = _list.pop
         self._list_remove = _list.remove
@@ -433,7 +435,7 @@ class SortedDict(dict):
         :raises IndexError: if `index` out of range
 
         """
-        key = self._list_getitem(index)
+        key = self._list[index]
         return key, self[key]
 
 
@@ -535,9 +537,10 @@ class SortedDict(dict):
         Runtime complexity: `O(n)`
 
         """
-        self._list._check()
-        assert len(self) == len(self._list)
-        assert all(key in self for key in self._list)
+        _list = self._list
+        _list._check()
+        assert len(self) == len(_list)
+        assert all(key in self for key in _list)
 
 
 class SortedKeysView(KeysView, Sequence):
