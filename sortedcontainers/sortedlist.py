@@ -1670,7 +1670,7 @@ def identity(value):
 
 
 class SortedKeyList(SortedList):
-    """Sorted-key list a subtype of sorted list.
+    """Sorted-key list is a subtype of sorted list.
 
     The sorted-key list maintains values in comparison order based on the
     result of a key function applied to every value.

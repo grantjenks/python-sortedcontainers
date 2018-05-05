@@ -1,6 +1,15 @@
 Sorted Containers Release History
 =================================
 
+2.0.0 (2018-05-04)
+------------------
+
+Big update to the source base. Now adopting Python 3 semantics. Still
+supporting Python 2. But primary development is now on Python 3.6.
+
+* SortedListWithKey is deprecated. Use SortedKeyList instead.
+
+
 1.5.10 (2018-04-21)
 -------------------
 

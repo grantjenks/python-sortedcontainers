@@ -1,6 +1,8 @@
 Sorted Containers Introduction
 ==============================
 
+.. currentmodule:: sortedcontainers
+
 Installation
 ------------
 
@@ -159,38 +161,37 @@ iterator in reverse.
 For more details, refer to the :doc:`SortedList API documentation
 <sortedlist>`.
 
-SortedListWithKey
------------------
+Sorted-key List
+---------------
 
 The :doc:`Sorted Containers<index>` project also maintains a specialized
 SortedList-like type that accepts a key-parameter as found with Python's
-built-in *sorted* function.  A SortedListWithKey provides the same
+built-in *sorted* function.  SortedKeyList provides the same
 functionality as a SortedList but maintains the order of contained values based
 on the applied key-function. This simplifies the pattern of boxing/un-boxing
 which would otherwise be required.
 
-    >>> from sortedcontainers import SortedListWithKey
-    >>> l = SortedListWithKey(key=lambda val: -val)
+    >>> from sortedcontainers import SortedKeyList
+    >>> l = SortedKeyList(key=lambda val: -val)
 
 The key function extracts a comparison key for ordering items in the list. In
 our example above we apply the negation operator. Doing so would maintain a
 list of integers in reverse.
 
-You can also construct a SortedListWithKey using the SortedList type by passing
+You can also construct a SortedKeyList using the SortedList type by passing
 a key-function to the constructor.
 
     >>> from sortedcontainers import SortedList
     >>> from operator import neg
     >>> values = SortedList(range(4), key=neg)
     >>> repr(values)
-    SortedListWithKey([3, 2, 1, 0], key=<built-in function neg>, load=1000)
+    SortedKeyList([3, 2, 1, 0], key=<built-in function neg>, load=1000)
     >>> type(values)
-    <class 'sortedcontainers.sortedlist.SortedListWithKey'>
+    <class 'sortedcontainers.sortedlist.SortedKeyList'>
     >>> isinstance(values, SortedList)
     True
 
-For more details, refer to the :doc:`SortedListWithKey API documentation
-<sortedlistwithkey>`.
+Refer to the :class:`SortedKeyList` API documentation for more details.
 
 SortedDict
 ----------
