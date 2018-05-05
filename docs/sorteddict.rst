@@ -5,6 +5,7 @@ SortedDict
 ..........
 
 .. autoclass:: sortedcontainers.SortedDict
+   :show-inheritance:
 
    .. automethod:: __init__
    .. autoattribute:: key
@@ -53,6 +54,7 @@ SortedKeysView
 ..............
 
 .. autoclass:: sortedcontainers.SortedKeysView
+   :show-inheritance:
 
    .. automethod:: __getitem__
 
@@ -61,6 +63,7 @@ SortedItemsView
 ...............
 
 .. autoclass:: sortedcontainers.SortedItemsView
+   :show-inheritance:
 
    .. automethod:: __getitem__
 
@@ -69,5 +72,6 @@ SortedValuesView
 ................
 
 .. autoclass:: sortedcontainers.SortedValuesView
+   :show-inheritance:
 
    .. automethod:: __getitem__
