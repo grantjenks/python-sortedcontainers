@@ -3,6 +3,7 @@ Python Sorted Containers
 
 .. todo::
 
+   * Rename SortedListWithKey to SortedKeyList
    * Update docs based on issues
    * Update introduction re: SortedListWithKey
    * Add docs note on scale page that binary trees have the same sampling
