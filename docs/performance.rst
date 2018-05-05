@@ -124,6 +124,8 @@ the size of the left-hand-side; medium is 50%; and large is 100%. The
 sortedcontainers module uses a different algorithm based on the size of the
 right-hand-side of the operation for a dramatic improvement in performance.
 
+.. currentmodule:: sortedcontainers
+
 SortedList
 ----------
 
@@ -139,82 +141,77 @@ Initializing with a list of random numbers.
 add
 ...
 
-Randomly adding values using :ref:`SortedList.add<SortedList.add>`.
+Randomly adding values using :func:`SortedList.add`.
 
 .. image:: _static/SortedList-add.png
 
 contains
 ........
 
-Randomly testing membership using
-:ref:`SortedList.__contains__<SortedList.__contains__>`.
+Randomly testing membership using :func:`SortedList.__contains__`.
 
 .. image:: _static/SortedList-contains.png
 
 count
 .....
 
-Counting objects at random using :ref:`SortedList.count<SortedList.count>`.
+Counting objects at random using :func:`SortedList.count`.
 
 .. image:: _static/SortedList-count.png
 
 __delitem__
 ...........
 
-Deleting objects at random using
-:ref:`SortedList.__delitem__<SortedList.__delitem__>`.
+Deleting objects at random using :func:`SortedList.__delitem__`.
 
 .. image:: _static/SortedList-delitem.png
 
 __getitem__
 ...........
 
-Retrieving ojbects by index using
-:ref:`SortedList.__getitem__<SortedList.__getitem__>`.
+Retrieving ojbects by index using :func:`SortedList.__getitem__`.
 
 .. image:: _static/SortedList-getitem.png
 
 index
 .....
 
-Finding the index of an object using :ref:`SortedList.index<SortedList.index>`.
+Finding the index of an object using :func:`SortedList.index`.
 
 .. image:: _static/SortedList-index.png
 
 iter
 ....
 
-Iterating a SortedList using :ref:`SortedList.__iter__<SortedList.__iter__>`.
+Iterating a SortedList using :func:`SortedList.__iter__`.
 
 .. image:: _static/SortedList-iter.png
 
 pop
 ...
 
-Removing the last object using :ref:`SortedList.pop<SortedList.pop>`.
+Removing the last object using :func:`SortedList.pop`.
 
 .. image:: _static/SortedList-pop.png
 
 remove
 ......
 
-Remove an object at random using :ref:`SortedList.remove<SortedList.remove>`.
+Remove an object at random using :func:`SortedList.remove`.
 
 .. image:: _static/SortedList-remove.png
 
 update_large
 ............
 
-Updating a SortedList with a large iterable using
-:ref:`SortedList.update<SortedList.update>`.
+Updating a SortedList with a large iterable using :func:`SortedList.update`.
 
 .. image:: _static/SortedList-update_large.png
 
 update_small
 ............
 
-Updating a SortedList with a small iterable using
-:ref:`SortedList.update<SortedList.update>`.
+Updating a SortedList with a small iterable using :func:`SortedList.update`.
 
 .. image:: _static/SortedList-update_small.png
 
@@ -234,39 +231,35 @@ __contains__
 ............
 
 Given a key at random, test whether the key is in the dictionary using
-:ref:`SortedDict.__contains__<SortedDict.__contains__>`.
+:func:`SortedDict.__contains__`.
 
 .. image:: _static/SortedDict-contains.png
 
 __getitem__
 ...........
 
-Given a key at random, retrieve the value using
-:ref:`SortedDict.__getitem__<SortedDict.__getitem__>`.
+Given a key at random, retrieve the value using :func:`SortedDict.__getitem__`.
 
 .. image:: _static/SortedDict-getitem.png
 
 __setitem__
 ...........
 
-Given a key at random, set the value using
-:ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
+Given a key at random, set the value using :func:`SortedDict.__setitem__`.
 
 .. image:: _static/SortedDict-setitem.png
 
 __delitem__
 ...........
 
-Given a key at random, delete the value using
-:ref:`SortedDict.__delitem__<SortedDict.__delitem__>`.
+Given a key at random, delete the value using :func:`SortedDict.__delitem__`.
 
 .. image:: _static/SortedDict-delitem.png
 
 iter
 ....
 
-Iterate the keys of a SortedDict using
-:ref:`SortedDict.__iter__<SortedDict.__iter__>`.
+Iterate the keys of a SortedDict using :func:`SortedDict.__iter__`.
 
 .. image:: _static/SortedDict-iter.png
 
@@ -274,7 +267,7 @@ setitem_existing
 ................
 
 Given an existing key at random, set the value using
-:ref:`SortedDict.__setitem__<SortedDict.__setitem__>`.
+:func:`SortedDict.__setitem__`.
 
 .. image:: _static/SortedDict-setitem_existing.png
 
@@ -293,275 +286,258 @@ Initializing with a list of random numbers.
 add
 ...
 
-Randomly add values using :ref:`SortedSet.add<SortedSet.add>`.
+Randomly add values using :func:`SortedSet.add`.
 
 .. image:: _static/SortedSet-add.png
 
 contains
 ........
 
-Randomly test membership using
-:ref:`SortedSet.__contains__<SortedSet.__contains__>`.
+Randomly test membership using :func:`SortedSet.__contains__`.
 
 .. image:: _static/SortedSet-contains.png
 
 difference_large
 ................
 
-Set difference using :ref:`SortedSet.difference<SortedSet.difference>`.
+Set difference using :func:`SortedSet.difference`.
 
 .. image:: _static/SortedSet-difference_large.png
 
 difference_medium
 .................
 
-Set difference using :ref:`SortedSet.difference<SortedSet.difference>`.
+Set difference using :func:`SortedSet.difference`.
 
 .. image:: _static/SortedSet-difference_medium.png
 
 difference_small
 ................
 
-Set difference using :ref:`SortedSet.difference<SortedSet.difference>`.
+Set difference using :func:`SortedSet.difference`.
 
 .. image:: _static/SortedSet-difference_small.png
 
 difference_tiny
 ...............
 
-Set difference using :ref:`SortedSet.difference<SortedSet.difference>`.
+Set difference using :func:`SortedSet.difference`.
 
 .. image:: _static/SortedSet-difference_tiny.png
 
 difference_update_large
 .......................
 
-Set difference using
-:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using :func:`SortedSet.difference_update`.
 
 .. image:: _static/SortedSet-difference_update_large.png
 
 difference_update_medium
 ........................
 
-Set difference using
-:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using :func:`SortedSet.difference_update`.
 
 .. image:: _static/SortedSet-difference_update_medium.png
 
 difference_update_small
 .......................
 
-Set difference using
-:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using :func:`SortedSet.difference_update`.
 
 .. image:: _static/SortedSet-difference_update_small.png
 
 difference_update_tiny
 ......................
 
-Set difference using
-:ref:`SortedSet.difference_update<SortedSet.difference_update>`.
+Set difference using :func:`SortedSet.difference_update`.
 
 .. image:: _static/SortedSet-difference_update_tiny.png
 
 intersection_large
 ..................
 
-Set intersection using :ref:`SortedSet.intersection<SortedSet.intersection>`.
+Set intersection using :func:`SortedSet.intersection`.
 
 .. image:: _static/SortedSet-intersection_large.png
 
 intersection_medium
 ...................
 
-Set intersection using :ref:`SortedSet.intersection<SortedSet.intersection>`.
+Set intersection using :func:`SortedSet.intersection`.
 
 .. image:: _static/SortedSet-intersection_medium.png
 
 intersection_small
 ..................
 
-Set intersection using :ref:`SortedSet.intersection<SortedSet.intersection>`.
+Set intersection using :func:`SortedSet.intersection`.
 
 .. image:: _static/SortedSet-intersection_small.png
 
 intersection_tiny
 .................
 
-Set intersection using :ref:`SortedSet.intersection<SortedSet.intersection>`.
+Set intersection using :func:`SortedSet.intersection`.
 
 .. image:: _static/SortedSet-intersection_tiny.png
 
 intersection_update_large
 .........................
 
-Set intersection using
-:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using :func:`SortedSet.intersection_update`.
 
 .. image:: _static/SortedSet-intersection_update_large.png
 
 intersection_update_medium
 ..........................
 
-Set intersection using
-:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using :func:`SortedSet.intersection_update`.
 
 .. image:: _static/SortedSet-intersection_update_medium.png
 
 intersection_update_small
 .........................
 
-Set intersection using
-:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using :func:`SortedSet.intersection_update`.
 
 .. image:: _static/SortedSet-intersection_update_small.png
 
 intersection_update_tiny
 ........................
 
-Set intersection using
-:ref:`SortedSet.intersection_update<SortedSet.intersection_update>`.
+Set intersection using :func:`SortedSet.intersection_update`.
 
 .. image:: _static/SortedSet-intersection_update_tiny.png
 
 iter
 ....
 
-Iterating a set using :ref:`iter(SortedSet)<SortedSet.__iter__>`.
+Iterating a set using :func:`SortedSet.__iter__`.
 
 .. image:: _static/SortedSet-iter.png
 
 pop
 ...
 
-Remove the last item in a set using :ref:`SortedSet.pop<SortedSet.pop>`.
+Remove the last item in a set using :func:`SortedSet.pop`.
 
 .. image:: _static/SortedSet-pop.png
 
 remove
 ......
 
-Remove an item at random using :ref:`SortedSet.remove<SortedSet.remove>`.
+Remove an item at random using :func:`SortedSet.remove`.
 
 .. image:: _static/SortedSet-remove.png
 
 union_large
 ...........
 
-Set union using :ref:`SortedSet.union<SortedSet.union>`.
+Set union using :func:`SortedSet.union`.
 
 .. image:: _static/SortedSet-union_large.png
 
 union_medium
 ............
 
-Set union using :ref:`SortedSet.union<SortedSet.union>`.
+Set union using :func:`SortedSet.union`.
 
 .. image:: _static/SortedSet-union_medium.png
 
 union_small
 ...........
 
-Set union using :ref:`SortedSet.union<SortedSet.union>`.
+Set union using :func:`SortedSet.union`.
 
 .. image:: _static/SortedSet-union_small.png
 
 union_tiny
 ..........
 
-Set union using :ref:`SortedSet.union<SortedSet.union>`.
+Set union using :func:`SortedSet.union`.
 
 .. image:: _static/SortedSet-union_tiny.png
 
 update_large
 ............
 
-Set update using :ref:`SortedSet.update<SortedSet.update>`.
+Set update using :func:`SortedSet.update`.
 
 .. image:: _static/SortedSet-update_large.png
 
 update_medium
 .............
 
-Set update using :ref:`SortedSet.update<SortedSet.update>`.
+Set update using :func:`SortedSet.update`.
 
 .. image:: _static/SortedSet-update_medium.png
 
 update_small
 ............
 
-Set update using :ref:`SortedSet.update<SortedSet.update>`.
+Set update using :func:`SortedSet.update`.
 
 .. image:: _static/SortedSet-update_small.png
 
 update_tiny
 ...........
 
-Set update using :ref:`SortedSet.update<SortedSet.update>`.
+Set update using :func:`SortedSet.update`.
 
 .. image:: _static/SortedSet-update_tiny.png
 
 symmetric_difference_large
 ..........................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference`.
 
 .. image:: _static/SortedSet-symmetric_difference_large.png
 
 symmetric_difference_medium
 ...........................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference`.
 
 .. image:: _static/SortedSet-symmetric_difference_medium.png
 
 symmetric_difference_small
 ..........................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference`.
 
 .. image:: _static/SortedSet-symmetric_difference_small.png
 
 symmetric_difference_tiny
 .........................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference<SortedSet.symmetric_difference>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference`.
 
 .. image:: _static/SortedSet-symmetric_difference_tiny.png
 
 symm_diff_update_large
 ......................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference_update`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_large.png
 
 symm_diff_update_medium
 .......................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference_update`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_medium.png
 
 symm_diff_update_small
 ......................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference_update`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_small.png
 
 symm_diff_update_tiny
 .....................
 
-Set symmetric-difference using
-:ref:`SortedSet.symmetric_difference_update<SortedSet.symmetric_difference_update>`.
+Set symmetric-difference using :func:`SortedSet.symmetric_difference_update`.
 
 .. image:: _static/SortedSet-symmetric_difference_update_tiny.png
