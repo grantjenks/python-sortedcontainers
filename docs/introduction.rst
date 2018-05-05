@@ -77,21 +77,21 @@ follow the programmer's directive to insert the element(s) at a specific
 location. Inserting an element out of order in this way will cause a
 ValueError.
 
-    >>> l[:] = [0, 1, 2, 3, 4]
-    >>> l.append(5)
-    >>> l.insert(0, 0)
-    >>> l.extend(range(6, 10))
+    >>> l.clear()
+    >>> l.update([0, 1, 2, 3, 4])
+    >>> l.add(5)
+    >>> l.add(0)
+    >>> l.update(range(6, 10))
     >>> print(','.join(map(str, l)))
     0,0,1,2,3,4,5,6,7,8,9
-    >>> l.insert(10, 5)
-    ValueError
 
 Removing elements from a SortedList is done with :ref:`discard
 <SortedList.discard>`, :ref:`remove <SortedList.remove>`, :ref:`__delitem__
 <SortedList.__delitem__>`, or :ref:`pop <SortedList.pop>`. These functions work
 identically to their list counterparts.
 
-    >>> l[:] = range(10)
+    >>> l.clear()
+    >>> l.update(range(10))
     >>> del l[-9:-3:3]
     >>> l.discard(0)
     >>> l.remove(5)
@@ -120,9 +120,12 @@ because values are always maintained in ascending sort order. To reverse a
 SortedList you may either request a :ref:`reversed <SortedList.reversed>`
 iterator or use negative indexing.
 
-    >>> l[:] = range(5)
+    >>> l.clear()
+    >>> l.update(range(5))
     >>> l.reverse()
-    NotImplementedError: .reverse() not defined
+    Traceback (most recent call last):
+      ...
+    NotImplementedError: use ``reversed(sl)`` instead
     >>> list(reversed(l))
     [4, 3, 2, 1, 0]
     >>> l[-3:]
@@ -133,7 +136,8 @@ types. :ref:`Addition <SortedList.__add__>`, :ref:`multiplication
 <SortedList.__mul__>`, and :ref:`comparison <SortedList.__eq__>` works as with
 other sequences.
 
-    >>> l[:] = range(10)
+    >>> l.clear()
+    >>> l.update(range(10))
     >>> l += range(10)
     >>> l *= 2
     >>> l >= [0, 0, 0, 0]
@@ -152,7 +156,8 @@ slicing rules, `start` to `stop`, inclusive and exclusive respectively; and
 method also accepts a `reverse` argument so that items are yielded from the
 iterator in reverse.
 
-    >>> l[:] = range(10)
+    >>> l.clear()
+    >>> l.update(range(10))
     >>> tuple(l.islice(3, 6, reverse=True))
     (5, 4, 3)
     >>> tuple(l.irange(2, 7, inclusive=(True, True)))
@@ -185,7 +190,7 @@ a key-function to the constructor.
     >>> from operator import neg
     >>> values = SortedList(range(4), key=neg)
     >>> repr(values)
-    SortedKeyList([3, 2, 1, 0], key=<built-in function neg>, load=1000)
+    'SortedKeyList([3, 2, 1, 0], key=<built-in function neg>)'
     >>> type(values)
     <class 'sortedcontainers.sortedlist.SortedKeyList'>
     >>> isinstance(values, SortedList)
@@ -214,8 +219,8 @@ strives to be as similar to the built-in ``dict`` type as possible.
     True
     >>> d.get('frank', 0)
     0
-    >>> d.pop()
-    'ellen'
+    >>> d.pop('ellen')
+    874
 
 SortedDict also supports key, value, and item iteration/views according to the
 Python version. (Python 2.7 and higher supports views while Python 2.6 supports
@@ -233,7 +238,7 @@ only iteration.) View operations like :ref:`and <KeysView.and>`,
     11
     >>> s = SortedDict([(1, '1'), (2, '2'), (3, '3'), (10, '10')])
     >>> s.keys() & keys
-    SortedSet([1, 2, 3])
+    {1, 2, 3}
 
 In addition to the normal dictionary operations, SortedDict supports fast
 :ref:`indexing with iloc<SortedDict.iloc>` and :ref:`key index
@@ -242,11 +247,12 @@ in iteration. These utilities are not common in other implementations but can
 be extremely useful. Indexing also supports slice notation.
 
     >>> d = SortedDict(b=2, d=4, c=3, e=5, a=1)
-    >>> d.iloc[0]
+    >>> keys = d.keys()
+    >>> keys[0]
     'a'
-    >>> d.iloc[-1]
+    >>> keys[-1]
     'e'
-    >>> d.iloc[-3:]
+    >>> keys[-3:]
     ['c', 'd', 'e']
     >>> d.index('c')
     2
@@ -261,9 +267,9 @@ For example, to contruct a mapping with integer keys in descending order and a
 load-factor of 100:
 
     >>> from operator import neg
-    >>> d = SortedDict(neg, 100, enumerate(range(4)))
+    >>> d = SortedDict(neg, enumerate(range(4)))
     >>> d
-    SortedDict(<built-in function neg>, 100, {3: 3, 2: 2, 1: 1, 0: 0})
+    SortedDict(<built-in function neg>, {3: 3, 2: 2, 1: 1, 0: 0})
 
 For more details, refer to the :doc:`SortedDict API documentation
 <sorteddict>`.
@@ -290,15 +296,13 @@ counterparts.
 
     >>> s.clear()
     >>> s.add(-1)
-    >>> s.update(xrange(10))
+    >>> _ = s.update(range(10))
     >>> 5 in s
     True
     >>> s - [1, 2, 3]
     SortedSet([-1, 0, 4, 5, 6, 7, 8, 9])
     >>> s & [-3, -2, -1, 0]
     SortedSet([-1, 0])
-    >>> s > [1, 2, 3]
-    True
 
 Adding and removing elements works the same as with the SortedList container
 although positional updates are not permitted. Unlike the built-in ``set``
@@ -307,11 +311,11 @@ type, SortedSet has full indexing support for
 set[index]<SortedSet.__delitem__>` operations.
 
     >>> s.clear()
-    >>> s.update(xrange(100))
+    >>> _ = s.update(range(100))
     >>> s[5]
     5
     >>> s[2:10:2]
-    SortedSet([2, 4, 6, 8])
+    [2, 4, 6, 8]
     >>> del s[3:15:3]
     >>> len(s)
     96
