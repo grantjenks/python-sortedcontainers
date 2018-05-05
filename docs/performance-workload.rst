@@ -150,11 +150,11 @@ their frequencies:
 Other Performance Comparisons
 -----------------------------
 
-SortedContainers uses a segmented-list data structure similar to a B-tree
-limited to two levels of nodes. As part of the implementation, a load factor is
-used to determine how many values should be stored in each node. This can have
-a significant impact on performance and a :doc:`load factor performance
-comparison<performance-load>` is also provided.
+:doc:`Sorted Containers<index>` uses a segmented-list data structure similar to
+a B-tree limited to two levels of nodes. As part of the implementation, a load
+factor is used to determine how many values should be stored in each node. This
+can have a significant impact on performance and a :doc:`load factor
+performance comparison<performance-load>` is also provided.
 
 Because sortedcontainers is pure-Python, its performance also depends directly
 on the Python runtime. A :doc:`runtime performance

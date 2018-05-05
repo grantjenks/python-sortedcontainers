@@ -1,17 +1,17 @@
-SortedContainers Introduction
-=============================
+Sorted Containers Introduction
+==============================
 
 Installation
 ------------
 
 This part of the documentation covers the installation of
-:doc:`SortedContainers<index>`.  The first step to using any software package
+:doc:`Sorted Containers<index>`.  The first step to using any software package
 is getting it properly installed.
 
 Distribute & Pip
 ................
 
-Installing :doc:`SortedContainers<index>` is simple with `pip
+Installing :doc:`Sorted Containers<index>` is simple with `pip
 <https://pypi.org/project/pip/>`_ using::
 
     $ pip install sortedcontainers
@@ -23,7 +23,7 @@ or, with `pipenv <https://pypi.org/project/pipenv/>`_ using::
 Get the Code
 ............
 
-:doc:`SortedContainers<index>` is actively developed on GitHub, where the code
+:doc:`Sorted Containers<index>` is actively developed on GitHub, where the code
 is `always available <https://github.com/grantjenks/sorted_containers>`_.
 
 You can either clone the public repository::
@@ -43,7 +43,7 @@ or install it into your site-packages easily::
 
     $ python setup.py install
 
-:doc:`SortedContainers<index>` is also available in Debian distributions as
+:doc:`Sorted Containers<index>` is also available in Debian distributions as
 `python-sortedcontainers` and `python3-sortedcontainers`.
 
 SortedList
@@ -162,7 +162,7 @@ For more details, refer to the :doc:`SortedList API documentation
 SortedListWithKey
 -----------------
 
-The :doc:`SortedContainers<index>` project also maintains a specialized
+The :doc:`Sorted Containers<index>` project also maintains a specialized
 SortedList-like type that accepts a key-parameter as found with Python's
 built-in *sorted* function.  A SortedListWithKey provides the same
 functionality as a SortedList but maintains the order of contained values based

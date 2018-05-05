@@ -1,8 +1,8 @@
 Performance at Scale
 ====================
 
-:doc:`SortedContainers<index>` scales extremely well. This page discusses why
-both in theory and in practice. The design of :doc:`SortedContainers<index>`
+:doc:`Sorted Containers<index>` scales extremely well. This page discusses why
+both in theory and in practice. The design of :doc:`Sorted Containers<index>`
 permits testing through tens of billions of items and benchmarks present
 results at this scale. The results of this page would be difficult and
 expensive to replicate with other implementations.
@@ -16,13 +16,13 @@ subset of the runtime complexity of these methods.
 
 To fully grasp the content below, its strongly recommended that you read the
 :doc:`implementation details<implementation>`
-first. :doc:`SortedContainers<index>` maintains a B-tree-like data structure
+first. :doc:`Sorted Containers<index>` maintains a B-tree-like data structure
 limited to two levels of nodes.
 
 Theory
 ------
 
-To discuss the runtime complexity of :doc:`SortedContainers<index>`, we must
+To discuss the runtime complexity of :doc:`Sorted Containers<index>`, we must
 consider two values:
 
 1. "n" - The size of the sorted list.
@@ -69,7 +69,7 @@ Now consider an extreme case:
 
    T_{add}(n|m \propto 1) = O(n^2)
 
-The above is why some consider :doc:`SortedContainers<index>`
+The above is why some consider :doc:`Sorted Containers<index>`
 unscalable. Because the load is not chosen dynamically, in theoretical
 analysis, it must be treated as a constant with respect to "n" which makes it
 proportional to 1.
@@ -122,7 +122,7 @@ impact. Consider a billion elements:
 
 The constant factor between those is :math:`1,000 / 33 \approx 33`. So if the
 operations for tree-based implementations are more than 33 times slower, then
-:doc:`SortedContainers<index>` may be faster. Below I'll make an argument for
+:doc:`Sorted Containers<index>` may be faster. Below I'll make an argument for
 why that occurs in practice.
 
 Now deleting an element using
@@ -246,7 +246,7 @@ possibly copied, which takes linear time. If we sampled performance by
 initializing lists of various sizes and appending an element, we may never
 observe a resize operation and so over-estimate performance.
 
-One solution for both Python lists and :doc:`SortedContainers<index>` sorted
+One solution for both Python lists and :doc:`Sorted Containers<index>` sorted
 lists would be to double the size or remove all elements from the initialized
 list as was done in the Theory section above. Unfortunately, that method is too
 expensive to be practical. Doing so would require weeks and months of time
@@ -366,7 +366,7 @@ time complexity for which, at extremely large sizes, the Ops/Sec ratio would
 approach one. However, at the sizes discussed below, the ratio is closer to
 1.136. This means that as we grow from one million to one billion elements, we
 expect a net ratio of ~2. By comparison, the cubic root time complexity would
-expect a net ratio of ~10. In practice, :doc:`SortedContainers<index>` is often
+expect a net ratio of ~10. In practice, :doc:`Sorted Containers<index>` is often
 five to ten times faster at smaller list sizes. So the total effect is for
 performance to be equal at large list sizes. Also, tree-based implementations
 have difficulty trying to realize the theoretical ratio on modern processors
@@ -501,12 +501,12 @@ elements. A highly optimized implementation will require at least 24 gigabytes
 of memory. The binary tree will likely traverse thirty levels, each of which is
 a data-dependent lookup. Some lookups will have good locality but most will
 not. Each lookup could be hundreds to thousands of times slower than sequential
-accesses. These slow lookups are why :doc:`SortedContainers<index>` can afford
+accesses. These slow lookups are why :doc:`Sorted Containers<index>` can afford
 to shift a thousand sequential elements in memory and have most additions take
 less time than binary tree competitors.
 
-Due to the memory cache hierarchy, :doc:`SortedContainers<index>` scales
+Due to the memory cache hierarchy, :doc:`Sorted Containers<index>` scales
 extremely well. Each element in a SortedList has little overhead which
 increases cache utilization. Data is randomly accessed and related data is
 stored together. These patterns in computing have held for decades which
-promises :doc:`SortedContainers<index>` a bright future.
+promises :doc:`Sorted Containers<index>` a bright future.

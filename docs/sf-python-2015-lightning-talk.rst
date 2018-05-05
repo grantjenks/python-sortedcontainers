@@ -74,8 +74,8 @@ If you're curious how it works, there's a page with implementation details. The
 short answer is two fold: I use bisect a lot and I cheat a little. But never
 fear, none of the graphs hide lazy-computations.
 
-I think Sorted Containers is great. But listen to what other smart people say
-about it:
+I think :doc:`Sorted Containers<index>` is great. But listen to what other
+smart people say about it:
 
 Alex Martelli says: Good stuff! ... I like the simple, effective implementation
 idea of splitting the sorted containers into smaller “fragments” to avoid the
@@ -93,7 +93,7 @@ out of the box on Python 2 and 3.
 
 So, the next time you write a priority queue, or work with time-series data, or
 setup an in-memory Sqlite database or send Redis a ZADD command, think of
-Sorted Containers.
+:doc:`Sorted Containers<index>`.
 
 In Python, we can do better. Happy Holidays.
 

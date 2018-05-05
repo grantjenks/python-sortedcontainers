@@ -1,9 +1,9 @@
 Runtime Performance Comparison
 ==============================
 
-Because :doc:`SortedContainers<index>` is implemented in pure-Python, its
+Because :doc:`Sorted Containers<index>` is implemented in pure-Python, its
 performance depends directly on the Python
-runtime. :doc:`SortedContainers<index>` was primarily developed, tested and
+runtime. :doc:`Sorted Containers<index>` was primarily developed, tested and
 benchmarked on CPython 2.7, specifically build:
 
 ::
@@ -12,7 +12,7 @@ benchmarked on CPython 2.7, specifically build:
     [GCC 4.2.1 Compatible Apple LLVM 7.0.2 (clang-700.1.81)] on darwin
 
 Not all runtimes are created equal. The graphs below compare
-:doc:`SortedContainers<index>` running on the CPython 2.7, CPython 3.5 and PyPy
+:doc:`Sorted Containers<index>` running on the CPython 2.7, CPython 3.5 and PyPy
 5.1 runtimes. The PyPy 5.1 runtime displays much more variability due to its
 JIT-ed nature. Once the just-in-time compiler optimizes the code, performance
 is often two to ten times faster.
@@ -21,7 +21,7 @@ Performance of competing implementations are benchmarked against the CPython
 2.7 runtime. An :doc:`implementation performance comparison<performance>` is
 also included with data from popular sorted container packages.
 
-:doc:`SortedContainers<index>` uses a segmented-list data structure similar to
+:doc:`Sorted Containers<index>` uses a segmented-list data structure similar to
 a B-tree limited to two levels of nodes. As part of the implementation, a load
 factor is used to determine how many values should be stored in each node. This
 can have a significant impact on performance and a :doc:`load factor

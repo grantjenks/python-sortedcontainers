@@ -1,7 +1,7 @@
 Load Factor Performance Comparison
 ==================================
 
-:doc:`SortedContainers<index>` uses a segmented-list data structure similar to
+:doc:`Sorted Containers<index>` uses a segmented-list data structure similar to
 a B-tree limited to two levels of nodes. As part of the implementation, a load
 factor is used to determine how many values should be stored in each node. This
 page compares three load factors on containers with as many as ten of million
@@ -9,7 +9,7 @@ elements.
 
 No single load factor is universally superior. The best load factor for your
 purposes will depend on your usage pattern. Originally,
-:doc:`SortedContainers<index>` used a load factor of 100 but that changed in
+:doc:`Sorted Containers<index>` used a load factor of 100 but that changed in
 release 0.8.5 mainly due to the SortedList.delitem_ benchmark which is most
 dramatically impacted. Most benchmarks perform slightly better with a load
 factor of 100 but each is competitive with alternate loads. For an in-depth
@@ -20,7 +20,7 @@ Performance of competing implementations are benchmarked against the CPython
 2.7 runtime. An :doc:`implementation performance comparison<performance>` is
 also included with data from popular sorted collections packages.
 
-Because :doc:`SortedContainers<index>` is pure-Python, its performance also
+Because :doc:`Sorted Containers<index>` is pure-Python, its performance also
 depends directly on the Python runtime. A :doc:`runtime performance
 comparison<performance-runtime>` is also included with data from popular Python
 runtimes.

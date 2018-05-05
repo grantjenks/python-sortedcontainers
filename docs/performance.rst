@@ -5,7 +5,7 @@ Measuring performance is a difficult task. All the benchmarks on this page are
 synthetic in the sense that they test one function repeatedly. Measurements in
 live systems are much harder to produce reliably. So take the following data
 with a grain of salt. That being said, a stated feature of
-:doc:`SortedContainers<index>` is performance so we would be remiss not to
+:doc:`Sorted Containers<index>` is performance so we would be remiss not to
 produce this page with comparisons.
 
 The source for all benchmarks can be found under the "tests" directory in the
@@ -18,14 +18,14 @@ better. Measurements are made by powers of ten: 100 through 1,000,000.
 
 Measurements up to 10,000,000,000 elements have been successfully tested and
 benchmarks. Read :doc:`Performance at Scale<performance-scale>` for
-details. Only a couple implementations (including SortedContainers) are capable
-of handling so many elements. The major limiting factor at that size is
-memory. Consider the simple case of storing CPython's integers in a
-SortedList. Each integer object requires ~24 bytes so one hundred million
-elements will require about three gigabytes of memory. If the implemenation
-adds significant overhead then most systems will run out of memory. For all
-datasets which may be kept in memory, :doc:`SortedContainers<index>` is an
-excellent choice.
+details. Only a couple implementations (including :doc:`Sorted
+Containers<index>`) are capable of handling so many elements. The major
+limiting factor at that size is memory. Consider the simple case of storing
+CPython's integers in a SortedList. Each integer object requires ~24 bytes so
+one hundred million elements will require about three gigabytes of memory. If
+the implemenation adds significant overhead then most systems will run out of
+memory. For all datasets which may be kept in memory, :doc:`Sorted
+Containers<index>` is an excellent choice.
 
 A good effort has been made to find competing implementations. Six in total
 were found with various list, set, and dict implementations.
@@ -93,19 +93,19 @@ pyavl
   fast. Lacking documentation and failed to build. Last updated December, 2008.
   `pyavl on PyPI <https://pypi.org/project/pyavl/>`_
 
-The most similar module to :doc:`SortedContainers<index>` is
+The most similar module to :doc:`Sorted Containers<index>` is
 skiplistcollections given that each is implemented in Python. But as is
-displayed below, :doc:`SortedContainers<index>` is several times faster and
-provides a richer API. Often the pure-Python implementation in SortedContainers
-is faster even than the C-implementation counterparts. Where it lacks,
-performance is generally on the same magnitude.
+displayed below, Sorted Containers is several times faster and provides a
+richer API. Often the pure-Python implementation in Sorted Containers is faster
+even than the C-implementation counterparts. Where it lacks, performance is
+generally on the same magnitude.
 
-Because :doc:`SortedContainers<index>` is implemented in pure-Python, its
+Because :doc:`Sorted Containers<index>` is implemented in pure-Python, its
 performance depends directly on the Python runtime. A :doc:`runtime performance
 comparison<performance-runtime>` is also included with data from popular
 runtimes.
 
-:doc:`SortedContainers<index>` uses a segmented-list data structure similar to
+:doc:`Sorted Containers<index>` uses a segmented-list data structure similar to
 a B-tree limited to two levels of nodes. As part of the implementation, a load
 factor is used to determine how many values should be stored in each node. This
 can have a significant impact on performance and a :doc:`load factor

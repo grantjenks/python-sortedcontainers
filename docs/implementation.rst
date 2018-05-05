@@ -1,7 +1,7 @@
 Implementation Details
 ======================
 
-The :doc:`SortedContainers<index>` internal implementation is based on a couple
+The :doc:`Sorted Containers<index>` internal implementation is based on a couple
 observations. The first is that Python lists are fast, *really fast*. They have
 great characteristics for memory management and random access. The second is
 that bisect.insort is fast. This is somewhat counter-intuitive since it
@@ -30,7 +30,7 @@ you will probably exhaust the memory of your machine before that point.)
 Experimentation is also recommended. A :doc:`load factor performance
 comparison<performance-load>` is also provided. For more in-depth analysis,
 read :doc:`Performance at Scale<performance-scale>` which benchmarks
-:doc:`SortedContainers<index>` with ten billion elements.
+:doc:`Sorted Containers<index>` with ten billion elements.
 
 Finding an element is a two step process. First the ``_maxes`` list, also known
 as the "maxes" index, is bisected which yields the position of a sorted

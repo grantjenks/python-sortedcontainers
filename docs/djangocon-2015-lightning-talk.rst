@@ -45,11 +45,12 @@ Red-Black. Banyan has that too and a Splay option. Bintrees has Binary,
 Red-Black and AVL. All of those are implemented in C or C++. Then I discovered
 a Skip-list implementation that was slower but pure-Python.
 
-All I can say in five minutes is SortedContainers doesn't use any of these
-exactly. It's kind of like a B-tree but only half-heartedly. It relies entirely
-on the bisect module. While it's slow to program in Python, the interpreter is
-written in C. So if you think of it as programming the interpreter, you're
-effectively writing C code. It turns out lists are fast; trees, not so much.
+All I can say in five minutes is :doc:`Sorted Containers<index>` doesn't use
+any of these exactly. It's kind of like a B-tree but only half-heartedly. It
+relies entirely on the bisect module. While it's slow to program in Python, the
+interpreter is written in C. So if you think of it as programming the
+interpreter, you're effectively writing C code. It turns out lists are fast;
+trees, not so much.
 
 Listen to what these smart people have to say about it:
 
@@ -70,6 +71,6 @@ standard library seems to have a battery missing. And the argument that “we
 never had it before” has worn thin. It is time that Python offered a full range
 of collection classes out of the box, including sorted ones.
 
-Ladies and gentlemen, the SortedContainers library. Thank you.
+Ladies and gentlemen, the :doc:`Sorted Containers<index>` library. Thank you.
 
 .. _`Accompanying Slides`: http://bit.ly/socoin5

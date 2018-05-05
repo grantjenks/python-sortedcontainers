@@ -3,11 +3,6 @@ Python Sorted Containers
 
 .. todo::
 
-   * Review all files for Python 3 compatibility
-   * Python 3 api changes: keys/values/items views/iter
-     * Not-implemented methods
-   * Make sure all dunder methods document the typical access syntax
-   * Update docs to use autodoc
    * Update docs based on issues
    * Update introduction re: SortedListWithKey
    * Add docs note on scale page that binary trees have the same sampling
@@ -27,8 +22,8 @@ Python Sorted Containers
      https://pypi.org/project/skipdict/
      https://github.com/tailhook/sortedsets
    * Change docs theme to gjtheme
-   * Rename "SortedContainers" to "Sorted Containers"
-   * Tell Doug Hellmann about SortedContainers and relation to bisect module
+   * Re-run performance benchmarks
+   * Tell Doug Hellmann about Sorted Containers and relation to bisect module
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.

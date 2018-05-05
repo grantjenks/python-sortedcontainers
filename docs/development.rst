@@ -27,8 +27,8 @@ Requests for Contributions
 Get the Code
 ------------
 
-SortedContainers is actively developed on GitHub, where the code is
-`always available <https://github.com/grantjenks/sorted_containers>`_.
+:doc:`Sorted Containers<index>` is actively developed on GitHub, where the code
+is `always available <https://github.com/grantjenks/sorted_containers>`_.
 
 You can either clone the public repository::
 
@@ -194,16 +194,16 @@ possible comparisons. In all cases, you can install missing packages from PyPI.
 Tested Runtimes
 ---------------
 
-SortedContainers actively tests against the following versions of Python:
+:doc:`Sorted Containers<index>` actively tests against the following versions
+of Python:
 
-* CPython 2.6
 * CPython 2.7
 * CPython 3.2
 * CPython 3.3
 * CPython 3.4
 * CPython 3.5
-* PyPy v5.1
-* PyPy3 v2.4
+* PyPy
+* PyPy3
 
 Life will feel much saner if you use `virtualenv <http://www.virtualenv.org/>`_
 to manage each of the runtimes.

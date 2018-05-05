@@ -99,7 +99,7 @@ types, what’s the right answer?
 I couldn’t find the right answer so I built it. The missing battery: `Sorted
 Containers`_.
 
-Here it is. This is the project home page. `SortedContainers`_ is a `Python
+Here it is. This is the project home page. `Sorted Containers`_ is a `Python
 sorted collections`_ library with `sorted list`_, `sorted dictionary`_, and
 `sorted set`_ implementations. It’s pure-Python but it’s as fast as
 C-extensions. It’s Python 2 and Python 3 compatible. It’s fully-featured. And
@@ -109,24 +109,24 @@ it’s extensively tested with 100% coverage and hours of stress.
 performance graphs in total. Let’s look at a few of them together.
 
 Here’s the performance of adding a random value to a sorted list. I’m comparing
-`SortedContainers`_ with other competing implementations.
+`Sorted Containers`_ with other competing implementations.
 
 Notice the axes are log-log. So if performance differs by major tick marks then
 one is actually ten times faster than the other.
 
-We see here that `SortedContainers`_ is in fact about ten times faster than
+We see here that `Sorted Containers`_ is in fact about ten times faster than
 blist when it comes to adding random values to a sorted list. Notice also
 Raymond’s recipe is just a list and that displays order n-squared runtime
 complexity. That’s why it curves upwards.
 
-Of all the sorted collections libraries, `SortedContainers`_ is also fastest at
+Of all the sorted collections libraries, `Sorted Containers`_ is also fastest at
 initialization. We’ll look at why soon.
 
-`SortedContainers`_ is not always fastest. But notice here the performance
+`Sorted Containers`_ is not always fastest. But notice here the performance
 improves with scale. You can see it there in blue. It starts in the middle of
 the pack and has a lesser slope than competitors.
 
-In short, `SortedContainers`_ is kind of like a `B-tree`_ implementation. That
+In short, `Sorted Containers`_ is kind of like a `B-tree`_ implementation. That
 means you can configure the the fan-out of nodes in the tree. We call that the
 load parameter and there are extensive performance graphs of three different
 `load parameters`_.
@@ -147,7 +147,7 @@ for most scenarios. It’s a very sane default.
 In addition to comparisons and load-factors, I also `benchmark
 runtimes`_. Here’s CPython 2.7, CPython 3.5 and `PyPy`_ version 5. You can see
 where the the just-in-time compiler, the jit-compiler, kicks in. That’ll make
-`SortedContainers`_ another ten times faster.
+`Sorted Containers`_ another ten times faster.
 
 Finally, I made a survey in 2015 on `Github`_ as to how people were using
 sorted collections. I noticed patterns like priority queues, mutli-sets,
@@ -157,7 +157,7 @@ This is the priority queue workload which spends 40% of its time adding
 elements, 40% popping elements, 10% discarding elements, and has a couple other
 methods.
 
-`SortedContainers`_ is two to ten times faster in all of these scenarios.
+`Sorted Containers`_ is two to ten times faster in all of these scenarios.
 
 We also have a lot of features. The API is nearly a drop-in replacement for the
 “blist” and “rbtree” modules. But the quirks have been fixed so the “pop”
@@ -200,8 +200,8 @@ implementation explanations. Even the git log is clean and the unit tests run
 out of the box on Python 2 and 3.
 
 If you’re new to sorted collections, I hope I’ve piqued your interest. Think
-about the achievement here. `SortedContainers`_ is pure-Python but as fast as
-C-implementations. Let’s look under the hood of `SortedContainers`_ at what
+about the achievement here. `Sorted Containers`_ is pure-Python but as fast as
+C-implementations. Let’s look under the hood of `Sorted Containers`_ at what
 makes it so fast.
 
 It really comes down to bisect for the heavy lifting. Bisect is a module in the
@@ -307,7 +307,7 @@ So memory is tiered. And caches are limited in size.
 
 This is also why the slope of the performance curve for sorted list was less
 than that for binary tree implementations. At scale, binary trees do more
-data-dependent DRAM lookups than `SortedContainers`_.
+data-dependent DRAM lookups than `Sorted Containers`_.
 
 I said that initializing a sorted container is fast. Let’s look at why. Here’s
 the initializer for a `SortedList`_. Notice it simply calls the sorted builtin
@@ -345,7 +345,7 @@ example, creating a billion integers in CPython will take more than 30
 gigabytes of memory which is already exceeding the limits of most machines.
 
 We’ve also seen that memory is expensive. Allocations are costly. In the common
-case, `SortedContainers`_ allocates no more memory when adding elements.
+case, `Sorted Containers`_ allocates no more memory when adding elements.
 
 If you’re doubtful about performance at scale, then I encourage you to read the
 project docs. There’s a page called `Performance at Scale`_ and it talks
@@ -369,7 +369,7 @@ So here’s the performance lessons: builtin types are fast; program your
 interpreter; memory is tiered; cheat, if you can; and measure, measure,
 measure.
 
-A couple closing thoughts. Everything related to `SortedContainers`_ is under
+A couple closing thoughts. Everything related to `Sorted Containers`_ is under
 an open-source `Apache2 license`_. Contributors are very welcome. We’ve started
 to create a little community around sorted collections.
 
@@ -380,7 +380,7 @@ contribution is a pure-Python implementation that’s fast-enough for most
 scenarios.
 
 I’ll end with a quote from `Mark Summerfield`_. Mark and a couple other authors
-have actually deprecated their modules in favor of `SortedContainers`_. Mark
+have actually deprecated their modules in favor of `Sorted Containers`_. Mark
 says: “Python’s ‘batteries included’ standard library seems to have a battery
 missing. And the argument that ‘we never had it before’ has worn thin. It is
 time that Python offered a full range of collection classes out of the box,
@@ -407,7 +407,7 @@ Thanks for letting me share.
 .. _`Blist`: http://stutzbachenterprises.com/blist/
 .. _`SortedCollection`: http://code.activestate.com/recipes/577197-sortedcollection/
 .. _`bintrees`: https://pypi.org/project/bintrees/
-.. _`SortedContainers`: http://www.grantjenks.com/docs/sortedcontainers/
+.. _`Sorted Containers`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`Banyan`: https://pythonhosted.org/Banyan/
 .. _`skiplistcollections`: https://pypi.org/project/skiplistcollections/
 .. _`Google`: https://www.google.com/
