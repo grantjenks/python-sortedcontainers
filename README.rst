@@ -3,14 +3,6 @@ Python Sorted Containers
 
 .. todo::
 
-   * Update docs based on issues
-     * Issue #51 -- order statistic tree
-     * Issue #64 -- total ordering requirement
-     * Issue #74 -- defaultdict via __missing__
-     * Issue #76 -- how to corrupt your sorted data type
-     * Issue #84 -- key-function invariants
-     * Issue #88 -- migrating from other projects
-   * Update introduction re: SortedListWithKey
    * Add docs note on scale page that binary trees have the same sampling
      limitation due to tree shape (except AVL)
    * Also add docs note about projects that have been deprecated in favor of
@@ -29,6 +21,7 @@ Python Sorted Containers
      https://github.com/tailhook/sortedsets
    * Change docs theme to gjtheme
    * Re-run performance benchmarks
+   * Update history and document v3 milestone
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
