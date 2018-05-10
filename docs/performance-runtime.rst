@@ -42,7 +42,7 @@ Graphs comparing :doc:`sortedlist` performance.
 __init__
 ........
 
-Initializing with a list of random numbers.
+Initializing with a list of random numbers using :func:`SortedList.__init__`.
 
 .. image:: _static/SortedList_runtime-init.png
 
@@ -131,7 +131,8 @@ Graphs comparing :doc:`sorteddict` performance.
 __init__
 ........
 
-Initializing with a list of pairs of random numbers.
+Initializing with a list of pairs of random numbers using
+:func:`SortedDict.__init__`.
 
 .. image:: _static/SortedDict_runtime-init.png
 
@@ -187,7 +188,7 @@ Graphs comparing :doc:`sortedset` performance.
 __init__
 ........
 
-Initializing with a list of random numbers.
+Initializing with a list of random numbers using :func:`SortedSet.__init__`.
 
 .. image:: _static/SortedSet_runtime-init.png
 
