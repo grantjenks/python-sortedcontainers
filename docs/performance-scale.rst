@@ -8,11 +8,11 @@ results at this scale. The results of this page would be difficult and
 expensive to replicate with other implementations.
 
 Two methods are most important for analysis. Each stresses editing while
-maintaining sorted order. The first is :ref:`SortedList.add<SortedList.add>`
-which identifies the insertion position using binary search. The second is
-:ref:`SortedList.__delitem__<SortedList.__delitem__>` which identifies the
-deletion position using indexing. Most other methods are either symmetric or a
-subset of the runtime complexity of these methods.
+maintaining sorted order. The first is :func:`SortedList.add` which identifies
+the insertion position using binary search. The second is
+:func:`SortedList.__delitem__` which identifies the deletion position using
+indexing. Most other methods are either symmetric or a subset of the runtime
+complexity of these methods.
 
 To fully grasp the content below, its strongly recommended that you read the
 :doc:`implementation details<implementation>`
@@ -25,33 +25,34 @@ Theory
 To discuss the runtime complexity of :doc:`Sorted Containers<index>`, we must
 consider two values:
 
-1. "n" - The size of the sorted list.
-2. "m" - The "load" or sublist length.
+1. `n` -- the size of the sorted list.
+2. `m` -- the "load" or sublist length.
 
-In a :doc:`SortedList<sortedlist>` with "n" elements, there will be a top-level
-list of pointers to :math:`\frac{n}{m}` sublists each of which are
-approximately "m" elements long. There will also be a "maxes" index which is
-the max of each sublist. The index will contain :math:`\frac{n}{m}` references.
+In a :doc:`sortedlist` with `n` elements, there will be a top-level list of
+pointers to :math:`\frac{n}{m}` sublists each of which are approximately `m`
+elements long. There will also be a "maxes" index which is the max of each
+sublist. The index will contain :math:`\frac{n}{m}` references.
 
-Now adding an element using :ref:`SortedList.add<SortedList.add>` requires
-these steps:
+Now adding an element using :func:`SortedList.add` requires these steps:
 
-1. Bisect the "maxes" index to find the appropriate
-   sublist. :math:`O(\log_2{\frac{n}{m}})`
-2. Bisect the sublist to find the appropriate insertion
-   position. :math:`O(\log_2{m})`
-3. Insert the element in the sublist. :math:`O(m)`
-4. A sublist may be split and inserted into the top-level
-   list. :math:`O(m+\frac{n}{m})`
+1. Bisect the "maxes" index to find the appropriate sublist --
+   :math:`O(\log_2{\frac{n}{m}})`
 
-Consider how often step (4) may occur if we begin with a
-:doc:`SortedList<sortedlist>` of "n" elements and add "n" more elements. The
-top-level list length will grow from :math:`\frac{n}{m}` to
-:math:`2*\frac{n}{m}` meaning that step (4) was executed :math:`\frac{n}{m}`
-times.
+2. Bisect the sublist to find the appropriate insertion position --
+   :math:`O(\log_2{m})`
 
-Altogether, growing a :doc:`SortedList<sortedlist>` of "n" elements by "n" more
-elements has the time complexity:
+3. Insert the element in the sublist -- :math:`O(m)`
+
+4. A sublist may be split and inserted into the top-level list --
+   :math:`O(m+\frac{n}{m})`
+
+Consider how often step #4 may occur if we begin with a :doc:`sortedlist` of
+`n` elements and add `n` more elements. The top-level list length will grow
+from :math:`\frac{n}{m}` to :math:`2*\frac{n}{m}` meaning that step #4 was
+executed :math:`\frac{n}{m}` times.
+
+Altogether, growing a :doc:`sortedlist` of `n` elements by `n` more elements
+has the time complexity:
 
 .. math::
 
@@ -71,12 +72,12 @@ Now consider an extreme case:
 
 The above is why some consider :doc:`Sorted Containers<index>`
 unscalable. Because the load is not chosen dynamically, in theoretical
-analysis, it must be treated as a constant with respect to "n" which makes it
+analysis, it must be treated as a constant with respect to `n` which makes it
 proportional to 1.
 
 In practice, the default load is 1,000 which is generally closer to the square
-root or cube root of "n". Consider where "m" is proportional to the square root
-of "n":
+root or cube root of `n`. Consider where `m` is proportional to the square root
+of `n`:
 
 .. math::
 
@@ -89,10 +90,10 @@ of "n":
 
    T_{add}(n|m \propto n^\frac{1}{2}) = O(n * n^\frac{1}{2})
 
-The amortized cost of adding an individual item is then proportional to the
-square root of "n".
+The amortized cost of adding an individual item is therefore proportional to
+the square root of `n`.
 
-Our best bounds will be to use the cube root of "n":
+Our best bounds will be to use the cube root of `n`:
 
 .. math::
 
@@ -106,11 +107,11 @@ Our best bounds will be to use the cube root of "n":
    T_{add}(n|m \propto n^\frac{1}{3}) = O(n * n^\frac{1}{3})
 
 Now the amortized cost of adding an individual item is proportional to the cube
-root of "n".
+root of `n`.
 
 Alternative tree-based implementations have a runtime complexity proportional
 to :math:`log_2{n}` for adding elements. The logarithm grows much more slowly
-than the cube root for large values of "n". However, in practice we never reach
+than the cube root for large values of `n`. However, in practice we never reach
 those large values and the constant factors involved have a significant
 impact. Consider a billion elements:
 
@@ -125,24 +126,28 @@ operations for tree-based implementations are more than 33 times slower, then
 :doc:`Sorted Containers<index>` may be faster. Below I'll make an argument for
 why that occurs in practice.
 
-Now deleting an element using
-:ref:`SortedList.__delitem__<SortedList.__delitem__>` requires these steps:
+Now deleting an element using :func:`SortedList.__delitem__` requires these
+steps:
 
-1. Build the index if not present. :math:`O(\frac{n}{m})`
-2. Traverse the index to resolve the internal
-   location. :math:`O(\log_2{\frac{n}{m}})`
-3. Delete the element in the sublist. :math:`O(m)`
-4. Update the index. :math:`O(\log_2{\frac{n}{m}})`
+1. Build the index if not present -- :math:`O(\frac{n}{m})`
+
+2. Traverse the index to resolve the internal location --
+   :math:`O(\log_2{\frac{n}{m}})`
+
+3. Delete the element in the sublist -- :math:`O(m)`
+
+4. Update the index -- :math:`O(\log_2{\frac{n}{m}})`
+
 5. A sublist may be combined with a neighboring sublist if it becomes too
-   small. When this happens, the index is deleted. :math:`O(m+\frac{n}{m})`
+   small. When this happens, the index is deleted -- :math:`O(m+\frac{n}{m})`
 
-Consider how often steps (1) and (5) may occur if we begin with a
-:doc:`SortedList<sortedlist>` of "n" elements and delete all "n" elements. The
-top-level list will shrink from :math:`\frac{n}{m}` to :math:`0` meaning that
-steps (1) and (5) were executed :math:`\frac{n}{m}` times.
+Consider how often steps #1 and #5 may occur if we begin with a
+:doc:`sortedlist` of `n` elements and delete all `n` elements. The top-level
+list will shrink from :math:`\frac{n}{m}` to zero meaning that steps #1 and #5
+were executed :math:`\frac{n}{m}` times.
 
-Altogether, deleting "n" elements from a :doc:`SortedList<sortedlist>` of "n"
-elements has the time complexity:
+Altogether, deleting `n` elements from a :doc:`sortedlist` of `n` elements has
+the time complexity:
 
 .. math::
 
@@ -160,7 +165,7 @@ Furthermore index lookups and updates are proportional to :math:`n *
 \log_2{\frac{n}{m}}`. All these terms are minimized with :math:`n = m`. However
 that maximizes the cost of step (3), :math:`O(n * m)`.
 
-Once again our best bounds will be to use the cube root of "n":
+Once again our best bounds will be to use the cube root of `n`:
 
 .. math::
 
@@ -176,11 +181,11 @@ Once again our best bounds will be to use the cube root of "n":
    T_{del}(n|m \propto n^\frac{1}{3}) = O(n * n^\frac{1}{3})
 
 When deleting elements by index, the amortized time complexity is proportional
-to the cube root of "n".
+to the cube root of `n`.
 
 Although using :math:`m \propto \sqrt[3]{n}` is the best theoretical time
 complexity, index lookups, updates, and building are composed of expensive
-operations. In practice, the square root of "n" works better when doing a lot
+operations. In practice, the square root of `n` works better when doing a lot
 of numerical indexing.
 
 Python Implementations
@@ -188,14 +193,13 @@ Python Implementations
 
 I've now said that some operations are more expensive than others while still
 considering each to take :math:`O(1)` time. To understand this, we have to look
-at the underlying Python implementation.
+at how Python is implemented.
 
-The most popular implementation of Python is `CPython
-<https://www.python.org/>`_. CPython implements lists as arrays of pointers and
-integers as allocated memory objects. This means that shifting elements in
-lists is very fast. It's akin to a mem-move operation for which modern
-processors are well optimized. The memory access pattern is entirely
-sequential.
+The most popular implementation of Python is `CPython`_. CPython implements
+lists as arrays of pointers and integers as allocated memory objects. This
+means that shifting elements in lists is very fast. It's akin to a mem-move
+operation for which modern processors are well optimized. The memory access
+pattern is entirely sequential.
 
 In 64-bit builds of CPython, integers require approximately thirty bytes
 each. This severely limits the number of integers we can hold in memory. In
@@ -205,11 +209,11 @@ number is small in theory. Doing integer math in CPython requires a memory
 allocation which, while still :math:`O(1)`, is quite a bit more costly than a
 processor-supported integer.
 
-An optimized implementation of Python is `PyPy <http://pypy.org/>`_. PyPy
-improves on CPython in many ways but one of the most important to our
-discussion is the use of "tagged pointers." Tagged pointers are capable of
-storing integers within the pointer itself. This greatly reduces memory
-consumption so that many integers in PyPy take only eight bytes.
+An optimized implementation of Python is `PyPy`_. PyPy improves on CPython in
+many ways but one of the most important to our discussion is the use of "tagged
+pointers." Tagged pointers are capable of storing integers within the pointer
+itself. This greatly reduces memory consumption so that many integers in PyPy
+take only eight bytes.
 
 Lists of integers in PyPy are therefore packed densely together. When storing
 integers in a sorted list, both the "maxes" index and positional index are
@@ -217,14 +221,17 @@ densely packed lists of integers. This improves locality for various processor
 cache features.
 
 The access pattern of both indexes is also optimized for modern
-processors. Traversing both the "maxes" index and the sublist uses
-bisect which while initially random, narrows locality with each
-iteration. Likewise the positional index is a tree, densely stored in a
-list. The memory access pattern locality is very good initially and then
-becomes random, the exact opposite of bisect.
+processors. Traversing both the "maxes" index and the sublist uses bisect which
+while initially random, narrows locality with each iteration. Likewise the
+positional index is a tree, densely stored in a list. The memory access pattern
+locality is very good initially and then becomes random, the exact opposite of
+bisect.
 
 The benchmarks below use PyPy, without loss of generality, to maximize memory
 utilization and performance.
+
+.. _`CPython`: https://www.python.org/
+.. _`PyPy`: http://pypy.org/
 
 Sampling
 --------
@@ -238,8 +245,8 @@ For example, consider measuring the expected value of the lottery without
 knowing the total jackpot. Purchasing a thousand tickets may still result in no
 winnings which would conclude incorrectly an expected value of zero.
 
-A more practical example is the list data type in CPython. Lists grow and
-shrink as necessary but the underlying implementation is restricted to static
+More practically, consider the list data type in CPython. Lists grow and shrink
+as necessary but the underlying implementation is restricted to static
 allocations. For this reason, lists are often over-allocated so that most
 appends may occur immediately. Occassionally, the list must be reallocated and
 possibly copied, which takes linear time. If we sampled performance by
@@ -256,6 +263,14 @@ To shorten the measured time, two techniques are used. The first constructs
 sorted lists very quickly by initializing private member variables
 directly. The latter uses sampling in representative scenarios to perform a
 hundredth of the operations needed to double the size or remove all elements.
+
+The problem solved here is similar to that faced by binary tree
+implementations, like red-black trees, which do not maintain a binary tree in
+perfect balance. In fact, the maximum height of a red-black tree is :math:`2 *
+log_2{n + 1}`. While still :math:`O(log_2{n})`, the constant factor can have a
+big impact on performance analysis. When using sampling to measure the
+performance of red-black trees, trees of various shapes and heights must be
+used. The same is done here with :doc:`Sorted Containers<index>`.
 
 Consider a sorted list initialized from an iterable of random values. Those
 values are sorted using the "sorted" builtin function and the resulting list is
@@ -319,7 +334,7 @@ the process repeats. The overall effect is like watching ripples. Over time
 each ripple starts as a sharp-looking normal curve and then flattens out.
 
 In modeling each of the above cases, a normal curve is used to represent the
-sublist lengths. When adding elements the range of the curve is bounded by
+sublist lengths. When adding elements, the range of the curve is bounded by
 :math:`load` and :math:`load * 2`. While deleting elements the curve is bounded
 by :math:`\frac{load}{2}` and :math:`load`. The curve wraps-around these
 limits. Normal distributions have two parameters: :math:`\mu` and
@@ -366,11 +381,11 @@ time complexity for which, at extremely large sizes, the Ops/Sec ratio would
 approach one. However, at the sizes discussed below, the ratio is closer to
 1.136. This means that as we grow from one million to one billion elements, we
 expect a net ratio of ~2. By comparison, the cubic root time complexity would
-expect a net ratio of ~10. In practice, :doc:`Sorted Containers<index>` is often
-five to ten times faster at smaller list sizes. So the total effect is for
-performance to be equal at large list sizes. Also, tree-based implementations
-have difficulty trying to realize the theoretical ratio on modern processors
-and so remain slower even at scale.
+expect a net ratio of ~10. In practice, :doc:`Sorted Containers<index>` is
+often five to ten times faster at smaller list sizes. So the total effect is
+for performance to be equal at large list sizes. Also, tree-based
+implementations have difficulty trying to realize the theoretical ratio and so
+remain slower even at scale.
 
 Local Results
 .............
@@ -391,9 +406,9 @@ Method    Size   Operations           Time       Ops/Sec     Ratio
 
 The above table displays the performance of adding elements to a sorted
 list. Notice the particularly good ratio, approximately 1.77, out-performed the
-theoretically expected 2.154. This is in large part due to the different
-constant times required for various operations of which memory plays a large
-role and is discussed below.
+theoretically expected 2.154. This is mainly due to the different constant
+times required for various operations, of which memory plays a large role and
+is discussed below.
 
 ====== ======= ============ ============== ============= =========
 Method    Size   Operations           Time       Ops/Sec     Ratio
@@ -407,8 +422,7 @@ Method    Size   Operations           Time       Ops/Sec     Ratio
 When deleting elements, the ratio starts by out-performing the theoretically
 expected 3.162 but increases with size. The limited processor caches at these
 large sizes play a significant role in the performance. Traversing the
-positional index will evict elements of the top-level list and
-sublists.
+positional index will evict elements of the top-level list and sublists.
 
 Virtual Machine Results
 .......................
@@ -469,9 +483,9 @@ times larger and four times slower than L2 cache. And memory is two thousand
 times larger and ten times slower than L3 cache. These ratios are approximate
 but illustrative of the slowdowns.
 
-Also important to consider is the memory access pattern. These advertised
-latencies are averages for random memory access. But there are two other
-patterns often seen in practice: sequential and data-dependent.
+Also important is the memory access pattern. These advertised latencies are
+averages for random memory access. But there are two other patterns often seen
+in practice: sequential and data-dependent.
 
 Sequential memory access is faster than random due to its predictable
 nature. The speedup varies but about five times faster is a reasonable
@@ -492,8 +506,8 @@ densely packed in a list. Using PyPy, the entire index could fit in the L3
 cache. As the list is bisected, nearby indexes will be pulled into the L2 and
 L1 cache and lookups will accelerate a hundred times. Once the sublist is
 found, it too will be bisected. The sublist will contain only one thousand
-integers and those too will quickly be pulled from memory into L3, L2, and L1
-caches. Once bisected the new value will be inserted and memory will be
+integers and those too will be quickly pulled from memory into L3, L2, and L1
+caches. Once bisected, the new value will be inserted and memory will be
 traversed sequentially to make space.
 
 For comparison, consider traversing an AVL-binary tree with one billion
@@ -503,10 +517,10 @@ a data-dependent lookup. Some lookups will have good locality but most will
 not. Each lookup could be hundreds to thousands of times slower than sequential
 accesses. These slow lookups are why :doc:`Sorted Containers<index>` can afford
 to shift a thousand sequential elements in memory and have most additions take
-less time than binary tree competitors.
+less time than binary tree implementations.
 
 Due to the memory cache hierarchy, :doc:`Sorted Containers<index>` scales
-extremely well. Each element in a SortedList has little overhead which
+extremely well. Each element in a :doc:`sortedlist` has little overhead which
 increases cache utilization. Data is randomly accessed and related data is
 stored together. These patterns in computing have held for decades which
 promises :doc:`Sorted Containers<index>` a bright future.
