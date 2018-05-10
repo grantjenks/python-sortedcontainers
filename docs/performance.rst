@@ -133,10 +133,10 @@ right-hand-side of the operation for a dramatic improvement in performance.
 
 .. currentmodule:: sortedcontainers
 
-SortedList
-----------
+Sorted List
+-----------
 
-Graphs comparing :doc:`SortedList<sortedlist>` performance.
+Graphs comparing :doc:`sortedlist` performance.
 
 __init__
 ........
@@ -222,10 +222,10 @@ Updating a SortedList with a small iterable using :func:`SortedList.update`.
 
 .. image:: _static/SortedList-update_small.png
 
-SortedDict
-----------
+Sorted Dict
+-----------
 
-Graphs comparing :doc:`SortedDict<sorteddict>` performance.
+Graphs comparing :doc:`sorteddict` performance.
 
 __init__
 ........
@@ -278,10 +278,10 @@ Given an existing key at random, set the value using
 
 .. image:: _static/SortedDict-setitem_existing.png
 
-SortedSet
----------
+Sorted Set
+----------
 
-Graphs comparing :doc:`SortedSet<sortedset>` performance.
+Graphs comparing :doc:`sortedset` performance.
 
 __init__
 ........

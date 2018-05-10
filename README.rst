@@ -3,23 +3,13 @@ Python Sorted Containers
 
 .. todo::
 
-   * Add docs note on scale page that binary trees have the same sampling
-     limitation due to tree shape (except AVL)
-   * Also add docs note about projects that have been deprecated in favor of
-     sortedcontainers
-   * Also add docs note about last update and Python 3 support for alternatives
-   * Add doctests to docs
    * Rename github repo
    * Add sortedmap, using std::map in C++ standard library.
      https://pypi.org/project/sortedmap/
-   * Reference deprecated projects, choosing sortedcontainers:
-     https://pypi.org/project/sorteddict/
-     https://pypi.org/project/bintrees/
    * Research
      https://bitbucket.org/mojaves/pyskiplist/
      https://pypi.org/project/skipdict/
      https://github.com/tailhook/sortedsets
-   * Change docs theme to gjtheme
    * Re-run performance benchmarks
    * Update history and document v3 milestone
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
