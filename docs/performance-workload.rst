@@ -54,7 +54,22 @@ interference while sorted list operations are performed. The frequency of each
 operation is also estimated because no projects had performance benchmarks that
 were easily evaluated.
 
+The legends of the graphs below correlate the underlying data structure used to
+the Python project. The correlation is as follows:
+
 .. currentmodule:: sortedcontainers
+
+======================  ==================================
+Data Structure          Project
+======================  ==================================
+:class:`SortedList`     :doc:`Sorted Containers<index>`
+:class:`SortedKeyList`  :doc:`Sorted Containers<index>`
+B-Tree                  `blist on PyPI`_
+List                    `sortedcollection recipe`_
+======================  ==================================
+
+.. _`blist on PyPI`: https://pypi.org/project/blist/
+.. _`sortedcollection recipe`: http://code.activestate.com/recipes/577197-sortedcollection/
 
 Sorted List
 -----------

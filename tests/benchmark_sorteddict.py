@@ -60,34 +60,39 @@ kinds['SortedDict'] = SortedDict
 
 try:
     from blist import sorteddict
-    kinds['blist.sorteddict'] = sorteddict
+    kinds['B-Tree'] = sorteddict
 except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
 try:
-    from treap import treap
-    kinds['treap'] = treap
-except ImportError:
-    warnings.warn('No module named treap', ImportWarning)
-
-try:
-    from bintrees import FastAVLTree, FastRBTree
-    kinds['FastAVLTree'] = FastAVLTree
-    kinds['FastRBTree'] = FastRBTree
+    from bintrees import FastAVLTree
+    kinds['AVL-Tree'] = FastAVLTree
 except ImportError:
     warnings.warn('No module named bintrees', ImportWarning)
 
 try:
+    from banyan import SortedDict as BanyanSortedDict
+    kinds['RB-Tree'] = BanyanSortedDict
+except ImportError:
+    warnings.warn('No module named banyan', ImportWarning)
+
+try:
     from skiplistcollections import SkipListDict
-    kinds['SkipListDict'] = SkipListDict
+    kinds['Skip-List'] = SkipListDict
 except ImportError:
     warnings.warn('No module named skiplistcollections', ImportWarning)
 
 try:
-    from banyan import SortedDict as BanyanSortedDict
-    kinds['banyan.SortedDict'] = BanyanSortedDict
+    from sortedmap import sortedmap as CppSortedMap
+    kinds['std::map'] = CppSortedMap
 except ImportError:
-    warnings.warn('No module named banyan', ImportWarning)
+    warnings.warn('No module named sortedmap', ImportWarning)
+
+try:
+    from treap import treap
+    kinds['Treap'] = treap
+except ImportError:
+    warnings.warn('No module named treap', ImportWarning)
 
 # Implementation configuration.
 
@@ -102,8 +107,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-if 'treap' in impls['contains']:
-    del impls['contains']['treap']
+remove('contains', 'Treap')
 
 for name, kind in kinds.items():
     impls['getitem'][name] = {
@@ -153,10 +157,9 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-remove('init', 'treap')
-
-limit('init', 'blist.sorteddict', 100000)
-limit('init', 'SkipListDict', 100000)
+remove('init', 'Treap')
+limit('init', 'B-Tree', 100000)
+limit('init', 'Skip-List', 100000)
 
 if __name__ == '__main__':
     main('SortedDict')

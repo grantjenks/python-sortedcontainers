@@ -188,21 +188,21 @@ kinds['SortedSet'] = SortedSet
 
 try:
     from blist import sortedset
-    kinds['blist.sortedset'] = sortedset
+    kinds['B-Tree'] = sortedset
 except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
 try:
-    from skiplistcollections import SkipListSet
-    kinds['SkipListSet'] = SkipListSet
-except ImportError:
-    warnings.warn('No module named skiplistcollections', ImportWarning)
-
-try:
     from banyan import SortedSet as BanyanSortedSet
-    kinds['banyan.SortedSet'] = BanyanSortedSet
+    kinds['RB-Tree'] = BanyanSortedSet
 except ImportError:
     warnings.warn('No module named banyan', ImportWarning)
+
+try:
+    from skiplistcollections import SkipListSet
+    kinds['Skip-List'] = SkipListSet
+except ImportError:
+    warnings.warn('No module named skiplistcollections', ImportWarning)
 
 # Implementation configuration.
 
@@ -235,7 +235,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('add', 'blist.sortedset', 10000)
+limit('add', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['update_tiny'][name] = {
@@ -261,7 +261,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('update_medium', 'blist.sortedset', 10000)
+limit('update_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['update_large'][name] = {
@@ -271,12 +271,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('update_large', 'blist.sortedset', 10000)
+limit('update_large', 'B-Tree', 10000)
 
-remove('update_tiny', 'SkipListSet')
-remove('update_small', 'SkipListSet')
-remove('update_medium', 'SkipListSet')
-remove('update_large', 'SkipListSet')
+remove('update_tiny', 'Skip-List')
+remove('update_small', 'Skip-List')
+remove('update_medium', 'Skip-List')
+remove('update_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['union_tiny'][name] = {
@@ -302,7 +302,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('union_medium', 'blist.sortedset', 10000)
+limit('union_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['union_large'][name] = {
@@ -312,12 +312,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('union_large', 'blist.sortedset', 10000)
+limit('union_large', 'B-Tree', 10000)
 
-remove('union_tiny', 'SkipListSet')
-remove('union_small', 'SkipListSet')
-remove('union_medium', 'SkipListSet')
-remove('union_large', 'SkipListSet')
+remove('union_tiny', 'Skip-List')
+remove('union_small', 'Skip-List')
+remove('union_medium', 'Skip-List')
+remove('union_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['remove'][name] = {
@@ -327,7 +327,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('remove', 'blist.sortedset', 10000)
+limit('remove', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['difference_tiny'][name] = {
@@ -353,7 +353,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_medium', 'blist.sortedset', 10000)
+limit('difference_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['difference_large'][name] = {
@@ -363,12 +363,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_large', 'blist.sortedset', 10000)
+limit('difference_large', 'B-Tree', 10000)
 
-remove('difference_tiny', 'SkipListSet')
-remove('difference_small', 'SkipListSet')
-remove('difference_medium', 'SkipListSet')
-remove('difference_large', 'SkipListSet')
+remove('difference_tiny', 'Skip-List')
+remove('difference_small', 'Skip-List')
+remove('difference_medium', 'Skip-List')
+remove('difference_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['difference_update_tiny'][name] = {
@@ -394,7 +394,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_update_medium', 'blist.sortedset', 10000)
+limit('difference_update_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['difference_update_large'][name] = {
@@ -404,12 +404,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('difference_update_large', 'blist.sortedset', 10000)
+limit('difference_update_large', 'B-Tree', 10000)
 
-remove('difference_update_tiny', 'SkipListSet')
-remove('difference_update_small', 'SkipListSet')
-remove('difference_update_medium', 'SkipListSet')
-remove('difference_update_large', 'SkipListSet')
+remove('difference_update_tiny', 'Skip-List')
+remove('difference_update_small', 'Skip-List')
+remove('difference_update_medium', 'Skip-List')
+remove('difference_update_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['intersection_tiny'][name] = {
@@ -419,7 +419,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_tiny', 'blist.sortedset', 10000)
+limit('intersection_tiny', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_small'][name] = {
@@ -429,7 +429,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_small', 'blist.sortedset', 10000)
+limit('intersection_small', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_medium'][name] = {
@@ -439,7 +439,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_medium', 'blist.sortedset', 10000)
+limit('intersection_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_large'][name] = {
@@ -449,12 +449,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_large', 'blist.sortedset', 10000)
+limit('intersection_large', 'B-Tree', 10000)
 
-remove('intersection_tiny', 'SkipListSet')
-remove('intersection_small', 'SkipListSet')
-remove('intersection_medium', 'SkipListSet')
-remove('intersection_large', 'SkipListSet')
+remove('intersection_tiny', 'Skip-List')
+remove('intersection_small', 'Skip-List')
+remove('intersection_medium', 'Skip-List')
+remove('intersection_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['intersection_update_tiny'][name] = {
@@ -464,7 +464,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_tiny', 'blist.sortedset', 10000)
+limit('intersection_update_tiny', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_update_small'][name] = {
@@ -474,7 +474,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_small', 'blist.sortedset', 10000)
+limit('intersection_update_small', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_update_medium'][name] = {
@@ -484,7 +484,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_medium', 'blist.sortedset', 10000)
+limit('intersection_update_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['intersection_update_large'][name] = {
@@ -494,12 +494,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('intersection_update_large', 'blist.sortedset', 10000)
+limit('intersection_update_large', 'B-Tree', 10000)
 
-remove('intersection_update_tiny', 'SkipListSet')
-remove('intersection_update_small', 'SkipListSet')
-remove('intersection_update_medium', 'SkipListSet')
-remove('intersection_update_large', 'SkipListSet')
+remove('intersection_update_tiny', 'Skip-List')
+remove('intersection_update_small', 'Skip-List')
+remove('intersection_update_medium', 'Skip-List')
+remove('intersection_update_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['symmetric_difference_tiny'][name] = {
@@ -509,7 +509,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_tiny', 'blist.sortedset', 10000)
+limit('symmetric_difference_tiny', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_small'][name] = {
@@ -519,7 +519,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_small', 'blist.sortedset', 10000)
+limit('symmetric_difference_small', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_medium'][name] = {
@@ -529,7 +529,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_medium', 'blist.sortedset', 10000)
+limit('symmetric_difference_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_large'][name] = {
@@ -539,12 +539,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_large', 'blist.sortedset', 10000)
+limit('symmetric_difference_large', 'B-Tree', 10000)
 
-remove('symmetric_difference_tiny', 'SkipListSet')
-remove('symmetric_difference_small', 'SkipListSet')
-remove('symmetric_difference_medium', 'SkipListSet')
-remove('symmetric_difference_large', 'SkipListSet')
+remove('symmetric_difference_tiny', 'Skip-List')
+remove('symmetric_difference_small', 'Skip-List')
+remove('symmetric_difference_medium', 'Skip-List')
+remove('symmetric_difference_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['symmetric_difference_update_tiny'][name] = {
@@ -554,7 +554,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_tiny', 'blist.sortedset', 10000)
+limit('symmetric_difference_update_tiny', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_update_small'][name] = {
@@ -564,7 +564,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_small', 'blist.sortedset', 10000)
+limit('symmetric_difference_update_small', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_update_medium'][name] = {
@@ -574,7 +574,7 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_medium', 'blist.sortedset', 10000)
+limit('symmetric_difference_update_medium', 'B-Tree', 10000)
 
 for name, kind in kinds.items():
     impls['symmetric_difference_update_large'][name] = {
@@ -584,12 +584,12 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-limit('symmetric_difference_update_large', 'blist.sortedset', 10000)
+limit('symmetric_difference_update_large', 'B-Tree', 10000)
 
-remove('symmetric_difference_update_tiny', 'SkipListSet')
-remove('symmetric_difference_update_small', 'SkipListSet')
-remove('symmetric_difference_update_medium', 'SkipListSet')
-remove('symmetric_difference_update_large', 'SkipListSet')
+remove('symmetric_difference_update_tiny', 'Skip-List')
+remove('symmetric_difference_update_small', 'Skip-List')
+remove('symmetric_difference_update_medium', 'Skip-List')
+remove('symmetric_difference_update_large', 'Skip-List')
 
 for name, kind in kinds.items():
     impls['pop'][name] = {
@@ -607,9 +607,8 @@ for name, kind in kinds.items():
         'limit': 1000000
     }
 
-remove('init', 'SkipListSet')
-
-limit('init', 'blist.sortedset', 100000)
+remove('init', 'Skip-List')
+limit('init', 'B-Tree', 100000)
 
 if __name__ == '__main__':
     main('SortedSet')

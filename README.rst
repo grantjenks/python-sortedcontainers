@@ -3,15 +3,10 @@ Python Sorted Containers
 
 .. todo::
 
-   * Rename github repo
-   * Add sortedmap, using std::map in C++ standard library.
-     https://pypi.org/project/sortedmap/
-   * Research
-     https://bitbucket.org/mojaves/pyskiplist/
-     https://pypi.org/project/skipdict/
-     https://github.com/tailhook/sortedsets
-   * Re-run performance benchmarks
    * Update history and document v3 milestone
+   * Update landing page
+   * Re-run performance benchmarks
+   * Rename github repo
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,

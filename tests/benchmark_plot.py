@@ -24,11 +24,14 @@
 from __future__ import print_function
 
 import argparse
+import matplotlib
 import matplotlib.pyplot as plt
-from collections import defaultdict
+from collections import OrderedDict
 
-def tree():
-    return defaultdict(tree)
+class TreeDict(OrderedDict):
+    def __missing__(self, key):
+        self[key] = value = TreeDict()
+        return value
 
 def order_kinds(kinds):
     for idx, kind in enumerate(kinds):
@@ -40,8 +43,12 @@ def order_kinds(kinds):
 
 def test_plot(test):
     ax = plt.gca()
-    ax.set_color_cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k', '0.8'])
-    kinds = order_kinds(sorted(args.kind or list(data[test])))
+    cmap = matplotlib.cm.get_cmap('Set1')
+    colors = list(cmap.colors)
+    colors[0], colors[1] = colors[1], colors[0]
+    del colors[5]
+    ax.set_prop_cycle('color', colors)
+    kinds = args.kind or list(data[test])
     for kind in kinds:
         kind_plot(test, kind)
     plt.ylim(ymin=9e-7)
@@ -53,13 +60,9 @@ def test_plot(test):
 
 def kind_plot(test, kind):
     sizes = sorted(data[test][kind].keys())
-    yrange = [[(data[test][kind][size][5] - data[test][kind][size][3])
-               for size in sizes],
-              [(data[test][kind][size][4] - data[test][kind][size][5])
-               for size in sizes]]
     # Timer isn't any better than micro-second resolution.
     yvalues = [max(1e-6, data[test][kind][size][5]) for size in sizes]
-    plt.errorbar(sizes, yvalues, yerr=yrange)
+    plt.plot(sizes, yvalues, marker='s')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plotting')
@@ -79,7 +82,7 @@ if __name__ == '__main__':
     for line in lines:
         line[2] = int(line[2])
         line[3:] = map(float, line[3:])
-    data = tree()
+    data = TreeDict()
     for line in lines:
         data[line[0]][line[1]][line[2]] = line
 

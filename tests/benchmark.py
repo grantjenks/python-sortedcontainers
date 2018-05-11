@@ -26,10 +26,13 @@ def measure(test, func, size):
 
 def benchmark(test, name, ctor, setup, func_name, limit):
     if args.load > 0:
-        if name == 'SortedDict':
-            ctor = partial(ctor, args.load)
-        else:
-            ctor = partial(ctor, load=args.load)
+        load = args.load
+        ctor_original = ctor
+        def ctor_load():
+            obj = ctor_original()
+            obj._reset(load)
+            return obj
+        ctor = ctor_load
 
     for size in sizes:
         if not args.no_limit and size > limit:
@@ -45,14 +48,16 @@ def benchmark(test, name, ctor, setup, func_name, limit):
         # record
 
         times = []
+
         for rpt in range(5):
             obj = ctor()
             setup(obj, size)
             func = getattr(obj, func_name)
             times.append(measure(test, func, size))
 
-        print(getattr(test, name_attr), name + args.suffix, size, min(times),
-              max(times), times[2], sum(times) / len(times))
+        times.sort()
+        print(getattr(test, name_attr), name + args.suffix, size, times[0],
+              times[-1], times[2], sum(times) / len(times))
 
 def register_test(func):
     tests[getattr(func, name_attr)] = func
@@ -96,7 +101,7 @@ def main(name):
     detail('Seed:', args.seed)
     random.seed(args.seed)
 
-    sizes.extend(args.size or [100, 1000, 10000, 100000, 1000000, 10000000])
+    sizes.extend(args.size or [100, 1000])  # , 10000, 100000, 1000000, 10000000])
 
     detail('Sizes:', sizes)
 

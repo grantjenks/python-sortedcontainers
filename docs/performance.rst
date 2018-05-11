@@ -9,96 +9,96 @@ Containers<index>` is performance so we would be remiss not to produce this
 page with comparisons.
 
 The source for all benchmarks can be found under the "tests" directory in the
-files prefixed "benchmark." Measurements are made from the min, max, and mean
-of 5 repetitions. In the graphs below, the line follows the mean and at each
-point, the min/max displays the bounds. Note that the axes are log-log so
-properly reading two different lines would describe one metric as "X times"
-faster rather than "X seconds" faster. In all graphs, lower is
-better. Measurements are made by powers of ten: 100 through 1,000,000.
+files prefixed "benchmark." Measurements are made from the min, max, and median
+of 5 repetitions. In the graphs below, the line follows the median at each
+point. Note that the axes are log-log so properly reading two different lines
+would describe one metric as "X times" faster rather than "X seconds"
+faster. In all graphs, lower is better. Measurements are made by powers of ten:
+100 through 10,000,000.
 
-Measurements up to 10,000,000,000 elements have been successfully tested and
+Measurements up to ten billion elements have been successfully tested and
 benchmarked. Read :doc:`performance-scale` for details. Only a couple
 implementations (including :doc:`Sorted Containers<index>`) are capable of
 handling so many elements. The major limiting factor at that size is
 memory. Consider the simple case of storing CPython's integers in a
 :doc:`sortedlist`. Each integer object requires ~24 bytes so one hundred
 million elements will require about three gigabytes of memory. If the
-implemenation adds significant overhead then most systems will run out of
+implementation adds significant overhead then most systems will run out of
 memory. For all datasets which may be kept in memory, :doc:`Sorted
 Containers<index>` is an excellent choice.
 
-A good effort has been made to find competing implementations. Six in total
+A good effort has been made to find competing implementations. Seven in total
 were found with various list, set, and dict implementations.
 
-blist
-  Provides list, dict, and set containers based on the blist data-type.
-  Implemented in Python and C. Last updated March, 2014. `blist on PyPI
-  <https://pypi.org/project/blist/>`_
+1. *blist* -- Provides list, dict, and set containers based on the blist
+   data-type. Uses a `B-Tree`_ data structure. Implemented in Python and C. BSD
+   License. Last updated March, 2014. `blist on PyPI`_
 
-bintrees
-  Provides several tree-based implementations for dict and set containers.
-  Fastest were AVL and Red-Black trees. Extends the conventional API to provide
-  set operations for the dict type. Implemented in C. Last updated April, 2017.
-  `bintrees on PyPI <https://pypi.org/project/bintrees/>`_
+2. *bintrees* -- Provides several tree-based implementations for dict and set
+   containers.  Fastest were AVL-Tree and Red-Black-Tree data
+   structures.. Extends the conventional API to provide set operations for the
+   dict type. Now deprecated in favor of :doc:`Sorted Containers<index>`
+   Implemented in C. MIT License. Last updated April, 2017.  `bintrees on
+   PyPI`_
 
-banyan
-  Provides a fast, C++-implementation for dict and set data types. Offers some
-  features also found in sortedcontainers like accessing the n-th item in a set
-  or dict. Last updated April, 2013. `banyan on PyPI
-  <https://pypi.org/project/Banyan/>`_
+3. *sortedmap* -- Provides a fast, C++ implemenation for dict data types.  Uses
+   the C++ standard library `std::map` data structure which is usually a
+   red-black tree. Last updated February, 2016. `sortedmap on PyPI`_
 
-treap
-  Uses Cython for improved performance and provides a dict container. Last
-  updated June, 2017. `treap on PyPI <https://pypi.org/project/treap/>`_
+4. *banyan* -- Provides a fast, C++ implementation for dict and set data
+   types. Offers some features also found in sortedcontainers like accessing
+   the n-th item in a set or dict. Uses sources from the `tree implementation`_
+   in GNU libstdc++. GPLv3 License. Last updated April, 2013. `banyan on PyPI`_
 
-skiplistcollections
-  Pure-Python implementation based on skip-lists providing a limited API for
-  dict and set types. Last updated January, 2014.  `skiplistcollections on PyPI
-  <https://pypi.org/project/skiplistcollections/>`_
+5. *treap* -- Uses Cython for improved performance and provides a dict
+   container. Apache V2 License. Last updated June, 2017. `treap on PyPI`_
 
-sortedcollection
-  Pure-Python implementation of sorted list based solely on a list.
-  Feature-poor and inefficient for writes but included because it is written by
-  Raymond Hettinger and linked from the official Python docs. Last updated
-  April, 2011. `sortedcollection on ActiveState
-  <http://code.activestate.com/recipes/577197-sortedcollection/>`_
+6. *skiplistcollections* -- Pure-Python implementation based on skip-lists
+   providing a limited API for dict and set types. MIT License. Last updated
+   January, 2014. `skiplistcollections on PyPI`_
 
-Several competing implementations were omitted because they were not easily
-installable or failed to build.
+7. *sortedcollection* -- Pure-Python implementation of sorted list based solely
+   on a list.  Feature-poor and inefficient for writes but included because it
+   is written by Raymond Hettinger and linked from the official Python
+   docs. MIT License. Last updated April, 2011. `sortedcollection recipe`_
 
-rbtree
-  C-implementation that only supports Python 2. Last updated
-  March, 2012. Provides a fast, C-implementation for dict and set data types.
-  `rbtree on PyPI <https://pypi.org/project/rbtree/>`_
+Several alternative implementations were omitted for reasons documented below:
 
-ruamel.ordereddict.sorteddict
-  C-implementation that only supports Python 2. Performance was measured in
-  correspondence with the module author. Performance was generally very good
-  except for ``__delitem__``. At scale, deleting entries became exceedingly
-  slow. Last updated July, 2017. `ruamel.ordereddict on PyPI
-  <https://pypi.org/project/ruamel.ordereddict/>`_
+A. *rbtree* -- C-implementation that only supports Python 2. Provides a fast,
+   C-implementation for dict and set data types. GPLv3 License. Last updated
+   March, 2012. `rbtree on PyPI`_
 
-rbtree from NewCenturyComputers
-  Pure-Python tree-based implementation. Not sure when this was last updated.
-  Unlikely to be fast. `rbtree from NewCenturyComputers
-  <http://newcenturycomputers.net/projects/rbtree.html>`_
+B. *ruamel.ordereddict.sorteddict* -- C-implementation that only supports
+   Python 2. Performance was measured in correspondence with the module
+   author. Performance was generally very good except for ``__delitem__``. At
+   scale, deleting entries became exceedingly slow. MIT License. Last updated
+   July, 2017. `ruamel.ordereddict on PyPI`_
 
-python-avl-tree from Github user pgrafov
-  Pure-Python tree-based implementation. Last updated October, 2010. Unlikely
-  to be fast. `python-avl-tree from Github user pgrafov
-  <https://github.com/pgrafov/python-avl-tree>`_
+C. *pyskiplist* -- Pure-Python skip-list based implementation supporting a
+   sorted-list-like interface. Now deprecated in favor of :doc:`Sorted
+   Containers<index>`. MIT License. Last updated July, 2015. `pyskiplist on
+   PyPI`_
 
-pyavl
-  C-implementation for AVL tree-based dict and set containers. Claims to be
-  fast. Lacking documentation and failed to build. Last updated December, 2008.
-  `pyavl on PyPI <https://pypi.org/project/pyavl/>`_
+D. *sorteddict* -- Pure-Python lazily-computed sorted dict implementation.  Now
+   deprecated in favor of :doc:`Sorted Containers<index>`. GPLv3 License. Last
+   updated September, 2007. `sorteddict on PyPI`_
 
-Several projects have deprecated themselves in favor of :doc:`Sorted
-Containers<index>`. Most notably those are `bintrees
-<https://pypi.org/project/bintrees/>`_ and `sorteddict
-<https://pypi.org/project/sorteddict/>`_. All of the projects above also use
-Python 2 semantics for :doc:`sorteddict` data types. Wherever possible,
-:doc:`Sorted Containers<index>` has adopted Python 3 semantics.
+E. *rbtree from NewCenturyComputers* -- Pure-Python tree-based
+   implementation. Not sure when this was last updated.  Unlikely to be
+   fast. Unknown license. Unknown last update. `rbtree from
+   NewCenturyComputers`_
+
+F. *python-avl-tree from GitHub user pgrafov* -- Pure-Python tree-based
+   implementation. Unlikely to be fast. MIT License. Last updated
+   October, 2010. `python-avl-tree from GitHub user pgrafov`_
+
+G. *pyavl* -- C-implementation for AVL tree-based dict and set
+   containers. Claims to be fast. Lacking documentation and failed to
+   build. Public Domain License. Last updated December, 2008. `pyavl on PyPI`_
+
+H. *skiplist* -- C-implementation of sorted list based on skip-list data
+   structure. Only supports Python 2. Zlib/libpng License. Last updated
+   Septemeber, 2013. `skiplist from Bitbucket user mojaves`_
 
 The most similar module to :doc:`Sorted Containers<index>` is
 skiplistcollections given that each is implemented in Python. But as is
@@ -123,15 +123,50 @@ been made to simulate real-world workloads. The :doc:`simulated workload
 performance comparison<performance-workload>` contains examples with
 comparisons to other implementations, load factors, and runtimes.
 
-A couple final notes about the graphs below. Missing data indicates the
-benchmark either took too long or failed. The set operations with tiny, small,
-medium, and large variations indicate the size of the container involved in the
+Some final notes about the graphs below. Missing data indicates the benchmark
+either took too long or failed. The set operations with tiny, small, medium,
+and large variations indicate the size of the container involved in the
 right-hand-side of the operation: tiny is exactly 10 elements; small is 10% of
 the size of the left-hand-side; medium is 50%; and large is 100%. :doc:`Sorted
 Containers<index>` uses a different algorithm based on the size of the
 right-hand-side of the operation for a dramatic improvement in performance.
 
+The legends of the graphs below correlate the underlying data structure used
+the Python project. The correlation is as follows:
+
 .. currentmodule:: sortedcontainers
+
+======================  ==================================
+Data Structure          Project
+======================  ==================================
+:class:`SortedList`     :doc:`Sorted Containers<index>`
+:class:`SortedKeyList`  :doc:`Sorted Containers<index>`
+B-Tree                  `blist on PyPI`_
+List                    `sortedcollection recipe`_
+AVL-Tree                `bintrees on PyPI`_
+RB-Tree                 `banyan on PyPI`_
+Skip-List               `skiplistcollections on PyPI`_
+std::map                `sortedmap on PyPI`_
+Treap                   `treap on PyPI`_
+======================  ==================================
+
+.. _`B-Tree`: https://en.wikipedia.org/wiki/B-tree
+.. _`blist on PyPI`: https://pypi.org/project/blist/
+.. _`bintrees on PyPI`: https://pypi.org/project/bintrees/
+.. _`sortedmap on PyPI`: https://pypi.org/project/sortedmap/
+.. _`sorteddict on PyPI`: https://pypi.org/project/sorteddict/
+.. _`pyskiplist on PyPI`: https://pypi.org/project/pyskiplist/
+.. _`banyan on PyPI`: https://pypi.org/project/Banyan/
+.. _`treap on PyPI`: https://pypi.org/project/treap/
+.. _`skiplistcollections on PyPI`: https://pypi.org/project/skiplistcollections/
+.. _`sortedcollection recipe`: http://code.activestate.com/recipes/577197-sortedcollection/
+.. _`rbtree on PyPI`: https://pypi.org/project/rbtree/
+.. _`ruamel.ordereddict on PyPI`: https://pypi.org/project/ruamel.ordereddict/
+.. _`rbtree from NewCenturyComputers`: http://newcenturycomputers.net/projects/rbtree.html
+.. _`python-avl-tree from GitHub user pgrafov`: https://github.com/pgrafov/python-avl-tree
+.. _`pyavl on PyPI`: https://pypi.org/project/pyavl/
+.. _`skiplist from Bitbucket user mojaves`: https://bitbucket.org/mojaves/pyskiplist/
+.. _`tree implementation`: https://gcc.gnu.org/onlinedocs/libstdc%2B%2B/ext/pb_ds/tree_based_containers.html
 
 Sorted List
 -----------
