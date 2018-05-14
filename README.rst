@@ -4,7 +4,8 @@ Python Sorted Containers
 .. todo::
 
    * Update history and document v3 milestone
-   * Update landing page
+   * Review implementation page
+   * Review development page
    * Re-run performance benchmarks
    * Rename github repo
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
@@ -14,32 +15,44 @@ written in pure-Python, and fast as C-extensions.
 
 Python's standard library is great until you need a sorted collections
 type. Many will attest that you can get really far without one, but the moment
-you **really need** a sorted list, dict, or set, you're faced with a dozen
-different implementations, most using C-extensions without great documentation
-and benchmarking.
+you **really need** a sorted list, sorted dict, or sorted set, you're faced
+with a dozen different implementations, most using C-extensions without great
+documentation and benchmarking.
 
 In Python, we can do better. And we can do it in pure-Python!
 
 .. code-block:: python
 
-    >>> sl = sortedcontainers.SortedList(xrange(10000000))
-    >>> 1234567 in sl
-    True
-    >>> sl[7654321]
-    7654321
-    >>> sl.add(1234567)
-    >>> sl.count(1234567)
+    >>> from sortedcontainers import SortedList
+    >>> sl = SortedList(['e', 'a', 'c', 'd', 'b'])
+    >>> sl
+    SortedList(['a', 'b', 'c', 'd', 'e'])
+    >>> sl *= 10_000_000
+    >>> sl.count('c')
+    10000000
+    >>> sl[-3:]
+    ['e', 'e', 'e']
+    >>> from sortedcontainers import SortedDict
+    >>> sd = SortedDict({'c': 3, 'a': 1, 'b': 2})
+    >>> sd
+    SortedDict({'a': 1, 'b': 2, 'c': 3})
+    >>> sd.popitem(index=-1)
+    ('c', 3)
+    >>> from sortedcontainers import SortedSet
+    >>> ss = SortedSet('abracadabra')
+    >>> ss
+    SortedSet(['a', 'b', 'c', 'd', 'r'])
+    >>> ss.bisect_left('c')
     2
-    >>> sl *= 3
-    >>> len(sl)
-    30000003
 
-**Note:** don't try this without at least a half gigabyte of memory. In Python
-an integer requires about 24 bytes. SortedList will add about 8 bytes per
-object stored in the container. That's pretty hard to beat as it's the cost of
-a pointer to each object. It's also 66% less overhead than a typical binary
-tree implementation (e.g. red-black tree, avl tree, aa tree, splay tree, treap,
-etc.) for which every node must also store two pointers to children nodes.
+All of the operations shown above run in faster than linear time. The above
+demo also take nearly a gigabyte of memory to run.  When the sorted list is
+multiplied by ten million, it stores ten million references to each of "a"
+through "e". Each reference requires eight bytes in the sorted
+container. That's pretty hard to beat as it's the cost of a pointer to each
+object. It's also 66% less overhead than a typical binary tree implementation
+(e.g. Red-Black Tree, AVL-Tree, AA-Tree, Splay-Tree, Treap, etc.) for which
+every node must also store two pointers to children nodes.
 
 `Sorted Containers`_ takes all of the work out of Python sorted collections -
 making your deployment and use of Python easy. There's no need to install a C
@@ -52,41 +65,48 @@ feature and testing has 100% coverage with unit tests and hours of stress.
 Testimonials
 ------------
 
-**Alex Martelli**, `Wikipedia`_
+**Alex Martelli**, `Fellow of the Python Software Foundation`_ --
 
-Good stuff! ... I like the `simple, effective implementation`_ idea of splitting
-the sorted containers into smaller "fragments" to avoid the O(N) insertion costs.
+"Good stuff! ... I like the `simple, effective implementation`_ idea of
+splitting the sorted containers into smaller "fragments" to avoid the O(N)
+insertion costs."
 
-.. _`Wikipedia`: http://en.wikipedia.org/wiki/Alex_Martelli
-.. _`simple, effective implementation`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
+**Jeff Knupp**, `author of Writing Idiomatic Python and Python Trainer`_ --
 
-**Jeff Knupp**, `Review of Sorted Containers`_
-
-That last part, "fast as C-extensions," was difficult to believe. I would need
+"That last part, "fast as C-extensions," was difficult to believe. I would need
 some sort of `Performance Comparison`_ to be convinced this is true. The author
-includes this in the docs. It is.
+includes this in the docs. It is."
 
-.. _`Review of Sorted Containers`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
+**Kevin Samuel**, `Python and Django Trainer`_ --
 
-**Kevin Samuel**, `Formations Python`_
+I'm quite amazed, not just by the code quality (it's incredibly readable and
+has more comment than code, wow), but the actual amount of work you put at
+stuff that is *not* code: documentation, benchmarking, implementation
+explanations. Even the git log is clean and the unit tests run out of the box
+on Python 2 and 3.
 
-I'm quite amazed, not just by the code quality (it's incredibly
-readable and has more comment than code, wow), but the actual
-amount of work you put at stuff that is *not* code:
-documentation, benchmarking, implementation explanations. Even
-the git log is clean and the unit tests run out of the box on
-Python 2 and 3.
-
-.. _`Formations Python`: http://formationspython.com/
-
-**Mark Summerfield**, a short plea for `Python Sorted Collections`_
+**Mark Summerfield**, a short plea for `Python Sorted Collections`_ --
 
 Python's "batteries included" standard library seems to have a battery
 missing. And the argument that "we never had it before" has worn thin. It is
 time that Python offered a full range of collection classes out of the box,
 including sorted ones.
 
+`Sorted Containers`_ is used in popular open source projects such as:
+`Zipline`_, an algorithmic trading library from Quantopian; `Angr`_, a binary
+analysis platform from UC Santa Barbara; `Trio`_, an async I/O library; and
+`Dask Distributed`_, a distributed computation library supported by Continuum
+Analytics.
+
+.. _`Fellow of the Python Software Foundation`: http://en.wikipedia.org/wiki/Alex_Martelli
+.. _`simple, effective implementation`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
+.. _`author of Writing Idiomatic Python and Python Trainer`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
+.. _`Python and Django Trainer`: https://www.elephorm.com/formateur/kevin-samuel
 .. _`Python Sorted Collections`: http://www.qtrac.eu/pysorted.html
+.. _`Zipline`: https://github.com/quantopian/zipline
+.. _`Angr`: https://github.com/angr/angr
+.. _`Trio`: https://github.com/python-trio/trio
+.. _`Dask Distributed`: https://github.com/dask/distributed
 
 Features
 --------
@@ -117,15 +137,17 @@ Installing `Sorted Containers`_ is simple with `pip
 
     $ pip install sortedcontainers
 
-You can access documentation in the interpreter with Python's built-in help
-function:
+You can access documentation in the interpreter with Python's built-in `help`
+function. The `help` works on modules, classes and methods in `Sorted
+Containers`_::
 
 .. code-block:: python
 
-    >>> from sortedcontainers import SortedList, SortedDict, SortedSet
-    >>> help(SortedList)
+    >>> import sortedcontainers
+    >>> help(sortedcontainers)
+    >>> from sortedcontainers import SortedDict
     >>> help(SortedDict)
-    >>> help(SortedSet)
+    >>> help(SortedDict.popitem)
 
 Documentation
 -------------
