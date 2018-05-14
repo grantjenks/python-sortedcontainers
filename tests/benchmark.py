@@ -101,7 +101,7 @@ def main(name):
     detail('Seed:', args.seed)
     random.seed(args.seed)
 
-    sizes.extend(args.size or [100, 1000])  # , 10000, 100000, 1000000, 10000000])
+    sizes.extend(args.size or [100, 1000, 10000, 100000, 1000000, 10000000])
 
     detail('Sizes:', sizes)
 
