@@ -539,8 +539,8 @@ class SortedSet(MutableSet, Sequence):
         :return: new sorted set
 
         """
-        inter = self._set.intersection(*iterables)
-        return self._fromset(inter, key=self._key)
+        intersect = self._set.intersection(*iterables)
+        return self._fromset(intersect, key=self._key)
 
     __and__ = intersection
     __rand__ = __and__
