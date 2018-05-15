@@ -7,6 +7,12 @@ Python Sorted Containers
    * Review implementation page
    * Review development page
    * Re-run performance benchmarks
+   * Replace bintrees in
+     * Document migrating bintrees insert to soco
+     * https://github.com/astropy/astropy
+     * https://github.com/netzob/netzob
+     * https://github.com/danpaquin/gdax-python
+     * https://github.com/dyn4mik3/OrderBook/
    * Rename github repo
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
 
@@ -46,7 +52,7 @@ In Python, we can do better. And we can do it in pure-Python!
     2
 
 All of the operations shown above run in faster than linear time. The above
-demo also take nearly a gigabyte of memory to run.  When the sorted list is
+demo also takes nearly a gigabyte of memory to run. When the sorted list is
 multiplied by ten million, it stores ten million references to each of "a"
 through "e". Each reference requires eight bytes in the sorted
 container. That's pretty hard to beat as it's the cost of a pointer to each
