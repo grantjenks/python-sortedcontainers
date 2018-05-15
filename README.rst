@@ -3,17 +3,18 @@ Python Sorted Containers
 
 .. todo::
 
-   * Review implementation page
-   * Review development page
-   * Re-run performance benchmarks
    * Add __delitem__ to sorted dict views?
    * Document migrating bintrees insert to soco
+   * Rename github repo
+   * Update coverage
+   * Pass pylint
+   * Update development page with test and coverage output.
+   * Re-run performance benchmarks
    * Replace bintrees in
      * https://github.com/astropy/astropy
      * https://github.com/netzob/netzob
      * https://github.com/danpaquin/gdax-python
      * https://github.com/dyn4mik3/OrderBook/
-   * Rename github repo
    * Tell Doug Hellmann about Sorted Containers and relation to bisect module
    * Send email update to Python announce list.
 

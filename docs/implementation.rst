@@ -1,25 +1,25 @@
 Implementation Details
 ======================
 
-The :doc:`Sorted Containers<index>` internal implementation is based on a couple
-observations. The first is that Python lists are fast, *really fast*. They have
-great characteristics for memory management and random access. The second is
-that bisect.insort is fast. This is somewhat counter-intuitive since it
-involves shifting a series of items in a list. But modern processors do this
-really well. A lot of time has been spent optimizing mem-copy/mem-move-like
-operations both in hardware and software.
+The :doc:`Sorted Containers<index>` internal implementation is based on a
+couple observations. The first is that Python's `list` is fast, *really
+fast*. Lists have great characteristics for memory management and random
+access. The second is that `bisect.insort` is fast. This is somewhat
+counter-intuitive since it involves shifting a series of items in a list. But
+modern processors do this really well. A lot of time has been spent optimizing
+mem-copy/mem-move-like operations both in hardware and software.
 
-But using only one list and bisect.insort would produce sluggish behavior for
-lengths exceeding ten thousand. So the implementation of
-:doc:`SortedList<sortedlist>` uses a list of lists to store elements. In this
-way, inserting or deleting is most often performed on a short list. Only rarely
-does a new list need to be added or deleted.
+But using only one list and `bisect.insort` would produce sluggish behavior for
+lengths exceeding ten thousand. So the implementation of :doc:`sortedlist` uses
+a list of lists to store elements. In this way, inserting or deleting is most
+often performed on a short list. Only rarely does a new list need to be added
+or deleted.
 
-:doc:`SortedList<sortedlist>` maintains three internal variables: ``_lists``,
-``_maxes``, and ``_index``. The first is simply the list of lists; each member
-is a sorted sublist of elements. The second contains the maximum element in
-each of the sublists. This is used for fast binary-search. The last maintains a
-tree of pair-wise sums of the lengths of the lists.
+:doc:`sortedlist` maintains three internal variables: `_lists`, `_maxes`, and
+`_index`. The first is simply the list of lists, each member is a sorted
+sublist of elements. The second contains the maximum element in each of the
+sublists. This is used for fast binary-search. The last maintains a tree of
+pair-wise sums of the lengths of the lists.
 
 Lists are kept balanced using the load factor. If a sublist's length exceeds
 double the load then it is split in two. Likewise at half the load it is
@@ -29,10 +29,10 @@ factor that is the square root to cube root of the average length.  (Although
 you will probably exhaust the memory of your machine before that point.)
 Experimentation is also recommended. A :doc:`load factor performance
 comparison<performance-load>` is also provided. For more in-depth analysis,
-read :doc:`Performance at Scale<performance-scale>` which benchmarks
-:doc:`Sorted Containers<index>` with ten billion elements.
+read :doc:`performance-scale` which benchmarks :doc:`Sorted Containers<index>`
+with ten billion elements.
 
-Finding an element is a two step process. First the ``_maxes`` list, also known
+Finding an element is a two step process. First the `_maxes` list, also known
 as the "maxes" index, is bisected which yields the position of a sorted
 sublist. Then that sublist is bisected for the location of the element.
 
@@ -55,12 +55,12 @@ Traditional tree-based designs have better big-O notation but that ignores the
 realities of today's software and hardware. For a more in-depth analysis, read
 :doc:`Performance at Scale<performance-scale>`.
 
-Indexing uses the ``_index`` list which operates as a tree of pair-wise sums of
+Indexing uses the `_index` list which operates as a tree of pair-wise sums of
 the lengths of the lists. The tree is maintained as a dense binary tree. It's
-easiest to explain with an example. Suppose ``_lists`` contains sublists with
+easiest to explain with an example. Suppose `_lists` contains sublists with
 these lengths (in this example, we assume the load factor is 4)::
 
-    map(len, _lists) -> [3, 5, 4, 5, 6]
+    list(map(len, _lists)) -> [3, 5, 4, 5, 6]
 
 Given these lengths, the first row in the index is the pair-wise sums::
 
@@ -79,12 +79,10 @@ finally::
 
 With this list, we can efficiently compute the index of an item in a sublist
 and, vice-versa, find an item given an index. Details of the algorithms to do
-so are contained in the docstring for ``SortedList._loc`` and
-``SortedList._pos``.
-
+so are contained in the docstring for `SortedList._loc` and `SortedList._pos`.
 
 For example, indexing requires traversing the tree to a leaf node. Each node
-has two children which are easily computable. Given an index, ``pos``, the
+has two children which are easily computable. Given an index, `pos`, the
 left-child is at ``pos * 2 + 1`` and the right-child is at ``pos * 2 + 2``.
 
 When the index is less than the left-child, traversal moves to the left
@@ -125,7 +123,7 @@ the sorted list.
 Maintaining the position index in this way has several advantages:
 
 * It's easy to traverse to children/parent. The children of a position in the
-  ``_index`` are at ``(pos * 2) + 1`` and ``(pos * 2) + 2``. The parent is at
+  `_index` are at ``(pos * 2) + 1`` and ``(pos * 2) + 2``. The parent is at
   ``(pos - 1) // 2``. We can even identify left/right-children easily. Each
   left-child is at an odd index and each right-child is at an even index.
 
@@ -136,7 +134,7 @@ Maintaining the position index in this way has several advantages:
   all be done within C-routines in the Python interpreter.
 
 * It's space efficient. The whole index is no more than twice the size of the
-  length of the ``_lists`` and contains only integers.
+  length of the `_lists` and contains only integers.
 
 * It's easy to update. Adding or removing an item involves incrementing or
   decrementing only ``log2(len(_index))`` items in the index. The only caveat
@@ -148,5 +146,5 @@ to other traditional designs. Whether the design is novel, I (Grant Jenks) do
 not know. Until shown otherwise, I would like to refer to it as the "Jenks"
 index.
 
-Each sorted container has a function named ``_check`` for verifying
+Each sorted container has a function named `_check` for verifying
 consistency. This function details the data-type invariants.
