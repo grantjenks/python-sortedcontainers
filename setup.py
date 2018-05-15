@@ -21,7 +21,7 @@ with open('README.rst') as reader:
 setup(
     name=sortedcontainers.__title__,
     version=sortedcontainers.__version__,
-    description='Python Sorted Container Types: SortedList, SortedDict, and SortedSet',
+    description='Sorted Containers -- Sorted List, Sorted Dict, Sorted Set',
     long_description=readme,
     author='Grant Jenks',
     author_email='contact@grantjenks.com',
@@ -38,7 +38,6 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
