@@ -199,6 +199,33 @@ class SortedCollection(object):
             return self._items[i]
         raise ValueError('No item found with key above: %r' % (k,))
 
+    # GrantJ 05/16/18 -- Additions for benchmarking.
+
+    add = insert
+
+    def update(self, iterable):
+        for value in iterable:
+            self.insert(value)
+
+    def bisect(self, item):
+        key = self._key(item)
+        pos = bisect_left(self._keys, key)
+        return pos
+
+    def pop(self):
+        self._keys.pop()
+        return self._items.pop()
+
+    def discard(self, item):
+        try:
+            self.remove(item)
+        except ValueError:
+            pass
+
+    def __delitem__(self, index):
+        del self._keys[index]
+        del self._items[index]
+
 
 # ---------------------------  Simple demo and tests  -------------------------
 if __name__ == '__main__':

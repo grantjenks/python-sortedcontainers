@@ -4,6 +4,7 @@ Python Sorted Containers
 .. todo::
 
    * Add __delitem__ to sorted dict views?
+   * SortedKeyList uses identity function (shows overhead)
    * Document migrating bintrees insert to soco
    * Rename github repo
    * Update coverage
