@@ -1,5 +1,6 @@
 from __future__ import print_function
 from sys import hexversion
+import logging
 
 import time, random, argparse
 from functools import partial
@@ -124,6 +125,20 @@ def main(name):
             if name not in kind_names:
                 continue
             details = impls[test][name]
-            benchmark(tests[test], name, details['ctor'], details['setup'], details['func'], details['limit'])
+            try:
+                benchmark(
+                    tests[test],
+                    name,
+                    details['ctor'],
+                    details['setup'],
+                    details['func'],
+                    details['limit'],
+                )
+            except Exception:
+                logging.exception('Benchmark Error')
+                logging.error('Test: %s', test)
+                logging.error('Name: %s', name)
+                for key in sorted(details):
+                    logging.error('Details[%r]: %s', key, details[key])
 
     detail('Benchmark Stop')
