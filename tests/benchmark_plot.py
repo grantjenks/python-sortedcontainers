@@ -43,14 +43,15 @@ def order_kinds(kinds):
 
 def test_plot(test):
     ax = plt.gca()
+    ax.grid(linestyle='dashed', linewidth=0.5)
     cmap = matplotlib.cm.get_cmap('Set1')
     colors = list(cmap.colors)
     colors[0], colors[1] = colors[1], colors[0]
     del colors[5]
     ax.set_prop_cycle('color', colors)
     kinds = args.kind or list(data[test])
-    for kind in kinds:
-        kind_plot(test, kind)
+    for order, kind in enumerate(kinds):
+        kind_plot(test, kind, len(kinds) - order)
     plt.ylim(ymin=9e-7)
     plt.loglog()
     plt.title(args.name + ' Performance: ' + test)
@@ -58,11 +59,11 @@ def test_plot(test):
     plt.xlabel('List Size')
     plt.legend(kinds, loc=2)
 
-def kind_plot(test, kind):
+def kind_plot(test, kind, zorder):
     sizes = sorted(data[test][kind].keys())
     # Timer isn't any better than micro-second resolution.
     yvalues = [max(1e-6, data[test][kind][size][5]) for size in sizes]
-    plt.plot(sizes, yvalues, marker='s')
+    plt.plot(sizes, yvalues, marker='s', zorder=zorder)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plotting')
