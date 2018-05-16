@@ -4,18 +4,14 @@ Runtime Performance Comparison
 Because :doc:`Sorted Containers<index>` is implemented in pure-Python, its
 performance depends directly on the Python runtime. :doc:`Sorted
 Containers<index>` is primarily developed, tested and benchmarked on CPython
-3.6, specifically build:
-
-::
-
-    Python 3.6.5 (default, Mar 29 2018, 15:37:32) 
-    [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)] on darwin
+3.6.
 
 Not all runtimes are created equal. The graphs below compare :doc:`Sorted
-Containers<index>` running on the CPython 2.7, CPython 3.6 and PyPy
-runtimes. The PyPy runtime displays much more variability due to its JIT-ed
-nature. Once the just-in-time compiler optimizes the code, performance is often
-two to ten times faster.
+Containers<index>` running on the CPython 3.6, CPython 2.7, and PyPy
+runtimes. As of Python 3.6 the CPython 3.6 runtime is now faster than the
+CPython 2.7 runtime. The PyPy runtime displays much more variability due to its
+JIT-ed nature. Once the just-in-time compiler optimizes the code, performance
+is often two to ten times faster.
 
 Performance of competing implementations are benchmarked against the CPython
 3.6 runtime. An :doc:`implementation performance comparison<performance>` is
