@@ -177,7 +177,7 @@ for name, kind in kinds.items():
         'func': '__delitem__',
         'limit': 1000000
     }
-limit('delitem', 'List', 10000)
+limit('delitem', 'List', 100000)
 
 for name, kind in kinds.items():
     impls['bisect'][name] = {
@@ -404,7 +404,7 @@ for name, kind in kinds.items():
         'func': 'run',
         'limit': 1000000
     }
-limit('intervals', 'List', 10000)
+limit('intervals', 'List', 100000)
 
 for name, kind in kinds.items():
     impls['init'][name] = {
