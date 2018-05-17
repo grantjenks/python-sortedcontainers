@@ -17,9 +17,9 @@ In Python, we can do better. And we can do it in pure-Python!
     >>> sl = SortedList(['e', 'a', 'c', 'd', 'b'])
     >>> sl
     SortedList(['a', 'b', 'c', 'd', 'e'])
-    >>> sl *= 10_000_000
+    >>> sl *= 1000000
     >>> sl.count('c')
-    10000000
+    1000000
     >>> sl[-3:]
     ['e', 'e', 'e']
     >>> from sortedcontainers import SortedDict
