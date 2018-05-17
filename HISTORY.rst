@@ -1,7 +1,13 @@
 Sorted Containers Release History
 =================================
 
+.. contents::
+   :depth: 1
+   :local:
+
 .. currentmodule:: sortedcontainers
+
+.. _v2:
 
 2.0.0 (2018-05-04)
 ------------------

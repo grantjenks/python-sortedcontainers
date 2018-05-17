@@ -749,8 +749,7 @@ couple of things to keep in mind.
 
 :doc:`Sorted Containers<index>` went through a major version change between
 version one and version two. The goal of the change was to adopt Python 3
-semantics wherever possible. These changes are detailed on the :doc:`history
-<history>` page but a quick summary follows:
+semantics wherever possible:
 
 1. Several :class:`SortedList` methods now raise :exc:`NotImplementedError`:
    :func:`SortedList.__setitem__`, :func:`SortedList.append`, and
@@ -767,6 +766,10 @@ semantics wherever possible. These changes are detailed on the :doc:`history
 3. Some type and parameter names were changed. `SortedListWithKey` was renamed
    to `SortedKeyList` but an alias remains for compatibility. Several methods
    which accepted a `val` parameter now accept `value` for better readability.
+
+The :doc:`history` documents all the changes made in every version in the
+history of the project. The :ref:`Version 2<v2>` release notes detail all the
+changes made.
 
 The `blist`_ project remains the most similar as its API was the original
 inspiration for :doc:`Sorted Containers<index>`. The main difference has always
