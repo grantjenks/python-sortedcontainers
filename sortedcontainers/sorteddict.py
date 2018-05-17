@@ -543,6 +543,44 @@ class SortedDict(dict):
         assert all(key in self for key in _list)
 
 
+def _view_delitem(self, index):
+    """Remove item at `index` from sorted dict.
+
+    ``view.__delitem__(index)`` <==> ``del view[index]``
+
+    Support slicing.
+
+    Runtime complexity: `O(log(n))` -- approximate.
+
+    >>> sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
+    >>> view = sd.keys()
+    >>> del view[0]
+    >>> sd
+    SortedDict({'b': 2, 'c': 3})
+    >>> del view[-1]
+    >>> sd
+    SortedDict({'b': 2})
+    >>> del view[:]
+    >>> sd
+    SortedDict({})
+
+    :param index: integer or slice for indexing
+    :raises IndexError: if index out of range
+
+    """
+    _mapping = self._mapping
+    _list = _mapping._list
+    _dict_delitem = _mapping._dict_delitem
+    if isinstance(index, slice):
+        keys = _list[index]
+        del _list[index]
+        for key in keys:
+            _dict_delitem(key)
+    else:
+        key = _list.pop(index)
+        _dict_delitem(key)
+
+
 class SortedKeysView(KeysView, Sequence):
     """Sorted keys view is a dynamic view of the sorted dict's keys.
 
@@ -582,6 +620,9 @@ class SortedKeysView(KeysView, Sequence):
 
         """
         return self._mapping._list[index]
+
+
+    __delitem__ = _view_delitem
 
 
 class SortedItemsView(ItemsView, Sequence):
@@ -633,6 +674,9 @@ class SortedItemsView(ItemsView, Sequence):
         return key, _mapping[key]
 
 
+    __delitem__ = _view_delitem
+
+
 class SortedValuesView(ValuesView, Sequence):
     """Sorted values view is a dynamic view of the sorted dict's values.
 
@@ -680,3 +724,6 @@ class SortedValuesView(ValuesView, Sequence):
 
         key = _mapping_list[index]
         return _mapping[key]
+
+
+    __delitem__ = _view_delitem

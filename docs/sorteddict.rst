@@ -57,6 +57,7 @@ SortedKeysView
    :show-inheritance:
 
    .. automethod:: __getitem__
+   .. automethod:: __delitem__
 
 
 SortedItemsView
@@ -66,6 +67,7 @@ SortedItemsView
    :show-inheritance:
 
    .. automethod:: __getitem__
+   .. automethod:: __delitem__
 
 
 SortedValuesView
@@ -75,3 +77,4 @@ SortedValuesView
    :show-inheritance:
 
    .. automethod:: __getitem__
+   .. automethod:: __delitem__
