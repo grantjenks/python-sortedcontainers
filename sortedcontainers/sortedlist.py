@@ -1710,9 +1710,9 @@ class SortedKeyList(SortedList):
         >>> skl = SortedKeyList(key=neg)
         >>> skl
         SortedKeyList([], key=<built-in function neg>)
-        >>> skl = SortedKeyList([3, 1, 2, 5, 4], key=neg)
+        >>> skl = SortedKeyList([3, 1, 2], key=neg)
         >>> skl
-        SortedKeyList([5, 4, 3, 2, 1], key=<built-in function neg>)
+        SortedKeyList([3, 2, 1], key=<built-in function neg>)
 
         :param iterable: initial values (optional)
         :param key: function used to extract comparison key (optional)
