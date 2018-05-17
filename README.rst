@@ -4,13 +4,10 @@ Python Sorted Containers
 .. todo::
 
    * Add __delitem__ to sorted dict views?
-   * SortedKeyList uses identity function (shows overhead)
-   * Document migrating bintrees insert to soco
    * Rename github repo
    * Update coverage
    * Pass pylint
    * Update development page with test and coverage output.
-   * Re-run performance benchmarks
    * Replace bintrees in
      * https://github.com/astropy/astropy
      * https://github.com/netzob/netzob
