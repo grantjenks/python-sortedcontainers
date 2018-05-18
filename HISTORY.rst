@@ -7,9 +7,18 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.0.1 (2018-05-18)
+------------------
+
+**Miscellaneous**
+
+* Rename Github repo from `grantjenks/sorted_containers` to
+  `grantjenks/python-sortedcontainers`.
+* Fix broken links in documentation.
+
 .. _v2:
 
-2.0.0 (2018-05-04)
+2.0.0 (2018-05-18)
 ------------------
 
 Version 2 represents a significant update to the source base. The code has been
