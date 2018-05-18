@@ -130,7 +130,7 @@ Installing `Sorted Containers`_ is simple with `pip
 
 You can access documentation in the interpreter with Python's built-in `help`
 function. The `help` works on modules, classes and methods in `Sorted
-Containers`_::
+Containers`_.
 
 .. code-block:: python
 
