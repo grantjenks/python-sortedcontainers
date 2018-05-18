@@ -271,13 +271,9 @@ equality. In pseudocode, the object type looks something like:
 
 The default implementation defines equality in terms of identity. Note that
 `Object` does not define comparison methods like less-than or
-greater-than. Instances of `object` can *not* be stored in a
+greater-than. While Python objects are comparable by default in Python 2, the
+feature was removed in Python 3. Instances of `object` can *not* be stored in a
 :class:`SortedList`.
-
-    >>> sl = SortedList([object(), object(), object()])
-    Traceback (most recent call last):
-      ...
-    TypeError: '<' not supported between instances of 'object' and 'object'
 
 We can extend this example by creating our own `Record` data type with `name`
 and `rank` attributes.
@@ -298,13 +294,9 @@ define comparison operators and so can *not* be stored in a
     >>> alice1 = Record('alice', 1)
     >>> bob2 = Record('bob', 2)
     >>> carol3 = Record('carol', 3)
-    >>> sl = SortedList([alice1, bob2, carol3])
-    Traceback (most recent call last):
-      ...
-    TypeError: '<' not supported between instances of 'Record' and 'Record'
 
-Since the `rank` attribute is intended for ordering records, the
-key-function presents a tempting but invalid use for ordering records::
+Since the `rank` attribute is intended for ordering records, the key-function
+presents a tempting but invalid use for ordering records::
 
     >>> get_rank = lambda record: record.rank
     >>> sl = SortedList([alice1, bob2, carol3], key=get_rank)
