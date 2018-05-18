@@ -114,10 +114,10 @@ Features
 - Developed on Python 3.6
 - Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 and PyPy, PyPy3
 
-.. image:: https://api.travis-ci.org/grantjenks/sorted_containers.svg?branch=master
+.. image:: https://api.travis-ci.org/grantjenks/python-sortedcontainers.svg?branch=master
    :target: http://www.grantjenks.com/docs/sortedcontainers/
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/grantjenks/sorted_containers?branch=master&svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/github/grantjenks/python-sortedcontainers?branch=master&svg=true
    :target: http://www.grantjenks.com/docs/sortedcontainers/
 
 Quickstart
@@ -207,8 +207,8 @@ Useful Links
 
 .. _`Sorted Containers Documentation`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`Sorted Containers at PyPI`: https://pypi.org/project/sortedcontainers/
-.. _`Sorted Containers at Github`: https://github.com/grantjenks/sorted_containers
-.. _`Sorted Containers Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
+.. _`Sorted Containers at Github`: https://github.com/grantjenks/python-sortedcontainers
+.. _`Sorted Containers Issue Tracker`: https://github.com/grantjenks/python-sortedcontainers/issues
 
 Sorted Containers License
 -------------------------

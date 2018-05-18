@@ -5,7 +5,7 @@ Collaborators are welcome!
 
 #. Check for open issues or open a fresh issue to start a discussion around a
    bug.
-#. Fork `the repository <https://github.com/grantjenks/sorted_containers>`_ on
+#. Fork `the repository <https://github.com/grantjenks/python-sortedcontainers>`_ on
    GitHub and start making your changes to a new branch.
 #. Write a test which shows that the bug was fixed.
 #. Send a pull request and bug the maintainer until it gets merged and
@@ -30,9 +30,9 @@ Get the Code
 is `open source`_. The recommended way to get a copy of the source repository
 is to clone the repository from GitHub::
 
-    $ git clone git://github.com/grantjenks/sorted_containers.git
+    $ git clone git://github.com/grantjenks/python-sortedcontainers.git
 
-.. _`open source`: https://github.com/grantjenks/sorted_containers
+.. _`open source`: https://github.com/grantjenks/python-sortedcontainers
 
 Development Dependencies
 ------------------------
@@ -193,9 +193,9 @@ local machine, then run:
 
 ::
 
-    $ curl -OL https://github.com/grantjenks/sorted_containers/zipball/master
+    $ curl -OL https://github.com/grantjenks/python-sortedcontainers/zipball/master
     $ unzip master
-    $ cd grantjenks-sorted_containers-[GITHASH]/
+    $ cd grantjenks-python-sortedcontainers-[GITHASH]/
     $ export PYTHONPATH=`pwd`
     $ python -m tests.benchmark_sortedlist
     $ python -m tests.benchmark_sorteddict

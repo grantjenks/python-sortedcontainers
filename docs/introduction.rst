@@ -30,7 +30,7 @@ is `open source`_. You may choose to install directly from the source
 repository. First, you will need a copy of the sources. The recommended way to
 get a copy of the source repository is to clone the repository from GitHub::
 
-    $ git clone git://github.com/grantjenks/sorted_containers.git
+    $ git clone git://github.com/grantjenks/python-sortedcontainers.git
 
 You may also choose instead to download the `Sorted Containers tarball`_ or
 download the `Sorted Containers zipball`_.
@@ -50,10 +50,10 @@ Issue Tracker`_.
 .. _`pip`: https://pypi.org/project/pip/
 .. _`pipenv`: https://pypi.org/project/pipenv/
 .. _`Python Package Index`: https://pypi.org/project/sortedcontainers/
-.. _`open source`: https://github.com/grantjenks/sorted_containers
-.. _`Sorted Containers tarball`: https://github.com/grantjenks/sorted_containers/tarball/master
-.. _`Sorted Containers zipball`: https://github.com/grantjenks/sorted_containers/zipball/master
-.. _`Sorted Containers Issue Tracker`: https://github.com/grantjenks/sorted_containers/issues
+.. _`open source`: https://github.com/grantjenks/python-sortedcontainers
+.. _`Sorted Containers tarball`: https://github.com/grantjenks/python-sortedcontainers/tarball/master
+.. _`Sorted Containers zipball`: https://github.com/grantjenks/python-sortedcontainers/zipball/master
+.. _`Sorted Containers Issue Tracker`: https://github.com/grantjenks/python-sortedcontainers/issues
 
 
 Sorted List
