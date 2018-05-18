@@ -56,19 +56,19 @@ feature and testing has 100% coverage with unit tests and hours of stress.
 Testimonials
 ------------
 
-**Alex Martelli**, `Fellow of the Python Software Foundation`_ --
+**Alex Martelli**, `Fellow of the Python Software Foundation`_
 
 "Good stuff! ... I like the `simple, effective implementation`_ idea of
 splitting the sorted containers into smaller "fragments" to avoid the O(N)
 insertion costs."
 
-**Jeff Knupp**, `author of Writing Idiomatic Python and Python Trainer`_ --
+**Jeff Knupp**, `author of Writing Idiomatic Python and Python Trainer`_
 
 "That last part, "fast as C-extensions," was difficult to believe. I would need
 some sort of `Performance Comparison`_ to be convinced this is true. The author
 includes this in the docs. It is."
 
-**Kevin Samuel**, `Python and Django Trainer`_ --
+**Kevin Samuel**, `Python and Django Trainer`_
 
 I'm quite amazed, not just by the code quality (it's incredibly readable and
 has more comment than code, wow), but the actual amount of work you put at
@@ -76,7 +76,7 @@ stuff that is *not* code: documentation, benchmarking, implementation
 explanations. Even the git log is clean and the unit tests run out of the box
 on Python 2 and 3.
 
-**Mark Summerfield**, a short plea for `Python Sorted Collections`_ --
+**Mark Summerfield**, a short plea for `Python Sorted Collections`_
 
 Python's "batteries included" standard library seems to have a battery
 missing. And the argument that "we never had it before" has worn thin. It is
