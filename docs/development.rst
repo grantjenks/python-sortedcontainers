@@ -63,13 +63,93 @@ and run the tests.
 ::
 
     $ python setup.py test
-    <todo>
+    running test
+    running egg_info
+    writing sortedcontainers.egg-info/PKG-INFO
+    writing dependency_links to sortedcontainers.egg-info/dependency_links.txt
+    writing top-level names to sortedcontainers.egg-info/top_level.txt
+    reading manifest file 'sortedcontainers.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    writing manifest file 'sortedcontainers.egg-info/SOURCES.txt'
+    running build_ext
+    GLOB sdist-make: /Users/grantj/repos/python-sortedcontainers/setup.py
+    py36 inst-nodeps: /Users/grantj/repos/python-sortedcontainers/.tox/dist/sortedcontainers-1.5.10.zip
+    py36 installed: attrs==18.1.0,more-itertools==4.1.0,pluggy==0.6.0,py==1.5.3,pytest==3.5.1,six==1.11.0,sortedcontainers==1.5.10
+    py36 runtests: PYTHONHASHSEED='365015869'
+    py36 runtests: commands[0] | python -m pytest
+    ================================================= test session starts =================================================
+    platform darwin -- Python 3.6.5, pytest-3.5.1, py-1.5.3, pluggy-0.6.0
+    rootdir: /Users/grantj/repos/python-sortedcontainers, inifile: tox.ini
+    collected 357 items
+
+    docs/introduction.rst .                                                                                         [  0%]
+    sortedcontainers/__init__.py .                                                                                  [  0%]
+    sortedcontainers/sorteddict.py ...........                                                                      [  3%]
+    sortedcontainers/sortedlist.py .....................................                                            [ 14%]
+    sortedcontainers/sortedset.py .................                                                                 [ 18%]
+    tests/benchmark_splits_fill.py .                                                                                [ 19%]
+    tests/sortedcollection.py .                                                                                     [ 19%]
+    tests/test_coverage_sorteddict.py ...................................................                           [ 33%]
+    tests/test_coverage_sortedkeylist_modulo.py ................................................................... [ 52%]
+    tests/test_coverage_sortedkeylist_negate.py .......................................................             [ 68%]
+    tests/test_coverage_sortedlist.py ..........................................................                    [ 84%]
+    tests/test_coverage_sortedset.py ..................................................                             [ 98%]
+    tests/test_stress_sorteddict.py ..                                                                              [ 98%]
+    tests/test_stress_sortedkeylist.py .                                                                            [ 99%]
+    tests/test_stress_sortedlist.py .                                                                               [ 99%]
+    tests/test_stress_sortedset.py ..                                                                               [100%]
+
+    ============================================= 357 passed in 10.86 seconds =============================================
+    lint inst-nodeps: /Users/grantj/repos/python-sortedcontainers/.tox/dist/sortedcontainers-1.5.10.zip
+    lint installed: astroid==1.6.4,isort==4.3.4,lazy-object-proxy==1.3.1,mccabe==0.6.1,pylint==1.9.0,six==1.11.0,sortedcontainers==1.5.10,wrapt==1.10.11
+    lint runtests: PYTHONHASHSEED='365015869'
+    lint runtests: commands[0] | pylint sortedcontainers
+    Using config file /Users/grantj/repos/python-sortedcontainers/.pylintrc
+
+    --------------------------------------------------------------------
+    Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)
+
+    _______________________________________________________ summary _______________________________________________________
+      py36: commands succeeded
+      lint: commands succeeded
 
 Coverage testing uses `pytest-cov <https://pypi.org/project/pytest-cov/>`_:
 
 ::
 
-    $ todo
+    $ python -m pytest --cov sortedcontainers --cov-report term-missing --cov-branch
+    ================================================= test session starts =================================================
+    platform darwin -- Python 3.6.5, pytest-3.5.0, py-1.5.3, pluggy-0.6.0
+    rootdir: /Users/grantj/repos/python-sortedcontainers, inifile: tox.ini
+    plugins: cov-2.5.1, hypothesis-3.55.3
+    collected 357 items
+
+    docs/introduction.rst .                                                                                         [  0%]
+    sortedcontainers/__init__.py .                                                                                  [  0%]
+    sortedcontainers/sorteddict.py ...........                                                                      [  3%]
+    sortedcontainers/sortedlist.py .....................................                                            [ 14%]
+    sortedcontainers/sortedset.py .................                                                                 [ 18%]
+    tests/benchmark_splits_fill.py .                                                                                [ 19%]
+    tests/sortedcollection.py .                                                                                     [ 19%]
+    tests/test_coverage_sorteddict.py ...................................................                           [ 33%]
+    tests/test_coverage_sortedkeylist_modulo.py ................................................................... [ 52%]
+    tests/test_coverage_sortedkeylist_negate.py .......................................................             [ 68%]
+    tests/test_coverage_sortedlist.py ..........................................................                    [ 84%]
+    tests/test_coverage_sortedset.py ..................................................                             [ 98%]
+    tests/test_stress_sorteddict.py ..                                                                              [ 98%]
+    tests/test_stress_sortedkeylist.py .                                                                            [ 99%]
+    tests/test_stress_sortedlist.py .                                                                               [ 99%]
+    tests/test_stress_sortedset.py ..                                                                               [100%]
+
+    ---------- coverage: platform darwin, python 3.6.5-final-0 -----------
+    Name                             Stmts   Miss Branch BrPart  Cover   Missing
+    ----------------------------------------------------------------------------
+    sortedcontainers/__init__.py        10      0      0      0   100%
+    sortedcontainers/sorteddict.py     159      0     40      0   100%
+    sortedcontainers/sortedlist.py    1001      8    420      3    99%   34-39, 44-45, 33->34, 785->787, 1429->1437
+    sortedcontainers/sortedset.py      179      0     26      0   100%
+    ----------------------------------------------------------------------------
+    TOTAL                             1349      8    486      3    99%
 
 It's normal to see coverage a little less than 100%. Some code is specific to
 the Python runtime.
