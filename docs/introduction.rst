@@ -59,10 +59,11 @@ Issue Tracker`_.
 Sorted List
 -----------
 
-At the core of :doc:`Sorted Containers<index>` is the mutable sequence data type
-:class:`SortedList`. The :class:`SortedList` maintains its values in ascending
-sort order. As with Python's built-in list data type, :class:`SortedList` supports
-duplicate elements and fast random-access indexing.
+At the core of :doc:`Sorted Containers<index>` is the mutable sequence data
+type :class:`SortedList`. The :class:`SortedList` maintains its values in
+ascending sort order. As with Python's built-in list data type,
+:class:`SortedList` supports duplicate elements and fast random-access
+indexing.
 
     >>> from sortedcontainers import SortedList
     >>> sl = SortedList()
@@ -532,9 +533,9 @@ total ordering of keys must not change while they are stored in the
     >>> from sortedcontainers import SortedDict
     >>> sd = SortedDict()
 
-Items may be added to a :class:`SortedDict` using :func:`SortedDict.__setitem__`,
-:func:`SortedDict.update` or :func:`SortedDict.setdefault`. When doing so, the
-keys remain sorted.
+Items may be added to a :class:`SortedDict` using
+:func:`SortedDict.__setitem__`, :func:`SortedDict.update` or
+:func:`SortedDict.setdefault`. When doing so, the keys remain sorted.
 
     >>> sd['e'] = 5
     >>> sd['b'] = 2

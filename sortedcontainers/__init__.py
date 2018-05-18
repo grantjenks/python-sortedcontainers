@@ -67,8 +67,8 @@ __all__ = [
 ]
 
 __title__ = 'sortedcontainers'
-__version__ = '1.5.10'
-__build__ = 0x010510
+__version__ = '2.0.0'
+__build__ = 0x020000
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
 __copyright__ = '2014-2018, Grant Jenks'

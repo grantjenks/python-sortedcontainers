@@ -119,8 +119,8 @@ blist when it comes to adding random values to a sorted list. Notice also
 Raymond’s recipe is just a list and that displays order n-squared runtime
 complexity. That’s why it curves upwards.
 
-Of all the sorted collections libraries, `Sorted Containers`_ is also fastest at
-initialization. We’ll look at why soon.
+Of all the sorted collections libraries, `Sorted Containers`_ is also fastest
+at initialization. We’ll look at why soon.
 
 `Sorted Containers`_ is not always fastest. But notice here the performance
 improves with scale. You can see it there in blue. It starts in the middle of
