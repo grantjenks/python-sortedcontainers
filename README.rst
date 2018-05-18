@@ -1,17 +1,6 @@
 Python Sorted Containers
 ========================
 
-.. todo::
-
-   * Rename github repo
-   * Replace bintrees in
-     * https://github.com/astropy/astropy
-     * https://github.com/netzob/netzob
-     * https://github.com/danpaquin/gdax-python
-     * https://github.com/dyn4mik3/OrderBook/
-   * Tell Doug Hellmann about Sorted Containers and relation to bisect module
-   * Send email update to Python announce list.
-
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.
 
