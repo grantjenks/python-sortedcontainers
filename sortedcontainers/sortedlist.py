@@ -33,14 +33,11 @@ from sys import hexversion
 if hexversion < 0x03000000:
     from itertools import imap as map  # pylint: disable=redefined-builtin
     from itertools import izip as zip  # pylint: disable=redefined-builtin
-    reduce = reduce  # pylint: disable=undefined-variable
     try:
         from thread import get_ident
     except ImportError:
         from dummy_thread import get_ident
 else:
-    map = map
-    zip = zip
     from functools import reduce
     try:
         from _thread import get_ident
