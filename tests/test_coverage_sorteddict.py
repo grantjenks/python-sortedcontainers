@@ -215,6 +215,9 @@ def test_values():
     temp = SortedDict(mapping)
     assert list(temp.values()) == [pos for key, pos in mapping]
 
+def test_notgiven():
+    assert repr(SortedDict._SortedDict__not_given) == '<not-given>'
+
 def test_pop():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)

@@ -3,7 +3,6 @@ Python Sorted Containers
 
 .. todo::
 
-   * Update coverage
    * Update development page with test and coverage output.
    * Rename github repo
    * Replace bintrees in
