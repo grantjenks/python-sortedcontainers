@@ -333,6 +333,7 @@ class SortedDict(dict):
 
 
     class _NotGiven(object):
+        # pylint: disable=too-few-public-methods
         def __repr__(self):
             return '<not-given>'
 

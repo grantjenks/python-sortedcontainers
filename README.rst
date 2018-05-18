@@ -3,11 +3,9 @@ Python Sorted Containers
 
 .. todo::
 
-   * Add __delitem__ to sorted dict views?
-   * Rename github repo
    * Update coverage
-   * Pass pylint
    * Update development page with test and coverage output.
+   * Rename github repo
    * Replace bintrees in
      * https://github.com/astropy/astropy
      * https://github.com/netzob/netzob

@@ -13,6 +13,7 @@ Sorted list implementations:
 * :class:`SortedKeyList`
 
 """
+# pylint: disable=too-many-lines
 from __future__ import print_function
 
 from bisect import bisect_left, bisect_right, insort
@@ -30,9 +31,9 @@ from functools import wraps
 from sys import hexversion
 
 if hexversion < 0x03000000:
-    from itertools import imap as map
-    from itertools import izip as zip
-    reduce = reduce
+    from itertools import imap as map  # pylint: disable=redefined-builtin
+    from itertools import izip as zip  # pylint: disable=redefined-builtin
+    reduce = reduce  # pylint: disable=undefined-variable
     try:
         from thread import get_ident
     except ImportError:
@@ -49,6 +50,7 @@ else:
 
 def recursive_repr(fillvalue='...'):
     "Decorator to make a repr function return fillvalue for a recursive call."
+    # pylint: disable=missing-docstring
     # Copied from reprlib in Python 3
     # https://hg.python.org/cpython/file/3.6/Lib/reprlib.py
 
@@ -185,6 +187,7 @@ class SortedList(MutableSequence):
         :return: sorted list or sorted-key list instance
 
         """
+        # pylint: disable=unused-argument
         if key is None:
             return object.__new__(cls)
         else:

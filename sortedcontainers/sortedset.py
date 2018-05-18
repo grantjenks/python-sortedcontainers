@@ -435,6 +435,7 @@ class SortedSet(MutableSet, Sequence):
         :raises IndexError: if index is out of range
 
         """
+        # pylint: disable=arguments-differ
         value = self._list.pop(index)
         self._set.remove(value)
         return value
