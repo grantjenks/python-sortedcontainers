@@ -397,7 +397,7 @@ Thanks for letting me share.
 .. _`collections.OrderedDict`: https://docs.python.org/3/library/collections.html#collections.OrderedDict
 .. _`Sqlite in-memory indexes`: https://www.sqlite.org/lang_createindex.html
 .. _`pandas.DataFrame indexes`: http://pandas.pydata.org/pandas-docs/stable/indexing.html
-.. _`Redis sorted sets`: http://redis.io/commands#sorted_set
+.. _`Redis sorted sets`: https://redis.io/topics/data-types
 .. _`MutableSequence`: https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
 .. _`PyPI`: https://pypi.org/
 .. _`Dan Stromberg`: http://stromberg.dnsalias.org/~dstromberg/datastructures/
@@ -433,7 +433,7 @@ Thanks for letting me share.
 .. _`.NET`: https://www.microsoft.com/net
 .. _`Python`: https://www.python.org/
 .. _`PHP`: http://php.net/
-.. _`Javascript`: http://www.ecmascript.org/
+.. _`Javascript`: https://en.wikipedia.org/wiki/ECMAScript
 .. _`MutableMapping`: https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
 .. _`MutableSet`: https://docs.python.org/3/library/collections.abc.html#collections-abstract-base-classes
 .. _`load parameters`: http://www.grantjenks.com/docs/sortedcontainers/performance-load.html

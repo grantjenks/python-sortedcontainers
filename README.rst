@@ -89,9 +89,9 @@ analysis platform from UC Santa Barbara; `Trio`_, an async I/O library; and
 `Dask Distributed`_, a distributed computation library supported by Continuum
 Analytics.
 
-.. _`Fellow of the Python Software Foundation`: http://en.wikipedia.org/wiki/Alex_Martelli
+.. _`Fellow of the Python Software Foundation`: https://en.wikipedia.org/wiki/Alex_Martelli
 .. _`simple, effective implementation`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
-.. _`author of Writing Idiomatic Python and Python Trainer`: http://reviews.jeffknupp.com/reviews/sortedcontainers/3/
+.. _`author of Writing Idiomatic Python and Python Trainer`: https://jeffknupp.com/
 .. _`Python and Django Trainer`: https://www.elephorm.com/formateur/kevin-samuel
 .. _`Python Sorted Collections`: http://www.qtrac.eu/pysorted.html
 .. _`Zipline`: https://github.com/quantopian/zipline
@@ -175,8 +175,8 @@ introduction, implementation, performance, and development.
 API Documentation
 .................
 
-If you are looking for information on a specific function, class or method, this
-part of the documentation is for you.
+If you are looking for information on a specific function, class or method,
+this part of the documentation is for you.
 
 - `Sorted List`_
 - `Sorted Dict`_

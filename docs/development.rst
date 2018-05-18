@@ -5,11 +5,13 @@ Collaborators are welcome!
 
 #. Check for open issues or open a fresh issue to start a discussion around a
    bug.
-#. Fork `the repository <https://github.com/grantjenks/python-sortedcontainers>`_ on
-   GitHub and start making your changes to a new branch.
+#. Fork the `repository`_ on GitHub and start making your changes to a new
+   branch.
 #. Write a test which shows that the bug was fixed.
 #. Send a pull request and bug the maintainer until it gets merged and
    published :)
+
+.. _`repository`: https://github.com/grantjenks/python-sortedcontainers
 
 Development Lead
 ----------------
@@ -37,7 +39,7 @@ is to clone the repository from GitHub::
 Development Dependencies
 ------------------------
 
-Install development dependencies with `pip <https://pypi.org/project/pip/>`_::
+Install development dependencies with `pip`_::
 
     $ pip install -r requirements.txt
 
@@ -48,12 +50,13 @@ Some alternative implementations, such as `banyan`, may have issues when
 installing on Windows. You can still develop :doc:`Sorted Containers<index>`
 without these packages. They will be omitted from benchmarking.
 
+.. _`pip`: https://pypi.org/project/pip/
+
 Testing
 -------
 
-Testing uses `tox <https://pypi.org/project/tox/>`_. If you don't want to
-install all the development requirements, then, after downloading, you can
-simply run::
+Testing uses `tox`_. If you don't want to install all the development
+requirements, then, after downloading, you can simply run::
 
     $ python setup.py test
 
@@ -113,7 +116,7 @@ and run the tests.
       py36: commands succeeded
       lint: commands succeeded
 
-Coverage testing uses `pytest-cov <https://pypi.org/project/pytest-cov/>`_:
+Coverage testing uses `pytest-cov`_:
 
 ::
 
@@ -220,5 +223,10 @@ of Python:
 * PyPy
 * PyPy3
 
-Life will feel much saner if you use `virtualenv <http://www.virtualenv.org/>`_
-and `tox` to manage and test each of the runtimes.
+Life will feel much saner if you use `venv`_ or `virtualenv`_ and `tox`_ to
+manage and test each of the runtimes.
+
+.. _`tox`: https://pypi.org/project/tox/
+.. _`pytest-cov`: https://pypi.org/project/pytest-cov/
+.. _`venv`: https://docs.python.org/3/library/venv.html
+.. _`virtualenv`: https://pypi.org/project/virtualenv/
