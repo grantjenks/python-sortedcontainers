@@ -175,6 +175,11 @@ class SortedDict(dict):
             self.bisect_key = _list.bisect_key
             self.irange_key = _list.irange_key
 
+        # GrantJ 2018-05-21 Temporary fix for improved backwards compatibility
+        # with V1.
+
+        self.iloc = SortedKeysView(self)
+
         self._update(*args, **kwargs)
 
 
