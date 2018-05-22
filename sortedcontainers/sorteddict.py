@@ -688,7 +688,7 @@ class SortedValuesView(ValuesView, Sequence):
 
     When the sorted dict's values change, the view reflects those changes.
 
-    The values view implements the set and sequence abstract base classes.
+    The values view implements the sequence abstract base class.
 
     """
     __slots__ = ()
