@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.test import test as TestCommand
 import sortedcontainers
 import sys
@@ -27,7 +27,7 @@ setup(
     author_email='contact@grantjenks.com',
     url='http://www.grantjenks.com/docs/sortedcontainers/',
     license='Apache 2.0',
-    packages=find_packages(exclude=('tests', 'docs')),
+    packages=['sortedcontainers'],
     tests_require=['tox'],
     cmdclass={'test': Tox},
     install_requires=[],
