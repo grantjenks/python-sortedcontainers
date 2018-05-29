@@ -197,16 +197,22 @@ class SortedDict(dict):
 
     @property
     def iloc(self):
+        """Cached reference of sorted keys view.
+
+        Deprecated in version 2 of Sorted Containers. Use
+        :func:`SortedDict.keys` instead.
+
+        """
         warnings.warn(
-            'sorted_dict.iloc is deprecated.'
-            ' Use SortedDict.keys() instead.',
-             DeprecationWarning,
+            'sorted_dict.iloc is deprecated. Use SortedDict.keys() instead.',
+            DeprecationWarning,
             stacklevel=2,
         )
         return self._iloc
 
 
     def clear(self):
+
         """Remove all items from sorted dict.
 
         Runtime complexity: `O(n)`
@@ -612,7 +618,7 @@ class SortedKeysView(KeysView, Sequence):
 
 
     @classmethod
-    def _from_iterable(self, it):
+    def _from_iterable(cls, it):
         return SortedSet(it)
 
 
@@ -661,7 +667,7 @@ class SortedItemsView(ItemsView, Sequence):
 
 
     @classmethod
-    def _from_iterable(self, it):
+    def _from_iterable(cls, it):
         return SortedSet(it)
 
 
