@@ -16,6 +16,7 @@ Sorted dict implementations:
 
 """
 
+import warnings
 from collections import ItemsView, KeysView, ValuesView, Sequence
 
 from .sortedlist import SortedList, recursive_repr
@@ -179,7 +180,7 @@ class SortedDict(dict):
         # GrantJ 2018-05-21 Temporary fix for improved backwards compatibility
         # with V1.
 
-        self.iloc = SortedKeysView(self)
+        self._iloc = SortedKeysView(self)
 
         self._update(*args, **kwargs)
 
@@ -192,6 +193,17 @@ class SortedDict(dict):
 
         """
         return self._key
+
+
+    @property
+    def iloc(self):
+        warnings.warn(
+            'sorted_dict.iloc is deprecated.'
+            ' Use SortedDict.keys() instead.',
+             DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._iloc
 
 
     def clear(self):
