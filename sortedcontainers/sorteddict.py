@@ -19,6 +19,7 @@ Sorted dict implementations:
 from collections import ItemsView, KeysView, ValuesView, Sequence
 
 from .sortedlist import SortedList, recursive_repr
+from .sortedset import SortedSet
 
 
 class SortedDict(dict):
@@ -554,7 +555,7 @@ def _view_delitem(self, index):
 
     ``view.__delitem__(index)`` <==> ``del view[index]``
 
-    Support slicing.
+    Supports slicing.
 
     Runtime complexity: `O(log(n))` -- approximate.
 
@@ -596,6 +597,11 @@ class SortedKeysView(KeysView, Sequence):
 
     """
     __slots__ = ()
+
+
+    @classmethod
+    def _from_iterable(self, it):
+        return SortedSet(it)
 
 
     def __getitem__(self, index):
@@ -640,6 +646,11 @@ class SortedItemsView(ItemsView, Sequence):
 
     """
     __slots__ = ()
+
+
+    @classmethod
+    def _from_iterable(self, it):
+        return SortedSet(it)
 
 
     def __getitem__(self, index):

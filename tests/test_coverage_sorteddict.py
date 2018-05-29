@@ -377,10 +377,10 @@ def test_keysview():
     assert keys <= that_keys
     assert keys >= that_keys
 
-    assert sorted(keys & that_keys) == [val for val, pos in mapping]
-    assert sorted(keys | that_keys) == [val for val, pos in mapping]
-    assert sorted(keys - that_keys) == []
-    assert sorted(keys ^ that_keys) == []
+    assert list(keys & that_keys) == [val for val, pos in mapping]
+    assert list(keys | that_keys) == [val for val, pos in mapping]
+    assert list(keys - that_keys) == []
+    assert list(keys ^ that_keys) == []
 
     keys = SortedDict(mapping[:2]).keys()
     assert repr(keys) == "SortedKeysView(SortedDict({'a': 0, 'b': 1}))"
@@ -447,10 +447,10 @@ def test_itemsview():
     assert items <= that_items
     assert items >= that_items
 
-    assert sorted(items & that_items) == mapping
-    assert sorted(items | that_items) == mapping
-    assert sorted(items - that_items) == []
-    assert sorted(items ^ that_items) == []
+    assert list(items & that_items) == mapping
+    assert list(items | that_items) == mapping
+    assert list(items - that_items) == []
+    assert list(items ^ that_items) == []
 
     items = SortedDict(mapping[:2]).items()
     assert repr(items) == "SortedItemsView(SortedDict({'a': 0, 'b': 1}))"
