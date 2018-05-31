@@ -487,7 +487,6 @@ class SortedSet(MutableSet, Sequence):
         return self._fromset(diff, key=self._key)
 
     __sub__ = difference
-    __rsub__ = __sub__
 
 
     def difference_update(self, *iterables):
