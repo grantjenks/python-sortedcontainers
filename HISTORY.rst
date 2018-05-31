@@ -7,6 +7,34 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.0.3 (2018-05-31)
+------------------
+
+**API Changes**
+
+* Accessing `SortedDict.iloc` will emit `DeprecationWarning`.
+
+**Bugfixes**
+
+* `SortedSet.__rsub__` erroneously reversed its arguments. The method has been
+  removed in favor of the inherited `Set.__rsub__` which has a correct
+  implementation.
+* :class:`SortedKeysView` and :class:`SortedValuesView` set-operations now
+  return :class:`SortedSet` objects to better match the semantics of version 1.
+
+**Miscellaneous**
+
+* The source distribution no longer contains the `docs` and `tests`
+  directories. If you need these, then please download an archive from
+  Github. Version control is tagged with the version released to PyPI.
+
+2.0.2 (2018-05-21)
+------------------
+
+**API Changes**
+
+* Add `SortedDict.iloc` for improved backwards compatibility with version 1.
+
 2.0.1 (2018-05-18)
 ------------------
 
