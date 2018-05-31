@@ -116,7 +116,6 @@ html_sidebars = {
         'searchbox.html',
     ]
 }
-# html_sidebars = {}  # TODO
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
