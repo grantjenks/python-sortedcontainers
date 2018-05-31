@@ -177,11 +177,6 @@ class SortedDict(dict):
             self.bisect_key = _list.bisect_key
             self.irange_key = _list.irange_key
 
-        # GrantJ 2018-05-21 Temporary fix for improved backwards compatibility
-        # with V1.
-
-        self._iloc = SortedKeysView(self)
-
         self._update(*args, **kwargs)
 
 
@@ -203,12 +198,18 @@ class SortedDict(dict):
         :func:`SortedDict.keys` instead.
 
         """
-        warnings.warn(
-            'sorted_dict.iloc is deprecated. Use SortedDict.keys() instead.',
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return self._iloc
+        # pylint: disable=attribute-defined-outside-init
+        try:
+            return self._iloc
+        except AttributeError:
+            warnings.warn(
+                'sorted_dict.iloc is deprecated.'
+                ' Use SortedDict.keys() instead.',
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            _iloc = self._iloc = SortedKeysView(self)
+            return _iloc
 
 
     def clear(self):
