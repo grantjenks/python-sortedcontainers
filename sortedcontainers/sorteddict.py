@@ -16,6 +16,7 @@ Sorted dict implementations:
 
 """
 
+import sys
 import warnings
 from collections import ItemsView, KeysView, ValuesView, Sequence
 
@@ -355,6 +356,26 @@ class SortedDict(dict):
 
         """
         return SortedValuesView(self)
+
+
+    if sys.hexversion < 0x03000000:
+        def __make_raise_attributeerror(original, alternate):
+            message = (
+                'SortedDict.{original}() is not implemented.'
+                ' Use SortedDict.{alternate}() instead.'
+            ).format(original=original, alternate=alternate)
+            def method(self):
+                raise AttributeError(message)
+            method.__name__ = original
+            method.__doc__ = message
+            return property(method)
+
+        iteritems = __make_raise_attributeerror('iteritems', 'items')
+        iterkeys = __make_raise_attributeerror('iterkeys', 'keys')
+        itervalues = __make_raise_attributeerror('itervalues', 'values')
+        viewitems = __make_raise_attributeerror('viewitems', 'items')
+        viewkeys = __make_raise_attributeerror('viewkeys', 'keys')
+        viewvalues = __make_raise_attributeerror('viewvalues', 'values')
 
 
     class _NotGiven(object):

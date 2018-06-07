@@ -7,6 +7,15 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.0.4 (2018-06-06)
+------------------
+
+**Bugfixes**
+
+* `SortedDict` methods `iterkeys`, `iteritems`, `itervalues`, `viewkeys`,
+  `viewitems`, and `viewvalues` are not implemented for Python 2. Attribute
+  lookup now raises :exc:`AttributeError`.
+
 2.0.3 (2018-05-31)
 ------------------
 
