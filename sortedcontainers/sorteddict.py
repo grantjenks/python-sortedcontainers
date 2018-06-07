@@ -360,11 +360,13 @@ class SortedDict(dict):
 
     if sys.hexversion < 0x03000000:
         def __make_raise_attributeerror(original, alternate):
+            # pylint: disable=no-self-argument
             message = (
                 'SortedDict.{original}() is not implemented.'
                 ' Use SortedDict.{alternate}() instead.'
             ).format(original=original, alternate=alternate)
             def method(self):
+                # pylint: disable=missing-docstring,unused-argument
                 raise AttributeError(message)
             method.__name__ = original
             method.__doc__ = message
