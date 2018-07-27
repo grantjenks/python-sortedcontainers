@@ -111,8 +111,8 @@ Features
 - Compatible API (nearly identical to older blist and bintrees modules)
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.keys()[-5:])
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
-- Developed on Python 3.6
-- Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 and PyPy, PyPy3
+- Developed on Python 3.7
+- Tested on CPython 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7 and PyPy, PyPy3
 
 .. image:: https://api.travis-ci.org/grantjenks/python-sortedcontainers.svg?branch=master
    :target: http://www.grantjenks.com/docs/sortedcontainers/

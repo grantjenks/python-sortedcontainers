@@ -17,7 +17,7 @@ in-depth analysis of the load factor read :doc:`Performance at
 Scale<performance-scale>`.
 
 Performance of competing implementations are benchmarked against the CPython
-3.6 runtime. An :doc:`implementation performance comparison<performance>` is
+3.7 runtime. An :doc:`implementation performance comparison<performance>` is
 also included with data from popular sorted collections packages.
 
 Because :doc:`Sorted Containers<index>` is pure-Python, its performance also
