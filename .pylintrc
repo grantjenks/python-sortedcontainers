@@ -135,7 +135,9 @@ disable=print-statement,
         redefined-argument-from-local,
         no-staticmethod-decorator,
         super-init-not-called,
-        ungrouped-imports
+        ungrouped-imports,
+        no-else-return,
+        useless-object-inheritance
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
