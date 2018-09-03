@@ -199,7 +199,7 @@ class SortedList(MutableSequence):
 
 
     @property
-    def key(self):
+    def key(self):  # pylint: disable=useless-return
         """Function used to extract comparison key from values.
 
         Sorted list compares values directly so the key function is none.
