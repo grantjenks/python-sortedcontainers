@@ -17,7 +17,6 @@ Sorted list implementations:
 from __future__ import print_function
 
 from bisect import bisect_left, bisect_right, insort
-from collections import Sequence, MutableSequence
 from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ne, gt, ge, lt, le, iadd
@@ -26,6 +25,11 @@ from textwrap import dedent
 ###############################################################################
 # BEGIN Python 2/3 Shims
 ###############################################################################
+
+try:
+    from collections.abc import Sequence, MutableSequence
+except ImportError:
+    from collections import Sequence, MutableSequence
 
 from functools import wraps
 from sys import hexversion

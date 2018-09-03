@@ -13,12 +13,24 @@ Sorted set implementations:
 
 """
 
-from collections import MutableSet, Sequence, Set
 from itertools import chain
 from operator import eq, ne, gt, ge, lt, le
 from textwrap import dedent
 
 from .sortedlist import SortedList, recursive_repr
+
+###############################################################################
+# BEGIN Python 2/3 Shims
+###############################################################################
+
+try:
+    from collections.abc import MutableSet, Sequence, Set
+except ImportError:
+    from collections import MutableSet, Sequence, Set
+
+###############################################################################
+# END Python 2/3 Shims
+###############################################################################
 
 
 class SortedSet(MutableSet, Sequence):
