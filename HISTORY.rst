@@ -7,6 +7,14 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.0.5 (2018-09-03)
+------------------
+
+**Bugfixes**
+
+* Change imports for Abstract Base Classes to `collections.abc` to avoid
+  warnings in Python 3.7.
+
 2.0.4 (2018-06-06)
 ------------------
 
