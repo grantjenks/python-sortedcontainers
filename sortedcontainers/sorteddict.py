@@ -29,7 +29,7 @@ from .sortedset import SortedSet
 try:
     from collections.abc import ItemsView, KeysView, ValuesView, Sequence
 except ImportError:
-    from collections import ItemsView, KeysView, ValuesView, Sequence
+    from collections import ItemsView, KeysView, ValuesView, Sequence, Mapping
 
 ###############################################################################
 # END Python 2/3 Shims
@@ -371,25 +371,13 @@ class SortedDict(dict):
 
 
     if sys.hexversion < 0x03000000:
-        def __make_raise_attributeerror(original, alternate):
-            # pylint: disable=no-self-argument
-            message = (
-                'SortedDict.{original}() is not implemented.'
-                ' Use SortedDict.{alternate}() instead.'
-            ).format(original=original, alternate=alternate)
-            def method(self):
-                # pylint: disable=missing-docstring,unused-argument
-                raise AttributeError(message)
-            method.__name__ = original
-            method.__doc__ = message
-            return property(method)
-
-        iteritems = __make_raise_attributeerror('iteritems', 'items')
-        iterkeys = __make_raise_attributeerror('iterkeys', 'keys')
-        itervalues = __make_raise_attributeerror('itervalues', 'values')
-        viewitems = __make_raise_attributeerror('viewitems', 'items')
-        viewkeys = __make_raise_attributeerror('viewkeys', 'keys')
-        viewvalues = __make_raise_attributeerror('viewvalues', 'values')
+        # pylint: disable=E1101,W0108
+        iteritems = Mapping.iteritems
+        iterkeys = Mapping.iterkeys
+        itervalues = Mapping.itervalues
+        viewitems = lambda self: SortedItemsView(self)
+        viewkeys = lambda self: SortedKeysView(self)
+        viewvalues = lambda self: SortedValuesView(self)
 
 
     class _NotGiven(object):
