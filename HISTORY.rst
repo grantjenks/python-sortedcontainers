@@ -7,6 +7,13 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.1.0 (2018-11-21)
+------------------
+
+**Miscellaneous**
+
+* Small updates to docs and tests for Python 3.7.
+
 2.0.5 (2018-09-03)
 ------------------
 
