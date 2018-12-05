@@ -25,7 +25,7 @@ _S = TypeVar("_S", bound=Hashable)
 _SS = TypeVar("_SS", bound="SortedSet")
 _Key = Callable[[_T], Any]
 
-class SortedSet(MutableSet[_T], Sequence[_T], Generic[_T]):
+class SortedSet(MutableSet[_T], Sequence[_T]):
     def __init__(self, iterable: Optional[Iterable[_T]] = ..., key: Optional[_Key] = ...) -> None: ...
     @classmethod
     def _fromset(cls, values: Set[_T], key: Optional[_Key] = ...) -> SortedSet[_T]: ...
