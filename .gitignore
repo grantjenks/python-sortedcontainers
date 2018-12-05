@@ -17,3 +17,7 @@
 
 # macOS metadata
 .DS_Store
+
+# typing cache
+.mypy_cache/
+.pyre/
