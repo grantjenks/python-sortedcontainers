@@ -572,7 +572,8 @@ class SortedDict(dict):
         :func:`SortedDict.__init__` confuse pickle so customize the reducer.
 
         """
-        return (self.__class__, (self._key, list(self.items())))
+        items = dict.copy(self)
+        return (type(self), (self._key, items))
 
 
     @recursive_repr()

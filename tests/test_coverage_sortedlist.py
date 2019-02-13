@@ -589,7 +589,8 @@ def test_pickle():
     alpha._reset(500)
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
-    assert alpha._load == beta._load
+    assert alpha._load == 500
+    assert beta._load == 1000
 
 def test_build_index():
     slt = SortedList([0])
