@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+
 import sortedcontainers
-import sys
 
 
 class Tox(TestCommand):
@@ -12,7 +12,7 @@ class Tox(TestCommand):
     def run_tests(self):
         import tox
         errno = tox.cmdline(self.test_args)
-        sys.exit(errno)
+        exit(errno)
 
 
 with open('README.rst') as reader:
