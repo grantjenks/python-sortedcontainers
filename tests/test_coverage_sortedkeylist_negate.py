@@ -597,7 +597,8 @@ def test_pickle():
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
     assert alpha._key == beta._key
-    assert alpha._load == beta._load
+    assert alpha._load == 500
+    assert beta._load == 1000
 
 def test_check():
     slt = SortedKeyList(range(10), key=negate)

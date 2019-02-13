@@ -1580,6 +1580,11 @@ class SortedList(MutableSequence):
     __make_cmp = staticmethod(__make_cmp)
 
 
+    def __reduce__(self):
+        values = reduce(iadd, self._lists, [])
+        return (type(self), (values,))
+
+
     @recursive_repr()
     def __repr__(self):
         """Return string representation of sorted list.
@@ -2524,6 +2529,11 @@ class SortedKeyList(SortedList):
         """
         values = reduce(iadd, self._lists, []) * num
         return self.__class__(values, key=self._key)
+
+
+    def __reduce__(self):
+        values = reduce(iadd, self._lists, [])
+        return (type(self), (values, self.key))
 
 
     @recursive_repr()
