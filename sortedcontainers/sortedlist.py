@@ -1187,7 +1187,7 @@ class SortedList(MutableSequence):
         """Return an index to insert `value` in the sorted list.
 
         Similar to `bisect_left`, but if `value` is already present, the
-        insertion point with be after (to the right of) any existing values.
+        insertion point will be after (to the right of) any existing values.
 
         Similar to the `bisect` module in the standard library.
 
@@ -2243,7 +2243,7 @@ class SortedKeyList(SortedList):
         """Return an index to insert `value` in the sorted-key list.
 
         Similar to `bisect_left`, but if `value` is already present, the
-        insertion point with be after (to the right of) any existing values.
+        insertion point will be after (to the right of) any existing values.
 
         Similar to the `bisect` module in the standard library.
 
@@ -2303,7 +2303,7 @@ class SortedKeyList(SortedList):
         """Return an index to insert `key` in the sorted-key list.
 
         Similar to `bisect_key_left`, but if `key` is already present, the
-        insertion point with be after (to the right of) any existing keys.
+        insertion point will be after (to the right of) any existing keys.
 
         Similar to the `bisect` module in the standard library.
 
