@@ -429,8 +429,7 @@ class SortedDict(dict):
         else:
             if default is self.__not_given:
                 raise KeyError(key)
-            else:
-                return default
+            return default
 
 
     def popitem(self, index=-1):
