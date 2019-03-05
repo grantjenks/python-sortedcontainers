@@ -702,7 +702,7 @@ class SortedSet(MutableSet, Sequence):
         confuse pickle so customize the reducer.
 
         """
-        return (type(self)._fromset, (self._set, self._key))
+        return (type(self), (self._set, self._key))
 
 
     @recursive_repr()

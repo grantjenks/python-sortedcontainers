@@ -473,6 +473,7 @@ def test_pickle():
     import pickle
     alpha = SortedSet(range(10000), key=negate)
     alpha._reset(500)
-    beta = pickle.loads(pickle.dumps(alpha))
+    data = pickle.dumps(alpha)
+    beta = pickle.loads(data)
     assert alpha == beta
     assert alpha._key == beta._key
