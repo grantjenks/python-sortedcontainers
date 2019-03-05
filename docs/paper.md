@@ -63,7 +63,9 @@ intervals, and ranking algorithms. Sorted Containers is used by scientific open
 source projects such as: Angr, a binary analysis platform from UC Santa
 Barbara; Astropy, a community Python package for astronomy; Dask Distributed, a
 library for dynamic task scheduling by Anaconda; Trio, an asynchronous I/O
-library; and Zipline, an algorithmic trading library by Quantopian.
+library; and Zipline, an algorithmic trading library by Quantopian. The source
+code for ``Sorted Containers`` has been archived to Zenodo with the linked DOI:
+[@zenodo]
 
 # Acknowledgements
 
