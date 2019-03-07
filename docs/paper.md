@@ -11,8 +11,8 @@ authors:
     orcid: 0000-0001-5010-405X
     affiliation: 1
 affiliations:
- - name: None
-   index: 1
+  - name: None
+    index: 1
 date: 5 March 2019
 bibliography: paper.bib
 ---
