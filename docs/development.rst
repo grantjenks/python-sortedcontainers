@@ -1,5 +1,49 @@
-Developing and Contributing
-===========================
+Development and Support
+=======================
+
+.. contents::
+   :depth: 1
+   :local:
+
+Reporting Issues
+----------------
+
+Support requests, bugs, issues, documentation typos, and general questions
+should be submitted via the `GitHub Issue Tracker`_. The issue tracker offers a
+web interface which allows relevant information to be entered and submitted to
+the :doc:`Sorted Containers<index>` developers. Steps to file an issue:
+
+#. Please search the issues database to determine whether the problem has
+   already been reported. It may be that a fix or workaround has already been
+   provided or is soon to be released. If additional information is needed then
+   you are welcome to reopen the issue and comment regarding your specific
+   scenario.
+#. To file a new issue, click the green "New issue" button on the Issue
+   Tracker. You will be required to sign-in to file an issue. It is not
+   possible to submit an issue anonymously.
+#. The issue form has two primary fields: title and comment. The title should
+   be a very short description of the problem; preferably less than ten words.
+   The comment should describe the problem in detail, including what you
+   expected to happen and what instead did happen. Working code samples that
+   illustrate the issue are best.
+#. Submitted issues and comments will notify the lead developer and project
+   maintainers. Bugs are typically fixed very quickly, within a week or so.
+   Feature enhancements may take longer or be deferred until a pull request is
+   made with a working prototype.
+
+Support
+-------
+
+Development of :doc:`Sorted Containers<index>` is lead by Grant Jenks
+<contact@grantjenks.com>. The preferred method of contact for support is to
+create an issue on the `GitHub Issue Tracker`_. For anything sensitive, such as
+conduct issues or security issues, please contact the development lead directly
+by email.
+
+.. _`GitHub Issue Tracker`: https://github.com/grantjenks/python-sortedcontainers/issues
+
+How to Contribute?
+------------------
 
 Collaborators are welcome!
 
@@ -8,15 +52,10 @@ Collaborators are welcome!
 #. Fork the `repository`_ on GitHub and start making your changes to a new
    branch.
 #. Write a test which shows that the bug was fixed.
-#. Send a pull request and bug the maintainer until it gets merged and
+#. Send a pull request and bug the development lead until it gets merged and
    published :)
 
 .. _`repository`: https://github.com/grantjenks/python-sortedcontainers
-
-Development Lead
-----------------
-
-* Grant Jenks <contact@grantjenks.com>
 
 Requests for Contributions
 --------------------------

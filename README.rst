@@ -143,40 +143,48 @@ Containers`_.
 Documentation
 -------------
 
-Complete documentation including performance comparisons is available at
+Complete documentation for `Sorted Containers`_ is available at
 http://www.grantjenks.com/docs/sortedcontainers/
 
 User Guide
 ..........
 
-For those wanting more details, this part of the documentation describes
-introduction, implementation, performance, and development.
+The user guide provides an introduction to `Sorted Containers`_ and extensive
+performance comparisons and analysis.
 
 - `Introduction`_
 - `Performance Comparison`_
 - `Load Factor Performance Comparison`_
 - `Runtime Performance Comparison`_
 - `Simulated Workload Performance Comparison`_
-- `Implementation Details`_
 - `Performance at Scale`_
-- `Developing and Contributing`_
-- `Release History`_
 
 .. _`Introduction`: http://www.grantjenks.com/docs/sortedcontainers/introduction.html
 .. _`Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance.html
 .. _`Load Factor Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-load.html
 .. _`Runtime Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-runtime.html
 .. _`Simulated Workload Performance Comparison`: http://www.grantjenks.com/docs/sortedcontainers/performance-workload.html
-.. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 .. _`Performance at Scale`: http://www.grantjenks.com/docs/sortedcontainers/performance-scale.html
-.. _`Developing and Contributing`: http://www.grantjenks.com/docs/sortedcontainers/development.html
+
+Community Guide
+...............
+
+The community guide provides information on the development of `Sorted
+Containers`_ along with support, implementation, and history details.
+
+- `Development and Support`_
+- `Implementation Details`_
+- `Release History`_
+
+.. _`Development and Support`: http://www.grantjenks.com/docs/sortedcontainers/development.html
+.. _`Implementation Details`: http://www.grantjenks.com/docs/sortedcontainers/implementation.html
 .. _`Release History`: http://www.grantjenks.com/docs/sortedcontainers/history.html
 
 API Documentation
 .................
 
-If you are looking for information on a specific function, class or method,
-this part of the documentation is for you.
+The API documentation provides information on specific functions, classes, and
+modules in the `Sorted Containers`_ package.
 
 - `Sorted List`_
 - `Sorted Dict`_
@@ -197,8 +205,8 @@ Talks
 .. _`SF Python Holiday Party 2015 Lightning Talk`: http://www.grantjenks.com/docs/sortedcontainers/sf-python-2015-lightning-talk.html
 .. _`DjangoCon 2015 Lightning Talk`: http://www.grantjenks.com/docs/sortedcontainers/djangocon-2015-lightning-talk.html
 
-Useful Links
-------------
+Resources
+---------
 
 - `Sorted Containers Documentation`_
 - `Sorted Containers at PyPI`_
