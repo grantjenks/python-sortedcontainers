@@ -40,7 +40,7 @@ your deployment and use of Python easy. There's no need to install a C compiler
 or pre-build and distribute custom extensions. Performance is a feature and
 testing has 100% coverage with unit tests and hours of stress.
 
-:copyright: (c) 2014-2018 by Grant Jenks.
+:copyright: (c) 2014-2019 by Grant Jenks.
 :license: Apache 2.0, see LICENSE for more details.
 
 """
@@ -71,4 +71,4 @@ __version__ = '2.1.0'
 __build__ = 0x020100
 __author__ = 'Grant Jenks'
 __license__ = 'Apache 2.0'
-__copyright__ = '2014-2018, Grant Jenks'
+__copyright__ = '2014-2019, Grant Jenks'
