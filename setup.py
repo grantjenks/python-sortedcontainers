@@ -31,7 +31,7 @@ setup(
     tests_require=['tox'],
     cmdclass={'test': Tox},
     install_requires=[],
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
@@ -48,5 +48,5 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
-    ),
+    ],
 )
