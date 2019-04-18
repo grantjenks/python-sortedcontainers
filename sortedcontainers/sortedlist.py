@@ -845,14 +845,15 @@ class SortedList(MutableSequence):
 
                 start_pos, start_idx = self._pos(start)
 
+                slice_len = stop - start
+                if len(_lists[start_pos]) >= start_idx + slice_len:
+                    return _lists[start_pos][start_idx:start_idx+slice_len]
+
                 if stop == self._len:
                     stop_pos = len(_lists) - 1
                     stop_idx = len(_lists[stop_pos])
                 else:
                     stop_pos, stop_idx = self._pos(stop)
-
-                if start_pos == stop_pos:
-                    return _lists[start_pos][start_idx:stop_idx]
 
                 prefix = _lists[start_pos][start_idx:]
                 middle = _lists[(start_pos + 1):stop_pos]
