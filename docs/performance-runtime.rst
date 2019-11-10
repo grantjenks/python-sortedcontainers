@@ -73,7 +73,7 @@ Deleting objects at random using :func:`SortedList.__delitem__`.
 __getitem__
 ...........
 
-Retrieving ojbects by index using :func:`SortedList.__getitem__`.
+Retrieving objects by index using :func:`SortedList.__getitem__`.
 
 .. image:: _static/SortedList_runtime-getitem.png
 
