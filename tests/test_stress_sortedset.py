@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from sys import hexversion
+from sys import version_info
 
 import random
 from .context import sortedcontainers
@@ -9,7 +9,7 @@ from sortedcontainers import SortedSet
 from functools import wraps
 import operator
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     from itertools import izip as zip
     range = xrange
 

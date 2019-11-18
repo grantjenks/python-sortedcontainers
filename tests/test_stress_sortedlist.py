@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from sys import hexversion
+from sys import version_info
 
 import copy
 import bisect
@@ -10,7 +10,7 @@ from .context import sortedcontainers
 from sortedcontainers import SortedList
 from functools import wraps
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     from itertools import izip as zip
     range = xrange
 

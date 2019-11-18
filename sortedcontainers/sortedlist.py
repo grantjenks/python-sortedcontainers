@@ -32,9 +32,9 @@ except ImportError:
     from collections import Sequence, MutableSequence
 
 from functools import wraps
-from sys import hexversion
+from sys import version_info
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     from itertools import imap as map  # pylint: disable=redefined-builtin
     from itertools import izip as zip  # pylint: disable=redefined-builtin
     try:

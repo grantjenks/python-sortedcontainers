@@ -4,9 +4,9 @@ import random, string
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
-from sys import hexversion
+from sys import version_info
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     range = xrange
 
 def negate(value):
@@ -16,13 +16,13 @@ def modulo(value):
     return value % 10
 
 def get_keysview(dic):
-    if hexversion < 0x03000000:
+    if version_info < (3,):
         return dic.viewkeys()
     else:
         return dic.keys()
 
 def get_itemsview(dic):
-    if hexversion < 0x03000000:
+    if version_info < (3,):
         return dic.viewitems()
     else:
         return dic.items()
@@ -194,7 +194,7 @@ def test_get():
     assert temp.get('A', -1) == -1
 
 def test_has_key():
-    if hexversion > 0x03000000:
+    if version_info > (3,):
         return
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping)

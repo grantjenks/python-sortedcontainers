@@ -370,7 +370,7 @@ class SortedDict(dict):
         return SortedValuesView(self)
 
 
-    if sys.hexversion < 0x03000000:
+    if sys.version_info < (3,):
         def __make_raise_attributeerror(original, alternate):
             # pylint: disable=no-self-argument
             message = (

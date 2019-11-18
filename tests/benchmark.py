@@ -1,5 +1,5 @@
 from __future__ import print_function
-from sys import hexversion
+from sys import version_info
 import logging
 
 import time, random, argparse
@@ -9,7 +9,7 @@ try:
 except:
     from ordereddict import OrderedDict
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     range = xrange
     name_attr = 'func_name'
 else:

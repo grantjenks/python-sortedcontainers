@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sys import hexversion
+from sys import version_info
 
 import random
 from .context import sortedcontainers
@@ -8,7 +8,7 @@ from sortedcontainers import SortedKeyList, SortedListWithKey
 from itertools import chain
 import pytest
 
-if hexversion < 0x03000000:
+if version_info < (3,):
     from itertools import izip as zip
     range = xrange
 
