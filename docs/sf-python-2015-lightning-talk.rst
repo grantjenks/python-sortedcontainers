@@ -38,7 +38,7 @@ Containers. The right answer is pure-Python. It's Python 2 and Python 3
 compatible. It's fast. It's fully-featured. And it's extensively tested with
 100% coverage and hours of stress.
 
-Performance is a feature. That means graphs. Lot's of them. Here's the
+Performance is a feature. That means graphs. Lots of them. Here's the
 performance of creating a sorted list from random numbers. I benchmark Sorted
 Containers against every worthy competitor I can find.
 

@@ -105,7 +105,7 @@ sorted collections`_ library with `sorted list`_, `sorted dictionary`_, and
 C-extensions. It’s Python 2 and Python 3 compatible. It’s fully-featured. And
 it’s extensively tested with 100% coverage and hours of stress.
 
-`Performance`_ is a feature. That means graphs. Lot’s of them. There are 189
+`Performance`_ is a feature. That means graphs. Lots of them. There are 189
 performance graphs in total. Let’s look at a few of them together.
 
 Here’s the performance of adding a random value to a sorted list. I’m comparing
@@ -127,7 +127,7 @@ improves with scale. You can see it there in blue. It starts in the middle of
 the pack and has a lesser slope than competitors.
 
 In short, `Sorted Containers`_ is kind of like a `B-tree`_ implementation. That
-means you can configure the the fan-out of nodes in the tree. We call that the
+means you can configure the fan-out of nodes in the tree. We call that the
 load parameter and there are extensive performance graphs of three different
 `load parameters`_.
 
@@ -146,11 +146,11 @@ for most scenarios. It’s a very sane default.
 
 In addition to comparisons and load-factors, I also `benchmark
 runtimes`_. Here’s CPython 2.7, CPython 3.5 and `PyPy`_ version 5. You can see
-where the the just-in-time compiler, the jit-compiler, kicks in. That’ll make
+where the just-in-time compiler, the jit-compiler, kicks in. That’ll make
 `Sorted Containers`_ another ten times faster.
 
 Finally, I made a survey in 2015 on `Github`_ as to how people were using
-sorted collections. I noticed patterns like priority queues, mutli-sets,
+sorted collections. I noticed patterns like priority queues, multi-sets,
 nearest-neighbor algorithms, etc.
 
 This is the priority queue workload which spends 40% of its time adding
