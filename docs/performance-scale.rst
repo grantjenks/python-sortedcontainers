@@ -248,7 +248,7 @@ winnings which would conclude incorrectly an expected value of zero.
 More practically, consider the list data type in CPython. Lists grow and shrink
 as necessary but the underlying implementation is restricted to static
 allocations. For this reason, lists are often over-allocated so that most
-appends may occur immediately. Occassionally, the list must be reallocated and
+appends may occur immediately. Occasionally, the list must be reallocated and
 possibly copied, which takes linear time. If we sampled performance by
 initializing lists of various sizes and appending an element, we may never
 observe a resize operation and so over-estimate performance.
