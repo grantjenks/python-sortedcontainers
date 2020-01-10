@@ -32,7 +32,7 @@ setup(
     zip_safe=False,
     tests_require=['tox'],
     cmdclass={'test': Tox},
-    install_requires=[],
+    install_requires=["typing"],
     classifiers=(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
