@@ -384,12 +384,18 @@ class SortedDict(dict):
             method.__doc__ = message
             return property(method)
 
-        iteritems = __make_raise_attributeerror('iteritems', 'items')  # type: ignore
-        iterkeys = __make_raise_attributeerror('iterkeys', 'keys')  # type: ignore
-        itervalues = __make_raise_attributeerror('itervalues', 'values')  # type: ignore
-        viewitems = __make_raise_attributeerror('viewitems', 'items')  # type: ignore
-        viewkeys = __make_raise_attributeerror('viewkeys', 'keys')  # type: ignore
-        viewvalues = __make_raise_attributeerror('viewvalues', 'values')  # type: ignore
+        iteritems = \
+            __make_raise_attributeerror('iteritems', 'items')  # type: ignore
+        iterkeys = \
+            __make_raise_attributeerror('iterkeys', 'keys')  # type: ignore
+        itervalues = \
+            __make_raise_attributeerror('itervalues', 'values')  # type: ignore
+        viewitems = \
+            __make_raise_attributeerror('viewitems', 'items')  # type: ignore
+        viewkeys = \
+            __make_raise_attributeerror('viewkeys', 'keys')  # type: ignore
+        viewvalues = \
+            __make_raise_attributeerror('viewvalues', 'values')  # type: ignore
 
 
     class _NotGiven(object):
