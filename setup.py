@@ -28,6 +28,8 @@ setup(
     url='http://www.grantjenks.com/docs/sortedcontainers/',
     license='Apache 2.0',
     packages=['sortedcontainers'],
+    package_data={'sortedcontainers':["py.typed", "sortedlist.pyi"]},
+    zip_safe=False,
     tests_require=['tox'],
     cmdclass={'test': Tox},
     install_requires=[],

@@ -294,13 +294,13 @@ class SortedSet(MutableSet, Sequence):
         return comparer
 
 
-    __eq__ = __make_cmp(eq, '==', 'equal to')
-    __ne__ = __make_cmp(ne, '!=', 'not equal to')
-    __lt__ = __make_cmp(lt, '<', 'a proper subset of')
-    __gt__ = __make_cmp(gt, '>', 'a proper superset of')
-    __le__ = __make_cmp(le, '<=', 'a subset of')
-    __ge__ = __make_cmp(ge, '>=', 'a superset of')
-    __make_cmp = staticmethod(__make_cmp)
+    __eq__ = __make_cmp(eq, '==', 'equal to')  # type: ignore
+    __ne__ = __make_cmp(ne, '!=', 'not equal to')  # type: ignore
+    __lt__ = __make_cmp(lt, '<', 'a proper subset of')  # type: ignore
+    __gt__ = __make_cmp(gt, '>', 'a proper superset of')  # type: ignore
+    __le__ = __make_cmp(le, '<=', 'a subset of')  # type: ignore
+    __ge__ = __make_cmp(ge, '>=', 'a superset of')  # type: ignore
+    __make_cmp = staticmethod(__make_cmp)  # type: ignore
 
 
     def __len__(self):
