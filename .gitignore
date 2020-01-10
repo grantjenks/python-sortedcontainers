@@ -3,6 +3,7 @@
 
 # virutalenv directories
 /env*/
+/venv
 
 # test files/directories
 .coverage
