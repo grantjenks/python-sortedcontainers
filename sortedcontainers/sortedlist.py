@@ -24,32 +24,13 @@ from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ne, gt, ge, lt, le, iadd
 from textwrap import dedent
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import Sequence, MutableSequence
-except ImportError:
-    from collections import Sequence, MutableSequence
-
+from typing import MutableSequence, TypeVar, Generic, Sequence
 from functools import wraps
-from sys import hexversion
-
-if hexversion < 0x03000000:
-    from itertools import imap as map  # pylint: disable=redefined-builtin
-    from itertools import izip as zip  # pylint: disable=redefined-builtin
-    try:
-        from thread import get_ident
-    except ImportError:
-        from dummy_thread import get_ident
-else:
-    from functools import reduce
-    try:
-        from _thread import get_ident
-    except ImportError:
-        from _dummy_thread import get_ident
+from functools import reduce
+try:
+    from _thread import get_ident
+except ImportError:
+    from _dummy_thread import get_ident
 
 
 def recursive_repr(fillvalue='...'):
@@ -81,8 +62,8 @@ def recursive_repr(fillvalue='...'):
 # END Python 2/3 Shims
 ###############################################################################
 
-
-class SortedList(MutableSequence):
+T = TypeVar('T', covariant=True)
+class SortedList(MutableSequence[T], Generic[T]):
     """Sorted list is a sorted mutable sequence.
 
     Sorted list values are maintained in sorted order.

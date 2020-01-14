@@ -16,24 +16,14 @@ Sorted set implementations:
 from itertools import chain
 from operator import eq, ne, gt, ge, lt, le
 from textwrap import dedent
+from typing import TypeVar, Generic, Sequence, MutableSet, Set
 
 from .sortedlist import SortedList, recursive_repr
 
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
 
-try:
-    from collections.abc import MutableSet, Sequence, Set
-except ImportError:
-    from collections import MutableSet, Sequence, Set
+T = TypeVar('T')
 
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
-
-
-class SortedSet(MutableSet, Sequence):
+class SortedSet(MutableSet[T], Sequence[T], Generic[T]):
     """Sorted set is a sorted mutable set.
 
     Sorted set values are maintained in sorted order. The design of sorted set
