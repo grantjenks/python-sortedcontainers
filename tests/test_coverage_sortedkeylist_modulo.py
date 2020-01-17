@@ -326,7 +326,7 @@ def test_reversed():
 
 def test_reverse():
     slt = SortedKeyList(range(10000), key=modulo)
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(AttributeError):
         slt.reverse()
 
 def test_islice():

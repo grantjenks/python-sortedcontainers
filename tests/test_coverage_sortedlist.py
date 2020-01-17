@@ -8,6 +8,11 @@ from sortedcontainers import SortedList
 from itertools import chain
 import pytest
 
+try:
+    from collections import abc
+except ImportError:
+    import collections as abc
+
 if hexversion < 0x03000000:
     from itertools import izip as zip
     range = xrange
@@ -266,7 +271,7 @@ def test_reversed():
 
 def test_reverse():
     slt = SortedList(range(10000))
-    with pytest.raises(NotImplementedError):
+    with pytest.raises(AttributeError):
         slt.reverse()
 
 def test_islice():
@@ -604,3 +609,29 @@ def test_check():
     slt._len = 5
     with pytest.raises(AssertionError):
         slt._check()
+
+
+@pytest.mark.parametrize("base_class_name",
+                         ["Sequence", "Reversible", "Iterable",
+                          "Sized", "Collection"])
+def test_abstract_base_classes(base_class_name):
+    # Some of these were introduced in later versions of Python
+    base_class = getattr(abc, base_class_name, None)
+    if base_class is None:
+        pytest.skip("%s introduced in a later version of Python" %
+                    base_class_name)
+
+    sl = SortedList()
+    assert isinstance(sl, base_class)
+
+
+def test_not_mutable_sequence_instance():
+    """
+    SortedList does not implement the MutableSequence interface, but has custom
+    behavior for all the methods of a MutableSquence, so we want to make sure
+    that it still fails an `isinstance` check.
+    """
+
+    sl = SortedList()
+    assert not isinstance(sl, abc.MutableSequence)
+    
