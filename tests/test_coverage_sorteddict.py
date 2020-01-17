@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import random, string
-from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
 from sys import hexversion

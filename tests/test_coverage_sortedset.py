@@ -3,7 +3,6 @@
 from sys import hexversion
 
 import random
-from .context import sortedcontainers
 from sortedcontainers import SortedSet
 import pytest
 

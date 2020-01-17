@@ -6,7 +6,6 @@ from sys import hexversion
 import copy
 import bisect
 import random
-from .context import sortedcontainers
 from sortedcontainers import SortedList
 from functools import wraps
 
