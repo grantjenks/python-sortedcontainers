@@ -5,6 +5,7 @@ from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
 from sys import hexversion
+import gc
 
 if hexversion < 0x03000000:
     range = xrange
@@ -474,3 +475,12 @@ def test_pickle():
     beta = pickle.loads(pickle.dumps(alpha))
     assert alpha == beta
     assert alpha._key == beta._key
+
+def test_ref_counts():
+    start_count = len(gc.get_objects())
+    temp = SortedDict()
+    init_count = len(gc.get_objects())
+    assert init_count > start_count
+    del temp
+    del_count = len(gc.get_objects())
+    assert start_count == del_count
