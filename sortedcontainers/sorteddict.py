@@ -369,7 +369,7 @@ class SortedDict(dict):
             def method(self):
                 # pylint: disable=missing-docstring,unused-argument
                 raise AttributeError(message)
-            method.__name__ = original
+            method.__name__ = original  # pylint: disable=non-str-assignment-to-dunder-name
             method.__doc__ = message
             return property(method)
 
