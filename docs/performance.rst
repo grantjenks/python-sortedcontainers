@@ -41,7 +41,7 @@ were found with various list, set, and dict implementations.
    Implemented in C. MIT License. Last updated April, 2017.  `bintrees on
    PyPI`_
 
-3. *sortedmap* -- Provides a fast, C++ implementation for dict data types.  Uses
+3. *sortedmap* -- Provides a fast, C++ implementation for dict data types. Uses
    the C++ standard library `std::map` data structure which is usually a
    red-black tree. Last updated February, 2016. `sortedmap on PyPI`_
 

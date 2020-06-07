@@ -7,6 +7,13 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.2.0 (2020-06-06)
+------------------
+
+**Miscellaneous**
+
+* Change SortedDict to avoid cycles for CPython reference counting.
+
 2.1.0 (2018-11-21)
 ------------------
 
