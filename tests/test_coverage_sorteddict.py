@@ -3,6 +3,8 @@
 import platform
 import random
 import string
+import warnings
+
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
@@ -316,16 +318,18 @@ def test_index():
     assert temp.index('f', 3, -3) == 5
 
 def test_iloc():
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert len(temp.iloc) == 26
-    assert temp.iloc[0] == 'a'
-    assert temp.iloc[-1] == 'z'
-    assert temp.iloc[-3:] == ['x', 'y', 'z']
-    del temp.iloc[0]
-    assert temp.iloc[0] == 'b'
-    del temp.iloc[-3:]
-    assert temp.iloc[-1] == 'w'
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', category=DeprecationWarning)
+        mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+        temp = SortedDict(mapping)
+        assert len(temp.iloc) == 26
+        assert temp.iloc[0] == 'a'
+        assert temp.iloc[-1] == 'z'
+        assert temp.iloc[-3:] == ['x', 'y', 'z']
+        del temp.iloc[0]
+        assert temp.iloc[0] == 'b'
+        del temp.iloc[-3:]
+        assert temp.iloc[-1] == 'w'
 
 def test_index_key():
     temp = SortedDict(negate, ((val, val) for val in range(100)))
