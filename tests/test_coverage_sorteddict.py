@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import random, string
+import platform
+import random
+import string
 from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
@@ -476,11 +478,12 @@ def test_pickle():
     assert alpha == beta
     assert alpha._key == beta._key
 
-def test_ref_counts():
-    start_count = len(gc.get_objects())
-    temp = SortedDict()
-    init_count = len(gc.get_objects())
-    assert init_count > start_count
-    del temp
-    del_count = len(gc.get_objects())
-    assert start_count == del_count
+if platform.python_implementation() == 'CPython':
+    def test_ref_counts():
+        start_count = len(gc.get_objects())
+        temp = SortedDict()
+        init_count = len(gc.get_objects())
+        assert init_count > start_count
+        del temp
+        del_count = len(gc.get_objects())
+        assert start_count == del_count
