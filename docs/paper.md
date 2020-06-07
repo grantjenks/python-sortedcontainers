@@ -20,12 +20,12 @@ bibliography: paper.bib
 # Summary
 
 The standard library of popular languages like C++, Java, and C# provide sorted
-container data types based on binary tree data structures. While Python has
-risen in popularity, the Standard Library still lacks these common data types.
-Part of the challenge has been Python's rich object model which makes binary
-trees implemented in Python slow in terms of both memory and processor
-usage. To overcome the overhead of the interpreter, C-extensions are used by
-the Python core developers. In doing so, flexibility is tradeoff for
+container data types based on binary tree data structures. While Python
+[-@python] has risen in popularity, the Standard Library still lacks these
+common data types.  Part of the challenge has been Python's rich object model
+which makes binary trees implemented in Python slow in terms of both memory and
+processor usage. To overcome the overhead of the interpreter, C-extensions are
+used by the Python core developers. In doing so, flexibility is tradeoff for
 performance. The goal of the Python core developers is to provide the right set
 of high-level APIs so that algorithms and data structures can be implemented
 efficiently. The Python Sorted Containers library uses Python's high-level APIs
@@ -64,26 +64,27 @@ object-oriented interface. Externally, SQLite in-memory indexes, Pandas
 DataFrame indexes, and Redis sorted sets provide similar functionality. These
 data structures are applied in priority queue, multiset, nearest neighbors,
 intervals, and ranking algorithms. Sorted Containers is used by scientific open
-source projects such as: Angr, a binary analysis platform from UC Santa
-Barbara; Astropy, a community Python package for astronomy; Dask Distributed, a
-library for dynamic task scheduling by Anaconda; Trio, an asynchronous I/O
-library; and Zipline, an algorithmic trading library by Quantopian. The source
-code for ``Sorted Containers`` has been archived to Zenodo with the linked DOI:
-[@zenodo]
+source projects such as: Angr [-@angr-shoshitaishvili2016state], a binary
+analysis platform from UC Santa Barbara; Astropy [-@astropy:2018], a community
+Python package for astronomy; Dask Distributed
+[-@dask-matthew_rocklin-proc-scipy-2015], a library for dynamic task scheduling
+by Anaconda; Trio [-@trio], an asynchronous I/O library; and Zipline
+[-@zipline], an algorithmic trading library by Quantopian.
 
 # Acknowledgements
 
-Thank you to Daniel Stutzbach for the "blist" software project to which Sorted
-Containers owes much of the original interface design.
+Thank you to Daniel Stutzbach for the "blist" [-@blist] software project to
+which Sorted Containers owes much of the original interface design.
 
-Thank you to Raymond Hettinger for the "SortedCollection" recipe which
-originally inspired the support and design of the "key" parameter feature.
+Thank you to Raymond Hettinger for the "SortedCollection" recipe
+[-@sortedcollection] which originally inspired the support and design of the
+"key" parameter feature.
 
-Thank you to Manfred Moitzi for the "bintrees" software project which motivated
-the range-based tree traversal interfaces.
+Thank you to Manfred Moitzi for the "bintrees" software project [-@bintrees]
+which motivated the range-based tree traversal interfaces.
 
 Thank you to Dan Stromberg for the benchmark comparisons of less common binary
-tree data structures like treap, splay, and scapegoat.
+tree data structures [-@dan-stromberg] like treap, splay, and scapegoat.
 
 Thank you to the open source community that has contributed bug reports,
 documentation improvements, and feature guidance in development of the project.

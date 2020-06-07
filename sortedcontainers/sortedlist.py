@@ -16,6 +16,9 @@ Sorted list implementations:
 # pylint: disable=too-many-lines
 from __future__ import print_function
 
+import sys
+import traceback
+
 from bisect import bisect_left, bisect_right, insort
 from itertools import chain, repeat, starmap
 from math import log
@@ -1658,8 +1661,6 @@ class SortedList(MutableSequence):
                         child_sum = self._index[child] + self._index[child + 1]
                         assert child_sum == self._index[pos]
         except:
-            import sys
-            import traceback
             traceback.print_exc(file=sys.stdout)
             print('len', self._len)
             print('load', self._load)
@@ -2617,8 +2618,6 @@ class SortedKeyList(SortedList):
                         child_sum = self._index[child] + self._index[child + 1]
                         assert child_sum == self._index[pos]
         except:
-            import sys
-            import traceback
             traceback.print_exc(file=sys.stdout)
             print('len', self._len)
             print('load', self._load)
