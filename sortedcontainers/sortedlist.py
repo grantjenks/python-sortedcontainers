@@ -840,14 +840,21 @@ class SortedList(MutableSequence):
             start, stop, step = index.indices(self._len)
 
             if step == 1 and start < stop:
+                # Whole slice optimization: start to stop slices the whole
+                # sorted list.
+
                 if start == 0 and stop == self._len:
                     return reduce(iadd, self._lists, [])
 
                 start_pos, start_idx = self._pos(start)
+                start_list = _lists[start_pos]
+                stop_idx = start_idx + stop - start
 
-                slice_len = stop - start
-                if len(_lists[start_pos]) >= start_idx + slice_len:
-                    return _lists[start_pos][start_idx:start_idx+slice_len]
+                # Small slice optimization: start index and stop index are
+                # within the start list.
+
+                if len(start_list) >= stop_idx:
+                    return start_list[start_idx:stop_idx]
 
                 if stop == self._len:
                     stop_pos = len(_lists) - 1
