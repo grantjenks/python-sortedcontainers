@@ -7,6 +7,14 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.2.2 (2020-06-07)
+------------------
+
+**Miscellaneous**
+
+* Add "small slice" optimization to `SortedList.__getitem__`.
+* Silence warning when testing `SortedList.iloc`.
+
 2.2.1 (2020-06-06)
 ------------------
 
