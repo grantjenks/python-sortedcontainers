@@ -519,7 +519,7 @@ class SortedSet(MutableSet, Sequence):
         """
         _set = self._set
         _list = self._list
-        values = set(chain(*iterables))
+        values = set(chain.from_iterable(iterables))
         if (4 * len(values)) > len(_set):
             _set.difference_update(values)
             _list.clear()
@@ -655,7 +655,7 @@ class SortedSet(MutableSet, Sequence):
         :return: new sorted set
 
         """
-        return self.__class__(chain(iter(self), *iterables), key=self._key)
+        return self.__class__(chain(iter(self), chain.from_iterable(iterables)), key=self._key)
 
     __or__ = union
     __ror__ = __or__
@@ -679,7 +679,7 @@ class SortedSet(MutableSet, Sequence):
         """
         _set = self._set
         _list = self._list
-        values = set(chain(*iterables))
+        values = set(chain.from_iterable(iterables))
         if (4 * len(values)) > len(_set):
             _list = self._list
             _set.update(values)
