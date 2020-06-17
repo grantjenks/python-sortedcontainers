@@ -655,7 +655,8 @@ class SortedSet(MutableSet, Sequence):
         :return: new sorted set
 
         """
-        return self.__class__(chain(iter(self), chain.from_iterable(iterables)), key=self._key)
+        return self.__class__(chain(iter(self), chain.from_iterable(iterables)),
+                              key=self._key)
 
     __or__ = union
     __ror__ = __or__
