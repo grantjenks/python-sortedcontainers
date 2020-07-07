@@ -12,7 +12,9 @@ jobs:
       with:
         python-version: 3.8
     - name: Run Pylint
-      run: tox -e pylint
+      run: |
+        pip install tox
+        tox -e pylint
 
   tests:
     needs: checks
@@ -47,6 +49,7 @@ jobs:
 
     - name: Test with tox
       run: |
+        pip install tox
         tox -e py
 
   build-linux-cp35:
