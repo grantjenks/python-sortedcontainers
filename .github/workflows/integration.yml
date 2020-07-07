@@ -201,7 +201,7 @@ jobs:
         path: dist
 
   upload:
-    if: startsWith(github.ref, "version-")
+    if: startsWith(github.ref, 'version-')
     needs: [build-linux-cp35, build-linux-cp36, build-linux-cp37, build-linux-cp38, build-macos, build-windows]
     runs-on: ubuntu-latest
 
