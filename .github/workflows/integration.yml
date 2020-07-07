@@ -59,6 +59,7 @@ jobs:
         tox -e py
 
   build-linux-cp35:
+    needs: tests
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2014_x86_64
 
