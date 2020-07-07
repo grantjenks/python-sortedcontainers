@@ -58,6 +58,31 @@ jobs:
       run: |
         tox -e py
 
+  build-linux-cp35:
+    runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2014_x86_64
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Python package dependencies
+      run: /opt/python/cp35-cp35m/bin/python -m pip install cython wheel
+
+    - name: Build binary wheel
+      run: /opt/python/cp35-cp35m/bin/python setup.py bdist_wheel
+
+    - name: Apply auditwheel
+      run: auditwheel repair -w dist dist/*
+
+    - name: Remove linux wheel
+      run: rm dist/*-linux_x86_64.whl
+
+    - name: Archive dist artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist-linux-3.5
+        path: dist
+
   build-linux-cp36:
     needs: tests
     runs-on: ubuntu-latest
