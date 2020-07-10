@@ -603,3 +603,10 @@ def test_check():
     slt._len = 5
     with pytest.raises(AssertionError):
         slt._check()
+
+try:
+    import Cython
+    def test_cython():
+        assert SortedList.__module__ == 'sortedcontainers._sortedlist'
+except ImportError:
+    pass

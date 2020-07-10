@@ -476,3 +476,10 @@ def test_pickle():
     beta = pickle.loads(data)
     assert alpha == beta
     assert alpha._key == beta._key
+
+try:
+    import Cython
+    def test_cython():
+        assert SortedSet.__module__ == 'sortedcontainers._sortedset'
+except ImportError:
+    pass
