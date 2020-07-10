@@ -69,8 +69,8 @@ jobs:
     - name: Apply auditwheel
       run: auditwheel repair -w .tox/dist .tox/dist/*
 
-    # - name: Remove linux wheel
-    #   run: rm dist/*-linux_x86_64.whl
+    - name: Remove linux wheel
+      run: rm .tox/dist/*-linux_x86_64.whl
 
     - name: Archive dist artifacts
       uses: actions/upload-artifact@v2
