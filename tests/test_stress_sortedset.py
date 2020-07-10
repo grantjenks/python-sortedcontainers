@@ -4,7 +4,6 @@ from __future__ import print_function
 from sys import hexversion
 
 import random
-from .context import sortedcontainers
 from sortedcontainers import SortedSet
 from functools import wraps
 import operator

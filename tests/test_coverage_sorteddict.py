@@ -5,7 +5,6 @@ import random
 import string
 import warnings
 
-from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
 from sys import hexversion

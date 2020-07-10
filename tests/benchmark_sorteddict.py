@@ -54,7 +54,6 @@ def fill_values(obj, size):
 
 # Implementation imports.
 
-from .context import sortedcontainers
 from sortedcontainers import SortedDict
 kinds['SortedDict'] = SortedDict
 
