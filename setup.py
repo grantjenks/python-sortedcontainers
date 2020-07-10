@@ -18,7 +18,7 @@ class Tox(TestCommand):
 with open('README.rst') as reader:
     readme = reader.read()
 
-setup(
+args = dict(
     name=sortedcontainers.__title__,
     version=sortedcontainers.__version__,
     description='Sorted Containers -- Sorted List, Sorted Dict, Sorted Set',
@@ -37,16 +37,27 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
+
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    pass
+else:
+    from setuptools import Extension
+    ext_modules = [
+        Extension('sortedcontainers._sortedlist', ['sortedcontainers/sortedlist.py']),
+        Extension('sortedcontainers._sorteddict', ['sortedcontainers/sorteddict.py']),
+        Extension('sortedcontainers._sortedset', ['sortedcontainers/sortedset.py']),
+    ]
+    args.update(ext_modules=cythonize(ext_modules))
+
+setup(**args)
