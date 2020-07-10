@@ -156,34 +156,38 @@ jobs:
   #       name: dist-linux-3.8
   #       path: dist
 
-  # build-macos:
-  #   needs: tests
-  #   runs-on: macos-latest
-  #   strategy:
-  #     max-parallel: 4
-  #     matrix:
-  #       python-version: [3.5, 3.6, 3.7, 3.8]
+  build-macos:
+    # needs: tests
+    runs-on: macos-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        config:
+        - {python-version: 3.5, toxenv: py35-cython}
+        - {python-version: 3.6, toxenv: py36-cython}
+        - {python-version: 3.7, toxenv: py37-cython}
+        - {python-version: 3.8, toxenv: py38-cython}
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Set up Python ${{ matrix.python-version }} x64
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: ${{ matrix.python-version }}
-  #       architecture: x64
+    - name: Set up Python ${{ matrix.config.python-version }} x64
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.python-version }}
+        architecture: x64
 
-  #   - name: Install Python package dependencies
-  #     run: pip install cython wheel
+    - name: Install Python package dependencies
+      run: pip install tox tox-wheel
 
-  #   - name: Build binary wheel
-  #     run: python setup.py bdist_wheel
+    - name: Build binary wheel
+      run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
 
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-macos-${{ matrix.python-version }}
-  #       path: dist
+    - name: Archive dist artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist-macos-${{ matrix.config.python-version }}
+        path: .tox/dist
 
   # build-windows:
   #   needs: tests
