@@ -76,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: dist-linux-3.5
-        path: dist
+        path: .tox/dist
 
   # build-linux-cp36:
   #   needs: tests
