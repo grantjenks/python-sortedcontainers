@@ -78,7 +78,7 @@ jobs:
           - {container: manylinux2010_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2010-x64}
           - {container: manylinux2014_aarch64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2014-aarch64}
     runs-on: ubuntu-latest
-    container: ${{ matrix.config.container }}
+    container: quay.io/pypa/${{ matrix.config.container }}
 
     steps:
     - uses: actions/checkout@v2
