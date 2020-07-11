@@ -54,6 +54,7 @@ jobs:
   #       tox -e py
 
   build-linux:
+    # needs: tests
     strategy:
       matrix:
         config:
@@ -84,110 +85,6 @@ jobs:
       with:
         name: dist-linux-${{ matrix.config.tag }}
         path: .tox/dist
-
-  # build-linux-cp35:
-  #   # needs: tests
-  #   runs-on: ubuntu-latest
-  #   container: quay.io/pypa/manylinux2014_x86_64
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Install Python package dependencies
-  #     run: /opt/python/cp35-cp35m/bin/python -m pip install tox tox-wheel
-
-  #   - name: Build binary wheel
-  #     run: /opt/python/cp35-cp35m/bin/python -m tox -e py35-cython --wheel
-
-  #   - name: Apply auditwheel
-  #     run: auditwheel repair -w .tox/dist .tox/dist/*
-
-  #   - name: Remove linux wheel
-  #     run: rm .tox/dist/*-linux_x86_64.whl
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-linux-3.5
-  #       path: .tox/dist
-
-  # build-linux-cp36:
-  #   needs: tests
-  #   runs-on: ubuntu-latest
-  #   container: quay.io/pypa/manylinux2014_x86_64
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Install Python package dependencies
-  #     run: /opt/python/cp36-cp36m/bin/python -m pip install cython wheel
-
-  #   - name: Build binary wheel
-  #     run: /opt/python/cp36-cp36m/bin/python setup.py bdist_wheel
-
-  #   - name: Apply auditwheel
-  #     run: auditwheel repair -w dist dist/*
-
-  #   - name: Remove linux wheel
-  #     run: rm dist/*-linux_x86_64.whl
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-linux-3.6
-  #       path: dist
-
-  # build-linux-cp37:
-  #   needs: tests
-  #   runs-on: ubuntu-latest
-  #   container: quay.io/pypa/manylinux2014_x86_64
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Install Python package dependencies
-  #     run: /opt/python/cp37-cp37m/bin/python -m pip install cython wheel
-
-  #   - name: Build binary wheel
-  #     run: /opt/python/cp37-cp37m/bin/python setup.py bdist_wheel
-
-  #   - name: Apply auditwheel
-  #     run: auditwheel repair -w dist dist/*
-
-  #   - name: Remove linux wheel
-  #     run: rm dist/*-linux_x86_64.whl
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-linux-3.7
-  #       path: dist
-
-  # build-linux-cp38:
-  #   needs: tests
-  #   runs-on: ubuntu-latest
-  #   container: quay.io/pypa/manylinux2014_x86_64
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Install Python package dependencies
-  #     run: /opt/python/cp38-cp38/bin/python -m pip install cython wheel
-
-  #   - name: Build binary wheel
-  #     run: /opt/python/cp38-cp38/bin/python setup.py bdist_wheel
-
-  #   - name: Apply auditwheel for manylinux wheel
-  #     run: auditwheel repair -w dist dist/*
-
-  #   - name: Remove linux wheel
-  #     run: rm dist/*-linux_x86_64.whl
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-linux-3.8
-  #       path: dist
 
   # TODO: https://github.com/matthew-brett/delocate
   # build-macos:
@@ -223,41 +120,48 @@ jobs:
   #       name: dist-macos-${{ matrix.config.python-version }}
   #       path: .tox/dist
 
-  # TODO: Include x64 and x86 builds
-  # build-windows:
-  #   needs: tests
-  #   runs-on: windows-latest
-  #   strategy:
-  #     max-parallel: 3
-  #     matrix:
-  #       python-version: [3.6, 3.7, 3.8]
+  build-windows:
+    # needs: tests
+    runs-on: windows-latest
+    strategy:
+      max-parallel: 3
+      matrix:
+        config:
+          - {py: 3.5, arch: x86, toxenv: py35-cython, tag: cy35-x86}
+          - {py: 3.5, arch: x64, toxenv: py35-cython, tag: cy35-x64}
+          - {py: 3.6, arch: x86, toxenv: py36-cython, tag: cy36-x86}
+          - {py: 3.6, arch: x64, toxenv: py36-cython, tag: cy36-x64}
+          - {py: 3.7, arch: x86, toxenv: py37-cython, tag: cy37-x86}
+          - {py: 3.7, arch: x64, toxenv: py37-cython, tag: cy37-x64}
+          - {py: 3.8, arch: x86, toxenv: py38-cython, tag: cy38-x86}
+          - {py: 3.8, arch: x64, toxenv: py38-cython, tag: cy38-x64}
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  #   - name: Download Build Tools for Visual Studio 2019
-  #     run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
+    - name: Download Build Tools for Visual Studio 2019
+      run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
 
-  #   - name: Run vs_buildtools.exe install
-  #     run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended
+    - name: Run vs_buildtools.exe install
+      run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended
 
-  #   - name: Set up Python ${{ matrix.python-version }} x64
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: ${{ matrix.python-version }}
-  #       architecture: x64
+    - name: Set up Python ${{ matrix.config.py }} ${{ matrix.config.arch }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config.py }}
+        architecture: ${{ matrix.config.arch }}
 
-  #   - name: Install Python package dependencies
-  #     run: pip install cython wheel
+    - name: Install Python package dependencies
+      run: pip install tox tox-wheel
 
-  #   - name: Build binary wheel
-  #     run: python setup.py bdist_wheel
+    - name: Build binary wheel
+      run: tox -e ${{ matrix.config.toxenv }} --wheel
 
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-windows-${{ matrix.python-version }}
-  #       path: dist
+    - name: Archive dist artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist-windows-${{ matrix.config.tag }}
+        path: dist
 
   # upload:
   #   if: startsWith(github.ref, 'version-')
