@@ -1,3 +1,4 @@
+# TODO: https://github.com/joerick/cibuildwheel
 name: integration
 
 on: push
@@ -52,31 +53,79 @@ jobs:
   #       pip install tox
   #       tox -e py
 
-  build-linux-cp35:
-    # needs: tests
+  build-linux:
+    strategy:
+      matrix:
+        config:
+          - {container: manylinux1_i686, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-1-x86}
+          - {container: manylinux1_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-1-x64}
+          - {container: manylinux2010_i686, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2010-x86}
+          - {container: manylinux2010_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2010-x64}
+          - {container: manylinux2014_aarch64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2014-aarch64}
+          - {container: manylinux1_i686, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-1-x86}
+          - {container: manylinux1_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-1-x64}
+          - {container: manylinux2010_i686, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2010-x86}
+          - {container: manylinux2010_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2010-x64}
+          - {container: manylinux2014_aarch64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2014-aarch64}
+          - {container: manylinux1_i686, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-1-x86}
+          - {container: manylinux1_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-1-x64}
+          - {container: manylinux2010_i686, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2010-x86}
+          - {container: manylinux2010_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2010-x64}
+          - {container: manylinux2014_aarch64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2014-aarch64}
+          - {container: manylinux1_i686, python: cp38-cp38, toxenv: py38-cython, tag: cy38-1-x86}
+          - {container: manylinux1_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-1-x64}
+          - {container: manylinux2010_i686, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2010-x86}
+          - {container: manylinux2010_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2010-x64}
+          - {container: manylinux2014_aarch64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2014-aarch64}
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2014_x86_64
+    container: ${{ matrix.config.container }}
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Install Python package dependencies
-      run: /opt/python/cp35-cp35m/bin/python -m pip install tox tox-wheel
+      run: /opt/python/${{ matrix.config.python }}/bin/python -m pip install tox tox-wheel
 
     - name: Build binary wheel
-      run: /opt/python/cp35-cp35m/bin/python -m tox -e py35-cython --wheel
+      run: /opt/python/${{ matrix.config.python }}/bin/python -m tox -e ${{ matrix.config.toxenv }} --wheel
 
     - name: Apply auditwheel
       run: auditwheel repair -w .tox/dist .tox/dist/*
 
     - name: Remove linux wheel
-      run: rm .tox/dist/*-linux_x86_64.whl
+      run: rm .tox/dist/*-linux_*.whl
 
     - name: Archive dist artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: dist-linux-3.5
+        name: dist-linux-${{ matrix.config.tag }}
         path: .tox/dist
+
+  # build-linux-cp35:
+  #   # needs: tests
+  #   runs-on: ubuntu-latest
+  #   container: quay.io/pypa/manylinux2014_x86_64
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Install Python package dependencies
+  #     run: /opt/python/cp35-cp35m/bin/python -m pip install tox tox-wheel
+
+  #   - name: Build binary wheel
+  #     run: /opt/python/cp35-cp35m/bin/python -m tox -e py35-cython --wheel
+
+  #   - name: Apply auditwheel
+  #     run: auditwheel repair -w .tox/dist .tox/dist/*
+
+  #   - name: Remove linux wheel
+  #     run: rm .tox/dist/*-linux_x86_64.whl
+
+  #   - name: Archive dist artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: dist-linux-3.5
+  #       path: .tox/dist
 
   # build-linux-cp36:
   #   needs: tests
@@ -156,39 +205,41 @@ jobs:
   #       name: dist-linux-3.8
   #       path: dist
 
-  build-macos:
-    # needs: tests
-    runs-on: macos-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        config:
-        - {python-version: 3.5, toxenv: py35-cython}
-        - {python-version: 3.6, toxenv: py36-cython}
-        - {python-version: 3.7, toxenv: py37-cython}
-        - {python-version: 3.8, toxenv: py38-cython}
+  # TODO: https://github.com/matthew-brett/delocate
+  # build-macos:
+  #   # needs: tests
+  #   runs-on: macos-latest
+  #   strategy:
+  #     max-parallel: 4
+  #     matrix:
+  #       config:
+  #       - {python-version: 3.5, toxenv: py35-cython}
+  #       - {python-version: 3.6, toxenv: py36-cython}
+  #       - {python-version: 3.7, toxenv: py37-cython}
+  #       - {python-version: 3.8, toxenv: py38-cython}
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.config.python-version }} x64
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.config.python-version }}
-        architecture: x64
+  #   - name: Set up Python ${{ matrix.config.python-version }} x64
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: ${{ matrix.config.python-version }}
+  #       architecture: x64
 
-    - name: Install Python package dependencies
-      run: pip install tox tox-wheel
+  #   - name: Install Python package dependencies
+  #     run: pip install tox tox-wheel
 
-    - name: Build binary wheel
-      run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
+  #   - name: Build binary wheel
+  #     run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
 
-    - name: Archive dist artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist-macos-${{ matrix.config.python-version }}
-        path: .tox/dist
+  #   - name: Archive dist artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: dist-macos-${{ matrix.config.python-version }}
+  #       path: .tox/dist
 
+  # TODO: Include x64 and x86 builds
   # build-windows:
   #   needs: tests
   #   runs-on: windows-latest
