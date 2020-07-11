@@ -53,38 +53,38 @@ jobs:
   #       pip install tox
   #       tox -e py
 
-  build-linux:
-    # needs: tests
-    strategy:
-      matrix:
-        config:
-          - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35}
-          - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36}
-          - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37}
-          - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38}
-    runs-on: ubuntu-latest
-    container: quay.io/pypa/${{ matrix.config.container }}
+  # build-linux:
+  #   needs: tests
+  #   strategy:
+  #     matrix:
+  #       config:
+  #         - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35}
+  #         - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36}
+  #         - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37}
+  #         - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38}
+  #   runs-on: ubuntu-latest
+  #   container: quay.io/pypa/${{ matrix.config.container }}
 
-    steps:
-    - uses: actions/checkout@v2
+  #   steps:
+  #   - uses: actions/checkout@v2
 
-    - name: Install Python package dependencies
-      run: /opt/python/${{ matrix.config.python }}/bin/python -m pip install tox tox-wheel
+  #   - name: Install Python package dependencies
+  #     run: /opt/python/${{ matrix.config.python }}/bin/python -m pip install tox tox-wheel
 
-    - name: Build binary wheel
-      run: /opt/python/${{ matrix.config.python }}/bin/python -m tox -e ${{ matrix.config.toxenv }} --wheel
+  #   - name: Build binary wheel
+  #     run: /opt/python/${{ matrix.config.python }}/bin/python -m tox -e ${{ matrix.config.toxenv }} --wheel
 
-    - name: Apply auditwheel
-      run: auditwheel repair -w .tox/dist .tox/dist/*
+  #   - name: Apply auditwheel
+  #     run: auditwheel repair -w .tox/dist .tox/dist/*
 
-    - name: Remove linux wheel
-      run: rm .tox/dist/*-linux_x86_64.whl
+  #   - name: Remove linux wheel
+  #     run: rm .tox/dist/*-linux_x86_64.whl
 
-    - name: Archive dist artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist-linux-${{ matrix.config.tag }}
-        path: .tox/dist
+  #   - name: Archive dist artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: dist-linux-${{ matrix.config.tag }}
+  #       path: .tox/dist
 
   # TODO: https://github.com/matthew-brett/delocate
   # build-macos:
@@ -161,7 +161,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: dist-windows-${{ matrix.config.tag }}
-        path: dist
+        path: .tox/dist
 
   # upload:
   #   if: startsWith(github.ref, 'version-')
