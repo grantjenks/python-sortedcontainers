@@ -57,18 +57,18 @@ jobs:
     strategy:
       matrix:
         config:
-          - {container: manylinux2010_i686, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2010-x86}
-          - {container: manylinux2010_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2010-x64}
-          - {container: manylinux2014_aarch64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-2014-aarch64}
-          - {container: manylinux2010_i686, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2010-x86}
-          - {container: manylinux2010_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2010-x64}
-          - {container: manylinux2014_aarch64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-2014-aarch64}
-          - {container: manylinux2010_i686, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2010-x86}
-          - {container: manylinux2010_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2010-x64}
-          - {container: manylinux2014_aarch64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-2014-aarch64}
-          - {container: manylinux2010_i686, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2010-x86}
-          - {container: manylinux2010_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2010-x64}
-          - {container: manylinux2014_aarch64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-2014-aarch64}
+          - {container: manylinux2014_i686, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-x86}
+          - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-x64}
+          - {container: manylinux2014_aarch64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-aarch64}
+          - {container: manylinux2014_i686, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-x86}
+          - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-x64}
+          - {container: manylinux2014_aarch64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-aarch64}
+          - {container: manylinux2014_i686, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-x86}
+          - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-x64}
+          - {container: manylinux2014_aarch64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-aarch64}
+          - {container: manylinux2014_i686, python: cp38-cp38, toxenv: py38-cython, tag: cy38-x86}
+          - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-x64}
+          - {container: manylinux2014_aarch64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-aarch64}
     runs-on: ubuntu-latest
     container: quay.io/pypa/${{ matrix.config.container }}
 
