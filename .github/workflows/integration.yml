@@ -57,18 +57,10 @@ jobs:
     strategy:
       matrix:
         config:
-          - {container: manylinux2014_i686, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-x86}
-          - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-x64}
-          - {container: manylinux2014_aarch64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35-aarch64}
-          - {container: manylinux2014_i686, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-x86}
-          - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-x64}
-          - {container: manylinux2014_aarch64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36-aarch64}
-          - {container: manylinux2014_i686, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-x86}
-          - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-x64}
-          - {container: manylinux2014_aarch64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37-aarch64}
-          - {container: manylinux2014_i686, python: cp38-cp38, toxenv: py38-cython, tag: cy38-x86}
-          - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-x64}
-          - {container: manylinux2014_aarch64, python: cp38-cp38, toxenv: py38-cython, tag: cy38-aarch64}
+          - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35}
+          - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36}
+          - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37}
+          - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38}
     runs-on: ubuntu-latest
     container: quay.io/pypa/${{ matrix.config.container }}
 
@@ -85,7 +77,7 @@ jobs:
       run: auditwheel repair -w .tox/dist .tox/dist/*
 
     - name: Remove linux wheel
-      run: rm .tox/dist/*-linux_*.whl
+      run: rm .tox/dist/*-linux_x86_64.whl
 
     - name: Archive dist artifacts
       uses: actions/upload-artifact@v2
