@@ -5,7 +5,7 @@ from sys import hexversion
 import random
 from .context import sortedcontainers
 from sortedcontainers import SortedKeyList, SortedListWithKey
-from itertools import chain
+from itertools import chain, repeat
 import pytest
 
 if hexversion < 0x03000000:
@@ -83,6 +83,18 @@ def test_update():
 
     values = sorted((val for val in chain(range(100), range(1000), range(10000))), key=negate)
     assert all(tup[0] == tup[1] for tup in zip(slt, values))
+
+def test_update_order_consistency():
+    slt = SortedKeyList(key=lambda x: x[0])
+
+    it1 = list(zip(repeat(0), range(4)))
+    it2 = list(zip(repeat(0), range(5)))
+
+    slt.update(it1)
+    slt.update(it2)
+    slt._check()
+
+    assert all(tup[0] == tup[1] for tup in zip(slt, chain(it1, it2)))
 
 def test_contains():
     slt = SortedKeyList(key=negate)
