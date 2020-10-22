@@ -85,16 +85,43 @@ def test_update():
     assert all(tup[0] == tup[1] for tup in zip(slt, values))
 
 def test_update_order_consistency():
-    slt = SortedKeyList(key=lambda x: x[0])
+    def negate_el0(tup):
+        return -tup[0]
 
-    it1 = list(zip(repeat(0), range(4)))
-    it2 = list(zip(repeat(0), range(5)))
+    slt1 = SortedKeyList(key=negate_el0)
+    slt2 = SortedKeyList(key=negate_el0)
 
-    slt.update(it1)
-    slt.update(it2)
-    slt._check()
+    def add_from_iterable(slt, it):
+        for item in it:
+            slt.add(item)
 
-    assert all(tup[0] == tup[1] for tup in zip(slt, chain(it1, it2)))
+    def add_from_all_iterables(slt, its):
+        for it in its:
+            add_from_iterable(slt, it)
+
+    def update_from_all_iterables(slt, its):
+        for it in its:
+            slt.update(it)
+
+    # the following iterators are set up (from large to small) such that they
+    # attempt to force the two kinds of internal update logic (extending upon
+    # the incoming iterable or appending to the existing elements by use of
+    # `add()`)
+    it1 = list(zip(repeat(0), range(5)))
+    it2 = list(zip(repeat(0), range(4)))
+    it3 = list(zip(repeat(0), range(3)))
+    it4 = list(zip(repeat(0), range(2)))
+    it5 = list(zip(repeat(0), range(1)))
+
+    it12345 = [it1, it2, it3, it4, it5]
+
+    add_from_all_iterables(slt1, it12345)
+    update_from_all_iterables(slt2, it12345)
+
+    slt1._check()
+    slt2._check()
+
+    assert all(tup[0] == tup[1] for tup in zip(slt1, slt2))
 
 def test_contains():
     slt = SortedKeyList(key=negate)
