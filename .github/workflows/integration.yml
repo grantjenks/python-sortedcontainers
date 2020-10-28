@@ -87,81 +87,82 @@ jobs:
   #       path: .tox/dist
 
   # TODO: https://github.com/matthew-brett/delocate
-  # build-macos:
-  #   # needs: tests
-  #   runs-on: macos-latest
-  #   strategy:
-  #     max-parallel: 4
-  #     matrix:
-  #       config:
-  #       - {python-version: 3.5, toxenv: py35-cython}
-  #       - {python-version: 3.6, toxenv: py36-cython}
-  #       - {python-version: 3.7, toxenv: py37-cython}
-  #       - {python-version: 3.8, toxenv: py38-cython}
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Set up Python ${{ matrix.config.python-version }} x64
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: ${{ matrix.config.python-version }}
-  #       architecture: x64
-
-  #   - name: Install Python package dependencies
-  #     run: pip install tox tox-wheel
-
-  #   - name: Build binary wheel
-  #     run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-macos-${{ matrix.config.python-version }}
-  #       path: .tox/dist
-
-  build-windows:
+  # Get 10_9 in the name!
+  build-macos:
     # needs: tests
-    runs-on: windows-latest
+    runs-on: macos-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 4
       matrix:
         config:
-          - {py: 3.5, arch: x86, toxenv: py35-cython, tag: cy35-x86}
-          - {py: 3.5, arch: x64, toxenv: py35-cython, tag: cy35-x64}
-          - {py: 3.6, arch: x86, toxenv: py36-cython, tag: cy36-x86}
-          - {py: 3.6, arch: x64, toxenv: py36-cython, tag: cy36-x64}
-          - {py: 3.7, arch: x86, toxenv: py37-cython, tag: cy37-x86}
-          - {py: 3.7, arch: x64, toxenv: py37-cython, tag: cy37-x64}
-          - {py: 3.8, arch: x86, toxenv: py38-cython, tag: cy38-x86}
-          - {py: 3.8, arch: x64, toxenv: py38-cython, tag: cy38-x64}
+        - {python-version: 3.5, toxenv: py35-cython}
+        - {python-version: 3.6, toxenv: py36-cython}
+        - {python-version: 3.7, toxenv: py37-cython}
+        - {python-version: 3.8, toxenv: py38-cython}
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Download Build Tools for Visual Studio 2019
-      run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
-
-    - name: Run vs_buildtools.exe install
-      run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended
-
-    - name: Set up Python ${{ matrix.config.py }} ${{ matrix.config.arch }}
+    - name: Set up Python ${{ matrix.config.python-version }} x64
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.py }}
-        architecture: ${{ matrix.config.arch }}
+        python-version: ${{ matrix.config.python-version }}
+        architecture: x64
 
     - name: Install Python package dependencies
       run: pip install tox tox-wheel
 
     - name: Build binary wheel
-      run: tox -e ${{ matrix.config.toxenv }} --wheel
+      run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
 
     - name: Archive dist artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: dist-windows-${{ matrix.config.tag }}
+        name: dist-macos-${{ matrix.config.python-version }}
         path: .tox/dist
+
+  # build-windows:
+  #   needs: tests
+  #   runs-on: windows-latest
+  #   strategy:
+  #     max-parallel: 3
+  #     matrix:
+  #       config:
+  #         - {py: 3.5, arch: x86, toxenv: py35-cython, tag: cy35-x86}
+  #         - {py: 3.5, arch: x64, toxenv: py35-cython, tag: cy35-x64}
+  #         - {py: 3.6, arch: x86, toxenv: py36-cython, tag: cy36-x86}
+  #         - {py: 3.6, arch: x64, toxenv: py36-cython, tag: cy36-x64}
+  #         - {py: 3.7, arch: x86, toxenv: py37-cython, tag: cy37-x86}
+  #         - {py: 3.7, arch: x64, toxenv: py37-cython, tag: cy37-x64}
+  #         - {py: 3.8, arch: x86, toxenv: py38-cython, tag: cy38-x86}
+  #         - {py: 3.8, arch: x64, toxenv: py38-cython, tag: cy38-x64}
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Download Build Tools for Visual Studio 2019
+  #     run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
+
+  #   - name: Run vs_buildtools.exe install
+  #     run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended
+
+  #   - name: Set up Python ${{ matrix.config.py }} ${{ matrix.config.arch }}
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: ${{ matrix.config.py }}
+  #       architecture: ${{ matrix.config.arch }}
+
+  #   - name: Install Python package dependencies
+  #     run: pip install tox tox-wheel
+
+  #   - name: Build binary wheel
+  #     run: tox -e ${{ matrix.config.toxenv }} --wheel
+
+  #   - name: Archive dist artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: dist-windows-${{ matrix.config.tag }}
+  #       path: .tox/dist
 
   # upload:
   #   if: startsWith(github.ref, 'version-')

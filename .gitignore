@@ -1,6 +1,10 @@
 # Python byte-code
 *.py[co]
 
+# Extension code
+*.c
+*.so
+
 # virutalenv directories
 /env*/
 
