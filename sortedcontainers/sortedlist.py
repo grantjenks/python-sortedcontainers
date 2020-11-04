@@ -339,7 +339,8 @@ class SortedList(MutableSequence):
 
         if _maxes:
             if len(values) * 4 >= self._len:
-                values.extend(chain.from_iterable(_lists))
+                _lists.append(values)
+                values = reduce(iadd, _lists, [])
                 values.sort()
                 self._clear()
             else:
@@ -1878,7 +1879,8 @@ class SortedKeyList(SortedList):
 
         if _maxes:
             if len(values) * 4 >= self._len:
-                values.extend(chain.from_iterable(_lists))
+                _lists.append(values)
+                values = reduce(iadd, _lists, [])
                 values.sort(key=self._key)
                 self._clear()
             else:
