@@ -7,6 +7,13 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.3.0 (2020-11-08)
+------------------
+
+**Bugfixes**
+
+* Make sort order stable when updating with large iterables.
+
 2.2.2 (2020-06-07)
 ------------------
 
