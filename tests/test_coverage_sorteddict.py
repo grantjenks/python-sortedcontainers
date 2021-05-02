@@ -491,3 +491,38 @@ if platform.python_implementation() == 'CPython':
         del temp
         del_count = len(gc.get_objects())
         assert start_count == del_count
+
+class CustomOr:
+    def __or__(self, other):
+        return NotImplemented
+
+    def __ror__(self, other):
+        return self
+
+def test_or():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp1 = SortedDict(mapping[:13])
+    temp2 = SortedDict(mapping[13:])
+    temp3 = temp1 | temp2
+    assert temp3 == dict(mapping)
+
+def test_or_not_implemented():
+    SortedDict() | CustomOr()
+
+def test_ror():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp1 = dict(mapping[:13])
+    temp2 = SortedDict(mapping[13:])
+    temp3 = temp1 | temp2
+    assert temp3 == dict(mapping)
+
+def test_ror_not_implemented():
+    with pytest.raises(TypeError):
+        CustomOr() | SortedDict()
+
+def test_ior():
+    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
+    temp1 = SortedDict(mapping[:13])
+    temp2 = SortedDict(mapping[13:])
+    temp1 |= temp2
+    assert temp1 == dict(mapping)
