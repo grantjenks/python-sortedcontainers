@@ -93,8 +93,8 @@ class SortedList(MutableSequence[_T]):
     ) -> Iterator[_T]: ...
     def irange(
         self,
-        minimum: Optional[int] = ...,
-        maximum: Optional[int] = ...,
+        minimum: Optional[_T] = ...,
+        maximum: Optional[_T] = ...,
         inclusive: Tuple[bool, bool] = ...,
         reverse: bool = ...,
     ) -> Iterator[_T]: ...
@@ -149,8 +149,8 @@ class SortedKeyList(SortedList[_T]):
     def _delete(self, pos: int, idx: int) -> None: ...
     def irange(
         self,
-        minimum: Optional[int] = ...,
-        maximum: Optional[int] = ...,
+        minimum: Optional[_T] = ...,
+        maximum: Optional[_T] = ...,
         inclusive: Tuple[bool, bool] = ...,
         reverse: bool = ...,
     ): ...
