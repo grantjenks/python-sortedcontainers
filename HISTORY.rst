@@ -7,6 +7,13 @@ Sorted Containers Release History
 
 .. currentmodule:: sortedcontainers
 
+2.4.0 (2021-05-16)
+------------------
+
+**API Changes**
+
+* Implement SortedDict methods: __or__, __ror__, and __ior__ per PEP 584.
+
 2.3.0 (2020-11-08)
 ------------------
 
