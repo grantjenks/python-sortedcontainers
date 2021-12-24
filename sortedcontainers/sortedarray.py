@@ -15,6 +15,8 @@ Sorted list implementations:
 """
 # pylint: disable=too-many-lines
 from __future__ import print_function
+from sys import hexversion
+
 from .sortedlist import SortedList, recursive_repr
 from array import array
 
@@ -98,12 +100,18 @@ class SortedArray(SortedList):
 
         """
         self._typecode = typecode
-        super().__init__(iterable=initializer, key=None)
+        if hexversion >= 0x03000000:
+            super().__init__(iterable=initializer, key=None)
+        else:
+            super(SortedArray, self).__init__(iterable=initializer, key=None)
 
 
     def __new__(cls, typecode, initializer=None):
         # pylint: disable=unused-argument
-        return super().__new__(cls, iterable=initializer, key=None)
+        if hexversion >= 0x03000000:
+            return super().__new__(cls, iterable=initializer, key=None)
+        else:
+            return super(SortedArray, cls).__new__(cls, iterable=initializer, key=None)
 
 
     def _new_list(self):
