@@ -15,14 +15,19 @@ if hexversion < 0x03000000:
 else:
     name_attr = '__name__'
 
+if hexversion < 0x03030000:
+    clock = time.clock
+else:
+    clock = time.perf_counter
+
 def detail(*values, **kwargs):
     if not args.bare:
         print(*values, **kwargs)
 
 def measure(test, func, size):
-    start = time.clock()
+    start = clock()
     test(func, size)
-    end = time.clock()
+    end = clock()
     return (end - start)
 
 def benchmark(test, name, ctor, setup, func_name, limit):
