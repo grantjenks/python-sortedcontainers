@@ -159,7 +159,7 @@ class SortedCollection(object):
         self._items.insert(i, item)
 
     def remove(self, item):
-        'Remove first occurence of item.  Raise ValueError if not found'
+        'Remove first occurrence of item.  Raise ValueError if not found'
         i = self.index(item)
         del self._keys[i]
         del self._items[i]
