@@ -41,11 +41,11 @@ mutating operations. When unable to preserve the sorted order constraint, the
 functionality is either non-existent or an error is raised from the
 library. Python's "sorted" built-in function also supports a "key" parameter
 which specifies a callable used to extract a comparison key from elements. When
-initializing a sorted container data type, the key paramemter is likewise
+initializing a sorted container data type, the key parameter is likewise
 supported.
 
 Internally, Python Sorted Containers uses a list of sublists data structure
-that is like a B-tree contstrained to two levels of nodes. The maximum of each
+that is like a B-tree constrained to two levels of nodes. The maximum of each
 sublist is maintained in a separate list. To lookup an element, the list of
 maximums is bisected using the "bisect" module in the Standard Library. Using
 the bisected maximums index, the corresponding sublist is bisected to find the

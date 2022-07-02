@@ -362,7 +362,7 @@ Python, these have a `total ordering`_:
 
 2. Strings and bytes.
 
-3. All foating-point numbers except ``float('nan')``.
+3. All floating-point numbers except ``float('nan')``.
 
 4. Sequences like `list` and `tuple` of values with a total ordering.
 
