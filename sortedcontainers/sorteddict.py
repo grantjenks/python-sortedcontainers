@@ -374,6 +374,8 @@ class SortedDict(dict):
     def values(self):
         """Return new sorted values view of the sorted dict's values.
 
+        Note that the values view is sorted by key.
+
         See :class:`SortedValuesView` for details.
 
         :return: new sorted values view
@@ -780,14 +782,14 @@ class SortedValuesView(ValuesView, Sequence):
 
         Runtime complexity: `O(log(n))` -- approximate.
 
-        >>> sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
+        >>> sd = SortedDict({'a': 2, 'b': 1, 'c': 3})
         >>> svv = sd.values()
         >>> svv[0]
-        1
+        2
         >>> svv[-1]
         3
         >>> svv[:]
-        [1, 2, 3]
+        [2, 1, 3]
         >>> svv[100]
         Traceback (most recent call last):
           ...
