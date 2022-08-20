@@ -253,7 +253,6 @@ Tested Runtimes
 :doc:`Sorted Containers<index>` actively tests against the following versions
 of Python:
 
-* CPython 2.7
 * CPython 3.2
 * CPython 3.3
 * CPython 3.4
