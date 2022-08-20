@@ -74,17 +74,11 @@ jobs:
         os: [ubuntu-20.04, windows-2019, macos-10.15]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v2
-
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==1.11.1.post1
-
-      - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+      - uses: pypa/cibuildwheel@v2.9.0
         env:
           CIBW_BEFORE_BUILD: pip install cython
           CIBW_TEST_REQUIRES: pytest pytest-cov pytest-xdist
-          CIBW_TEST_COMMAND: pytest {project}/tests && python {project}/tests/benchmark.py
+          CIBW_TEST_COMMAND: pytest {project}/tests
           CIBW_SKIP: pp*
