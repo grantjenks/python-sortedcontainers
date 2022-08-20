@@ -6,7 +6,7 @@ doc8
 gj
 matplotlib
 pyannote-banyan
-pylint
+pylint<2.6
 pytest
 pytest-cov
 rstcheck
