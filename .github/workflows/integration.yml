@@ -1,256 +1,88 @@
-# TODO: https://github.com/joerick/cibuildwheel
 name: integration
 
-on: push
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
 
-  # checks:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
-  #   - name: Run Pylint
-  #     run: |
-  #       pip install tox
-  #       tox -e pylint
-
-  # tests:
-  #   needs: checks
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     max-parallel: 8
-  #     matrix:
-  #       os: [ubuntu-latest, macos-latest, windows-latest, ubuntu-16.04]
-  #       python-version: [3.5, 3.6, 3.7, 3.8, pypy3]
-  #       # exclude:
-  #       # # Excluded due to faulthandler bug:
-  #       # # https://github.com/grantjenks/python-runstats/runs/301718278#step:5:13
-  #       # - os: windows-latest
-  #       #   python-version: pypy3
-
-  #   steps:
-  #   - name: Download Build Tools for Visual Studio 2019
-  #     if: matrix.os == 'windows-latest'
-  #     run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
-
-  #   - name: Run vs_buildtools.exe install
-  #     if: matrix.os == 'windows-latest'
-  #     run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended.
-
-  #   - name: Set up Python ${{ matrix.python-version }} x64
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: ${{ matrix.python-version }}
-  #       architecture: x64
-
-  #   - uses: actions/checkout@v2
-
-  #   - name: Test with tox
-  #     run: |
-  #       pip install tox
-  #       tox -e py
-
-  # build-linux:
-  #   needs: tests
-  #   strategy:
-  #     matrix:
-  #       config:
-  #         - {container: manylinux2014_x86_64, python: cp35-cp35m, toxenv: py35-cython, tag: cy35}
-  #         - {container: manylinux2014_x86_64, python: cp36-cp36m, toxenv: py36-cython, tag: cy36}
-  #         - {container: manylinux2014_x86_64, python: cp37-cp37m, toxenv: py37-cython, tag: cy37}
-  #         - {container: manylinux2014_x86_64, python: cp38-cp38, toxenv: py38-cython, tag: cy38}
-  #   runs-on: ubuntu-latest
-  #   container: quay.io/pypa/${{ matrix.config.container }}
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Install Python package dependencies
-  #     run: /opt/python/${{ matrix.config.python }}/bin/python -m pip install tox tox-wheel
-
-  #   - name: Build binary wheel
-  #     run: /opt/python/${{ matrix.config.python }}/bin/python -m tox -e ${{ matrix.config.toxenv }} --wheel
-
-  #   - name: Apply auditwheel
-  #     run: auditwheel repair -w .tox/dist .tox/dist/*
-
-  #   - name: Remove linux wheel
-  #     run: rm .tox/dist/*-linux_x86_64.whl
-
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-linux-${{ matrix.config.tag }}
-  #       path: .tox/dist
-
-  # TODO: https://github.com/matthew-brett/delocate
-  # Get 10_9 in the name!
-  build-macos:
-    # needs: tests
-    runs-on: macos-latest
+  checks:
+    runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 6
       matrix:
-        config:
-        - {python-version: 3.5, toxenv: py35-cython}
-        - {python-version: 3.6, toxenv: py36-cython}
-        - {python-version: 3.7, toxenv: py37-cython}
-        - {python-version: 3.8, toxenv: py38-cython}
+        check: [pylint]
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.config.python-version }} x64
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.config.python-version }}
-        architecture: x64
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install tox
+    - name: Run checks with tox
+      run: |
+        tox -e ${{ matrix.check }}
 
-    - name: Install Python package dependencies
-      run: pip install tox tox-wheel
+  tests:
+    needs: checks
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9, '3.10']
 
-    - name: Build binary wheel
-      run: python -m tox -e ${{ matrix.config.toxenv }} --wheel
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Archive dist artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist-macos-${{ matrix.config.python-version }}
-        path: .tox/dist
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-  # build-windows:
-  #   needs: tests
-  #   runs-on: windows-latest
-  #   strategy:
-  #     max-parallel: 3
-  #     matrix:
-  #       config:
-  #         - {py: 3.5, arch: x86, toxenv: py35-cython, tag: cy35-x86}
-  #         - {py: 3.5, arch: x64, toxenv: py35-cython, tag: cy35-x64}
-  #         - {py: 3.6, arch: x86, toxenv: py36-cython, tag: cy36-x86}
-  #         - {py: 3.6, arch: x64, toxenv: py36-cython, tag: cy36-x64}
-  #         - {py: 3.7, arch: x86, toxenv: py37-cython, tag: cy37-x86}
-  #         - {py: 3.7, arch: x64, toxenv: py37-cython, tag: cy37-x64}
-  #         - {py: 3.8, arch: x86, toxenv: py38-cython, tag: cy38-x86}
-  #         - {py: 3.8, arch: x64, toxenv: py38-cython, tag: cy38-x64}
+      - name: Install tox
+        run: |
+          pip install --upgrade pip
+          pip install tox
 
-  #   steps:
-  #   - uses: actions/checkout@v2
+      - name: Test with tox
+        run: tox -e py
 
-  #   - name: Download Build Tools for Visual Studio 2019
-  #     run: Invoke-WebRequest -Uri https://aka.ms/vs/16/release/vs_buildtools.exe -OutFile vs_buildtools.exe
+      - name: Install cython and pytest
+        run: pip install cython pytest pytest-cov pytest-xdist
 
-  #   - name: Run vs_buildtools.exe install
-  #     run: ./vs_buildtools.exe --quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 --add Microsoft.VisualStudio.Component.VC.140 --includeRecommended
+      - name: Build Cython extension
+        run: python setup.py build_ext --inplace
 
-  #   - name: Set up Python ${{ matrix.config.py }} ${{ matrix.config.arch }}
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: ${{ matrix.config.py }}
-  #       architecture: ${{ matrix.config.arch }}
+      - name: Test with pytest
+        run: pytest
 
-  #   - name: Install Python package dependencies
-  #     run: pip install tox tox-wheel
+  builds:
+    needs: tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
 
-  #   - name: Build binary wheel
-  #     run: tox -e ${{ matrix.config.toxenv }} --wheel
+    steps:
+      - uses: actions/checkout@v2
 
-  #   - name: Archive dist artifacts
-  #     uses: actions/upload-artifact@v2
-  #     with:
-  #       name: dist-windows-${{ matrix.config.tag }}
-  #       path: .tox/dist
+      - uses: actions/setup-python@v2
 
-  # upload:
-  #   if: startsWith(github.ref, 'version-')
-  #   needs: [build-linux-cp35, build-linux-cp36, build-linux-cp37, build-linux-cp38, build-macos, build-windows]
-  #   runs-on: ubuntu-latest
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==1.11.1.post1
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
-
-  #   - name: Create source dist
-  #     run: python setup.py sdist
-
-  #   - name: Stage linux 3.5
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-linux-3.5
-  #   - run: mv -v dist-linux-3.5/* dist/
-
-  #   - name: Stage linux 3.6
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-linux-3.6
-  #   - run: mv -v dist-linux-3.6/* dist/
-
-  #   - name: Stage linux 3.7
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-linux-3.7
-  #   - run: mv -v dist-linux-3.7/* dist/
-
-  #   - name: Stage linux 3.8
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-linux-3.8
-  #   - run: mv -v dist-linux-3.8/* dist/
-
-  #   - name: Stage macos 3.5
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-macos-3.5
-  #   - run: mv -v dist-macos-3.5/* dist/
-
-  #   - name: Stage macos 3.6
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-macos-3.6
-  #   - run: mv -v dist-macos-3.6/* dist/
-
-  #   - name: Stage macos 3.7
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-macos-3.7
-  #   - run: mv -v dist-macos-3.7/* dist/
-
-  #   - name: Stage macos 3.8
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-macos-3.8
-  #   - run: mv -v dist-macos-3.8/* dist/
-
-  #   - name: Stage windows 3.6
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-windows-3.6
-  #   - run: mv -v dist-windows-3.6/* dist/
-
-  #   - name: Stage windows 3.7
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-windows-3.7
-  #   - run: mv -v dist-windows-3.7/* dist/
-
-  #   - name: Stage windows 3.8
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: dist-windows-3.8
-  #   - run: mv -v dist-windows-3.8/* dist/
-
-  #   - name: Upload with twine
-  #     env:
-  #       TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-  #       TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-  #     run: |
-  #       ls -l dist/*
-  #       pip install twine
-  #       twine upload dist/*
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_BEFORE_BUILD: pip install cython
+          CIBW_TEST_REQUIRES: pytest pytest-cov pytest-xdist
+          CIBW_TEST_COMMAND: pytest {project}/tests && python {project}/tests/benchmark.py
+          CIBW_SKIP: pp*
