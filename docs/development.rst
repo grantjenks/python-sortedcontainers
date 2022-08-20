@@ -254,7 +254,6 @@ Tested Runtimes
 of Python:
 
 * CPython 3.7
-* PyPy
 * PyPy3
 
 Life will feel much saner if you use `venv`_ or `virtualenv`_ and `tox`_ to
