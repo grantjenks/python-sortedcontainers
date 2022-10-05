@@ -34,6 +34,9 @@ In Python, we can do better. And we can do it in pure-Python!
     SortedSet(['a', 'b', 'c', 'd', 'r'])
     >>> ss.bisect_left('c')
     2
+    >>> sa = SortedArray('i', [5,7,3,6,2,1,4])
+    >>> sa
+    SortedArray('i', [1, 2, 3, 4, 5, 6, 7])
 
 Sorted Containers takes all of the work out of Python sorted types - making
 your deployment and use of Python easy. There's no need to install a C compiler
@@ -54,6 +57,7 @@ from .sorteddict import (
     SortedItemsView,
     SortedValuesView,
 )
+from .sortedarray import SortedArray
 
 __all__ = [
     'SortedList',
@@ -64,6 +68,7 @@ __all__ = [
     'SortedItemsView',
     'SortedValuesView',
     'SortedSet',
+    'SortedArray'
 ]
 
 __title__ = 'sortedcontainers'

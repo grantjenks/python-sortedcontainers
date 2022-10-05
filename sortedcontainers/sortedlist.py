@@ -160,10 +160,11 @@ class SortedList(MutableSequence):
 
         """
         assert key is None
+        _new_list = self._new_list
         self._len = 0
         self._load = self.DEFAULT_LOAD_FACTOR
         self._lists = []
-        self._maxes = []
+        self._maxes = _new_list()
         self._index = []
         self._offset = 0
 
@@ -201,6 +202,14 @@ class SortedList(MutableSequence):
                 raise TypeError('inherit SortedKeyList for key argument')
 
 
+    def _new_list(self):
+        return []
+
+
+    def _sort_in_place(self, _list):
+        _list.sort()
+
+
     @property
     def key(self):  # pylint: disable=useless-return
         """Function used to extract comparison key from values.
@@ -229,7 +238,8 @@ class SortedList(MutableSequence):
         :param int load: load-factor for sorted list sublists
 
         """
-        values = reduce(iadd, self._lists, [])
+        _new_list = self._new_list
+        values = reduce(iadd, self._lists, _new_list())
         self._clear()
         self._load = load
         self._update(values)
@@ -280,7 +290,10 @@ class SortedList(MutableSequence):
 
             self._expand(pos)
         else:
-            _lists.append([value])
+            _new_list = self._new_list
+            new_list = _new_list()
+            new_list.append(value)
+            _lists.append(new_list)
             _maxes.append(value)
 
         self._len += 1
@@ -335,13 +348,16 @@ class SortedList(MutableSequence):
         """
         _lists = self._lists
         _maxes = self._maxes
-        values = sorted(iterable)
+        _new_list = self._new_list
+        _sort_in_place = self._sort_in_place
+        values = _new_list()
+        values.extend(iterable)
 
         if _maxes:
             if len(values) * 4 >= self._len:
                 _lists.append(values)
-                values = reduce(iadd, _lists, [])
-                values.sort()
+                values = reduce(iadd, _lists, _new_list())
+                _sort_in_place(values)
                 self._clear()
             else:
                 _add = self.add
@@ -350,6 +366,7 @@ class SortedList(MutableSequence):
                 return
 
         _load = self._load
+        _sort_in_place(values)
         _lists.extend(values[pos:(pos + _load)]
                       for pos in range(0, len(values), _load))
         _maxes.extend(sublist[-1] for sublist in _lists)
@@ -1471,7 +1488,8 @@ class SortedList(MutableSequence):
         :return: new sorted list
 
         """
-        values = reduce(iadd, self._lists, [])
+        _new_list = self._new_list
+        values = reduce(iadd, self._lists, _new_list())
         values.extend(other)
         return self.__class__(values)
 
@@ -1515,7 +1533,8 @@ class SortedList(MutableSequence):
         :return: new sorted list
 
         """
-        values = reduce(iadd, self._lists, []) * num
+        _new_list = self._new_list
+        values = reduce(iadd, self._lists, _new_list()) * num
         return self.__class__(values)
 
     __rmul__ = __mul__
@@ -1537,7 +1556,8 @@ class SortedList(MutableSequence):
         :return: existing sorted list
 
         """
-        values = reduce(iadd, self._lists, []) * num
+        _new_list = self._new_list
+        values = reduce(iadd, self._lists, _new_list()) * num
         self._clear()
         self._update(values)
         return self
@@ -1593,7 +1613,8 @@ class SortedList(MutableSequence):
 
 
     def __reduce__(self):
-        values = reduce(iadd, self._lists, [])
+        _new_list = self._new_list
+        values = reduce(iadd, self._lists, _new_list())
         return (type(self), (values,))
 
 
