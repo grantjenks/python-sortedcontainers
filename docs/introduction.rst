@@ -618,7 +618,9 @@ method creates a kind of `defaultdict` like that in the `collections` module.
 
     >>> class DefaultSortedDict(SortedDict):
     ...     def __missing__(self, key):
-    ...         return 0
+    ...         value = 0
+    ...         self[key] = value
+    ...         return value
     >>> dsd = DefaultSortedDict()
     >>> dsd['z']
     0
