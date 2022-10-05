@@ -41,10 +41,6 @@ SortedList
    .. automethod:: __repr__
    .. automethod:: _check
    .. automethod:: _reset
-   .. automethod:: append
-   .. automethod:: extend
-   .. automethod:: insert
-   .. automethod:: reverse
    .. automethod:: __setitem__
 
 

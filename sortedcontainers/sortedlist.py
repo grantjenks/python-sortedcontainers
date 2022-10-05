@@ -30,9 +30,9 @@ from textwrap import dedent
 ###############################################################################
 
 try:
-    from collections.abc import Sequence, MutableSequence
+    from collections.abc import Sequence
 except ImportError:
-    from collections import Sequence, MutableSequence
+    from collections import Sequence
 
 from functools import wraps
 from sys import hexversion
@@ -82,7 +82,7 @@ def recursive_repr(fillvalue='...'):
 ###############################################################################
 
 
-class SortedList(MutableSequence):
+class SortedList(Sequence):
     """Sorted list is a sorted mutable sequence.
 
     Sorted list values are maintained in sorted order.
@@ -134,8 +134,14 @@ class SortedList(MutableSequence):
     Sorted lists use lexicographical ordering semantics when compared to other
     sequences.
 
-    Some methods of mutable sequences are not supported and will raise
-    not-implemented error.
+    .. versionchanged:: 3.0
+
+        SortedLists are mutable sequences but they do not implement the
+        :class:`collections.abc.MutableSequence` interface. In version 3.0, the
+        base class was switched to :class:`collections.abc.Sequence` and the
+        ``append``, ``extend``, ``reverse`` and ``insert`` methods, which
+        previously raised :py:exc:`NotImplementedError` when called, were
+        removed.
 
     """
     DEFAULT_LOAD_FACTOR = 1000
@@ -941,24 +947,6 @@ class SortedList(MutableSequence):
         return chain.from_iterable(map(reversed, reversed(self._lists)))
 
 
-    def reverse(self):
-        """Raise not-implemented error.
-
-        Sorted list maintains values in ascending sort order. Values may not be
-        reversed in-place.
-
-        Use ``reversed(sl)`` for an iterator over values in descending sort
-        order.
-
-        Implemented to override `MutableSequence.reverse` which provides an
-        erroneous default implementation.
-
-        :raises NotImplementedError: use ``reversed(sl)`` instead
-
-        """
-        raise NotImplementedError('use ``reversed(sl)`` instead')
-
-
     def islice(self, start=None, stop=None, reverse=False):
         """Return an iterator that slices sorted list from `start` to `stop`.
 
@@ -1282,38 +1270,20 @@ class SortedList(MutableSequence):
 
     __copy__ = copy
 
+    def __getattr__(self, key):
+        if key == 'append':
+            msg = 'use ``sl.add(value)`` instead'
+        elif key == 'extend':
+            msg = 'use ``sl.update(values)`` instead'
+        elif key == 'reverse':
+            msg = 'use ``reversed(sl)`` instead'
+        elif key == 'insert':
+            msg = 'use ``sl.add(value)`` instead'
+        else:
+            msg = "'%s' object has no attribute '%s'" % (type(self).__name__,
+                                                         key)
 
-    def append(self, value):
-        """Raise not-implemented error.
-
-        Implemented to override `MutableSequence.append` which provides an
-        erroneous default implementation.
-
-        :raises NotImplementedError: use ``sl.add(value)`` instead
-
-        """
-        raise NotImplementedError('use ``sl.add(value)`` instead')
-
-
-    def extend(self, values):
-        """Raise not-implemented error.
-
-        Implemented to override `MutableSequence.extend` which provides an
-        erroneous default implementation.
-
-        :raises NotImplementedError: use ``sl.update(values)`` instead
-
-        """
-        raise NotImplementedError('use ``sl.update(values)`` instead')
-
-
-    def insert(self, index, value):
-        """Raise not-implemented error.
-
-        :raises NotImplementedError: use ``sl.add(value)`` instead
-
-        """
-        raise NotImplementedError('use ``sl.add(value)`` instead')
+        raise AttributeError(msg)
 
 
     def pop(self, index=-1):

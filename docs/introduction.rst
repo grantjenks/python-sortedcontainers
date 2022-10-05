@@ -166,19 +166,19 @@ at an index which is not supported by :class:`SortedList`.
     >>> sl.reverse()
     Traceback (most recent call last):
       ...
-    NotImplementedError: use ``reversed(sl)`` instead
+    AttributeError: use ``reversed(sl)`` instead
     >>> sl.append('f')
     Traceback (most recent call last):
       ...
-    NotImplementedError: use ``sl.add(value)`` instead
+    AttributeError: use ``sl.add(value)`` instead
     >>> sl.extend(['f', 'g', 'h'])
     Traceback (most recent call last):
       ...
-    NotImplementedError: use ``sl.update(values)`` instead
+    AttributeError: use ``sl.update(values)`` instead
     >>> sl.insert(5, 'f')
     Traceback (most recent call last):
       ...
-    NotImplementedError: use ``sl.add(value)`` instead
+    AttributeError: use ``sl.add(value)`` instead
 
 Comparison with :class:`SortedList` uses lexicographical ordering as with other
 sequence types.
