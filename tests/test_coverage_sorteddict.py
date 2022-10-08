@@ -357,6 +357,7 @@ def test_bisect_key2():
     assert all(temp.bisect_key_right(val) == ((val % 10) + 1) * 10 for val in range(10))
     assert all(temp.bisect_key_left(val) == (val % 10) * 10 for val in range(10))
 
+
 # Test Values for adjacent search functions.
 sd = SortedDict({1: "a", 2: "b", 4: "c", 5: "d"})
 k1 = 0  # The key that is smaller than any existing value.
@@ -366,34 +367,37 @@ k4 = 4  # The key that exists in the instance.
 k5 = 5  # The key that is the largest in the instance.
 k6 = 6  # The key that is larger than any existing value.
 
-# TODO: Improve the readability of test result.
-@pytest.fixture
-def next_smaller_item_test_params():
-    return [(k1, (None, None)), (k2, (None, None)), (k3, (2, "b")), (k4, (2, "b")), (k5, (4, "c")), (k6, (5, "d"))]
+def test_next_smaller_item():
+    assert sd.next_smaller_item(k1) == (None, None)
+    assert sd.next_smaller_item(k2) == (None, None)
+    assert sd.next_smaller_item(k3) == (2, "b")
+    assert sd.next_smaller_item(k4) == (2, "b")
+    assert sd.next_smaller_item(k5) == (4, "c")
+    assert sd.next_smaller_item(k6) == (5, "d")
 
-def test_next_smaller_item(next_smaller_item_test_params):
-    assert all(sd.next_smaller_item(key) == expected for key, expected in next_smaller_item_test_params)
+def test_floor_item():
+    assert sd.floor_item(k1) == (None, None)
+    assert sd.floor_item(k2) == (1, "a")
+    assert sd.floor_item(k3) == (2, "b")
+    assert sd.floor_item(k4) == (4, "c")
+    assert sd.floor_item(k5) == (5, "d")
+    assert sd.floor_item(k6) == (5, "d")
 
-@pytest.fixture
-def floor_item_test_params():
-    return [(k1, (None, None)), (k2, (1, "a")), (k3, (2, "b")), (k4, (4, "c")), (k5, (5, "d")), (k6, (5, "d"))]
+def test_ceil_item():
+    assert sd.ceil_item(k1) == (1, "a")
+    assert sd.ceil_item(k2) == (1, "a")
+    assert sd.ceil_item(k3) == (4, "c")
+    assert sd.ceil_item(k4) == (4, "c")
+    assert sd.ceil_item(k5) == (5, "d")
+    assert sd.ceil_item(k6) == (None, None)
 
-def test_floor_item(floor_item_test_params):
-    assert all(sd.floor_item(key) == expected for key, expected in floor_item_test_params)
-
-@pytest.fixture
-def ceil_item_test_params():
-    return [(k1, (1, "a")), (k2, (1, "a")), (k3, (4, "c")), (k4, (4, "c")), (k5, (5, "d")), (k6, (None, None))]
-
-def test_ceil_item(ceil_item_test_params):
-    assert all(sd.ceil_item(key) == expected for key, expected in ceil_item_test_params)
-
-@pytest.fixture
-def next_greater_item_test_params():
-    return [(k1, (1, "a")), (k2, (2, "b")), (k3, (4, "c")), (k4, (5, "d")), (k5, (None, None)), (k6, (None, None))]
-
-def test_next_greater_item(next_greater_item_test_params):
-    assert all(sd.next_greater_item(key) == expected for key, expected in next_greater_item_test_params)
+def test_next_greater_item():
+    assert sd.next_greater_item(k1) == (1, "a")
+    assert sd.next_greater_item(k2) == (2, "b")
+    assert sd.next_greater_item(k3) == (4, "c")
+    assert sd.next_greater_item(k4) == (5, "d")
+    assert sd.next_greater_item(k5) == (None, None)
+    assert sd.next_greater_item(k6) == (None, None)
 
 def test_keysview():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]

@@ -368,6 +368,7 @@ def test_bisect_right():
     assert slt.bisect_right(10) == 22
     assert slt.bisect_right(200) == 200
 
+
 # Test Values for adjacent search functions.
 slt = SortedList([1, 2, 4, 4, 5])
 v1 = 0  # The value that is smaller than any existing value.
@@ -377,34 +378,37 @@ v4 = 4  # The value that exists in the instance.
 v5 = 5  # The value that is the largest in the instance.
 v6 = 6  # The value that is larger than any existing value.
 
-# TODO: Improve the readability of test result.
-@pytest.fixture
-def next_smaller_test_params():
-    return [(v1, None), (v2, None), (v3, 2), (v4, 2), (v5, 4), (v6, 5)]
+def test_next_smaller():
+    assert slt.next_smaller(v1) is None
+    assert slt.next_smaller(v2) is None
+    assert slt.next_smaller(v3) == 2
+    assert slt.next_smaller(v4) == 2
+    assert slt.next_smaller(v5) == 4
+    assert slt.next_smaller(v6) == 5
 
-def test_next_smaller(next_smaller_test_params):
-    assert all(slt.next_smaller(value) == expected for value, expected in next_smaller_test_params)
+def test_floor():
+    assert slt.floor(v1) is None
+    assert slt.floor(v2) == 1
+    assert slt.floor(v3) == 2
+    assert slt.floor(v4) == 4
+    assert slt.floor(v5) == 5
+    assert slt.floor(v6) == 5
 
-@pytest.fixture
-def floor_test_params():
-    return [(v1, None), (v2, 1), (v3, 2), (v4, 4), (v5, 5), (v6, 5)]
+def test_ceil():
+    assert slt.ceil(v1) == 1
+    assert slt.ceil(v2) == 1
+    assert slt.ceil(v3) == 4
+    assert slt.ceil(v4) == 4
+    assert slt.ceil(v5) == 5
+    assert slt.ceil(v6) is None
 
-def test_floor(floor_test_params):
-    assert all(slt.floor(value) == expected for value, expected in floor_test_params)
-
-@pytest.fixture
-def ceil_test_params():
-    return [(v1, 1), (v2, 1), (v3, 4), (v4, 4), (v5, 5), (v6, None)]
-
-def test_ceil(ceil_test_params):
-    assert all(slt.ceil(value) == expected for value, expected in ceil_test_params)
-
-@pytest.fixture
-def next_greater_test_params():
-    return [(v1, 1), (v2, 2), (v3, 4), (v4, 5), (v5, None), (v6, None)]
-
-def test_next_greater(next_greater_test_params):
-    assert all(slt.next_greater(value) == expected for value, expected in next_greater_test_params)
+def test_next_greater():
+    assert slt.next_greater(v1) == 1
+    assert slt.next_greater(v2) == 2
+    assert slt.next_greater(v3) == 4
+    assert slt.next_greater(v4) == 5
+    assert slt.next_greater(v5) is None
+    assert slt.next_greater(v6) is None
 
 def test_copy():
     alpha = SortedList(range(100))
