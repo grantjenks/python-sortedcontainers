@@ -357,6 +357,48 @@ def test_bisect_key2():
     assert all(temp.bisect_key_right(val) == ((val % 10) + 1) * 10 for val in range(10))
     assert all(temp.bisect_key_left(val) == (val % 10) * 10 for val in range(10))
 
+
+# Test Values for adjacent search functions.
+sd = SortedDict({1: "a", 2: "b", 4: "c", 5: "d"})
+k1 = 0  # The key that is smaller than any existing value.
+k2 = 1  # The key that is the smallest in the instance.
+k3 = 3  # The key that does not exists in the instance.
+k4 = 4  # The key that exists in the instance.
+k5 = 5  # The key that is the largest in the instance.
+k6 = 6  # The key that is larger than any existing value.
+
+def test_next_smaller_item():
+    assert sd.next_smaller_item(k1) == (None, None)
+    assert sd.next_smaller_item(k2) == (None, None)
+    assert sd.next_smaller_item(k3) == (2, "b")
+    assert sd.next_smaller_item(k4) == (2, "b")
+    assert sd.next_smaller_item(k5) == (4, "c")
+    assert sd.next_smaller_item(k6) == (5, "d")
+
+def test_floor_item():
+    assert sd.floor_item(k1) == (None, None)
+    assert sd.floor_item(k2) == (1, "a")
+    assert sd.floor_item(k3) == (2, "b")
+    assert sd.floor_item(k4) == (4, "c")
+    assert sd.floor_item(k5) == (5, "d")
+    assert sd.floor_item(k6) == (5, "d")
+
+def test_ceil_item():
+    assert sd.ceil_item(k1) == (1, "a")
+    assert sd.ceil_item(k2) == (1, "a")
+    assert sd.ceil_item(k3) == (4, "c")
+    assert sd.ceil_item(k4) == (4, "c")
+    assert sd.ceil_item(k5) == (5, "d")
+    assert sd.ceil_item(k6) == (None, None)
+
+def test_next_greater_item():
+    assert sd.next_greater_item(k1) == (1, "a")
+    assert sd.next_greater_item(k2) == (2, "b")
+    assert sd.next_greater_item(k3) == (4, "c")
+    assert sd.next_greater_item(k4) == (5, "d")
+    assert sd.next_greater_item(k5) == (None, None)
+    assert sd.next_greater_item(k6) == (None, None)
+
 def test_keysview():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
     temp = SortedDict(mapping[:13])

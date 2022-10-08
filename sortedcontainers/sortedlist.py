@@ -1229,6 +1229,33 @@ class SortedList(MutableSequence):
     bisect = bisect_right
     _bisect_right = bisect_right
 
+    def next_smaller(self, value):
+        """Return strictly smaller value to the given value."""
+        i = self.bisect_left(value) - 1
+        if i < 0:
+            return None
+        return self[i]
+
+    def floor(self, value):
+        """Return smaller or equal value than the given value."""
+        i = self.bisect_right(value) - 1
+        if i < 0:
+            return None
+        return self[i]
+
+    def ceil(self, value):
+        """Return larger or equal value than the given value."""
+        i = self.bisect_left(value)
+        if i >= len(self):
+            return None
+        return self[i]
+
+    def next_greater(self, value):
+        """Return strictly larger value than the given value."""
+        i = self.bisect_right(value)
+        if i >= len(self):
+            return None
+        return self[i]
 
     def count(self, value):
         """Return number of occurrences of `value` in the sorted list.

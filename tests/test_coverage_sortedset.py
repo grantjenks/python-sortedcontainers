@@ -255,6 +255,48 @@ def test_bisect_key():
     assert all(temp.bisect_key(val) == (val + 1) for val in range(100))
     assert all(temp.bisect_key_right(val) == (val + 1) for val in range(100))
 
+
+# Test Values for adjacent search functions.
+ss = SortedSet([1, 2, 4, 5])
+v1 = 0  # The value that is smaller than any existing value.
+v2 = 1  # The value that is the smallest in the instance.
+v3 = 3  # The value that does not exists in the instance.
+v4 = 4  # The value that exists in the instance.
+v5 = 5  # The value that is the largest in the instance.
+v6 = 6  # The value that is larger than any existing value.
+
+def test_next_smaller():
+    assert ss.next_smaller(v1) is None
+    assert ss.next_smaller(v2) is None
+    assert ss.next_smaller(v3) == 2
+    assert ss.next_smaller(v4) == 2
+    assert ss.next_smaller(v5) == 4
+    assert ss.next_smaller(v6) == 5
+
+def test_floor():
+    assert ss.floor(v1) is None
+    assert ss.floor(v2) == 1
+    assert ss.floor(v3) == 2
+    assert ss.floor(v4) == 4
+    assert ss.floor(v5) == 5
+    assert ss.floor(v6) == 5
+
+def test_ceil():
+    assert ss.ceil(v1) == 1
+    assert ss.ceil(v2) == 1
+    assert ss.ceil(v3) == 4
+    assert ss.ceil(v4) == 4
+    assert ss.ceil(v5) == 5
+    assert ss.ceil(v6) is None
+
+def test_next_greater():
+    assert ss.next_greater(v1) == 1
+    assert ss.next_greater(v2) == 2
+    assert ss.next_greater(v3) == 4
+    assert ss.next_greater(v4) == 5
+    assert ss.next_greater(v5) is None
+    assert ss.next_greater(v6) is None
+
 def test_clear():
     temp = SortedSet(range(100))
     temp._reset(7)

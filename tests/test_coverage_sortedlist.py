@@ -368,6 +368,48 @@ def test_bisect_right():
     assert slt.bisect_right(10) == 22
     assert slt.bisect_right(200) == 200
 
+
+# Test Values for adjacent search functions.
+slt = SortedList([1, 2, 4, 4, 5])
+v1 = 0  # The value that is smaller than any existing value.
+v2 = 1  # The value that is the smallest in the instance.
+v3 = 3  # The value that does not exists in the instance.
+v4 = 4  # The value that exists in the instance.
+v5 = 5  # The value that is the largest in the instance.
+v6 = 6  # The value that is larger than any existing value.
+
+def test_next_smaller():
+    assert slt.next_smaller(v1) is None
+    assert slt.next_smaller(v2) is None
+    assert slt.next_smaller(v3) == 2
+    assert slt.next_smaller(v4) == 2
+    assert slt.next_smaller(v5) == 4
+    assert slt.next_smaller(v6) == 5
+
+def test_floor():
+    assert slt.floor(v1) is None
+    assert slt.floor(v2) == 1
+    assert slt.floor(v3) == 2
+    assert slt.floor(v4) == 4
+    assert slt.floor(v5) == 5
+    assert slt.floor(v6) == 5
+
+def test_ceil():
+    assert slt.ceil(v1) == 1
+    assert slt.ceil(v2) == 1
+    assert slt.ceil(v3) == 4
+    assert slt.ceil(v4) == 4
+    assert slt.ceil(v5) == 5
+    assert slt.ceil(v6) is None
+
+def test_next_greater():
+    assert slt.next_greater(v1) == 1
+    assert slt.next_greater(v2) == 2
+    assert slt.next_greater(v3) == 4
+    assert slt.next_greater(v4) == 5
+    assert slt.next_greater(v5) is None
+    assert slt.next_greater(v6) is None
+
 def test_copy():
     alpha = SortedList(range(100))
     alpha._reset(7)

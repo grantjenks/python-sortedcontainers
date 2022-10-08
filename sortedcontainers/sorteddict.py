@@ -512,6 +512,33 @@ class SortedDict(dict):
         key = self._list[index]
         return key, self[key]
 
+    def next_smaller_item(self, value):
+        """Return strictly smaller item than the given key."""
+        i = self.bisect_left(value) - 1
+        if i < 0:
+            return None, None
+        return self.peekitem(index=i)
+
+    def floor_item(self, value):
+        """Return smaller or equal item than the given key."""
+        i = self.bisect_right(value) - 1
+        if i < 0:
+            return None, None
+        return self.peekitem(index=i)
+
+    def ceil_item(self, value):
+        """Return larger or equal item than the given key."""
+        i = self.bisect_left(value)
+        if i >= len(self):
+            return None, None
+        return self.peekitem(index=i)
+
+    def next_greater_item(self, value):
+        """Return strictly larger item than the given key."""
+        i = self.bisect_right(value)
+        if i >= len(self):
+            return None, None
+        return self.peekitem(index=i)
 
     def setdefault(self, key, default=None):
         """Return value for item identified by `key` in sorted dict.
