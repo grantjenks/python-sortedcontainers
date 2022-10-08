@@ -153,6 +153,10 @@ class SortedSet(MutableSet, Sequence):
         self.bisect_left = _list.bisect_left
         self.bisect = _list.bisect
         self.bisect_right = _list.bisect_right
+        self.next_smaller = _list.next_smaller
+        self.floor = _list.floor
+        self.ceil = _list.ceil
+        self.next_greater = _list.next_greater
         self.index = _list.index
         self.irange = _list.irange
         self.islice = _list.islice
