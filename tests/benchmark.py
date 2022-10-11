@@ -1,4 +1,10 @@
-from __future__ import print_function
+import sys
+
+if '--no-cython' in sys.argv:
+    sys.modules['sortedcontainers._sorteddict'] = None
+    sys.modules['sortedcontainers._sortedlist'] = None
+    sys.modules['sortedcontainers._sortedset'] = None
+
 from sys import hexversion
 import logging
 
@@ -92,6 +98,7 @@ parser.add_argument('--bare', action='store_true', default=False,
                     help='hide header and footer info')
 parser.add_argument('--load', type=int, default=0,
                     help='load value for sorted container types')
+parser.add_argument('--no-cython', action='store_true')
 args = parser.parse_args()
 
 def main(name):
