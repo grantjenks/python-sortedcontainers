@@ -1,7 +1,8 @@
+import pathlib
+import re
+
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-
-import sortedcontainers
 
 
 class Tox(TestCommand):
@@ -15,12 +16,16 @@ class Tox(TestCommand):
         exit(errno)
 
 
+init = (pathlib.Path('src') / 'sortedcontainers' / '__init__.py').read_text()
+match = re.search(r"^__version__ = '(.+)'$", init, re.MULTILINE)
+version = match.group(1)
+
 with open('README.rst') as reader:
     readme = reader.read()
 
 args = dict(
-    name=sortedcontainers.__title__,
-    version=sortedcontainers.__version__,
+    name='sortedcontainers',
+    version=version,
     description='Sorted Containers -- Sorted List, Sorted Dict, Sorted Set',
     long_description=readme,
     author='Grant Jenks',
