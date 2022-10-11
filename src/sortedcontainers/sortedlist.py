@@ -82,7 +82,7 @@ def recursive_repr(fillvalue='...'):
 ###############################################################################
 
 
-class SortedList(MutableSequence):
+class SortedList:
     """Sorted list is a sorted mutable sequence.
 
     Sorted list values are maintained in sorted order.
@@ -169,36 +169,6 @@ class SortedList(MutableSequence):
 
         if iterable is not None:
             self._update(iterable)
-
-
-    def __new__(cls, iterable=None, key=None):
-        """Create new sorted list or sorted-key list instance.
-
-        Optional `key`-function argument will return an instance of subtype
-        :class:`SortedKeyList`.
-
-        >>> sl = SortedList()
-        >>> isinstance(sl, SortedList)
-        True
-        >>> sl = SortedList(key=lambda x: -x)
-        >>> isinstance(sl, SortedList)
-        True
-        >>> isinstance(sl, SortedKeyList)
-        True
-
-        :param iterable: initial values (optional)
-        :param key: function used to extract comparison key (optional)
-        :return: sorted list or sorted-key list instance
-
-        """
-        # pylint: disable=unused-argument
-        if key is None:
-            return object.__new__(cls)
-        else:
-            if cls is SortedList:
-                return object.__new__(SortedKeyList)
-            else:
-                raise TypeError('inherit SortedKeyList for key argument')
 
 
     @property
@@ -787,13 +757,15 @@ class SortedList(MutableSequence):
 
             if step == 1 and start < stop:
                 if start == 0 and stop == self._len:
-                    return self._clear()
+                    self._clear()
+                    return
                 elif self._len <= 8 * (stop - start):
                     values = self._getitem(slice(None, start))
                     if stop < self._len:
                         values += self._getitem(slice(stop, None))
                     self._clear()
-                    return self._update(values)
+                    self._update(values)
+                    return
 
             indices = range(start, stop, step)
 
@@ -1681,6 +1653,9 @@ class SortedList(MutableSequence):
             print('len_lists', len(self._lists))
             print('lists', self._lists)
             raise
+
+
+MutableSequence.register(SortedList)
 
 
 def identity(value):
