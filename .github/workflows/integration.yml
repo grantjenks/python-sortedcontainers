@@ -8,7 +8,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '0 9 * * *'
 
 jobs:
 
