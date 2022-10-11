@@ -119,6 +119,9 @@ Features
 .. image:: https://github.com/grantjenks/python-sortedcontainers/workflows/integration/badge.svg
    :target: http://www.grantjenks.com/docs/sortedcontainers/
 
+.. image:: https://github.com/grantjenks/python-sortedcontainers/workflows/release/badge.svg
+   :target: http://www.grantjenks.com/docs/sortedcontainers/
+
 Quickstart
 ----------
 
