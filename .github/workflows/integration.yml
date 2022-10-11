@@ -74,5 +74,5 @@ jobs:
         env:
           CIBW_BEFORE_BUILD: pip install cython
           CIBW_TEST_REQUIRES: pytest pytest-cov pytest-xdist
-          CIBW_TEST_COMMAND: pytest {project}/tests
+          CIBW_TEST_COMMAND: pytest -c {project} {project}/tests
           CIBW_SKIP: pp*
