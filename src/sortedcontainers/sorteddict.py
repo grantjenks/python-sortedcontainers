@@ -815,6 +815,6 @@ class SortedValuesView(ValuesView, Sequence):
 
 
 try:
-    from ._sorteddict import SortedDict
+    from ._sorteddict import SortedDict  # pylint: disable=unused-import
 except ImportError:
     pass
