@@ -2643,4 +2643,9 @@ class SortedKeyList(SortedList):
             raise
 
 
+try:
+    from ._sortedlist import SortedList, SortedKeyList
+except ImportError:
+    pass
+
 SortedListWithKey = SortedKeyList

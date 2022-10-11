@@ -812,3 +812,9 @@ class SortedValuesView(ValuesView, Sequence):
 
 
     __delitem__ = _view_delitem
+
+
+try:
+    from ._sorteddict import SortedDict
+except ImportError:
+    pass
