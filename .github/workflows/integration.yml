@@ -57,14 +57,8 @@ jobs:
       - name: Test with tox
         run: tox -e py
 
-      - name: Install cython and pytest
-        run: pip install cython pytest pytest-cov pytest-xdist
-
-      - name: Build Cython extension
-        run: python setup.py build_ext --inplace
-
-      - name: Test with pytest
-        run: pytest
+      - name: Test with tox and Cython
+        run: tox -e py-cython
 
   builds:
     needs: tests
