@@ -111,8 +111,8 @@ Features
 - Compatible API (nearly identical to older blist and bintrees modules)
 - Feature-rich (e.g. get the five largest keys in a sorted dict: d.keys()[-5:])
 - Pragmatic design (e.g. SortedSet is a Python set with a SortedList index)
-- Developed on Python 3.8
-- Tested with CPython 3.5, 3.6, 3.7, 3.8 and PyPy3
+- Developed on Python 3.10
+- Tested with CPython 3.7, 3.8, 3.9, 3.10 and PyPy3
 - Tested on Linux, Mac OSX, and Windows
 - Cython optimized wheels published for CPython
 
