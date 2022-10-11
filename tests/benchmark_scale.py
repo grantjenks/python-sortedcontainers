@@ -173,9 +173,9 @@ def timeit(func):
     @ft.wraps(func)
     def wrapper(*args, **kwargs):
         "Return timed duration of function call. Ignores function result."
-        start = time.clock()
+        start = time.perf_counter()
         result = func(*args, **kwargs)
-        end = time.clock()
+        end = time.perf_counter()
         return (end - start)
     return wrapper
 

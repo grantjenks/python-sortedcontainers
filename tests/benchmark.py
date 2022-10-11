@@ -20,9 +20,9 @@ def detail(*values, **kwargs):
         print(*values, **kwargs)
 
 def measure(test, func, size):
-    start = time.clock()
+    start = time.perf_counter()
     test(func, size)
-    end = time.clock()
+    end = time.perf_counter()
     return (end - start)
 
 def benchmark(test, name, ctor, setup, func_name, limit):
