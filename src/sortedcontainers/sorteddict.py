@@ -812,9 +812,3 @@ class SortedValuesView(ValuesView, Sequence):
 
 
     __delitem__ = _view_delitem
-
-
-try:
-    from ._sorteddict import SortedDict  # pylint: disable=unused-import
-except ImportError:
-    pass

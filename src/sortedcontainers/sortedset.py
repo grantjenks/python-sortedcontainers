@@ -731,9 +731,3 @@ class SortedSet(MutableSet, Sequence):
         _list._check()
         assert len(_set) == len(_list)
         assert all(value in _set for value in _list)
-
-
-try:
-    from ._sortedset import SortedSet
-except ImportError:
-    pass
