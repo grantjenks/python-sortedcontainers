@@ -32,6 +32,7 @@ args = dict(
     author_email='contact@grantjenks.com',
     url='http://www.grantjenks.com/docs/sortedcontainers/',
     license='Apache 2.0',
+    package_dir={'': 'src'},
     packages=['sortedcontainers'],
     tests_require=['tox'],
     cmdclass={'test': Tox},
@@ -59,9 +60,9 @@ except ImportError:
 else:
     from setuptools import Extension
     ext_modules = [
-        Extension('sortedcontainers._sortedlist', ['sortedcontainers/sortedlist.py']),
-        Extension('sortedcontainers._sorteddict', ['sortedcontainers/sorteddict.py']),
-        Extension('sortedcontainers._sortedset', ['sortedcontainers/sortedset.py']),
+        Extension('sortedcontainers._sortedlist', ['src/sortedcontainers/sortedlist.py']),
+        Extension('sortedcontainers._sorteddict', ['src/sortedcontainers/sorteddict.py']),
+        Extension('sortedcontainers._sortedset', ['src/sortedcontainers/sortedset.py']),
     ]
     args.update(ext_modules=cythonize(ext_modules))
 
