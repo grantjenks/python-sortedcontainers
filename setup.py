@@ -1,7 +1,8 @@
+import pathlib
+import re
+
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-
-import sortedcontainers
 
 
 class Tox(TestCommand):
@@ -15,18 +16,23 @@ class Tox(TestCommand):
         exit(errno)
 
 
+init = (pathlib.Path('src') / 'sortedcontainers' / '__init__.py').read_text()
+match = re.search(r"^__version__ = '(.+)'$", init, re.MULTILINE)
+version = match.group(1)
+
 with open('README.rst') as reader:
     readme = reader.read()
 
-setup(
-    name=sortedcontainers.__title__,
-    version=sortedcontainers.__version__,
+args = dict(
+    name='sortedcontainers',
+    version=version,
     description='Sorted Containers -- Sorted List, Sorted Dict, Sorted Set',
     long_description=readme,
     author='Grant Jenks',
     author_email='contact@grantjenks.com',
     url='http://www.grantjenks.com/docs/sortedcontainers/',
     license='Apache 2.0',
+    package_dir={'': 'src'},
     packages=['sortedcontainers'],
     tests_require=['tox'],
     cmdclass={'test': Tox},
@@ -37,16 +43,27 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
+
+try:
+    from Cython.Build import cythonize
+except ImportError:
+    pass
+else:
+    from setuptools import Extension
+    ext_modules = [
+        Extension('sortedcontainers._sortedlist', ['src/sortedcontainers/sortedlist.py']),
+        Extension('sortedcontainers._sorteddict', ['src/sortedcontainers/sorteddict.py']),
+        Extension('sortedcontainers._sortedset', ['src/sortedcontainers/sortedset.py']),
+    ]
+    args.update(ext_modules=cythonize(ext_modules))
+
+setup(**args)

@@ -5,7 +5,6 @@ import random
 import string
 import warnings
 
-from .context import sortedcontainers
 from sortedcontainers import SortedDict
 import pytest
 from sys import hexversion
@@ -492,6 +491,7 @@ if platform.python_implementation() == 'CPython':
         del_count = len(gc.get_objects())
         assert start_count == del_count
 
+
 class CustomOr:
     def __or__(self, other):
         return NotImplemented
@@ -526,3 +526,10 @@ def test_ior():
     temp2 = SortedDict(mapping[13:])
     temp1 |= temp2
     assert temp1 == dict(mapping)
+
+try:
+    import Cython
+    def test_cython():
+        assert SortedDict.__module__ == 'sortedcontainers._sorteddict'
+except ImportError:
+    pass

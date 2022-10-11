@@ -1,6 +1,10 @@
 # Python byte-code
 *.py[co]
 
+# Extension code
+*.c
+*.so
+
 # virutalenv directories
 /env*/
 
@@ -12,7 +16,7 @@
 # setup and upload directories
 /build/
 /dist/
-/sortedcontainers.egg-info/
+*.egg-info/
 /docs/_build/
 
 # macOS metadata
