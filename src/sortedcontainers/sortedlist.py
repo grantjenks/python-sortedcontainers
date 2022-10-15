@@ -268,11 +268,11 @@ class SortedList:
         _load = self._load
         _lists = self._lists
         _index = self._index
+        _lists_pos = _lists[pos]
 
-        if len(_lists[pos]) > (_load << 1):
+        if len(_lists_pos) > (_load << 1):
             _maxes = self._maxes
 
-            _lists_pos = _lists[pos]
             half = _lists_pos[_load:]
             del _lists_pos[_load:]
             _maxes[pos] = _lists_pos[-1]
@@ -559,7 +559,8 @@ class SortedList:
             # account the total below the left child node.
 
             if not pos & 1:
-                total += _index[pos - 1]
+                index_pos_1 = _index[pos - 1]
+                total += index_pos_1
 
             # Advance pos to the parent node.
 
@@ -624,7 +625,8 @@ class SortedList:
 
         """
         if idx < 0:
-            last_len = len(self._lists[-1])
+            _lists_1 = self._lists[-1]
+            last_len = len(_lists_1)
 
             if (-idx) <= last_len:
                 return len(self._lists) - 1, last_len + idx
