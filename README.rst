@@ -114,7 +114,6 @@ Features
 - Developed on Python 3.10
 - Tested with CPython 3.7, 3.8, 3.9, 3.10 and PyPy3
 - Tested on Linux, Mac OSX, and Windows
-- Cython optimized wheels published for CPython
 
 .. image:: https://github.com/grantjenks/python-sortedcontainers/workflows/integration/badge.svg
    :target: http://www.grantjenks.com/docs/sortedcontainers/
