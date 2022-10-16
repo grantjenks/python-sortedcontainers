@@ -52,10 +52,3 @@ echo ". env37/bin/activate && python -m tests.benchmark_sortedset --bare --kind 
 echo ". env37/bin/activate && python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _1000 --load 1000 --no-limit >> tests/results_load_sortedset.txt" | bash
 echo ". env37/bin/activate && python -m tests.benchmark_sortedset --bare --kind SortedSet --suffix _10000 --load 10000 --no-limit >> tests/results_load_sortedset.txt" | bash
 python -m tests.benchmark_plot tests/results_load_sortedset.txt SortedSet --suffix _load --save
-
-# Compare Cython
-
-rm tests/results_cython_sortedlist.txt
-echo ". env310/bin/activate && python -m tests.benchmark_sortedlist --bare --kind SortedList --size 1000 --size 100000 --suffix _Cython >> tests/results_cython_sortedlist.txt" | bash
-echo ". env310/bin/activate && python -m tests.benchmark_sortedlist --bare --kind SortedList --size 1000 --size 100000 --suffix _NoCython --no-cython >> tests/results_cython_sortedlist.txt" | bash
-python -m tests.benchmark_plot tests/results_cython_sortedlist.txt SortedList --suffix _cython --save
