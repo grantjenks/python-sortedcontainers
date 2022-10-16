@@ -1,7 +1,6 @@
 bintrees
 blist
 coverage
-cython
 doc8
 gj
 matplotlib
