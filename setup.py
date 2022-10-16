@@ -23,7 +23,7 @@ version = match.group(1)
 with open('README.rst') as reader:
     readme = reader.read()
 
-args = dict(
+setup(
     name='sortedcontainers',
     version=version,
     description='Sorted Containers -- Sorted List, Sorted Dict, Sorted Set',
@@ -52,18 +52,3 @@ args = dict(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
-
-try:
-    from Cython.Build import cythonize
-except ImportError:
-    pass
-else:
-    from setuptools import Extension
-    ext_modules = [
-        Extension('sortedcontainers._sortedlist', ['src/sortedcontainers/sortedlist.py']),
-        Extension('sortedcontainers._sorteddict', ['src/sortedcontainers/sorteddict.py']),
-        Extension('sortedcontainers._sortedset', ['src/sortedcontainers/sortedset.py']),
-    ]
-    args.update(ext_modules=cythonize(ext_modules))
-
-setup(**args)
