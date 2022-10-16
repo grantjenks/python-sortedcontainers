@@ -526,10 +526,3 @@ def test_ior():
     temp2 = SortedDict(mapping[13:])
     temp1 |= temp2
     assert temp1 == dict(mapping)
-
-try:
-    import Cython
-    def test_cython():
-        assert SortedDict.__module__ == 'sortedcontainers._sorteddict'
-except ImportError:
-    pass
