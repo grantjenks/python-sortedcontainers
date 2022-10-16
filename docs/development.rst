@@ -60,9 +60,7 @@ Collaborators are welcome!
 Requests for Contributions
 --------------------------
 
-#. Terabytes of memory for benchmarks of 100,000,000,000 elements.
 #. Find a way for SortedSet to inherit directly from ``set``.
-#. Testing / benchmarking with Cython.
 
 Get the Code
 ------------
