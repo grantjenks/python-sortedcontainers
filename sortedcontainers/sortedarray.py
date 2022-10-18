@@ -81,10 +81,10 @@ class SortedArray(SortedList):
 
 
     def __init__(self, typecode, initializer=None):
-        """Initialize sorted list instance.
+        """Initialize sorted array instance.
 
         Optional `iterable` argument provides an initial iterable of values to
-        initialize the sorted list.
+        initialize the sorted array.
 
         Runtime complexity: `O(n*log(n))`
 
