@@ -1,7 +1,7 @@
 Python Sorted Collections - PyCon 2016 Talk
 ===========================================
 
-* `Python Sorted Collections Video Recording on Youtube`_
+* `Python Sorted Collections Video`_
 * `Python Sorted Collections Slides`_
 
 Hello, I’m here today to talk about `Python sorted collections`_. I’m excited
@@ -388,8 +388,8 @@ including sorted ones.”
 
 Thanks for letting me share.
 
-.. _`Python Sorted Collections Video Recording on Youtube`: https://www.youtube.com/watch?v=7z2Ki44Vs4E
-.. _`Python Sorted Collections Slides`: http://bit.ly/soco-pycon
+.. _`Python Sorted Collections Video`: https://www.youtube.com/watch?v=7z2Ki44Vs4E
+.. _`Python Sorted Collections Slides`: https://grantjenks.com/talks/PyCon-2016-Python-Sorted-Collections.pdf
 .. _`Python sorted collections`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`heapq`: https://docs.python.org/3/library/heapq.html
 .. _`bisect`: https://docs.python.org/3/library/bisect.html
