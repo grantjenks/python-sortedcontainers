@@ -31,6 +31,9 @@ setup(
     author='Grant Jenks',
     author_email='contact@grantjenks.com',
     url='http://www.grantjenks.com/docs/sortedcontainers/',
+    project_urls={
+        'Source': 'https://github.com/grantjenks/python-sortedcontainers',
+    },
     license='Apache 2.0',
     package_dir={'': 'src'},
     packages=['sortedcontainers'],
