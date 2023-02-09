@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import platform
-import random
 import string
 import warnings
 
 from sortedcontainers import SortedDict
 import pytest
-from sys import hexversion
 import gc
 
-if hexversion < 0x03000000:
-    range = xrange
 
 def negate(value):
     return -value
@@ -20,16 +16,10 @@ def modulo(value):
     return value % 10
 
 def get_keysview(dic):
-    if hexversion < 0x03000000:
-        return dic.viewkeys()
-    else:
-        return dic.keys()
+    return dic.keys()
 
 def get_itemsview(dic):
-    if hexversion < 0x03000000:
-        return dic.viewitems()
-    else:
-        return dic.items()
+    return dic.items()
 
 def test_init():
     temp = SortedDict()
@@ -196,13 +186,6 @@ def test_get():
     temp = SortedDict(mapping)
     assert temp.get('a') == 0
     assert temp.get('A', -1) == -1
-
-def test_has_key():
-    if hexversion > 0x03000000:
-        return
-    mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]
-    temp = SortedDict(mapping)
-    assert temp.has_key('a')
 
 def test_items():
     mapping = [(val, pos) for pos, val in enumerate(string.ascii_lowercase)]

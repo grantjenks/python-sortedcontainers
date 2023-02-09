@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from sys import hexversion
 
-import copy
 import bisect
 import random
 from sortedcontainers import SortedList
 from functools import wraps
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 random.seed(0)
 actions = []

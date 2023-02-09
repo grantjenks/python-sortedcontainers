@@ -1,20 +1,10 @@
-import sys
 
-from sys import hexversion
+import argparse
+import random
 import logging
+import time
+from collections import OrderedDict
 
-import time, random, argparse
-from functools import partial
-try:
-    from collections import OrderedDict
-except:
-    from ordereddict import OrderedDict
-
-if hexversion < 0x03000000:
-    range = xrange
-    name_attr = 'func_name'
-else:
-    name_attr = '__name__'
 
 def detail(*values, **kwargs):
     if not args.bare:
@@ -58,11 +48,11 @@ def benchmark(test, name, ctor, setup, func_name, limit):
             times.append(measure(test, func, size))
 
         times.sort()
-        print(getattr(test, name_attr), name + args.suffix, size, times[0],
+        print(getattr(test, '__name__'), name + args.suffix, size, times[0],
               times[-1], times[2], sum(times) / len(times))
 
 def register_test(func):
-    tests[getattr(func, name_attr)] = func
+    tests[getattr(func, '__name__')] = func
     return func
 
 def limit(test, kind, value):

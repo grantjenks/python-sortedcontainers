@@ -16,28 +16,15 @@ Sorted dict implementations:
 
 """
 
-import sys
 import warnings
 
+from collections.abc import (
+        ItemsView, KeysView, Mapping, ValuesView, Sequence
+)
 from itertools import chain
 
 from .sortedlist import SortedList, recursive_repr
 from .sortedset import SortedSet
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import (
-        ItemsView, KeysView, Mapping, ValuesView, Sequence
-    )
-except ImportError:
-    from collections import ItemsView, KeysView, Mapping, ValuesView, Sequence
-
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
 
 
 class SortedDict(dict):
@@ -382,29 +369,6 @@ class SortedDict(dict):
 
         """
         return SortedValuesView(self)
-
-
-    if sys.hexversion < 0x03000000:
-        def __make_raise_attributeerror(original, alternate):
-            # pylint: disable=no-self-argument
-            message = (
-                'SortedDict.{original}() is not implemented.'
-                ' Use SortedDict.{alternate}() instead.'
-            ).format(original=original, alternate=alternate)
-            def method(self):
-                # pylint: disable=missing-docstring,unused-argument
-                raise AttributeError(message)
-            method.__name__ = original  # pylint: disable=non-str-assignment-to-dunder-name
-            method.__doc__ = message
-            return property(method)
-
-        iteritems = __make_raise_attributeerror('iteritems', 'items')
-        iterkeys = __make_raise_attributeerror('iterkeys', 'keys')
-        itervalues = __make_raise_attributeerror('itervalues', 'values')
-        viewitems = __make_raise_attributeerror('viewitems', 'items')
-        viewkeys = __make_raise_attributeerror('viewkeys', 'keys')
-        viewvalues = __make_raise_attributeerror('viewvalues', 'values')
-
 
     class _NotGiven(object):
         # pylint: disable=too-few-public-methods

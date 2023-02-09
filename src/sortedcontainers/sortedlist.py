@@ -20,66 +20,13 @@ import sys
 import traceback
 
 from bisect import bisect_left, bisect_right, insort
+from collections.abc import Sequence, MutableSequence
+from functools import reduce
 from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ne, gt, ge, lt, le, iadd
 from textwrap import dedent
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import Sequence, MutableSequence
-except ImportError:
-    from collections import Sequence, MutableSequence
-
-from functools import wraps
-from sys import hexversion
-
-if hexversion < 0x03000000:
-    from itertools import imap as map  # pylint: disable=redefined-builtin
-    from itertools import izip as zip  # pylint: disable=redefined-builtin
-    try:
-        from thread import get_ident
-    except ImportError:
-        from dummy_thread import get_ident
-else:
-    from functools import reduce
-    try:
-        from _thread import get_ident
-    except ImportError:
-        from _dummy_thread import get_ident
-
-
-def recursive_repr(fillvalue='...'):
-    "Decorator to make a repr function return fillvalue for a recursive call."
-    # pylint: disable=missing-docstring
-    # Copied from reprlib in Python 3
-    # https://hg.python.org/cpython/file/3.6/Lib/reprlib.py
-
-    def decorating_function(user_function):
-        repr_running = set()
-
-        @wraps(user_function)
-        def wrapper(self):
-            key = id(self), get_ident()
-            if key in repr_running:
-                return fillvalue
-            repr_running.add(key)
-            try:
-                result = user_function(self)
-            finally:
-                repr_running.discard(key)
-            return result
-
-        return wrapper
-
-    return decorating_function
-
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
+from reprlib import recursive_repr
 
 
 class SortedList(MutableSequence):

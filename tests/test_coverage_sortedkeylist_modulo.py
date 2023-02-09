@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from sys import hexversion
-
 import random
 from sortedcontainers import SortedList, SortedKeyList
-from itertools import chain, repeat
 import pytest
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 def modulo(val):
     return val % 10

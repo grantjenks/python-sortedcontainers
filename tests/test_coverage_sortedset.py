@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from sys import hexversion
-
-import random
 from sortedcontainers import SortedSet
-import pytest
 
-if hexversion < 0x03000000:
-    range = xrange
 
 def negate(value):
     return -value
