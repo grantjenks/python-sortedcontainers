@@ -57,7 +57,6 @@ empty capacity.
 
 """
 
-from __future__ import print_function
 
 import sortedcontainers as sc
 import random
@@ -72,12 +71,12 @@ class SortedListWithSplits(sc.SortedList):
     
     def __init__(self, *args, **kwargs):
         self.splits = 0
-        super(SortedListWithSplits, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _expand(self, pos):
         if len(self._lists[pos]) > self._twice:
             self.splits += 1
-        super(SortedListWithSplits, self)._expand(pos)
+        super()._expand(pos)
 
 
 def init_sorted_list(sl, size):

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 from sortedcontainers import SortedList, SortedKeyList
 import pytest

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from sortedcontainers import SortedSet
 
 
@@ -442,7 +440,7 @@ def test_ior():
     temp |= range(90, 100)
     assert all(temp[val] == val for val in range(100))
 
-class Identity(object):
+class Identity:
     def __call__(self, value):
         return value
     def __repr__(self):

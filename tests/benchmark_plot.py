@@ -21,7 +21,6 @@
 
 """
 
-from __future__ import print_function
 
 import argparse
 import matplotlib
@@ -96,6 +95,6 @@ if __name__ == '__main__':
             plt.show()
 
         if args.save:
-            plt.savefig('{0}{1}-{2}.png'.format(args.name, args.suffix, test))
+            plt.savefig(f'{args.name}{args.suffix}-{test}.png')
 
         plt.close()

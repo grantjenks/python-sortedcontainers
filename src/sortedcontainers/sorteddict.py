@@ -370,7 +370,7 @@ class SortedDict(dict):
         """
         return SortedValuesView(self)
 
-    class _NotGiven(object):
+    class _NotGiven:
         # pylint: disable=too-few-public-methods
         def __repr__(self):
             return '<not-given>'
@@ -564,10 +564,10 @@ class SortedDict(dict):
         """
         _key = self._key
         type_name = type(self).__name__
-        key_arg = '' if _key is None else '{0!r}, '.format(_key)
-        item_format = '{0!r}: {1!r}'.format
+        key_arg = '' if _key is None else f'{_key!r}, '
+        item_format = '{!r}: {!r}'.format
         items = ', '.join(item_format(key, self[key]) for key in self._list)
-        return '{0}({1}{{{2}}})'.format(type_name, key_arg, items)
+        return f'{type_name}({key_arg}{{{items}}})'
 
 
     def _check(self):

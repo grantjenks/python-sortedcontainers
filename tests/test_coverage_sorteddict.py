@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import platform
 import string
 import warnings
@@ -276,7 +274,7 @@ def test_repr():
     temp = SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})
     assert repr(temp) == "SortedDict({'alice': 3, 'bob': 1, 'carol': 2, 'dave': 4})"
 
-class Identity(object):
+class Identity:
     def __call__(self, value):
         return value
     def __repr__(self):

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-
 import bisect
 import random
 from sortedcontainers import SortedList
@@ -48,7 +44,7 @@ def stress_add(slt):
 
 @actor(1)
 def stress_update(slt):
-    slt.update((random.random() for rpt in range(350)))
+    slt.update(random.random() for rpt in range(350))
 
 @actor(1)
 @not_empty
@@ -256,7 +252,7 @@ def stress_lt(slt):
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedList((random.random() for rpt in range(1000)))
+    slt = SortedList(random.random() for rpt in range(1000))
     slt._reset(23)
 
     for rpt in range(repeat):

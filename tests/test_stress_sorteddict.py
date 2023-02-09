@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-
 import random
 from sortedcontainers import SortedDict
 
@@ -35,7 +31,7 @@ def test_init():
 @actor
 def stress_contains(sdict):
     keys = list(sdict)
-    assert all((key in sdict for key in keys))
+    assert all(key in sdict for key in keys)
 
 @actor
 def stress_delitem(sdict):
@@ -52,7 +48,7 @@ def stress_getitem(sdict):
     
 @actor
 def stress_eq(sdict):
-    that = dict((key, value) for key, value in sdict.items())
+    that = {key: value for key, value in sdict.items()}
     assert sdict == that
 
 @actor

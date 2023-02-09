@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 from sortedcontainers import SortedKeyList, SortedListWithKey
 from itertools import chain
@@ -497,7 +495,7 @@ def test_mul():
     that = this * 5
     this._check()
     that._check()
-    assert this == list(reversed((range(10))))
+    assert this == list(reversed(range(10)))
     assert that == list(sorted(list(range(10)) * 5, reverse=True))
     assert this != that
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 from sortedcontainers import SortedList
 from itertools import chain
@@ -434,7 +432,7 @@ def test_index():
 
     assert slt.index(99, 0, 1000) == 99
 
-    slt = SortedList((0 for rpt in range(100)))
+    slt = SortedList(0 for rpt in range(100))
     slt._reset(17)
 
     for start in range(100):

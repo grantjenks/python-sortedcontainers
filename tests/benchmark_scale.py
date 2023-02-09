@@ -59,7 +59,6 @@ L3 cache:              46080K
 NUMA node0 CPU(s):     0-31
 
 """
-from __future__ import print_function
 
 import argparse
 import collections as co
@@ -119,7 +118,7 @@ def init_sorted_list(sl, size, moment=5, fraction=0.1):
     sigma = load * fraction
     total = 0
 
-    class WhileIterator(object):
+    class WhileIterator:
         "Convert for-loop to while-loop with length estimate."
         def __iter__(self):
             while total < size:
