@@ -169,35 +169,35 @@ class SortedCollection:
         i = bisect_left(self._keys, k)
         if i != len(self) and self._keys[i] == k:
             return self._items[i]
-        raise ValueError('No item found with key equal to: {!r}'.format(k))
+        raise ValueError(f'No item found with key equal to: {k!r}')
 
     def find_le(self, k):
         'Return last item with a key <= k.  Raise ValueError if not found.'
         i = bisect_right(self._keys, k)
         if i:
             return self._items[i-1]
-        raise ValueError('No item found with key at or below: {!r}'.format(k))
+        raise ValueError(f'No item found with key at or below: {k!r}')
 
     def find_lt(self, k):
         'Return last item with a key < k.  Raise ValueError if not found.'
         i = bisect_left(self._keys, k)
         if i:
             return self._items[i-1]
-        raise ValueError('No item found with key below: {!r}'.format(k))
+        raise ValueError(f'No item found with key below: {k!r}')
 
     def find_ge(self, k):
         'Return first item with a key >= equal to k.  Raise ValueError if not found'
         i = bisect_left(self._keys, k)
         if i != len(self):
             return self._items[i]
-        raise ValueError('No item found with key at or above: {!r}'.format(k))
+        raise ValueError(f'No item found with key at or above: {k!r}')
 
     def find_gt(self, k):
         'Return first item with a key > k.  Raise ValueError if not found'
         i = bisect_right(self._keys, k)
         if i != len(self):
             return self._items[i]
-        raise ValueError('No item found with key above: {!r}'.format(k))
+        raise ValueError(f'No item found with key above: {k!r}')
 
     # GrantJ 05/16/18 -- Additions for benchmarking.
 
