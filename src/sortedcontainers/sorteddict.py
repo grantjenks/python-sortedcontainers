@@ -95,7 +95,6 @@ class SortedDict(dict):
 
     * :func:`SortedList.bisect_left`
     * :func:`SortedList.bisect_right`
-    * :func:`SortedList.count`
     * :func:`SortedList.index`
     * :func:`SortedList.irange`
     * :func:`SortedList.islice`
