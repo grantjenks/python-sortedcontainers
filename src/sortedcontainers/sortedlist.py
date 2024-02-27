@@ -14,72 +14,18 @@ Sorted list implementations:
 
 """
 # pylint: disable=too-many-lines
-from __future__ import print_function
 
 import sys
 import traceback
 
 from bisect import bisect_left, bisect_right, insort
+from collections.abc import Sequence, MutableSequence
+from functools import reduce
 from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ne, gt, ge, lt, le, iadd
 from textwrap import dedent
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import Sequence, MutableSequence
-except ImportError:
-    from collections import Sequence, MutableSequence
-
-from functools import wraps
-from sys import hexversion
-
-if hexversion < 0x03000000:
-    from itertools import imap as map  # pylint: disable=redefined-builtin
-    from itertools import izip as zip  # pylint: disable=redefined-builtin
-    try:
-        from thread import get_ident
-    except ImportError:
-        from dummy_thread import get_ident
-else:
-    from functools import reduce
-    try:
-        from _thread import get_ident
-    except ImportError:
-        from _dummy_thread import get_ident
-
-
-def recursive_repr(fillvalue='...'):
-    "Decorator to make a repr function return fillvalue for a recursive call."
-    # pylint: disable=missing-docstring
-    # Copied from reprlib in Python 3
-    # https://hg.python.org/cpython/file/3.6/Lib/reprlib.py
-
-    def decorating_function(user_function):
-        repr_running = set()
-
-        @wraps(user_function)
-        def wrapper(self):
-            key = id(self), get_ident()
-            if key in repr_running:
-                return fillvalue
-            repr_running.add(key)
-            try:
-                result = user_function(self)
-            finally:
-                repr_running.discard(key)
-            return result
-
-        return wrapper
-
-    return decorating_function
-
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
+from reprlib import recursive_repr
 
 
 class SortedList(MutableSequence):
@@ -446,12 +392,12 @@ class SortedList(MutableSequence):
         _maxes = self._maxes
 
         if not _maxes:
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError(f'{value!r} not in list')
 
         pos = bisect_left(_maxes, value)
 
         if pos == len(_maxes):
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError(f'{value!r} not in list')
 
         _lists = self._lists
         idx = bisect_left(_lists[pos], value)
@@ -459,7 +405,7 @@ class SortedList(MutableSequence):
         if _lists[pos][idx] == value:
             self._delete(pos, idx)
         else:
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError(f'{value!r} not in list')
 
 
     def _delete(self, pos, idx):
@@ -1407,7 +1353,7 @@ class SortedList(MutableSequence):
         _len = self._len
 
         if not _len:
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         if start is None:
             start = 0
@@ -1424,19 +1370,19 @@ class SortedList(MutableSequence):
             stop = _len
 
         if stop <= start:
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         _maxes = self._maxes
         pos_left = bisect_left(_maxes, value)
 
         if pos_left == len(_maxes):
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         _lists = self._lists
         idx_left = bisect_left(_lists[pos_left], value)
 
         if _lists[pos_left][idx_left] != value:
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         stop -= 1
         left = self._loc(pos_left, idx_left)
@@ -1450,7 +1396,7 @@ class SortedList(MutableSequence):
             if start <= right:
                 return start
 
-        raise ValueError('{0!r} is not in list'.format(value))
+        raise ValueError(f'{value!r} is not in list')
 
 
     def __add__(self, other):
@@ -1566,7 +1512,7 @@ class SortedList(MutableSequence):
             return seq_op(self_len, len_other)
 
         seq_op_name = seq_op.__name__
-        comparer.__name__ = '__{0}__'.format(seq_op_name)
+        comparer.__name__ = f'__{seq_op_name}__'
         doc_str = """Return true if and only if sorted list is {0} `other`.
 
         ``sl.__{1}__(other)`` <==> ``sl {2} other``
@@ -1606,7 +1552,7 @@ class SortedList(MutableSequence):
         :return: string representation
 
         """
-        return '{0}({1!r})'.format(type(self).__name__, list(self))
+        return f'{type(self).__name__}({list(self)!r})'
 
 
     def _check(self):
@@ -2022,13 +1968,13 @@ class SortedKeyList(SortedList):
         _maxes = self._maxes
 
         if not _maxes:
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError(f'{value!r} not in list')
 
         key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
-            raise ValueError('{0!r} not in list'.format(value))
+            raise ValueError(f'{value!r} not in list')
 
         _lists = self._lists
         _keys = self._keys
@@ -2038,7 +1984,7 @@ class SortedKeyList(SortedList):
 
         while True:
             if _keys[pos][idx] != key:
-                raise ValueError('{0!r} not in list'.format(value))
+                raise ValueError(f'{value!r} not in list')
             if _lists[pos][idx] == value:
                 self._delete(pos, idx)
                 return
@@ -2046,7 +1992,7 @@ class SortedKeyList(SortedList):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_keys:
-                    raise ValueError('{0!r} not in list'.format(value))
+                    raise ValueError(f'{value!r} not in list')
                 len_sublist = len(_keys[pos])
                 idx = 0
 
@@ -2443,7 +2389,7 @@ class SortedKeyList(SortedList):
         _len = self._len
 
         if not _len:
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         if start is None:
             start = 0
@@ -2460,14 +2406,14 @@ class SortedKeyList(SortedList):
             stop = _len
 
         if stop <= start:
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         _maxes = self._maxes
         key = self._key(value)
         pos = bisect_left(_maxes, key)
 
         if pos == len(_maxes):
-            raise ValueError('{0!r} is not in list'.format(value))
+            raise ValueError(f'{value!r} is not in list')
 
         stop -= 1
         _lists = self._lists
@@ -2478,7 +2424,7 @@ class SortedKeyList(SortedList):
 
         while True:
             if _keys[pos][idx] != key:
-                raise ValueError('{0!r} is not in list'.format(value))
+                raise ValueError(f'{value!r} is not in list')
             if _lists[pos][idx] == value:
                 loc = self._loc(pos, idx)
                 if start <= loc <= stop:
@@ -2489,11 +2435,11 @@ class SortedKeyList(SortedList):
             if idx == len_sublist:
                 pos += 1
                 if pos == len_keys:
-                    raise ValueError('{0!r} is not in list'.format(value))
+                    raise ValueError(f'{value!r} is not in list')
                 len_sublist = len(_keys[pos])
                 idx = 0
 
-        raise ValueError('{0!r} is not in list'.format(value))
+        raise ValueError(f'{value!r} is not in list')
 
 
     def __add__(self, other):
@@ -2557,7 +2503,7 @@ class SortedKeyList(SortedList):
 
         """
         type_name = type(self).__name__
-        return '{0}({1!r}, key={2!r})'.format(type_name, list(self), self._key)
+        return f'{type_name}({list(self)!r}, key={self._key!r})'
 
 
     def _check(self):

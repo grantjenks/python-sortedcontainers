@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from sys import hexversion
-
 import random
 from sortedcontainers import SortedList
 from itertools import chain
 import pytest
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 def test_init():
     slt = SortedList()
@@ -439,7 +432,7 @@ def test_index():
 
     assert slt.index(99, 0, 1000) == 99
 
-    slt = SortedList((0 for rpt in range(100)))
+    slt = SortedList(0 for rpt in range(100))
     slt._reset(17)
 
     for start in range(100):

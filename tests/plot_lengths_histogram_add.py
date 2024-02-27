@@ -27,7 +27,6 @@ Observations:
 
 """
 
-from __future__ import division, print_function
 
 import argparse
 import itertools as it

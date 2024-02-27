@@ -13,24 +13,12 @@ Sorted set implementations:
 
 """
 
+from collections.abc import MutableSet, Sequence, Set
 from itertools import chain
 from operator import eq, ne, gt, ge, lt, le
 from textwrap import dedent
 
 from .sortedlist import SortedList, recursive_repr
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import MutableSet, Sequence, Set
-except ImportError:
-    from collections import MutableSet, Sequence, Set
-
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
 
 
 class SortedSet(MutableSet, Sequence):
@@ -277,7 +265,7 @@ class SortedSet(MutableSet, Sequence):
             return NotImplemented
 
         set_op_name = set_op.__name__
-        comparer.__name__ = '__{0}__'.format(set_op_name)
+        comparer.__name__ = f'__{set_op_name}__'
         doc_str = """Return true if and only if sorted set is {0} `other`.
 
         ``ss.__{1}__(other)`` <==> ``ss {2} other``
@@ -715,9 +703,9 @@ class SortedSet(MutableSet, Sequence):
 
         """
         _key = self._key
-        key = '' if _key is None else ', key={0!r}'.format(_key)
+        key = '' if _key is None else f', key={_key!r}'
         type_name = type(self).__name__
-        return '{0}({1!r}{2})'.format(type_name, list(self), key)
+        return f'{type_name}({list(self)!r}{key})'
 
 
     def _check(self):

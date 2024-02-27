@@ -1,13 +1,5 @@
-# -*- coding: utf-8 -*-
-
-from sys import hexversion
-
-import random
 from sortedcontainers import SortedSet
-import pytest
 
-if hexversion < 0x03000000:
-    range = xrange
 
 def negate(value):
     return -value
@@ -448,7 +440,7 @@ def test_ior():
     temp |= range(90, 100)
     assert all(temp[val] == val for val in range(100))
 
-class Identity(object):
+class Identity:
     def __call__(self, value):
         return value
     def __repr__(self):

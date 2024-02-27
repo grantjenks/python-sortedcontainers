@@ -3,12 +3,9 @@ Benchmark Sorted Set Datatypes
 """
 
 import warnings
-from sys import hexversion
 
 from .benchmark import *
 
-if hexversion < 0x03000000:
-    range = xrange
 
 # Tests.
 

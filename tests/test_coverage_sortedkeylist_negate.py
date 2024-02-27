@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from sys import hexversion
-
 import random
 from sortedcontainers import SortedKeyList, SortedListWithKey
-from itertools import chain, repeat
+from itertools import chain
 import pytest
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 def negate(val):
     return -val
@@ -502,7 +495,7 @@ def test_mul():
     that = this * 5
     this._check()
     that._check()
-    assert this == list(reversed((range(10))))
+    assert this == list(reversed(range(10)))
     assert that == list(sorted(list(range(10)) * 5, reverse=True))
     assert this != that
 

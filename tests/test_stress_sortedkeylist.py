@@ -1,17 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-from sys import hexversion
-
-import copy
 import bisect
 import random
 from sortedcontainers import SortedKeyList
 from functools import wraps
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 random.seed(0)
 actions = []
@@ -53,7 +44,7 @@ def stress_add(slt):
 
 @actor(1)
 def stress_update(slt):
-    slt.update((random.random() for rpt in range(350)))
+    slt.update(random.random() for rpt in range(350))
 
 @actor(1)
 @not_empty
@@ -242,7 +233,7 @@ def stress_lt(slt):
     assert not (slt < values)
 
 def test_stress(repeat=1000):
-    slt = SortedKeyList((random.random() for rpt in range(1000)))
+    slt = SortedKeyList(random.random() for rpt in range(1000))
 
     for rpt in range(repeat):
         action = random.choice(actions)

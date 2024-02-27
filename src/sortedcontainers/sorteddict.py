@@ -16,28 +16,15 @@ Sorted dict implementations:
 
 """
 
-import sys
 import warnings
 
+from collections.abc import (
+        ItemsView, KeysView, Mapping, ValuesView, Sequence
+)
 from itertools import chain
 
 from .sortedlist import SortedList, recursive_repr
 from .sortedset import SortedSet
-
-###############################################################################
-# BEGIN Python 2/3 Shims
-###############################################################################
-
-try:
-    from collections.abc import (
-        ItemsView, KeysView, Mapping, ValuesView, Sequence
-    )
-except ImportError:
-    from collections import ItemsView, KeysView, Mapping, ValuesView, Sequence
-
-###############################################################################
-# END Python 2/3 Shims
-###############################################################################
 
 
 class SortedDict(dict):
@@ -382,30 +369,7 @@ class SortedDict(dict):
         """
         return SortedValuesView(self)
 
-
-    if sys.hexversion < 0x03000000:
-        def __make_raise_attributeerror(original, alternate):
-            # pylint: disable=no-self-argument
-            message = (
-                'SortedDict.{original}() is not implemented.'
-                ' Use SortedDict.{alternate}() instead.'
-            ).format(original=original, alternate=alternate)
-            def method(self):
-                # pylint: disable=missing-docstring,unused-argument
-                raise AttributeError(message)
-            method.__name__ = original  # pylint: disable=non-str-assignment-to-dunder-name
-            method.__doc__ = message
-            return property(method)
-
-        iteritems = __make_raise_attributeerror('iteritems', 'items')
-        iterkeys = __make_raise_attributeerror('iterkeys', 'keys')
-        itervalues = __make_raise_attributeerror('itervalues', 'values')
-        viewitems = __make_raise_attributeerror('viewitems', 'items')
-        viewkeys = __make_raise_attributeerror('viewkeys', 'keys')
-        viewvalues = __make_raise_attributeerror('viewvalues', 'values')
-
-
-    class _NotGiven(object):
+    class _NotGiven:
         # pylint: disable=too-few-public-methods
         def __repr__(self):
             return '<not-given>'
@@ -599,10 +563,10 @@ class SortedDict(dict):
         """
         _key = self._key
         type_name = type(self).__name__
-        key_arg = '' if _key is None else '{0!r}, '.format(_key)
-        item_format = '{0!r}: {1!r}'.format
+        key_arg = '' if _key is None else f'{_key!r}, '
+        item_format = '{!r}: {!r}'.format
         items = ', '.join(item_format(key, self[key]) for key in self._list)
-        return '{0}({1}{{{2}}})'.format(type_name, key_arg, items)
+        return f'{type_name}({key_arg}{{{items}}})'
 
 
     def _check(self):

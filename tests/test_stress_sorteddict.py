@@ -1,15 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
-from sys import hexversion
-
 import random
 from sortedcontainers import SortedDict
-from functools import wraps
 
-if hexversion < 0x03000000:
-    from itertools import izip as zip
-    range = xrange
 
 random.seed(0)
 actions = []
@@ -40,7 +31,7 @@ def test_init():
 @actor
 def stress_contains(sdict):
     keys = list(sdict)
-    assert all((key in sdict for key in keys))
+    assert all(key in sdict for key in keys)
 
 @actor
 def stress_delitem(sdict):
@@ -57,7 +48,7 @@ def stress_getitem(sdict):
     
 @actor
 def stress_eq(sdict):
-    that = dict((key, value) for key, value in sdict.items())
+    that = {key: value for key, value in sdict.items()}
     assert sdict == that
 
 @actor
@@ -82,14 +73,6 @@ def stress_get(sdict):
             assert sdict.get(key, 1) == -key
         else:
             assert sdict.get(key, 1) == 1
-
-@actor
-def stress_has_key(sdict):
-    if hexversion > 0x03000000:
-        return
-    keys = list(range(100))
-    for key in keys:
-        assert all((key in sdict) == (sdict.has_key(key)) for key in sdict)
 
 @actor
 def stress_items_keys_values(sdict):
