@@ -17,14 +17,14 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        check: [pylint]
+        check: [rufflint, ruffformatcheck, doc8, docs, rstcheck, build-check]
 
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
       - name: Install tox
         run: |
           pip install --upgrade pip
@@ -37,10 +37,10 @@ jobs:
     needs: checks
     runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 4
+      max-parallel: 6
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
+        python-version: [3.8, 3.9, '3.10', 3.11, 3.12]
 
     steps:
       - uses: actions/checkout@v3
@@ -57,22 +57,3 @@ jobs:
 
       - name: Test with tox
         run: tox -e py
-
-  builds:
-    needs: tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install build
-        run: |
-          pip install --upgrade pip
-          pip install build
-
-      - run: python -m build .
