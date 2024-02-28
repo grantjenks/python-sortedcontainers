@@ -7,42 +7,24 @@ on:
 
 jobs:
 
-  builds:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install build
-        run: |
-          pip install --upgrade pip
-          pip install build
-
-      - run: python -m build .
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: ./dist/*
-
   upload:
-    needs: builds
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
-    - name: Stage wheels
-      uses: actions/download-artifact@v3
-      with:
-        name: dist
-        path: dist
+    - uses: actions/checkout@v3
 
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        python-version: '3.12'
+
+    - name: Install build
+      run: pip install build
+
+    - name: Create build
+      run: python -m build
+
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
