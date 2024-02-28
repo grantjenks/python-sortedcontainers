@@ -44,29 +44,15 @@ testing has 100% coverage with unit tests and hours of stress.
 :license: Apache 2.0, see LICENSE for more details.
 
 """
-# pylint: disable=reimported
 
-
-from .sortedlist import SortedList, SortedKeyList, SortedListWithKey
-from .sortedset import SortedSet
 from .sorteddict import (
     SortedDict,
-    SortedKeysView,
     SortedItemsView,
+    SortedKeysView,
     SortedValuesView,
 )
-
-try:
-    from ._sortedlist import SortedList, SortedKeyList, SortedListWithKey
-    from ._sortedset import SortedSet
-    from ._sorteddict import (
-        SortedDict,
-        SortedKeysView,
-        SortedItemsView,
-        SortedValuesView,
-    )
-except ImportError:
-    pass
+from .sortedlist import SortedKeyList, SortedList, SortedListWithKey
+from .sortedset import SortedSet
 
 __all__ = [
     'SortedList',
