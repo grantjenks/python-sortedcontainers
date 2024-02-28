@@ -17,10 +17,7 @@ Sorted dict implementations:
 """
 
 import warnings
-
-from collections.abc import (
-        ItemsView, KeysView, Mapping, ValuesView, Sequence
-)
+from collections.abc import ItemsView, KeysView, Mapping, Sequence, ValuesView
 from itertools import chain
 
 from .sortedlist import SortedList, recursive_repr

@@ -17,15 +17,14 @@ Sorted list implementations:
 
 import sys
 import traceback
-
 from bisect import bisect_left, bisect_right, insort
-from collections.abc import Sequence, MutableSequence
+from collections.abc import MutableSequence, Sequence
 from functools import reduce
 from itertools import chain, repeat, starmap
 from math import log
-from operator import add, eq, ne, gt, ge, lt, le, iadd
-from textwrap import dedent
+from operator import add, eq, ge, gt, iadd, le, lt, ne
 from reprlib import recursive_repr
+from textwrap import dedent
 
 
 class SortedList(MutableSequence):

@@ -15,7 +15,7 @@ Sorted set implementations:
 
 from collections.abc import MutableSet, Sequence, Set
 from itertools import chain
-from operator import eq, ne, gt, ge, lt, le
+from operator import eq, ge, gt, le, lt, ne
 from textwrap import dedent
 
 from .sortedlist import SortedList, recursive_repr
