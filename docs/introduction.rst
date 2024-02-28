@@ -38,7 +38,7 @@ download the `Sorted Containers zipball`_.
 Once you have a copy of the sources, you can embed it in your Python package,
 or install it into your site-packages using the command::
 
-    $ python3 setup.py install
+    $ python3 -m pip install .
 
 :doc:`Sorted Containers<index>` is available in Debian distributions as
 `python3-sortedcontainers` and `python-sortedcontainers`.
