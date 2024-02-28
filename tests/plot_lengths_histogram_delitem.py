@@ -15,14 +15,14 @@ import random
 
 
 def background():
-    'Plot the background of each animated frame.'
+    "Plot the background of each animated frame."
     hist_line.set_data([], [])
     norm_line.set_data([], [])
     return hist_line, norm_line
 
 
 def frame(num):
-    'Draw frame.'
+    "Draw frame."
     for value in xrange(LOAD):
         del values[random.randrange(len(values))]
     data = np.array([len(sublist) for sublist in values._lists])

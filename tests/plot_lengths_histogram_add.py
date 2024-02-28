@@ -42,14 +42,14 @@ DISPLAY_FIT = False
 
 
 def background():
-    'Plot the background of each animated frame.'
+    "Plot the background of each animated frame."
     hist_line.set_data([], [])
     norm_line.set_data([], [])
     return hist_line, norm_line
 
 
 def frame(num):
-    'Draw frame.'
+    "Draw frame."
     values.update(func() for func in it.repeat(random.random, LOAD))
     data = np.array([len(sublist) for sublist in values._lists])
     hist, bins = np.histogram(data, bins=BINS, normed=True)

@@ -132,69 +132,69 @@ class SortedCollection:
         return item in self._items[i:j]
 
     def index(self, item):
-        'Find the position of an item.  Raise ValueError if not found.'
+        "Find the position of an item.  Raise ValueError if not found."
         k = self._key(item)
         i = bisect_left(self._keys, k)
         j = bisect_right(self._keys, k)
         return self._items[i:j].index(item) + i
 
     def count(self, item):
-        'Return number of occurrences of item'
+        "Return number of occurrences of item"
         k = self._key(item)
         i = bisect_left(self._keys, k)
         j = bisect_right(self._keys, k)
         return self._items[i:j].count(item)
 
     def insert(self, item):
-        'Insert a new item.  If equal keys are found, add to the left'
+        "Insert a new item.  If equal keys are found, add to the left"
         k = self._key(item)
         i = bisect_left(self._keys, k)
         self._keys.insert(i, k)
         self._items.insert(i, item)
 
     def insert_right(self, item):
-        'Insert a new item.  If equal keys are found, add to the right'
+        "Insert a new item.  If equal keys are found, add to the right"
         k = self._key(item)
         i = bisect_right(self._keys, k)
         self._keys.insert(i, k)
         self._items.insert(i, item)
 
     def remove(self, item):
-        'Remove first occurrence of item.  Raise ValueError if not found'
+        "Remove first occurrence of item.  Raise ValueError if not found"
         i = self.index(item)
         del self._keys[i]
         del self._items[i]
 
     def find(self, k):
-        'Return first item with a key == k.  Raise ValueError if not found.'
+        "Return first item with a key == k.  Raise ValueError if not found."
         i = bisect_left(self._keys, k)
         if i != len(self) and self._keys[i] == k:
             return self._items[i]
         raise ValueError(f'No item found with key equal to: {k!r}')
 
     def find_le(self, k):
-        'Return last item with a key <= k.  Raise ValueError if not found.'
+        "Return last item with a key <= k.  Raise ValueError if not found."
         i = bisect_right(self._keys, k)
         if i:
             return self._items[i - 1]
         raise ValueError(f'No item found with key at or below: {k!r}')
 
     def find_lt(self, k):
-        'Return last item with a key < k.  Raise ValueError if not found.'
+        "Return last item with a key < k.  Raise ValueError if not found."
         i = bisect_left(self._keys, k)
         if i:
             return self._items[i - 1]
         raise ValueError(f'No item found with key below: {k!r}')
 
     def find_ge(self, k):
-        'Return first item with a key >= equal to k.  Raise ValueError if not found'
+        "Return first item with a key >= equal to k.  Raise ValueError if not found"
         i = bisect_left(self._keys, k)
         if i != len(self):
             return self._items[i]
         raise ValueError(f'No item found with key at or above: {k!r}')
 
     def find_gt(self, k):
-        'Return first item with a key > k.  Raise ValueError if not found'
+        "Return first item with a key > k.  Raise ValueError if not found"
         i = bisect_right(self._keys, k)
         if i != len(self):
             return self._items[i]
@@ -232,49 +232,49 @@ class SortedCollection:
 if __name__ == '__main__':
 
     def ve2no(f, *args):
-        'Convert ValueError result to -1'
+        "Convert ValueError result to -1"
         try:
             return f(*args)
         except ValueError:
             return -1
 
     def slow_index(seq, k):
-        'Location of match or -1 if not found'
+        "Location of match or -1 if not found"
         for i, item in enumerate(seq):
             if item == k:
                 return i
         return -1
 
     def slow_find(seq, k):
-        'First item with a key equal to k. -1 if not found'
+        "First item with a key equal to k. -1 if not found"
         for item in seq:
             if item == k:
                 return item
         return -1
 
     def slow_find_le(seq, k):
-        'Last item with a key less-than or equal to k.'
+        "Last item with a key less-than or equal to k."
         for item in reversed(seq):
             if item <= k:
                 return item
         return -1
 
     def slow_find_lt(seq, k):
-        'Last item with a key less-than k.'
+        "Last item with a key less-than k."
         for item in reversed(seq):
             if item < k:
                 return item
         return -1
 
     def slow_find_ge(seq, k):
-        'First item with a key-value greater-than or equal to k.'
+        "First item with a key-value greater-than or equal to k."
         for item in seq:
             if item >= k:
                 return item
         return -1
 
     def slow_find_gt(seq, k):
-        'First item with a key-value greater-than or equal to k.'
+        "First item with a key-value greater-than or equal to k."
         for item in seq:
             if item > k:
                 return item

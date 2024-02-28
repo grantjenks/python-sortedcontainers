@@ -67,7 +67,7 @@ RATIO = 3
 
 
 class SortedListWithSplits(sc.SortedList):
-    'SortedList that counts splits that occur in _expand.'
+    "SortedList that counts splits that occur in _expand."
 
     def __init__(self, *args, **kwargs):
         self.splits = 0
@@ -80,7 +80,7 @@ class SortedListWithSplits(sc.SortedList):
 
 
 def init_sorted_list(sl, size):
-    'Initialize a SortedList with normally distributed sublist lengths.'
+    "Initialize a SortedList with normally distributed sublist lengths."
     sl.clear()
 
     total = 0
@@ -105,7 +105,7 @@ def init_sorted_list(sl, size):
 
 
 def fill(obj, count, limit):
-    'Repeatedly add random values to the SortedList.'
+    "Repeatedly add random values to the SortedList."
     for each in range(count):
         obj.add(random.randrange(limit))
 

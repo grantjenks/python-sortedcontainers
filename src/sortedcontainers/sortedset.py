@@ -250,10 +250,10 @@ class SortedSet(MutableSet, Sequence):
         del _list[index]
 
     def __make_cmp(set_op, symbol, doc):
-        'Make comparator method.'
+        "Make comparator method."
 
         def comparer(self, other):
-            'Compare method for sorted set and set.'
+            "Compare method for sorted set and set."
             if isinstance(other, SortedSet):
                 return set_op(self._set, other._set)
             elif isinstance(other, Set):

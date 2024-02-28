@@ -1450,10 +1450,10 @@ class SortedList(MutableSequence):
         return self
 
     def __make_cmp(seq_op, symbol, doc):
-        'Make comparator method.'
+        "Make comparator method."
 
         def comparer(self, other):
-            'Compare method for sorted list and sequence.'
+            "Compare method for sorted list and sequence."
             if not isinstance(other, Sequence):
                 return NotImplemented
 
@@ -1587,7 +1587,7 @@ class SortedList(MutableSequence):
 
 
 def identity(value):
-    'Identity function.'
+    "Identity function."
     return value
 
 
@@ -1658,7 +1658,7 @@ class SortedKeyList(SortedList):
 
     @property
     def key(self):
-        'Function used to extract comparison key from values.'
+        "Function used to extract comparison key from values."
         return self._key
 
     def clear(self):
