@@ -8,7 +8,7 @@ description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
 authors = [
     {"name" = "Grant Jenks", "email" = "contact@grantjenks.com"},
 ]
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">=3.2"
 license = {"text" = "Apache 2.0"}
 classifiers = [
