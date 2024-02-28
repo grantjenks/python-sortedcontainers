@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sortedcontainers"
+description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
+authors = [
+    {"name" = "Grant Jenks", "email" = "contact@grantjenks.com"},
+]
+readme = "README.md"
+requires-python = ">=3.2"
+keywords = ["django", "search"]
+license = {"text" = "Apache 2.0"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://grantjenks.com/docs/sortedcontainers/"
+Source = "https://github.com/grantjenks/python-sortedcontainers"
+Tracker = "https://github.com/grantjenks/python-sortedcontainers/issues"
+
+[tool.setuptools.dynamic]
+version = {attr = "djangoinstantsearch.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "www.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = "--cov www --cov interplexer --cov-report term"
+
+[tool.ruff]
+format.quote-style = "single"
+
+[tool.ruff.lint]
+ignore = [
+    # E501 Line too long
+    "E501",
+]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
