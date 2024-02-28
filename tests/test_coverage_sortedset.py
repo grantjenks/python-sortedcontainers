@@ -4,8 +4,10 @@ from sortedcontainers import SortedSet
 def negate(value):
     return -value
 
+
 def modulo(value):
     return value % 10
+
 
 def test_init():
     temp = SortedSet(range(100))
@@ -14,9 +16,11 @@ def test_init():
     temp._check()
     assert all(val == temp[val] for val in temp)
 
+
 def test_init_key():
     temp = SortedSet(range(100), key=negate)
     assert temp.key == negate
+
 
 def test_contains():
     temp = SortedSet(range(100))
@@ -24,10 +28,12 @@ def test_contains():
     assert all(val in temp for val in range(100))
     assert all(val not in temp for val in range(100, 200))
 
+
 def test_getitem():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert all(val == temp[val] for val in temp)
+
 
 def test_getitem_slice():
     vals = list(range(100))
@@ -35,10 +41,12 @@ def test_getitem_slice():
     temp._reset(7)
     assert temp[20:30] == vals[20:30]
 
+
 def test_getitem_key():
     temp = SortedSet(range(100), key=negate)
     temp._reset(7)
     assert all(temp[val] == (99 - val) for val in range(100))
+
 
 def test_delitem():
     temp = SortedSet(range(100))
@@ -46,6 +54,7 @@ def test_delitem():
     for val in reversed(range(50)):
         del temp[val]
     assert all(temp[pos] == (pos + 50) for pos in range(50))
+
 
 def test_delitem_slice():
     vals = list(range(100))
@@ -55,6 +64,7 @@ def test_delitem_slice():
     del temp[20:40:2]
     assert temp == set(vals)
 
+
 def test_delitem_key():
     temp = SortedSet(range(100), key=modulo)
     temp._reset(7)
@@ -63,6 +73,7 @@ def test_delitem_key():
         del temp[val]
         del values[val]
     assert list(temp) == list(values)
+
 
 def test_eq():
     alpha = SortedSet(range(100))
@@ -74,6 +85,7 @@ def test_eq():
     beta.add(101)
     assert not (alpha == beta)
 
+
 def test_ne():
     alpha = SortedSet(range(100))
     alpha._reset(7)
@@ -84,6 +96,7 @@ def test_ne():
     assert alpha != beta
     assert alpha != beta._set
     assert alpha != list(range(101))
+
 
 def test_lt_gt():
     temp = SortedSet(range(100))
@@ -97,6 +110,7 @@ def test_lt_gt():
     assert not (that > temp)
     assert temp > that._set
 
+
 def test_le_ge():
     alpha = SortedSet(range(100))
     alpha._reset(7)
@@ -109,15 +123,18 @@ def test_le_ge():
     assert not (alpha >= beta)
     assert beta >= alpha._set
 
+
 def test_iter():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert all(val == temp[val] for val in iter(temp))
 
+
 def test_reversed():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert all(val == temp[val] for val in reversed(temp))
+
 
 def test_islice():
     ss = SortedSet()
@@ -134,7 +151,9 @@ def test_islice():
 
     for start in range(53):
         for stop in range(53):
-            assert list(ss.islice(start, stop, reverse=True)) == values[start:stop][::-1]
+            assert (
+                list(ss.islice(start, stop, reverse=True)) == values[start:stop][::-1]
+            )
 
     for start in range(53):
         assert list(ss.islice(start=start)) == values[start:]
@@ -143,6 +162,7 @@ def test_islice():
     for stop in range(53):
         assert list(ss.islice(stop=stop)) == values[:stop]
         assert list(ss.islice(stop=stop, reverse=True)) == values[:stop][::-1]
+
 
 def test_irange():
     ss = SortedSet()
@@ -155,8 +175,11 @@ def test_irange():
 
     for start in range(53):
         for end in range(start, 53):
-            assert list(ss.irange(start, end)) == values[start:(end + 1)]
-            assert list(ss.irange(start, end, reverse=True)) == values[start:(end + 1)][::-1]
+            assert list(ss.irange(start, end)) == values[start : (end + 1)]
+            assert (
+                list(ss.irange(start, end, reverse=True))
+                == values[start : (end + 1)][::-1]
+            )
 
     for start in range(53):
         for end in range(start, 53):
@@ -164,11 +187,15 @@ def test_irange():
 
     for start in range(53):
         for end in range(start, 53):
-            assert list(range(start + 1, end + 1)) == list(ss.irange(start, end, (False, True)))
+            assert list(range(start + 1, end + 1)) == list(
+                ss.irange(start, end, (False, True))
+            )
 
     for start in range(53):
         for end in range(start, 53):
-            assert list(range(start + 1, end)) == list(ss.irange(start, end, (False, False)))
+            assert list(range(start + 1, end)) == list(
+                ss.irange(start, end, (False, False))
+            )
 
     for start in range(53):
         assert list(range(start, 53)) == list(ss.irange(start))
@@ -181,6 +208,7 @@ def test_irange():
     assert [] == list(ss.irange(53))
     assert values == list(ss.irange(None, 53, (True, False)))
 
+
 def test_irange_key():
     values = sorted(range(100), key=modulo)
 
@@ -191,38 +219,40 @@ def test_irange_key():
         for start in range(10):
             for end in range(start, 10):
                 temp = list(ss.irange_key(start, end))
-                assert temp == values[(start * 10):((end + 1) * 10)]
+                assert temp == values[(start * 10) : ((end + 1) * 10)]
 
                 temp = list(ss.irange_key(start, end, reverse=True))
-                assert temp == values[(start * 10):((end + 1) * 10)][::-1]
+                assert temp == values[(start * 10) : ((end + 1) * 10)][::-1]
 
         for start in range(10):
             for end in range(start, 10):
                 temp = list(ss.irange_key(start, end, inclusive=(True, False)))
-                assert temp == values[(start * 10):(end * 10)]
+                assert temp == values[(start * 10) : (end * 10)]
 
         for start in range(10):
             for end in range(start, 10):
                 temp = list(ss.irange_key(start, end, (False, True)))
-                assert temp == values[((start + 1) * 10):((end + 1) * 10)]
+                assert temp == values[((start + 1) * 10) : ((end + 1) * 10)]
 
         for start in range(10):
             for end in range(start, 10):
                 temp = list(ss.irange_key(start, end, inclusive=(False, False)))
-                assert temp == values[((start + 1) * 10):(end * 10)]
+                assert temp == values[((start + 1) * 10) : (end * 10)]
 
         for start in range(10):
             temp = list(ss.irange_key(min_key=start))
-            assert temp == values[(start * 10):]
+            assert temp == values[(start * 10) :]
 
         for end in range(10):
             temp = list(ss.irange_key(max_key=end))
-            assert temp == values[:(end + 1) * 10]
+            assert temp == values[: (end + 1) * 10]
+
 
 def test_len():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert len(temp) == 100
+
 
 def test_add():
     temp = SortedSet(range(100))
@@ -232,12 +262,14 @@ def test_add():
     temp._check()
     assert all(val == temp[val] for val in range(101))
 
+
 def test_bisect():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert all(temp.bisect_left(val) == val for val in range(100))
     assert all(temp.bisect(val) == (val + 1) for val in range(100))
     assert all(temp.bisect_right(val) == (val + 1) for val in range(100))
+
 
 def test_bisect_key():
     temp = SortedSet(range(100), key=lambda val: val)
@@ -246,12 +278,14 @@ def test_bisect_key():
     assert all(temp.bisect_key(val) == (val + 1) for val in range(100))
     assert all(temp.bisect_key_right(val) == (val + 1) for val in range(100))
 
+
 def test_clear():
     temp = SortedSet(range(100))
     temp._reset(7)
     temp.clear()
     temp._check()
     assert len(temp) == 0
+
 
 def test_copy():
     temp = SortedSet(range(100))
@@ -261,14 +295,17 @@ def test_copy():
     assert len(temp) == 100
     assert len(that) == 101
 
+
 def test_copy_copy():
     import copy
+
     temp = SortedSet(range(100))
     temp._reset(7)
     that = copy.copy(temp)
     that.add(1000)
     assert len(temp) == 100
     assert len(that) == 101
+
 
 def test_count():
     temp = SortedSet(range(100))
@@ -280,12 +317,14 @@ def test_count():
     assert temp.count(0) == 1
     temp._check()
 
+
 def test_sub():
     temp = SortedSet(range(100))
     temp._reset(7)
     that = temp - range(0, 10) - range(10, 20)
     assert all(val == temp[val] for val in range(100))
     assert all((val + 20) == that[val] for val in range(80))
+
 
 def test_difference():
     temp = SortedSet(range(100))
@@ -294,11 +333,13 @@ def test_difference():
     assert all(val == temp[val] for val in range(100))
     assert all((val + 20) == that[val] for val in range(80))
 
+
 def test_difference_update():
     temp = SortedSet(range(100))
     temp._reset(7)
     temp.difference_update(range(0, 10), range(10, 20))
     assert all((val + 20) == temp[val] for val in range(80))
+
 
 def test_isub():
     temp = SortedSet(range(100))
@@ -306,6 +347,7 @@ def test_isub():
     temp -= range(0, 10)
     temp -= range(10, 20)
     assert all((val + 20) == temp[val] for val in range(80))
+
 
 def test_discard():
     temp = SortedSet(range(100))
@@ -317,10 +359,12 @@ def test_discard():
     temp._check()
     assert len(temp) == 97
 
+
 def test_index():
     temp = SortedSet(range(100))
     temp._reset(7)
     assert all(temp.index(val) == val for val in range(100))
+
 
 def test_and():
     temp = SortedSet(range(100))
@@ -329,12 +373,14 @@ def test_and():
     assert all(that[val] == (val + 10) for val in range(10))
     assert all(temp[val] == val for val in range(100))
 
+
 def test_intersection():
     temp = SortedSet(range(100))
     temp._reset(7)
     that = temp.intersection(range(0, 20), range(10, 30))
     assert all(that[val] == (val + 10) for val in range(10))
     assert all(temp[val] == val for val in range(100))
+
 
 def test_intersection_update():
     temp = SortedSet(range(100))
@@ -343,12 +389,14 @@ def test_intersection_update():
     temp &= range(10, 30)
     assert all(temp[val] == (val + 10) for val in range(10))
 
+
 def test_isdisjoint():
     temp = SortedSet(range(100))
     temp._reset(7)
     that = SortedSet(range(100, 200))
     that._reset(9)
     assert temp.isdisjoint(that)
+
 
 def test_issubset():
     temp = SortedSet(range(100))
@@ -357,12 +405,14 @@ def test_issubset():
     that._reset(9)
     assert that.issubset(temp)
 
+
 def test_issuperset():
     temp = SortedSet(range(100))
     temp._reset(7)
     that = SortedSet(range(25, 75))
     that._reset(9)
     assert temp.issuperset(that)
+
 
 def test_xor():
     temp = SortedSet(range(0, 75))
@@ -375,6 +425,7 @@ def test_xor():
     assert all(temp[val] == val for val in range(75))
     assert all(that[val] == (val + 25) for val in range(75))
 
+
 def test_symmetric_difference():
     temp = SortedSet(range(0, 75))
     temp._reset(7)
@@ -386,6 +437,7 @@ def test_symmetric_difference():
     assert all(temp[val] == val for val in range(75))
     assert all(that[val] == (val + 25) for val in range(75))
 
+
 def test_symmetric_difference_update():
     temp = SortedSet(range(0, 75))
     temp._reset(7)
@@ -395,6 +447,7 @@ def test_symmetric_difference_update():
     assert all(temp[val] == val for val in range(25))
     assert all(temp[val + 25] == (val + 75) for val in range(25))
 
+
 def test_pop():
     temp = SortedSet(range(0, 100))
     temp._reset(7)
@@ -402,10 +455,12 @@ def test_pop():
     temp.pop(0)
     assert all(temp[val] == (val + 1) for val in range(98))
 
+
 def test_remove():
     temp = SortedSet(range(0, 100))
     temp._reset(7)
     temp.remove(50)
+
 
 def test_or():
     temp = SortedSet(range(0, 50))
@@ -417,6 +472,7 @@ def test_or():
     assert all(temp[val] == val for val in range(50))
     assert all(that[val] == (val + 50) for val in range(50))
 
+
 def test_union():
     temp = SortedSet(range(0, 50))
     temp._reset(7)
@@ -427,11 +483,13 @@ def test_union():
     assert all(temp[val] == val for val in range(50))
     assert all(that[val] == (val + 50) for val in range(50))
 
+
 def test_update():
     temp = SortedSet(range(0, 80))
     temp._reset(7)
     temp.update(range(80, 90), range(90, 100))
     assert all(temp[val] == val for val in range(100))
+
 
 def test_ior():
     temp = SortedSet(range(0, 80))
@@ -440,16 +498,20 @@ def test_ior():
     temp |= range(90, 100)
     assert all(temp[val] == val for val in range(100))
 
+
 class Identity:
     def __call__(self, value):
         return value
+
     def __repr__(self):
         return 'identity'
+
 
 def test_repr():
     temp = SortedSet(range(0, 10), key=Identity())
     temp._reset(7)
     assert repr(temp) == 'SortedSet([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], key=identity)'
+
 
 def test_repr_recursion():
     class HashableSortedSet(SortedSet):
@@ -458,10 +520,15 @@ def test_repr_recursion():
 
     temp = HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2])])
     temp.add(temp)
-    assert repr(temp) == 'HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2]), ...])'
+    assert (
+        repr(temp)
+        == 'HashableSortedSet([HashableSortedSet([1]), HashableSortedSet([1, 2]), ...])'
+    )
+
 
 def test_pickle():
     import pickle
+
     alpha = SortedSet(range(10000), key=negate)
     alpha._reset(500)
     data = pickle.dumps(alpha)

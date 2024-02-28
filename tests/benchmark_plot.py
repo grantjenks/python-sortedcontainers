@@ -27,10 +27,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 
+
 class TreeDict(OrderedDict):
     def __missing__(self, key):
         self[key] = value = TreeDict()
         return value
+
 
 def order_kinds(kinds):
     for idx, kind in enumerate(kinds):
@@ -39,6 +41,7 @@ def order_kinds(kinds):
             kinds.insert(0, kind)
             break
     return kinds
+
 
 def test_plot(test):
     ax = plt.gca()
@@ -58,11 +61,13 @@ def test_plot(test):
     plt.xlabel('List Size')
     plt.legend(kinds, loc=2)
 
+
 def kind_plot(test, kind, zorder):
     sizes = sorted(data[test][kind].keys())
     # Timer isn't any better than micro-second resolution.
     yvalues = [max(1e-6, data[test][kind][size][5]) for size in sizes]
     plt.plot(sizes, yvalues, marker='s', zorder=zorder)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plotting')

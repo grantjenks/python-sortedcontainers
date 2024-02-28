@@ -5,9 +5,11 @@ from sortedcontainers import SortedSet
 random.seed(0)
 actions = []
 
+
 def actor(func):
     actions.append(func)
     return func
+
 
 def test_init():
     sst = SortedSet()
@@ -26,16 +28,19 @@ def test_init():
     assert list(iter(sst)) == []
     sst._check()
 
+
 @actor
 def stress_contains(sst):
     values = list(sst)
     assert all((val in sst) for val in values)
+
 
 @actor
 def stress_delitem(sst):
     for rpt in range(100):
         pos = random.randrange(0, len(sst))
         del sst[pos]
+
 
 @actor
 def stress_operator(sst):
@@ -44,26 +49,31 @@ def stress_operator(sst):
     assert other < sst
     assert sst > other
 
+
 @actor
 def stress_getitem(sst):
     other = list(sst)
     assert all(sst[pos] == other[pos] for pos in range(len(sst)))
-    
+
+
 @actor
 def stress_reversed(sst):
     other = list(reversed(list(sst)))
     assert all(tup[0] == tup[1] for tup in zip(reversed(sst), other))
-    
+
+
 @actor
 def stress_add(sst):
     for rpt in range(100):
         val = random.randrange(0, 1000)
         sst.add(val)
 
+
 @actor
 def stress_count(sst):
     for val in sst:
         assert sst.count(val) == 1
+
 
 @actor
 def stress_difference(sst):
@@ -73,6 +83,7 @@ def stress_difference(sst):
     stress_delitem(copy_two)
     sst.difference_update(copy_one, copy_two)
 
+
 @actor
 def stress_discard(sst):
     for rpt in range(100):
@@ -80,12 +91,14 @@ def stress_discard(sst):
         val = sst[pos]
         sst.discard(val)
 
+
 @actor
 def stress_index(sst):
     for rpt in range(100):
         pos = random.randrange(0, len(sst))
         val = sst[pos]
         assert pos == sst.index(val)
+
 
 @actor
 def stress_intersection(sst):
@@ -95,11 +108,13 @@ def stress_intersection(sst):
     stress_delitem(copy_two)
     sst.intersection_update(copy_one, copy_two)
 
+
 @actor
 def stress_symmetric_difference(sst):
     copy_one = sst.copy()
     stress_delitem(copy_one)
     sst.symmetric_difference_update(copy_one)
+
 
 @actor
 def stress_pop(sst):
@@ -110,6 +125,7 @@ def stress_pop(sst):
         val = sst[pos]
         assert val == sst.pop(pos)
 
+
 @actor
 def stress_remove(sst):
     for rpt in range(100):
@@ -117,20 +133,26 @@ def stress_remove(sst):
         val = sst[pos]
         sst.remove(val)
 
+
 @actor
 def stress_update(sst):
     def iter_randomly(start, stop, count):
         for rpt in range(count):
             yield random.randrange(start, stop)
-    sst.update(iter_randomly(0, 500, 100),
-               iter_randomly(500, 1000, 100),
-               iter_randomly(1000, 1500, 100),
-               iter_randomly(1500, 2000, 100))
+
+    sst.update(
+        iter_randomly(0, 500, 100),
+        iter_randomly(500, 1000, 100),
+        iter_randomly(1000, 1500, 100),
+        iter_randomly(1500, 2000, 100),
+    )
+
 
 @actor
 def stress_isdisjoint(sst):
     values = [-1, -2, -3]
     assert sst.isdisjoint(values)
+
 
 @actor
 def stress_issubset(sst):
@@ -138,10 +160,12 @@ def stress_issubset(sst):
     that.update(range(1000))
     assert sst.issubset(that)
 
+
 @actor
 def stress_issuperset(sst):
     that = SortedSet(sst)
     assert sst.issuperset(that)
+
 
 def test_stress(repeat=1000):
     sst = SortedSet(range(1000))
@@ -166,6 +190,7 @@ def test_stress(repeat=1000):
 
         if start_len != len(sst):
             sst._check()
+
 
 if __name__ == '__main__':
     import sys

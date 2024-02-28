@@ -76,7 +76,7 @@ CHECK = False
 
 
 def iter_with_description(iterable, description=''):
-    "Placeholder iterator function with ignored description parameter."
+    'Placeholder iterator function with ignored description parameter.'
     return iter(iterable)
 
 
@@ -119,10 +119,12 @@ def init_sorted_list(sl, size, moment=5, fraction=0.1):
     total = 0
 
     class WhileIterator:
-        "Convert for-loop to while-loop with length estimate."
+        'Convert for-loop to while-loop with length estimate.'
+
         def __iter__(self):
             while total < size:
                 yield True
+
         def __len__(self):
             if moment < 0:
                 return size / half
@@ -160,7 +162,8 @@ def init_sorted_list(sl, size, moment=5, fraction=0.1):
 
     del sl._index[:]
 
-    if CHECK: sl._check()
+    if CHECK:
+        sl._check()
 
     assert len(sl) == size
 
@@ -168,39 +171,41 @@ def init_sorted_list(sl, size, moment=5, fraction=0.1):
 
 
 def timeit(func):
-    "Decorator to time function calls."
+    'Decorator to time function calls.'
+
     @ft.wraps(func)
     def wrapper(*args, **kwargs):
-        "Return timed duration of function call. Ignores function result."
+        'Return timed duration of function call. Ignores function result.'
         start = time.perf_counter()
         result = func(*args, **kwargs)
         end = time.perf_counter()
-        return (end - start)
+        return end - start
+
     return wrapper
 
 
 @timeit
 def add(obj, numbers):
-    "Repeatedly add number from numbers to sorted list."
+    'Repeatedly add number from numbers to sorted list.'
     for number in PROGRESS(numbers, 'add'):
         obj.add(number)
 
 
 @timeit
 def delitem(obj, indices):
-    "Repeatedly delete values from sorted list by index in indices."
+    'Repeatedly delete values from sorted list by index in indices.'
     for index in PROGRESS(indices, 'del'):
         del obj[index]
 
 
 def randvalues(limit, fraction=0.001):
-    "Return fraction of limit random values between 0 and limit."
+    'Return fraction of limit random values between 0 and limit.'
     iterable = PROGRESS(xrange(int(limit * fraction)), 'randvalues')
     return [random.randrange(limit) for each in iterable]
 
 
 def randindices(limit, fraction=0.002):
-    "Return fraction of limit random indices counting down from limit."
+    'Return fraction of limit random indices counting down from limit.'
     stop = limit - int(limit * fraction)
     iterable = PROGRESS(xrange(limit, stop, -1), 'randindices')
     return [random.randrange(length) for length in iterable]
@@ -220,7 +225,7 @@ def benchmark_add(start, limit, times):
     """
     for exponent in xrange(start, limit + 1):
         timings = []
-        count = 10 ** exponent
+        count = 10**exponent
         sl = sc.SortedList(load=int(count ** (1.0 / 3)))
 
         for attempt in xrange(times):
@@ -253,8 +258,8 @@ def benchmark_del(start, limit, times):
     """
     for exponent in xrange(start, limit + 1):
         timings = []
-        count = 10 ** exponent
-        sl = sc.SortedList(load=int(count ** (1.0 / 3))) # 2)))
+        count = 10**exponent
+        sl = sc.SortedList(load=int(count ** (1.0 / 3)))  # 2)))
 
         for attempt in xrange(times):
             subtimings = []
@@ -273,7 +278,7 @@ def benchmark_del(start, limit, times):
 
 
 def display(name, times, size, last=['', 0]):
-    "Display performance summary with ratio of ops/sec."
+    'Display performance summary with ratio of ops/sec.'
 
     times.sort()
     median_time = times[len(times) / 2]
@@ -305,6 +310,7 @@ if __name__ == '__main__':
 
     if args.progress:
         import tqdm
+
         PROGRESS = tqdm.tqdm
 
     CHECK = args.check

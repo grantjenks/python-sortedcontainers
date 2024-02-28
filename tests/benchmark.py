@@ -9,20 +9,24 @@ def detail(*values, **kwargs):
     if not args.bare:
         print(*values, **kwargs)
 
+
 def measure(test, func, size):
     start = time.perf_counter()
     test(func, size)
     end = time.perf_counter()
-    return (end - start)
+    return end - start
+
 
 def benchmark(test, name, ctor, setup, func_name, limit):
     if args.load > 0:
         load = args.load
         ctor_original = ctor
+
         def ctor_load():
             obj = ctor_original()
             obj._reset(load)
             return obj
+
         ctor = ctor_load
 
     for size in sizes:
@@ -35,7 +39,7 @@ def benchmark(test, name, ctor, setup, func_name, limit):
         setup(obj, size)
         func = getattr(obj, func_name)
         measure(test, func, size)
-        
+
         # record
 
         times = []
@@ -47,20 +51,31 @@ def benchmark(test, name, ctor, setup, func_name, limit):
             times.append(measure(test, func, size))
 
         times.sort()
-        print(getattr(test, '__name__'), name + args.suffix, size, times[0],
-              times[-1], times[2], sum(times) / len(times))
+        print(
+            getattr(test, '__name__'),
+            name + args.suffix,
+            size,
+            times[0],
+            times[-1],
+            times[2],
+            sum(times) / len(times),
+        )
+
 
 def register_test(func):
     tests[getattr(func, '__name__')] = func
     return func
 
+
 def limit(test, kind, value):
     if kind in impls[test]:
         impls[test][kind]['limit'] = value
 
+
 def remove(test, kind):
     if kind in impls[test]:
         del impls[test][kind]
+
 
 tests = OrderedDict()
 kinds = OrderedDict()
@@ -69,20 +84,22 @@ sizes = []
 lists = {}
 
 parser = argparse.ArgumentParser(description='Benchmarking')
-parser.add_argument('--seed', type=int, default=0,
-                    help='seed value for random')
-parser.add_argument('--no-limit', default=False, action='store_true',
-                    help='no limit on size')
+parser.add_argument('--seed', type=int, default=0, help='seed value for random')
+parser.add_argument(
+    '--no-limit', default=False, action='store_true', help='no limit on size'
+)
 parser.add_argument('--test', action='append', help='filter tests by name')
 parser.add_argument('--kind', action='append', help='filter types by name')
-parser.add_argument('--size', type=int, action='append',
-                    help='specify sizes to test')
+parser.add_argument('--size', type=int, action='append', help='specify sizes to test')
 parser.add_argument('--suffix', default='', help='suffix for kind name')
-parser.add_argument('--bare', action='store_true', default=False,
-                    help='hide header and footer info')
-parser.add_argument('--load', type=int, default=0,
-                    help='load value for sorted container types')
+parser.add_argument(
+    '--bare', action='store_true', default=False, help='hide header and footer info'
+)
+parser.add_argument(
+    '--load', type=int, default=0, help='load value for sorted container types'
+)
 args = parser.parse_args()
+
 
 def main(name):
     global sizes, lists

@@ -7,28 +7,34 @@ from .benchmark import *
 
 # Tests.
 
+
 @register_test
 def add(func, size):
     for val in lists[size][::100]:
         func(val)
 
+
 @register_test
 def update_small(func, size):
     func(lists[size][::10])
 
+
 @register_test
 def update_large(func, size):
     func(lists[size])
+
 
 @register_test
 def contains(func, size):
     for val in lists[size][::100]:
         assert func(val)
 
+
 @register_test
 def remove(func, size):
     for val in lists[size][::100]:
         func(val)
+
 
 @register_test
 def delitem(func, size):
@@ -36,88 +42,108 @@ def delitem(func, size):
         pos = random.randrange(size - val)
         func(pos)
 
+
 @register_test
 def bisect(func, size):
     for val in lists[size][::100]:
         func(val)
+
 
 @register_test
 def getitem(func, size):
     for val in lists[size][::100]:
         assert func(val) == val
 
+
 @register_test
 def pop(func, size):
     for val in range(int(size / 100)):
         assert func() == (size - val - 1)
+
 
 @register_test
 def index(func, size):
     for val in lists[size][::100]:
         assert func(val) == val
 
+
 @register_test
 def iter(func, size):
     assert all(idx == val for idx, val in enumerate(func()))
+
 
 @register_test
 def count(func, size):
     for val in lists[size][::100]:
         assert func(val) == 1
 
+
 @register_test
 def priorityqueue(func, size):
     for val in lists[size][::10]:
         func(val)
+
 
 @register_test
 def multiset(func, size):
     for val in lists[size][::10]:
         func(val)
 
+
 @register_test
 def ranking(func, size):
     for val in lists[size][::10]:
         func(val)
+
 
 @register_test
 def neighbor(func, size):
     for val in lists[size][::10]:
         func(val)
 
+
 @register_test
 def intervals(func, size):
     for val in lists[size][::10]:
         func(val)
 
+
 @register_test
 def init(func, size):
     func(lists[size])
 
+
 # Setups.
+
 
 def do_nothing(obj, size):
     pass
 
+
 def fill_values(obj, size):
     obj.update(sorted(lists[size]))
+
 
 # Implementation imports.
 
 from sortedcontainers import SortedList
+
 kinds['SortedList'] = SortedList
 
 from sortedcontainers import SortedKeyList
+
 kinds['SortedKeyList'] = SortedKeyList
 
 try:
     from blist import sortedlist
+
     kinds['B-Tree'] = sortedlist
 except ImportError:
     warnings.warn('No module named blist', ImportWarning)
 
 try:
     from .sortedcollection import SortedCollection
+
     kinds['List'] = SortedCollection
 except ImportError:
     warnings.warn('No module named sortedcollection', ImportWarning)
@@ -132,7 +158,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'add',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -140,7 +166,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('update_small', 'List', 100000)
 
@@ -149,7 +175,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'update',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('update_large', 'List', 100000)
 
@@ -158,7 +184,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__contains__',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -166,7 +192,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'remove',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -174,7 +200,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__delitem__',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('delitem', 'List', 100000)
 
@@ -183,7 +209,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'bisect',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -191,7 +217,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__getitem__',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -199,7 +225,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'pop',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -207,7 +233,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'index',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -215,7 +241,7 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': '__iter__',
-        'limit': 1000000
+        'limit': 1000000,
     }
 
 for name, kind in kinds.items():
@@ -223,22 +249,28 @@ for name, kind in kinds.items():
         'setup': fill_values,
         'ctor': kind,
         'func': 'count',
-        'limit': 1000000
+        'limit': 1000000,
     }
+
 
 class Mixed:
     def __init__(self, kind):
         self.rand = random.Random(0)
         self.kind = kind
+
     def __call__(self, *args, **kwargs):
         self.obj = self.kind(*args, **kwargs)
         return self
+
     def _reset(self, load):
         self.obj._reset(load)
+
     def update(self, values):
         self.obj.update(values)
+
     def run(self, value):
         raise NotImplementedError
+
 
 class PriorityQueue(Mixed):
     def run(self, value):
@@ -265,14 +297,16 @@ class PriorityQueue(Mixed):
                 if idx > 100:
                     break
 
+
 for name, kind in kinds.items():
     impls['priorityqueue'][name] = {
         'setup': fill_values,
         'ctor': PriorityQueue(kind),
         'func': 'run',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('priorityqueue', 'List', 100000)
+
 
 class Multiset(Mixed):
     def run(self, value):
@@ -295,14 +329,16 @@ class Multiset(Mixed):
             if value < len(obj):
                 obj[value]
 
+
 for name, kind in kinds.items():
     impls['multiset'][name] = {
         'setup': fill_values,
         'ctor': Multiset(kind),
         'func': 'run',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('multiset', 'List', 100000)
+
 
 class Ranking(Mixed):
     def run(self, value):
@@ -325,14 +361,16 @@ class Ranking(Mixed):
         else:
             obj.remove(value)
 
+
 for name, kind in kinds.items():
     impls['ranking'][name] = {
         'setup': fill_values,
         'ctor': Ranking(kind),
         'func': 'run',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('ranking', 'List', 100000)
+
 
 class Neighbor(Mixed):
     def run(self, value):
@@ -356,14 +394,16 @@ class Neighbor(Mixed):
                 if idx > 100:
                     break
 
+
 for name, kind in kinds.items():
     impls['neighbor'][name] = {
         'setup': fill_values,
         'ctor': Neighbor(kind),
         'func': 'run',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('neighbor', 'List', 100000)
+
 
 class Intervals(Mixed):
     def run(self, value):
@@ -396,12 +436,13 @@ class Intervals(Mixed):
         else:
             obj.discard(value)
 
+
 for name, kind in kinds.items():
     impls['intervals'][name] = {
         'setup': fill_values,
         'ctor': Intervals(kind),
         'func': 'run',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('intervals', 'List', 100000)
 
@@ -410,7 +451,7 @@ for name, kind in kinds.items():
         'setup': do_nothing,
         'ctor': kind,
         'func': '__init__',
-        'limit': 1000000
+        'limit': 1000000,
     }
 limit('init', 'B-Tree', 100000)
 

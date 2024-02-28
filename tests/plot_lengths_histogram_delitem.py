@@ -15,18 +15,18 @@ import random
 
 
 def background():
-    "Plot the background of each animated frame."
+    'Plot the background of each animated frame.'
     hist_line.set_data([], [])
     norm_line.set_data([], [])
     return hist_line, norm_line
 
 
 def frame(num):
-    "Draw frame."
+    'Draw frame.'
     for value in xrange(LOAD):
         del values[random.randrange(len(values))]
     data = np.array([len(sublist) for sublist in values._lists])
-    hist, bins = np.histogram(data, bins=BINS) # , normed=True)
+    hist, bins = np.histogram(data, bins=BINS)  # , normed=True)
     hist_line.set_data(bins[:-1], hist)
 
     return hist_line, norm_line
@@ -51,16 +51,19 @@ if __name__ == '__main__':
     fig = plt.figure()
     bounds = (LOAD // 2 - 5 * LOAD // 100, LOAD * 2 - 5 * LOAD // 100)
     ax = plt.axes(xlim=bounds, ylim=(0, 1000))
-    hist_line, = ax.plot([], [])
-    norm_line, = ax.plot([], [])
+    (hist_line,) = ax.plot([], [])
+    (norm_line,) = ax.plot([], [])
 
     animator = animation.FuncAnimation(
-        fig, frame, init_func=background, frames=1000, interval=10, blit=True,
+        fig,
+        frame,
+        init_func=background,
+        frames=1000,
+        interval=10,
+        blit=True,
     )
 
     if args.show:
         plt.show()
     else:
-        animator.save(
-            args.filename, fps=20, extra_args=['-vcodec', 'libx264']
-        )
+        animator.save(args.filename, fps=20, extra_args=['-vcodec', 'libx264'])

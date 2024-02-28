@@ -7,17 +7,21 @@ from functools import wraps
 random.seed(0)
 actions = []
 
+
 def frange(start, stop, step):
     while start < stop:
         yield start
         start += step
 
+
 class actor:
     def __init__(self, count):
         self._count = count
+
     def __call__(self, func):
         actions.extend([func] * self._count)
         return func
+
 
 def not_empty(func):
     @wraps(func)
@@ -25,7 +29,9 @@ def not_empty(func):
         if len(slt) < 100:
             stress_update(slt)
         func(slt)
+
     return wrapper
+
 
 @actor(1)
 def stress_clear(slt):
@@ -34,7 +40,8 @@ def stress_clear(slt):
     else:
         values = list(slt)
         slt.clear()
-        slt.update(values[:int(len(values) / 2)])
+        slt.update(values[: int(len(values) / 2)])
+
 
 @actor(1)
 def stress_add(slt):
@@ -42,9 +49,11 @@ def stress_add(slt):
         slt.clear()
     slt.add(random.random())
 
+
 @actor(1)
 def stress_update(slt):
     slt.update(random.random() for rpt in range(350))
+
 
 @actor(1)
 @not_empty
@@ -57,17 +66,20 @@ def stress_contains(slt):
         assert val in slt
         assert 1 not in slt
 
+
 @actor(1)
 @not_empty
 def stress_discard(slt):
     val = slt[random.randrange(len(slt))]
     slt.discard(val)
 
+
 @actor(1)
 def stress_discard2(slt):
     if random.randrange(100) < 10:
         slt.clear()
     slt.discard(random.random())
+
 
 @actor(1)
 def stress_remove(slt):
@@ -87,10 +99,12 @@ def stress_remove(slt):
     except ValueError:
         pass
 
+
 @actor(1)
 @not_empty
 def stress_delitem(slt):
     del slt[random.randrange(len(slt))]
+
 
 @actor(1)
 def stress_getitem(slt):
@@ -116,6 +130,7 @@ def stress_getitem(slt):
         except IndexError:
             pass
 
+
 @actor(1)
 @not_empty
 def stress_delitem_slice(slt):
@@ -123,16 +138,19 @@ def stress_delitem_slice(slt):
     step = random.choice([-3, -2, -1, 1, 1, 1, 1, 1, 2, 3])
     del slt[start:stop:step]
 
+
 @actor(1)
 def stress_iter(slt):
     itr1 = iter(slt)
     itr2 = (slt[pos] for pos in range(len(slt)))
     assert all(tup[0] == tup[1] for tup in zip(itr1, itr2))
 
+
 @actor(1)
 def stress_reversed(slt):
     itr = reversed(list(reversed(slt)))
     assert all(tup[0] == tup[1] for tup in zip(slt, itr))
+
 
 @actor(1)
 def stress_bisect_left(slt):
@@ -141,6 +159,7 @@ def stress_bisect_left(slt):
     values.sort()
     assert bisect.bisect_left(values, value) == slt.bisect_left(value)
 
+
 @actor(1)
 def stress_bisect(slt):
     values = list(slt)
@@ -148,12 +167,14 @@ def stress_bisect(slt):
     values.sort()
     assert bisect.bisect(values, value) == slt.bisect(value)
 
+
 @actor(1)
 def stress_bisect_right(slt):
     values = list(slt)
     value = random.random()
     values.sort()
     assert bisect.bisect_right(values, value) == slt.bisect_right(value)
+
 
 @actor(1)
 @not_empty
@@ -163,6 +184,7 @@ def stress_dups(slt):
     for rpt in range(pos):
         slt.add(val)
 
+
 @actor(1)
 @not_empty
 def stress_count(slt):
@@ -170,11 +192,13 @@ def stress_count(slt):
     val = slt[random.randrange(len(slt))]
     assert slt.count(val) == values.count(val)
 
+
 @actor(1)
 @not_empty
 def stress_pop(slt):
     pos = random.randrange(len(slt)) + 1
     assert slt[-pos] == slt.pop(-pos)
+
 
 @actor(1)
 @not_empty
@@ -185,6 +209,7 @@ def stress_index(slt):
     pos = random.randrange(len(slt))
     assert slt.index(slt[pos]) == pos
 
+
 @actor(1)
 @not_empty
 def stress_index2(slt):
@@ -192,6 +217,7 @@ def stress_index2(slt):
     slt = SortedKeyList(values)
     for idx, val in enumerate(slt):
         assert slt.index(val, idx) == idx
+
 
 @actor(1)
 def stress_mul(slt):
@@ -201,10 +227,12 @@ def stress_mul(slt):
     values.sort()
     assert (slt * mult) == values
 
+
 @actor(1)
 def stress_imul(slt):
     mult = random.randrange(10)
     slt *= mult
+
 
 @actor(1)
 @not_empty
@@ -215,11 +243,13 @@ def stress_reversed(slt):
         val = next(itr)
     assert val == slt[-pos]
 
+
 @actor(1)
 @not_empty
 def stress_eq(slt):
     values = []
     assert not (values == slt)
+
 
 @actor(1)
 @not_empty
@@ -231,6 +261,7 @@ def stress_lt(slt):
     values = []
     assert values < slt
     assert not (slt < values)
+
 
 def test_stress(repeat=1000):
     slt = SortedKeyList(random.random() for rpt in range(1000))
@@ -261,6 +292,7 @@ def test_stress(repeat=1000):
         del slt[pos]
 
     slt._check()
+
 
 if __name__ == '__main__':
     import sys

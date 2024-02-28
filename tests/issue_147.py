@@ -1,6 +1,7 @@
 from sortedcontainers import SortedDict, SortedList
 import gc
 
+
 def check(f):
     print('start')
 
@@ -28,10 +29,13 @@ def check(f):
 
     print('finish')
 
+
 check(lambda: SortedDict({'a': 1, 'b': 2}))
+
 
 class MyDict(dict):
     pass
+
 
 check(lambda: MyDict({'a': 1, 'b': 2}))
 
@@ -39,8 +43,8 @@ check(lambda: SortedList([1, 2, 3]))
 
 from functools import partial
 
-class SortedDictSub(SortedDict):
 
+class SortedDictSub(SortedDict):
     def __init__(self, *args, **kwargs):
         """Initialize sorted dict instance.
         Optional key-function argument defines a callable that, like the `key`
@@ -119,5 +123,6 @@ class SortedDictSub(SortedDict):
             self.irange_key = _list.irange_key
 
         self._update(*args, **kwargs)
+
 
 check(lambda: SortedDictSub({'a': 1, 'b': 2}))

@@ -5,9 +5,11 @@ from sortedcontainers import SortedDict
 random.seed(0)
 actions = []
 
+
 def actor(func):
     actions.append(func)
     return func
+
 
 def test_init():
     sdict = SortedDict()
@@ -28,10 +30,12 @@ def test_init():
     sdict = SortedDict.fromkeys(range(1000), None)
     assert all(sdict[key] == None for key in range(1000))
 
+
 @actor
 def stress_contains(sdict):
     keys = list(sdict)
     assert all(key in sdict for key in keys)
+
 
 @actor
 def stress_delitem(sdict):
@@ -41,15 +45,18 @@ def stress_delitem(sdict):
         del sdict[keys[pos]]
         del keys[pos]
 
+
 @actor
 def stress_getitem(sdict):
     items = list(sdict.items())
     assert all(sdict[key] == value for key, value in items)
-    
+
+
 @actor
 def stress_eq(sdict):
     that = {key: value for key, value in sdict.items()}
     assert sdict == that
+
 
 @actor
 def stress_setitem_len(sdict):
@@ -61,9 +68,11 @@ def stress_setitem_len(sdict):
     end_len = len(sdict)
     assert (start_len + missing) == end_len
 
+
 @actor
 def stress_copy(sdict):
     that = sdict.copy()
+
 
 @actor
 def stress_get(sdict):
@@ -74,6 +83,7 @@ def stress_get(sdict):
         else:
             assert sdict.get(key, 1) == 1
 
+
 @actor
 def stress_items_keys_values(sdict):
     items = sdict.items()
@@ -81,10 +91,12 @@ def stress_items_keys_values(sdict):
     values = sdict.values()
     assert list(items) == list(zip(keys, values))
 
+
 @actor
 def stress_iter_items_keys_values(sdict):
     it = zip(sdict.items(), sdict.keys(), sdict.values())
     assert all(tup[0] == (tup[1], tup[2]) for tup in it)
+
 
 @actor
 def stress_pop(sdict):
@@ -96,12 +108,14 @@ def stress_pop(sdict):
         else:
             assert sdict.pop(key, 1) == 1
 
+
 @actor
 def stress_popitem(sdict):
     items = [sdict.popitem() for rpt in range(100)]
     keys = [item[0] for item in items]
     assert all(keys[pos - 1] > keys[pos] for pos in range(1, len(keys)))
     assert all(key == -value for key, value in items)
+
 
 @actor
 def stress_setdefault(sdict):
@@ -113,6 +127,7 @@ def stress_setdefault(sdict):
             sdict.setdefault(key)
             assert sdict[key] == None
             del sdict[key]
+
 
 def test_stress(repeat=1000):
     sdict = SortedDict((val, -val) for val in range(1000))
@@ -140,6 +155,7 @@ def test_stress(repeat=1000):
 
         if start_len != len(sdict):
             sdict._check()
+
 
 if __name__ == '__main__':
     import sys

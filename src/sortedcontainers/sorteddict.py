@@ -93,6 +93,7 @@ class SortedDict(dict):
     Sorted dicts may only be compared for equality and inequality.
 
     """
+
     def __init__(self, *args, **kwargs):
         """Initialize sorted dict instance.
 
@@ -168,7 +169,6 @@ class SortedDict(dict):
 
         self._update(*args, **kwargs)
 
-
     @property
     def key(self):
         """Function used to extract comparison key from keys.
@@ -177,7 +177,6 @@ class SortedDict(dict):
 
         """
         return self._key
-
 
     @property
     def iloc(self):
@@ -192,17 +191,14 @@ class SortedDict(dict):
             return self._iloc
         except AttributeError:
             warnings.warn(
-                'sorted_dict.iloc is deprecated.'
-                ' Use SortedDict.keys() instead.',
+                'sorted_dict.iloc is deprecated.' ' Use SortedDict.keys() instead.',
                 DeprecationWarning,
                 stacklevel=2,
             )
             _iloc = self._iloc = SortedKeysView(self)
             return _iloc
 
-
     def clear(self):
-
         """Remove all items from sorted dict.
 
         Runtime complexity: `O(n)`
@@ -210,7 +206,6 @@ class SortedDict(dict):
         """
         dict.clear(self)
         self._list_clear()
-
 
     def __delitem__(self, key):
         """Remove item from sorted dict identified by `key`.
@@ -235,7 +230,6 @@ class SortedDict(dict):
         dict.__delitem__(self, key)
         self._list_remove(key)
 
-
     def __iter__(self):
         """Return an iterator over the keys of the sorted dict.
 
@@ -247,7 +241,6 @@ class SortedDict(dict):
         """
         return self._list_iter()
 
-
     def __reversed__(self):
         """Return a reverse iterator over the keys of the sorted dict.
 
@@ -258,7 +251,6 @@ class SortedDict(dict):
 
         """
         return self._list_reversed()
-
 
     def __setitem__(self, key, value):
         """Store item in sorted dict with `key` and corresponding `value`.
@@ -284,13 +276,11 @@ class SortedDict(dict):
 
     _setitem = __setitem__
 
-
     def __or__(self, other):
         if not isinstance(other, Mapping):
             return NotImplemented
         items = chain(self.items(), other.items())
         return self.__class__(self._key, items)
-
 
     def __ror__(self, other):
         if not isinstance(other, Mapping):
@@ -298,11 +288,9 @@ class SortedDict(dict):
         items = chain(other.items(), self.items())
         return self.__class__(self._key, items)
 
-
     def __ior__(self, other):
         self._update(other)
         return self
-
 
     def copy(self):
         """Return a shallow copy of the sorted dict.
@@ -315,7 +303,6 @@ class SortedDict(dict):
         return self.__class__(self._key, self.items())
 
     __copy__ = copy
-
 
     @classmethod
     def fromkeys(cls, iterable, value=None):
@@ -331,7 +318,6 @@ class SortedDict(dict):
         """
         return cls((key, value) for key in iterable)
 
-
     def keys(self):
         """Return new sorted keys view of the sorted dict's keys.
 
@@ -342,7 +328,6 @@ class SortedDict(dict):
         """
         return SortedKeysView(self)
 
-
     def items(self):
         """Return new sorted items view of the sorted dict's items.
 
@@ -352,7 +337,6 @@ class SortedDict(dict):
 
         """
         return SortedItemsView(self)
-
 
     def values(self):
         """Return new sorted values view of the sorted dict's values.
@@ -405,7 +389,6 @@ class SortedDict(dict):
                 raise KeyError(key)
             return default
 
-
     def popitem(self, index=-1):
         """Remove and return ``(key, value)`` pair at `index` from sorted dict.
 
@@ -441,7 +424,6 @@ class SortedDict(dict):
         value = dict.pop(self, key)
         return (key, value)
 
-
     def peekitem(self, index=-1):
         """Return ``(key, value)`` pair at `index` in sorted dict.
 
@@ -472,7 +454,6 @@ class SortedDict(dict):
         key = self._list[index]
         return key, self[key]
 
-
     def setdefault(self, key, default=None):
         """Return value for item identified by `key` in sorted dict.
 
@@ -502,7 +483,6 @@ class SortedDict(dict):
         dict.__setitem__(self, key, default)
         self._list_add(key)
         return default
-
 
     def update(self, *args, **kwargs):
         """Update sorted dict with items from `args` and `kwargs`.
@@ -537,7 +517,6 @@ class SortedDict(dict):
 
     _update = update
 
-
     def __reduce__(self):
         """Support for pickle.
 
@@ -547,7 +526,6 @@ class SortedDict(dict):
         """
         items = dict.copy(self)
         return (type(self), (self._key, items))
-
 
     @recursive_repr()
     def __repr__(self):
@@ -564,7 +542,6 @@ class SortedDict(dict):
         item_format = '{!r}: {!r}'.format
         items = ', '.join(item_format(key, self[key]) for key in self._list)
         return f'{type_name}({key_arg}{{{items}}})'
-
 
     def _check(self):
         """Check invariants of sorted dict.
@@ -624,13 +601,12 @@ class SortedKeysView(KeysView, Sequence):
     The keys view implements the set and sequence abstract base classes.
 
     """
-    __slots__ = ()
 
+    __slots__ = ()
 
     @classmethod
     def _from_iterable(cls, it):
         return SortedSet(it)
-
 
     def __getitem__(self, index):
         """Lookup key at `index` in sorted keys views.
@@ -661,7 +637,6 @@ class SortedKeysView(KeysView, Sequence):
         """
         return self._mapping._list[index]
 
-
     __delitem__ = _view_delitem
 
 
@@ -673,13 +648,12 @@ class SortedItemsView(ItemsView, Sequence):
     The items view implements the set and sequence abstract base classes.
 
     """
-    __slots__ = ()
 
+    __slots__ = ()
 
     @classmethod
     def _from_iterable(cls, it):
         return SortedSet(it)
-
 
     def __getitem__(self, index):
         """Lookup item at `index` in sorted items view.
@@ -718,7 +692,6 @@ class SortedItemsView(ItemsView, Sequence):
         key = _mapping_list[index]
         return key, _mapping[key]
 
-
     __delitem__ = _view_delitem
 
 
@@ -730,8 +703,8 @@ class SortedValuesView(ValuesView, Sequence):
     The values view implements the sequence abstract base class.
 
     """
-    __slots__ = ()
 
+    __slots__ = ()
 
     def __getitem__(self, index):
         """Lookup value at `index` in sorted values view.
@@ -769,6 +742,5 @@ class SortedValuesView(ValuesView, Sequence):
 
         key = _mapping_list[index]
         return _mapping[key]
-
 
     __delitem__ = _view_delitem
