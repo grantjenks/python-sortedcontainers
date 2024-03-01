@@ -57,7 +57,6 @@ empty capacity.
 
 """
 
-
 import sortedcontainers as sc
 import random
 

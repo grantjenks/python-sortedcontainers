@@ -1,7 +1,4 @@
-"""Plot histogram of SortedList sublist lengths while items are deleted.
-
-"""
-
+"""Plot histogram of SortedList sublist lengths while items are deleted."""
 
 import argparse
 import itertools as it
