@@ -114,6 +114,7 @@ Features
 - Developed on Python 3.10
 - Tested with CPython 3.7, 3.8, 3.9, 3.10, 3.11, 3.12 and PyPy3
 - Tested on Linux, Mac OSX, and Windows
+- Type annotations available
 
 .. image:: https://github.com/grantjenks/python-sortedcontainers/workflows/integration/badge.svg
    :target: http://www.grantjenks.com/docs/sortedcontainers/
@@ -140,6 +141,12 @@ Containers`_.
     >>> from sortedcontainers import SortedDict
     >>> help(SortedDict)
     >>> help(SortedDict.popitem)
+
+If you'd like type annotations, they're available by installing the
+`sortedcontainers-stubs <https://pypi.org/project/sortedcontainers-stubs/>`_
+package (maintained separately, by Sorted Container's users)::
+
+    $ pip install sortedcontainers-stubs
 
 Documentation
 -------------
