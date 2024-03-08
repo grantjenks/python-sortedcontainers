@@ -289,7 +289,9 @@ class SortedSet(MutableSet, Sequence):
         """Return the size of the sorted set.
 
         ``ss.__len__()`` <==> ``len(ss)``
-
+        
+        Runtime complexity: `O(1)`
+        
         :return: size of sorted set
 
         """
