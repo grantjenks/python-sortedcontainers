@@ -1076,7 +1076,9 @@ class SortedList(MutableSequence):
         """Return the size of the sorted list.
 
         ``sl.__len__()`` <==> ``len(sl)``
-
+        
+        Runtime complexity: `O(1)`
+        
         :return: size of sorted list
 
         """
