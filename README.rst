@@ -1,5 +1,14 @@
 Python Sorted Containers
 ========================
+.. image:: https://opencollective.com/python-sortedcontainers/backers/badge.svg
+    :alt: Backers on Open Collective
+    :target: #backers
+
+.. image:: https://opencollective.com/python-sortedcontainers/sponsors/badge.svg
+    :alt: Sponsors on Open Collective
+    :target: #sponsors
+
+
 
 `Sorted Containers`_ is an Apache2 licensed `sorted collections library`_,
 written in pure-Python, and fast as C-extensions.
@@ -218,6 +227,40 @@ Resources
 .. _`Sorted Containers at PyPI`: https://pypi.org/project/sortedcontainers/
 .. _`Sorted Containers at Github`: https://github.com/grantjenks/python-sortedcontainers
 .. _`Sorted Containers Issue Tracker`: https://github.com/grantjenks/python-sortedcontainers/issues
+
+Credits
++++++++
+
+Contributors
+------------
+
+This project exists thanks to all the people who contribute! 
+
+.. image:: https://opencollective.com/python-sortedcontainers/contributors.svg?width=890&button=false
+
+Backers
+-------
+
+Thank you to all our backers! `Become a backer`__.
+
+.. image:: https://opencollective.com/python-sortedcontainers/backers.svg?width=890
+    :target: https://opencollective.com/python-sortedcontainers#backers
+
+__ Backer_
+.. _Backer: https://opencollective.com/python-sortedcontainers#backer
+
+Sponsors
+--------
+
+Support us by becoming a sponsor. Your logo will show up here with a link to your website. `Become a sponsor`__.
+
+.. image:: https://opencollective.com/python-sortedcontainers/sponsor/0/avatar.svg
+    :target: https://opencollective.com/python-sortedcontainers/sponsor/0/website
+
+__ Sponsor_
+.. _Sponsor: https://opencollective.com/python-sortedcontainers#sponsor
+
+
 
 Sorted Containers License
 -------------------------
