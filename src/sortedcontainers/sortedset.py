@@ -391,9 +391,8 @@ class SortedSet(MutableSet, Sequence):
         :param value: `value` to discard from sorted set
 
         """
-        _set = self._set
-        if value in _set:
-            _set.remove(value)
+        if value in self._set:
+            self._set.remove(value)
             self._list.remove(value)
 
     _discard = discard
