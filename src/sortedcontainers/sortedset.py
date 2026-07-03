@@ -394,7 +394,11 @@ class SortedSet(MutableSet, Sequence):
         _set = self._set
         if value in _set:
             _set.remove(value)
-            self._list.remove(value)
+            try:
+                self._list.remove(value)
+            except ValueError:
+                self._list.clear()
+                self._list.update(_set)
 
     _discard = discard
 
