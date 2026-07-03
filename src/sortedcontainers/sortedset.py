@@ -13,7 +13,7 @@ Sorted set implementations:
 
 """
 
-from collections.abc import MutableSet, Sequence, Set
+from collections.abc import Iterable, MutableSet, Sequence, Set
 from itertools import chain
 from operator import eq, ge, gt, le, lt, ne
 from textwrap import dedent
@@ -470,7 +470,21 @@ class SortedSet(MutableSet, Sequence):
         diff = self._set.difference(*iterables)
         return self._fromset(diff, key=self._key)
 
-    __sub__ = difference
+    def __sub__(self, other):
+        """Return the difference of two sets as a new sorted set.
+
+        ``ss.__sub__(other)`` <==> ``ss - other``
+
+        Return :data:`NotImplemented` when `other` is not iterable so that
+        Python can fall back to `other`'s reflected operator instead of raising.
+
+        :param other: `other` iterable
+        :return: new sorted set
+
+        """
+        if isinstance(other, Iterable):
+            return self.difference(other)
+        return NotImplemented
 
     def difference_update(self, *iterables):
         """Remove all values of `iterables` from this sorted set.
@@ -524,7 +538,22 @@ class SortedSet(MutableSet, Sequence):
         intersect = self._set.intersection(*iterables)
         return self._fromset(intersect, key=self._key)
 
-    __and__ = intersection
+    def __and__(self, other):
+        """Return the intersection of two sets as a new sorted set.
+
+        ``ss.__and__(other)`` <==> ``ss & other``
+
+        Return :data:`NotImplemented` when `other` is not iterable so that
+        Python can fall back to `other`'s reflected operator instead of raising.
+
+        :param other: `other` iterable
+        :return: new sorted set
+
+        """
+        if isinstance(other, Iterable):
+            return self.intersection(other)
+        return NotImplemented
+
     __rand__ = __and__
 
     def intersection_update(self, *iterables):
@@ -575,7 +604,22 @@ class SortedSet(MutableSet, Sequence):
         diff = self._set.symmetric_difference(other)
         return self._fromset(diff, key=self._key)
 
-    __xor__ = symmetric_difference
+    def __xor__(self, other):
+        """Return the symmetric difference with `other` as a new sorted set.
+
+        ``ss.__xor__(other)`` <==> ``ss ^ other``
+
+        Return :data:`NotImplemented` when `other` is not iterable so that
+        Python can fall back to `other`'s reflected operator instead of raising.
+
+        :param other: `other` iterable
+        :return: new sorted set
+
+        """
+        if isinstance(other, Iterable):
+            return self.symmetric_difference(other)
+        return NotImplemented
+
     __rxor__ = __xor__
 
     def symmetric_difference_update(self, other):
@@ -623,7 +667,22 @@ class SortedSet(MutableSet, Sequence):
         """
         return self.__class__(chain(iter(self), *iterables), key=self._key)
 
-    __or__ = union
+    def __or__(self, other):
+        """Return new sorted set with values from itself and `other`.
+
+        ``ss.__or__(other)`` <==> ``ss | other``
+
+        Return :data:`NotImplemented` when `other` is not iterable so that
+        Python can fall back to `other`'s reflected operator instead of raising.
+
+        :param other: `other` iterable
+        :return: new sorted set
+
+        """
+        if isinstance(other, Iterable):
+            return self.union(other)
+        return NotImplemented
+
     __ror__ = __or__
 
     def update(self, *iterables):

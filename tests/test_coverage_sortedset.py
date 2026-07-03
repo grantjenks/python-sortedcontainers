@@ -535,3 +535,36 @@ def test_pickle():
     beta = pickle.loads(data)
     assert alpha == beta
     assert alpha._key == beta._key
+
+
+def test_set_op_returns_notimplemented():
+    # Set-algebra operators must return NotImplemented for an unsupported
+    # (non-iterable) operand instead of raising, so the other operand's
+    # reflected operator can run. See issue #219.
+    temp = SortedSet(range(10))
+
+    assert temp.__and__(5) is NotImplemented
+    assert temp.__or__(5) is NotImplemented
+    assert temp.__sub__(5) is NotImplemented
+    assert temp.__xor__(5) is NotImplemented
+
+    # Iterable operands keep working as before.
+    assert temp & [1, 2, 20] == SortedSet([1, 2])
+    assert temp - [0, 1] == SortedSet(range(2, 10))
+    assert temp ^ [0, 10] == SortedSet(list(range(1, 10)) + [10])
+    assert temp | [10] == SortedSet(range(11))
+
+    # A non-iterable operand that defines a reflected operator now wins.
+    class OnlyReflected:
+        def __rand__(self, other):
+            return 'reflected'
+
+    assert (temp & OnlyReflected()) == 'reflected'
+
+    # A plain non-iterable with no reflected operator still raises TypeError.
+    try:
+        temp & 5
+    except TypeError:
+        pass
+    else:
+        assert False, 'expected TypeError'
