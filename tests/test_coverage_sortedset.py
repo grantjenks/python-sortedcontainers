@@ -360,6 +360,16 @@ def test_discard():
     assert len(temp) == 97
 
 
+def test_discard_with_changed_key():
+    keys = {value: value for value in range(5)}
+    temp = SortedSet(range(5), key=keys.__getitem__)
+    value = temp[-1]
+    keys[value] = -1
+    temp.discard(value)
+    temp._check()
+    assert value not in temp
+
+
 def test_index():
     temp = SortedSet(range(100))
     temp._reset(7)
