@@ -582,3 +582,29 @@ def test_ior():
     temp2 = SortedDict(mapping[13:])
     temp1 |= temp2
     assert temp1 == dict(mapping)
+
+
+@pytest.mark.parametrize('initial', [{}, {'existing': 0}])
+@pytest.mark.parametrize('key', [None, len])
+def test_update_malformed_pairs_preserves_index(initial, key):
+    temp = SortedDict(key, initial)
+    with pytest.raises(ValueError):
+        temp.update([('valid', 1), ('invalid',)])
+    temp._check()
+    assert dict(temp.items()) == initial
+    temp['next'] = 2
+    temp._check()
+    assert temp.pop('next') == 2
+
+
+@pytest.mark.parametrize('initial', [{}, {'existing': 0}])
+def test_update_failing_iterator_preserves_index(initial):
+    def pairs():
+        yield 'valid', 1
+        raise RuntimeError('source failed')
+
+    temp = SortedDict(initial)
+    with pytest.raises(RuntimeError, match='source failed'):
+        temp.update(pairs())
+    temp._check()
+    assert dict(temp.items()) == initial
