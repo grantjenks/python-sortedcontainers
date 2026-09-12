@@ -497,15 +497,15 @@ class SortedDict(dict):
         :param kwargs: keyword arguments mapping
 
         """
-        if not self:
-            dict.update(self, *args, **kwargs)
-            self._list_update(dict.__iter__(self))
-            return
-
         if not kwargs and len(args) == 1 and isinstance(args[0], dict):
             pairs = args[0]
         else:
             pairs = dict(*args, **kwargs)
+
+        if not self:
+            dict.update(self, pairs)
+            self._list_update(dict.__iter__(self))
+            return
 
         if (10 * len(pairs)) > len(self):
             dict.update(self, pairs)
