@@ -2427,6 +2427,8 @@ class SortedKeyList(SortedList):
         values = reduce(iadd, self._lists, []) * num
         return self.__class__(values, key=self._key)
 
+    __rmul__ = __mul__
+
     def __reduce__(self):
         values = reduce(iadd, self._lists, [])
         return (type(self), (values, self.key))
