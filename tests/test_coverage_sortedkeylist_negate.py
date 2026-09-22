@@ -567,6 +567,36 @@ def test_mul():
     assert this != that
 
 
+@pytest.mark.parametrize('values', [[], [1, 3, 2]])
+@pytest.mark.parametrize('num', [-1, 0, 1, 3])
+def test_rmul_preserves_key(values, num):
+    this = SortedKeyList(values, key=negate)
+    that = num * this
+    this._check()
+    that._check()
+    assert that == sorted(values * num, reverse=True)
+    assert that.key is negate
+    assert this == sorted(values, reverse=True)
+    assert that is not this
+
+
+def test_rmul_with_incomparable_values():
+    def key(value):
+        return -value['rank']
+
+    low = {'rank': 1}
+    high = {'rank': 2}
+    this = SortedKeyList([low, high], key=key)
+    that = 2 * this
+    this._check()
+    that._check()
+    assert that == [high, high, low, low]
+    assert that.key is key
+    assert that[0] is high
+    assert that[-1] is low
+    assert this == [high, low]
+
+
 def test_imul():
     this = SortedKeyList(range(10), key=negate)
     this._reset(4)
