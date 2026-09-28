@@ -335,7 +335,12 @@ class SortedSet(MutableSet, Sequence):
         _set = self._set
         if value not in _set:
             _set.add(value)
-            self._list.add(value)
+            try:
+                self._list.add(value)
+            except BaseException:
+                # A failing key or comparison must not leave a phantom member.
+                _set.remove(value)
+                raise
 
     _add = add
 
@@ -646,10 +651,12 @@ class SortedSet(MutableSet, Sequence):
         _list = self._list
         values = set(chain(*iterables))
         if (4 * len(values)) > len(_set):
-            _list = self._list
+            candidate_set = _set.union(values)
+            candidate_list = SortedList(candidate_set, key=self._key)
             _set.update(values)
-            _list.clear()
-            _list.update(_set)
+            # Keep the list object because public bisect/index methods are
+            # bound to it. The replacement has already validated every key.
+            _list.__dict__.update(candidate_list.__dict__)
         else:
             _add = self._add
             for value in values:
