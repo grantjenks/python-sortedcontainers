@@ -35,6 +35,7 @@ version = {attr = "sortedcontainers.__version__"}
 where = ["src"]
 
 [tool.ruff]
+target-version = "py38"
 format.quote-style = "single"
 
 [tool.ruff.lint]

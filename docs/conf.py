@@ -176,8 +176,7 @@ texinfo_documents = [
         'SortedContainers Documentation',
         author,
         'SortedContainers',
-        'Python sorted collections library:'
-        ' sorted list, sorted dict, and sorted set.',
+        'Python sorted collections library: sorted list, sorted dict, and sorted set.',
         'Miscellaneous',
     ),
 ]

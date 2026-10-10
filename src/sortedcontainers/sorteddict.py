@@ -191,7 +191,7 @@ class SortedDict(dict):
             return self._iloc
         except AttributeError:
             warnings.warn(
-                'sorted_dict.iloc is deprecated.' ' Use SortedDict.keys() instead.',
+                'sorted_dict.iloc is deprecated. Use SortedDict.keys() instead.',
                 DeprecationWarning,
                 stacklevel=2,
             )
