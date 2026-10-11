@@ -599,9 +599,15 @@ class SortedSet(MutableSet, Sequence):
         """
         _set = self._set
         _list = self._list
-        _set.symmetric_difference_update(other)
-        _list.clear()
-        _list.update(_set)
+        candidate_set = _set.symmetric_difference(other)
+        candidate_list = SortedList(key=self._key)
+        candidate_list._reset(_list._load)
+        candidate_list.update(candidate_set)
+        # Validate keys and comparisons before changing either backing container.
+        # Preserve their identities because public methods are bound to them.
+        _set.clear()
+        _set.update(candidate_set)
+        _list.__dict__.update(candidate_list.__dict__)
         return self
 
     __ixor__ = symmetric_difference_update
