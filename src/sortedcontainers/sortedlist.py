@@ -23,6 +23,7 @@ from functools import reduce
 from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ge, gt, iadd, le, lt, ne
+from operator import index as to_index
 from reprlib import recursive_repr
 from textwrap import dedent
 
@@ -739,6 +740,7 @@ class SortedList(MutableSequence):
                 pos, idx = _pos(index)
                 _delete(pos, idx)
         else:
+            index = to_index(index)
             pos, idx = self._pos(index)
             self._delete(pos, idx)
 
@@ -811,6 +813,7 @@ class SortedList(MutableSequence):
             indices = range(start, stop, step)
             return list(self._getitem(index) for index in indices)
         else:
+            index = to_index(index)
             if self._len:
                 if index == 0:
                     return _lists[0][0]
@@ -1251,6 +1254,7 @@ class SortedList(MutableSequence):
         :raises IndexError: if index is out of range
 
         """
+        index = to_index(index)
         if not self._len:
             raise IndexError('pop index out of range')
 

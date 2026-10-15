@@ -244,10 +244,10 @@ class SortedSet(MutableSet, Sequence):
         if isinstance(index, slice):
             values = _list[index]
             _set.difference_update(values)
+            del _list[index]
         else:
-            value = _list[index]
+            value = _list.pop(index)
             _set.remove(value)
-        del _list[index]
 
     def __make_cmp(set_op, symbol, doc):
         "Make comparator method."
