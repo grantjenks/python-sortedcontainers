@@ -480,8 +480,8 @@ class SortedDict(dict):
         """
         if key in self:
             return self[key]
-        dict.__setitem__(self, key, default)
         self._list_add(key)
+        dict.__setitem__(self, key, default)
         return default
 
     def update(self, *args, **kwargs):
