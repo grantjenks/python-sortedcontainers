@@ -582,3 +582,35 @@ def test_ior():
     temp2 = SortedDict(mapping[13:])
     temp1 |= temp2
     assert temp1 == dict(mapping)
+
+
+@pytest.mark.parametrize('with_key', [False, True])
+def test_setdefault_failed_ordering_keeps_mapping_and_index_consistent(with_key):
+    def reject_bad_key(key):
+        if key == 'bad':
+            raise ValueError('invalid sort key')
+        return len(key)
+
+    mapping = SortedDict(reject_bad_key, {'ok': 1}) if with_key else SortedDict({1: 1})
+    candidate = 'bad'
+    expected_error = ValueError if with_key else TypeError
+    original = dict(mapping)
+    with pytest.raises(expected_error):
+        mapping.setdefault(candidate, 2)
+    assert dict(mapping.items()) == original
+    assert dict.copy(mapping) == original
+    assert candidate not in mapping
+    mapping._check()
+
+
+def test_setdefault_existing_key_does_not_recompute_sort_key():
+    calls = []
+
+    def key(value):
+        calls.append(value)
+        return value
+
+    mapping = SortedDict(key, {'existing': 1})
+    calls[:] = []
+    assert mapping.setdefault('existing', 2) == 1
+    assert calls == []
