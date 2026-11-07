@@ -12,6 +12,7 @@ SortedDict
    .. automethod:: __getitem__
    .. automethod:: __setitem__
    .. automethod:: __delitem__
+   .. automethod:: range_del
    .. automethod:: __iter__
    .. automethod:: __len__
    .. automethod:: setdefault
