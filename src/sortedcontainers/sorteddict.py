@@ -52,6 +52,7 @@ class SortedDict(dict):
     * :func:`SortedDict.clear`
     * :func:`SortedDict.pop`
     * :func:`SortedDict.popitem`
+    * :func:`SortedDict.range_del`
 
     Methods for looking up items:
 
@@ -229,6 +230,50 @@ class SortedDict(dict):
         """
         dict.__delitem__(self, key)
         self._list_remove(key)
+
+    def range_del(self, minimum=None, maximum=None, inclusive=(True, True)):
+        """Remove keys between `minimum` and `maximum`.
+
+        ``inclusive`` is a pair of booleans indicating whether the lower and
+        upper bounds are included. ``None`` for either bound means the
+        corresponding end of the sorted dictionary. The operation removes the
+        range in one block-level update and returns ``None``.
+
+        Bounds use the same ordering as :meth:`irange`. With a key function,
+        bounds are dictionary keys, and all keys with an equal comparison key
+        are included or excluded together. Reversed or empty ranges do nothing.
+
+        Finding the bounds takes approximately ``O(log(n))`` comparisons.
+        Deletion takes ``O(k + m + n/m)`` time in the worst case, where ``k``
+        is the number of removed keys and ``m`` is the sorted-list load factor.
+        This includes copying boundary blocks and moving references in the
+        flat list of blocks. It uses ``O(k + m)`` temporary space, avoids
+        building the positional index, and does not search for each key again.
+
+        >>> sd = SortedDict({1: 'a', 2: 'b', 3: 'c', 4: 'd'})
+        >>> sd.range_del(2, 3)
+        >>> sd
+        SortedDict({1: 'a', 4: 'd'})
+        >>> sd.range_del(4)
+        >>> sd
+        SortedDict({1: 'a'})
+
+        :param minimum: minimum key to remove
+        :param maximum: maximum key to remove
+        :param inclusive: pair of booleans
+        :return: ``None``
+
+        """
+        keys = self._list._delete_range_by_bounds(minimum, maximum, inclusive)
+        if not keys:
+            return
+
+        # Delete from the mapping directly after all range comparisons and
+        # coordinate calculations have succeeded. Keys are required to remain
+        # hashable and order-stable by SortedDict's existing contract.
+        dict_delitem = dict.__delitem__
+        for key in keys:
+            dict_delitem(self, key)
 
     def __iter__(self):
         """Return an iterator over the keys of the sorted dict.

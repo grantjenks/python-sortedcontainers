@@ -1072,6 +1072,136 @@ class SortedList(MutableSequence):
 
         return self._islice(min_pos, min_idx, max_pos, max_idx, reverse)
 
+    def _range_bounds(self, minimum=None, maximum=None, inclusive=(True, True)):
+        """Return block coordinates for a value range.
+
+        This is the coordinate part of :meth:`irange`. It deliberately works
+        with block-local bisect operations and does not build the positional
+        index, which is useful for operations that already have the values in
+        sorted order.
+        """
+        if self.key is not None:
+            minimum = self._key(minimum) if minimum is not None else None
+            maximum = self._key(maximum) if maximum is not None else None
+            _lists = self._keys
+        else:
+            _lists = self._lists
+
+        _maxes = self._maxes
+        if not _maxes:
+            return None
+
+        if minimum is None:
+            min_pos = 0
+            min_idx = 0
+        elif inclusive[0]:
+            min_pos = bisect_left(_maxes, minimum)
+            if min_pos == len(_maxes):
+                return None
+            min_idx = bisect_left(_lists[min_pos], minimum)
+        else:
+            min_pos = bisect_right(_maxes, minimum)
+            if min_pos == len(_maxes):
+                return None
+            min_idx = bisect_right(_lists[min_pos], minimum)
+
+        if maximum is None:
+            max_pos = len(_maxes) - 1
+            max_idx = len(_lists[max_pos])
+        elif inclusive[1]:
+            max_pos = bisect_right(_maxes, maximum)
+            if max_pos == len(_maxes):
+                max_pos -= 1
+                max_idx = len(_lists[max_pos])
+            else:
+                max_idx = bisect_right(_lists[max_pos], maximum)
+        else:
+            max_pos = bisect_left(_maxes, maximum)
+            if max_pos == len(_maxes):
+                max_pos -= 1
+                max_idx = len(_lists[max_pos])
+            else:
+                max_idx = bisect_left(_lists[max_pos], maximum)
+
+        if min_pos > max_pos or (min_pos == max_pos and min_idx >= max_idx):
+            return None
+
+        return min_pos, min_idx, max_pos, max_idx
+
+    def _delete_range(self, min_pos, min_idx, max_pos, max_idx):
+        """Delete a contiguous range using block coordinates.
+
+        The operation avoids positional-index construction and per-item
+        deletion. Only the boundary blocks are copied; complete interior
+        blocks are discarded in one slice. The small amount of local
+        rebalancing keeps short fragments out of the middle of the structure.
+        """
+        arrays = [self._lists]
+        if hasattr(self, '_keys'):
+            arrays.append(self._keys)
+
+        lists = self._lists
+        removed = sum(len(block) for block in lists[min_pos : max_pos + 1])
+        removed -= min_idx + len(lists[max_pos]) - max_idx
+        fragments = [
+            blocks[min_pos][:min_idx] + blocks[max_pos][max_idx:] for blocks in arrays
+        ]
+        stop = max_pos + 1
+
+        # A short surviving fragment needs one neighbor to restore the load
+        # invariant. Keep cached keys alongside values without calling _key.
+        size = len(fragments[0])
+        if 0 < size < (self._load >> 1):
+            if min_pos:
+                min_pos -= 1
+                fragments = [
+                    blocks[min_pos] + fragments[index]
+                    for index, blocks in enumerate(arrays)
+                ]
+            elif stop < len(lists):
+                fragments = [
+                    fragments[index] + blocks[stop]
+                    for index, blocks in enumerate(arrays)
+                ]
+                stop += 1
+
+        size = len(fragments[0])
+        replacements = [[] for _ in arrays]
+        if size:
+            # Even splitting avoids a short last fragment in the middle of
+            # the list. At most two old boundary blocks and one neighbor are
+            # involved; whole interior blocks need no element-wise rebuilding.
+            count = (size + (self._load << 1) - 1) // (self._load << 1)
+            width, extra = divmod(size, count)
+            offset = 0
+            for pos in range(count):
+                end = offset + width + (pos < extra)
+                for index, fragment in enumerate(fragments):
+                    replacements[index].append(fragment[offset:end])
+                offset = end
+
+        maxes = [block[-1] for block in replacements[-1]]
+        for index, blocks in enumerate(arrays):
+            blocks[min_pos:stop] = replacements[index]
+        self._maxes[min_pos:stop] = maxes
+        self._len -= removed
+        # Any successful structural deletion invalidates the positional index;
+        # lazy rebuilding preserves the normal cache contract.
+        self._index[:] = []
+        self._offset = 0
+
+    def _delete_range_by_bounds(
+        self, minimum=None, maximum=None, inclusive=(True, True)
+    ):
+        """Delete and return values in a sorted value range."""
+        bounds = self._range_bounds(minimum, maximum, inclusive)
+        if bounds is None:
+            return []
+        min_pos, min_idx, max_pos, max_idx = bounds
+        values = list(self._islice(min_pos, min_idx, max_pos, max_idx, False))
+        self._delete_range(min_pos, min_idx, max_pos, max_idx)
+        return values
+
     def __len__(self):
         """Return the size of the sorted list.
 
