@@ -612,6 +612,25 @@ construct a :class:`SortedDict` with integer keys in descending order:
     >>> list(keys)
     [3, 2, 1]
 
+Range bounds follow the container's sort order. With ``neg`` as the key
+function, ``irange(minimum=3, maximum=2)`` starts at 3 and ends at 2, because
+``neg(3) < neg(2)``. Passing these bounds in numeric ascending order yields an
+empty range. The ``reverse`` argument reverses the result's iteration order;
+it does not swap the bounds:
+
+    >>> list(sd.irange(minimum=3, maximum=2))
+    [3, 2]
+    >>> list(sd.irange(minimum=2, maximum=3))
+    []
+    >>> list(sd.irange(minimum=3, maximum=2, reverse=True))
+    [2, 3]
+
+Use ``irange_key`` to supply comparison keys directly. Here the bounds are
+negative numbers, while the iterator still yields the original dictionary keys:
+
+    >>> list(sd.irange_key(min_key=-3, max_key=-2))
+    [3, 2]
+
 Because :class:`SortedDict` inherits from `dict`, the `__missing__` method can
 be used to give missing keys a default value. Customizing the `__missing__`
 method creates a kind of `defaultdict` like that in the `collections` module.
@@ -719,6 +738,33 @@ comparison key.
     >>> ss = SortedSet([1, 2, 3], key=neg)
     >>> ss
     SortedSet([3, 2, 1], key=<built-in function neg>)
+
+The key function may be called during construction, insertion, lookup, and
+removal. It must return the same comparison key for a value while that value
+is stored in the set; do not depend on the number of calls or use side effects
+to determine ordering.
+
+Avoid adding or removing values while iterating over a sorted container.
+An iterator can skip values or raise ``RuntimeError`` when the container
+changes. Iterate over a snapshot to remove selected values safely:
+
+    >>> ss = SortedSet(range(6))
+    >>> for value in list(ss):
+    ...     if value % 2 == 0:
+    ...         ss.discard(value)
+    >>> list(ss)
+    [1, 3, 5]
+
+For a range, materialize the range iterator before modifying the container:
+
+    >>> ss = SortedSet(range(6))
+    >>> _ = ss.difference_update(list(ss.irange(1, 3)))
+    >>> list(ss)
+    [0, 4, 5]
+
+To remove every value, use ``ss.clear()`` instead of removing items through an
+iterator. The same snapshot rule applies to ``SortedList`` and ``SortedDict``
+iteration, including iterators returned by ``irange`` and ``islice``.
 
 Sorted set comparisons use subset and superset relations. Two sorted sets are
 equal if and only if every element of each sorted set is contained in the other
