@@ -53,6 +53,12 @@ feature and testing has 100% coverage with unit tests and hours of stress.
 .. _`Sorted Containers`: http://www.grantjenks.com/docs/sortedcontainers/
 .. _`sorted collections library`: http://www.grantjenks.com/docs/sortedcontainers/
 
+For additional collections built on Sorted Containers, see the companion
+`sortedcollections`_ library. It provides specialized containers such as
+``ValueSortedDict`` and ``ItemSortedDict``.
+
+.. _`sortedcollections`: https://grantjenks.com/docs/sortedcollections/
+
 Testimonials
 ------------
 
