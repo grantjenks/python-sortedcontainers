@@ -141,6 +141,17 @@ Containers`_.
     >>> help(SortedDict)
     >>> help(SortedDict.popitem)
 
+Pydantic Integration
+--------------------
+
+The separately maintained `sortedcontainers-pydantic`_ package provides
+``SortedDict``, ``SortedList``, and ``SortedSet`` classes that support Pydantic
+model validation and serialization. Import these classes from
+``sortedcontainers_pydantic`` when using them in Pydantic models. See the
+package's documentation for installation instructions and examples.
+
+.. _`sortedcontainers-pydantic`: https://github.com/drivendataorg/sortedcontainers-pydantic
+
 Documentation
 -------------
 
