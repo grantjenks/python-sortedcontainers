@@ -59,5 +59,6 @@ SortedKeyList
    .. automethod:: bisect_key_left
    .. automethod:: bisect_key_right
    .. automethod:: irange_key
+   .. automethod:: update_key
 
 .. autoclass:: sortedcontainers.SortedListWithKey

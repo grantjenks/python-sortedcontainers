@@ -23,6 +23,7 @@ from functools import reduce
 from itertools import chain, repeat, starmap
 from math import log
 from operator import add, eq, ge, gt, iadd, le, lt, ne
+from operator import index as as_index
 from reprlib import recursive_repr
 from textwrap import dedent
 
@@ -1606,6 +1607,7 @@ class SortedKeyList(SortedList):
     * :func:`SortedKeyList.bisect_key_left`
     * :func:`SortedKeyList.bisect_key_right`
     * :func:`SortedKeyList.irange_key`
+    * :func:`SortedKeyList.update_key`
 
     Some examples below use:
 
@@ -1717,6 +1719,93 @@ class SortedKeyList(SortedList):
             _maxes.append(key)
 
         self._len += 1
+
+    def update_key(self, index):
+        """Recompute the key of the value at `index` and return its new index.
+
+        Use the value's position from before changing it, then call this method
+        before any other operation that depends on sorted order. Only this
+        occurrence's key is refreshed; keys of other occurrences must still be
+        valid. The key function must return a separate, stable comparison key.
+
+        If the value still belongs between its neighbors, keep its position,
+        including within equal keys. Otherwise place it after existing equal
+        keys. Moving within a sublist preserves that sublist's length and the
+        positional index. Key extraction and comparisons finish before changes
+        are made to stored values or cached keys.
+
+        Runtime complexity: `O(log(n))` -- approximate.
+
+        >>> items = [[1, 'first'], [2, 'second'], [3, 'third']]
+        >>> skl = SortedKeyList(items, key=lambda item: item[0])
+        >>> items[0][0] = 4
+        >>> skl.update_key(0)
+        2
+        >>> list(skl)
+        [[2, 'second'], [3, 'third'], [4, 'first']]
+
+        :param int index: position of the changed value (negative indices allowed)
+        :return: new nonnegative index of the value
+        :raises IndexError: if the index is out of range
+
+        """
+        index = as_index(index)
+        pos, idx = self._pos(index)
+        index = index if index >= 0 else self._len + index
+        _lists, _keys, _maxes = self._lists, self._keys, self._maxes
+        value = _lists[pos][idx]
+        key = self._key(value)
+
+        move_left = (idx and key < _keys[pos][idx - 1]) or (
+            not idx and pos and key < _maxes[pos - 1]
+        )
+        move_right = (idx + 1 < len(_keys[pos]) and _keys[pos][idx + 1] < key) or (
+            idx + 1 == len(_keys[pos])
+            and pos + 1 < len(_keys)
+            and _keys[pos + 1][0] < key
+        )
+        if not move_left and not move_right:
+            _keys[pos][idx] = key
+            if idx + 1 == len(_keys[pos]):
+                _maxes[pos] = key
+            return index
+
+        if move_left:
+            target_pos = bisect_right(_maxes, key, 0, pos + 1)
+        else:
+            target_pos = bisect_right(_maxes, key, pos)
+        if target_pos == len(_keys):
+            target_pos -= 1
+            target_idx = len(_keys[target_pos])
+        else:
+            target_idx = bisect_right(_keys[target_pos], key)
+
+        if target_pos == pos:
+            target_idx -= target_idx > idx
+            del _keys[pos][idx]
+            del _lists[pos][idx]
+            _keys[pos].insert(target_idx, key)
+            _lists[pos].insert(target_idx, value)
+            _maxes[pos] = _keys[pos][-1]
+            return index + target_idx - idx
+
+        # Deletion may merge or split sublists, so retain the destination as a
+        # logical index rather than carrying block coordinates across it.
+        target_index = self._loc(target_pos, target_idx) - (target_pos > pos)
+        needs_rebalance = len(_keys[pos]) - 1 <= (self._load >> 1)
+        self._delete(pos, idx)
+        if needs_rebalance:
+            if target_index == self._len:
+                target_pos = len(_lists) - 1
+                target_idx = len(_lists[target_pos])
+            else:
+                target_pos, target_idx = self._pos(target_index)
+        _lists[target_pos].insert(target_idx, value)
+        _keys[target_pos].insert(target_idx, key)
+        _maxes[target_pos] = _keys[target_pos][-1]
+        self._expand(target_pos)
+        self._len += 1
+        return target_index
 
     def _expand(self, pos):
         """Split sublists with length greater than double the load-factor.
