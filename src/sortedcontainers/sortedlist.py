@@ -504,6 +504,9 @@ class SortedList(MutableSequence):
         if not pos:
             return idx
 
+        if pos == 1 and len(self._lists) == 2:
+            return len(self._lists[0]) + idx
+
         _index = self._index
 
         if not _index:
@@ -598,8 +601,12 @@ class SortedList(MutableSequence):
         elif idx >= self._len:
             raise IndexError('list index out of range')
 
-        if idx < len(self._lists[0]):
+        len_0 = len(self._lists[0])
+        if idx < len_0:
             return 0, idx
+
+        if len(self._lists) == 2:
+            return 1, idx - len_0
 
         _index = self._index
 
@@ -1194,7 +1201,14 @@ class SortedList(MutableSequence):
         :return: new sorted list
 
         """
-        return self.__class__(self)
+        that = object.__new__(self.__class__)
+        that._len = self._len
+        that._load = self._load
+        that._lists = [sublist.copy() for sublist in self._lists]
+        that._maxes = self._maxes.copy()
+        that._index = []
+        that._offset = 0
+        return that
 
     __copy__ = copy
 
@@ -2295,7 +2309,16 @@ class SortedKeyList(SortedList):
         :return: new sorted-key list
 
         """
-        return self.__class__(self, key=self._key)
+        that = object.__new__(self.__class__)
+        that._key = self._key
+        that._len = self._len
+        that._load = self._load
+        that._lists = [sublist.copy() for sublist in self._lists]
+        that._keys = [sublist.copy() for sublist in self._keys]
+        that._maxes = self._maxes.copy()
+        that._index = []
+        that._offset = 0
+        return that
 
     __copy__ = copy
 

@@ -300,7 +300,35 @@ class SortedDict(dict):
         :return: new sorted dict
 
         """
-        return self.__class__(self._key, self.items())
+        that = self.__class__.__new__(self.__class__)
+        dict.update(that, self)
+        that._key = self._key
+        that._list = self._list.copy()
+
+        _list = that._list
+        that._list_add = _list.add
+        that._list_clear = _list.clear
+        that._list_iter = _list.__iter__
+        that._list_reversed = _list.__reversed__
+        that._list_pop = _list.pop
+        that._list_remove = _list.remove
+        that._list_update = _list.update
+
+        that.bisect_left = _list.bisect_left
+        that.bisect = _list.bisect_right
+        that.bisect_right = _list.bisect_right
+        that.index = _list.index
+        that.irange = _list.irange
+        that.islice = _list.islice
+        that._reset = _list._reset
+
+        if that._key is not None:
+            that.bisect_key_left = _list.bisect_key_left
+            that.bisect_key_right = _list.bisect_key_right
+            that.bisect_key = _list.bisect_key
+            that.irange_key = _list.irange_key
+
+        return that
 
     __copy__ = copy
 
